@@ -3,9 +3,7 @@ require 'optparse'
 module Pvn
   class CLI
     def self.execute(stdout, arguments=[])
-
       # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.
-
       options = {
         :path     => '~'
       }
