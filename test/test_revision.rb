@@ -13,14 +13,16 @@ module PVN
     include Loggable
 
     def uses fname
+      # mlc = MockLogCommand.new File.dirname(__FILE__) + '/' + fname
       MockLogCommand.current_file = File.dirname(__FILE__) + '/' + fname
+      mce = MockCommandExecutor.new MockLogCommand.class
     end
     
     def setup
     end
 
     def assert_revision exp, val
-      rev = Revision.new(val, "foo", MockLogCommand)
+      rev = Revision.new val, "foo", MockLogCommand
       assert_equal exp, rev.revision
     end
     

@@ -45,7 +45,8 @@ module PVN
 
     DEFAULT_LIMIT = 5
     
-    def initialize(args = Hash.new)
+    def initialize args = Hash.new
+      info "args: #{args}"
       cmdargs = args[:command_args] || Array.new
       execute = args[:execute].nil? ? true : args[:execute]
       
@@ -54,38 +55,52 @@ module PVN
 
       logargs = Array.new
       logargs << "log"
+      logargs << "-l"
+      logargs << "5"
+
+      info "args: #{args}".green
 
       while cmdargs.length > 0
         arg = cmdargs.shift
-        if arg == '-r' && cmdargs.length > 1
-          cmdargs.shift
+        info "arg: #{arg}".cyan
+
+        if arg == '-r' && cmdargs.length > 0
           revarg = cmdargs.shift
+          info "revarg: #{revarg}".cyan
           rev = to_revision(revarg, cmdargs[-1])
+          info "rev: #{rev}".cyan
 
           if rev.nil?
             raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
           end
 
-          logargs << 'r'
+          info "args: #{args}".green
+
+          logargs << '-r'
           logargs << rev
         elsif arg == '-l' && cmdargs.length > 0
-          limit = cmdargs.shift
+          logargs[2] == cmdargs.shift.to_i
         elsif %w{ --no-limit --nolimit }.include?(arg)
-          limit = nil
+          # remove the limit args:
+          logargs.delete_at(2)
+          logargs.delete_at(1)
         else
           cmdargs.unshift arg
           break
         end        
       end
 
-      logargs.concat([ '-l', limit ]) if limit
       logargs.concat(cmdargs)
 
-      super(:execute => args[:execute], :command_args => logargs)
+      args[:command_args] = logargs
+
+      info "args: #{args}".green
+
+      super
     end
 
-    def to_revision(arg, fname)
-      RevisionCommand.new(arg, fname, self.class).revision
+    def to_revision arg, fname
+      Revision.new(arg, fname, self.class).revision
     end
   end
 end

@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
+require 'rubygems'
+require 'riel'
 require 'pvn/log'
+require 'pvn/cmdexec'
 
 module PVN
   class MockLogCommand < LogCommand
@@ -27,3 +30,18 @@ module PVN
   end
 end
 
+
+module PVN
+  class MockCommandExecutor < CommandExecutor
+    def initialize cmdcls
+      @cmdcls = cmdcls
+      super()
+    end
+
+    def run cmd
+      # look for limit
+      
+      info "cmd: #{cmd}".on_magenta
+    end
+  end
+end

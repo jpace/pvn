@@ -88,11 +88,13 @@ module PVN
     attr_reader :command
 
     def initialize(args = Hash.new)
+      info "args: #{args}".on_red
       @execute  = args[:execute].nil? ? true : args[:execute]
       @args     = args[:command_args]
       @executor = args[:executor] || CommandExecutor.new
       @command = "svn " + @args.join(" ")
-      debug "@command: #{@command}"
+      info "@command: #{@command}".on_blue
+      info "@executor: #{@executor}".on_blue
       if @execute
         @output = @executor.run(@command)
       else

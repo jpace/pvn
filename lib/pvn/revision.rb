@@ -18,8 +18,11 @@ module PVN
     attr_reader :revision
 
     # this assumes that fname is specified, and is a filename, as opposed to '.'
-    def initialize(numstr, fname, logcmdclass = LogCommand)
+    def initialize numstr, fname, logcmdclass = LogCommand
       num = numstr.kind_of?(String) ? numstr.strip : numstr
+      info "num        : #{num}"
+      info "fname      : #{fname}"
+      info "logcmdclass: #{logcmdclass}"
       
       @revision = nil
 
@@ -34,6 +37,7 @@ module PVN
       elsif md = %r{^\+(\d+)}.match(num)
         num = md[1].to_i
         log = logcmdclass.new :filename => fname
+        info "log: #{log}"
         @revision = read_from_log_output num, log.output.reverse
       else
         @revision = num.to_i
@@ -44,6 +48,7 @@ module PVN
       # count the limit backward, and get the "first" (last) match
       limit = -1 * neg
       log = logcmdclass.new :limit => limit, :filename => fname
+      info "log: #{log}"
       revision = read_from_log_output 1, log.output.reverse
     end
 

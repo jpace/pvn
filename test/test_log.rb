@@ -9,6 +9,9 @@ Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
+  class MockLogExecutor < MockCommandExecutor
+  end
+
   class TestLog < Test::Unit::TestCase
     include Loggable
 
@@ -25,6 +28,11 @@ module PVN
     def assert_log_command exp, cmdargs = nil
       origargs = cmdargs && cmdargs.dup
       assert_equal exp, LogCommand.new(:execute => false, :command_args => cmdargs).command, "arguments: " + origargs.to_s
+    end
+
+    def assert_log_command_mock exp, cmdargs = nil
+      origargs = cmdargs && cmdargs.dup
+      assert_equal exp, LogCommand.new(:executor => MockLogExecutor.new, :execute => true, :command_args => cmdargs).command, "arguments: " + origargs.to_s
     end
 
     def xtest_command_basic
@@ -46,9 +54,9 @@ module PVN
     def test_command_using_converted_revision
       uses "svn_long_log.txt"
 
-      assert_log_command "svn log -l 5 -r -1", %w{ -r 11 }
-      assert_log_command "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
-      assert_log_command "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
+      assert_log_command_mock "svn log -l 5 -r xxx", %w{ -r -1 }
+      assert_log_command_mock "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
+      assert_log_command_mock "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
     end
   end
 end
