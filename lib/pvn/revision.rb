@@ -20,19 +20,14 @@ module PVN
     # this assumes that fname is specified, and is a filename, as opposed to '.'
     def initialize(numstr, fname, logcmdclass = LogCommand)
       num = numstr.kind_of?(String) ? numstr.strip : numstr
-      info "num: #{num}"
       
       @revision = nil
 
       if neg = Util.negative_integer?(numstr)
-        info "negative revision: #{neg}"
-
         # if these two are the same number (revision(-3) == revision(-2)) then
         # we're at the end/beginning of the list.
-
         prevrev = get_negative_revision fname, logcmdclass, neg + 1
         currrev = get_negative_revision fname, logcmdclass, neg
-
         @revision = prevrev == currrev ? nil : currrev
       elsif num.kind_of? Fixnum
         @revision = num
@@ -48,7 +43,7 @@ module PVN
     def get_negative_revision fname, logcmdclass, neg
       # count the limit backward, and get the "first" (last) match
       limit = -1 * neg
-      log = logcmdclass.new(:limit => limit, :filename => fname)
+      log = logcmdclass.new :limit => limit, :filename => fname
       revision = read_from_log_output 1, log.output.reverse
     end
 
@@ -56,20 +51,12 @@ module PVN
       matched = 0
 
       loglines.each do |line|
-        # info "line: #{line}"
-
-        if md = PVN::LogCommand::LOG_REVISION_LINE.match(line)
-          info "MATCHED: #{md}"
-
-          matched += 1
-
-          if matched == n_matches
-            return md[1].to_i
-          end
+        next unless md = PVN::LogCommand::LOG_REVISION_LINE.match(line)
+        matched += 1
+        if matched == n_matches
+          return md[1].to_i
         end
       end
-
-      # not found
       nil
     end
   end
