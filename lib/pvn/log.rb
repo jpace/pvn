@@ -84,7 +84,5 @@ module PVN
     def to_revision(arg, fname)
       RevisionCommand.new(arg, fname).revision
     end
-
   end
-
 end

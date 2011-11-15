@@ -24,51 +24,53 @@ module PVN
       
       @revision = nil
 
-      if n = Util.negative_integer?(numstr)
-        info "negative revision: #{n}"
+      if neg = Util.negative_integer?(numstr)
+        info "negative revision: #{neg}"
 
-        # count the limit backward, and get the "first" (last) match
-        limit = -1 * n
-        log = logcmdclass.new(:limit => limit, :filename => fname)
-        # verify N matches in output ...
-        read_from_log_output 1, log.output.reverse.each
+        # if these two are the same number (revision(-3) == revision(-2)) then
+        # we're at the end/beginning of the list.
+
+        prevrev = get_negative_revision fname, logcmdclass, neg + 1
+        currrev = get_negative_revision fname, logcmdclass, neg
+
+        @revision = prevrev == currrev ? nil : currrev
       elsif num.kind_of? Fixnum
         @revision = num
       elsif md = %r{^\+(\d+)}.match(num)
         num = md[1].to_i
         log = logcmdclass.new :filename => fname
-        read_from_log_output num, log.output.reverse
+        @revision = read_from_log_output num, log.output.reverse
       else
-        @revision = n.to_i
+        @revision = num.to_i
       end
     end
 
-    def read_from_log_output n_matches, fname
-      num = md[1].to_i
-      # info "num: #{num}"
+    def get_negative_revision fname, logcmdclass, neg
+      # count the limit backward, and get the "first" (last) match
+      limit = -1 * neg
+      log = logcmdclass.new(:limit => limit, :filename => fname)
+      revision = read_from_log_output 1, log.output.reverse
+    end
 
+    def read_from_log_output n_matches, loglines
       matched = 0
 
-      # no limit on output
-      log = logcmdclass.new(:filename => fname)
-
-      log.output.reverse.each do |line|
+      loglines.each do |line|
         # info "line: #{line}"
 
-        if md = Log::LOG_REVISION_LINE.match(line)
-          # info "MATCHED: #{md}"
+        if md = PVN::LogCommand::LOG_REVISION_LINE.match(line)
+          info "MATCHED: #{md}"
 
           matched += 1
 
           if matched == n_matches
-            @revision = md[1].to_i
-            # info "@revision: #{@revision}"
-            break
+            return md[1].to_i
           end
         end
       end
 
-      # error: not found
+      # not found
+      nil
     end
   end
 end
