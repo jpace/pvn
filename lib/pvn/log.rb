@@ -38,7 +38,15 @@ module PVN
 
     def self.help
       Command.make_help_for self
-    end    
+    end
+
+    def self.has_argument tag, varname, *args
+      puts "tag: #{tag}".on_blue
+      puts "varname: #{varname}".on_blue
+      puts "args: #{args}".on_blue
+    end
+
+    has_argument '-l', :limit, :type => :numeric, :default => 5
 
     # yes, there's more to it ...
     LOG_REVISION_LINE = Regexp.new('^r(\d+)\s*\|\s*(\w+)')
@@ -54,10 +62,8 @@ module PVN
       limit    = DEFAULT_LIMIT
       revision = nil
 
-      logargs = Array.new
-      logargs << "log"
-      logargs << "-l"
-      logargs << (args[:limit] || "5")
+      logargs = Hash.new
+      logargs[:limit] = (args[:limit] || "5")
 
       info "args: #{args}"
 
@@ -66,38 +72,51 @@ module PVN
         info "arg: #{arg}"
 
         if arg == '-r' && cmdargs.length > 0
-          revarg = cmdargs.shift
-          info "revarg: #{revarg}"
-          rev = to_revision(revarg, cmdargs[-1])
-          info "rev: #{rev}"
-
-          if rev.nil?
-            raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
-          end
-
-          info "args: #{args}".green
-
-          logargs << '-r'
-          logargs << rev
+          update_revision_arg logargs, cmdargs
         elsif arg == '-l' && cmdargs.length > 0
-          logargs[2] = cmdargs.shift.to_i
+          logargs[:limit] = cmdargs.shift.to_i
         elsif %w{ --no-limit --nolimit }.include?(arg)
-          # remove the limit args:
-          logargs.delete_at(2)
-          logargs.delete_at(1)
+          remove_limit_arg logargs
         else
           cmdargs.unshift arg
           break
         end        
       end
 
-      logargs.concat(cmdargs)
+      allargs = Array.new
+      allargs << "log"
+      if logargs[:limit]
+        allargs << '-l' << logargs[:limit]
+      end
 
-      args[:command_args] = logargs
+      if logargs[:revision]
+        allargs << '-r' << logargs[:revision]
+      end
+
+      allargs.concat(cmdargs)
+
+      args[:command_args] = allargs
 
       info "args: #{args}"
 
       super
+    end
+
+    def remove_limit_arg logargs
+      logargs[:limit] = nil
+    end
+
+    def update_revision_arg logargs, cmdargs
+      revarg = cmdargs.shift
+      info "revarg: #{revarg}"
+      rev = to_revision(revarg, cmdargs[-1])
+      info "rev: #{rev}"
+
+      if rev.nil?
+        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
+      end
+
+      logargs[:revision] = rev
     end
 
     def to_revision arg, fname
