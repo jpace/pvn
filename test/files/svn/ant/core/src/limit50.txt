@@ -1,0 +1,211 @@
+------------------------------------------------------------------------
+r1199931 | jglick | 2011-11-09 14:41:59 -0500 (Wed, 09 Nov 2011) | 1 line
+
+#51049: <junitreport> mishandled ${line.separator}.
+------------------------------------------------------------------------
+r1199924 | jglick | 2011-11-09 14:24:45 -0500 (Wed, 09 Nov 2011) | 1 line
+
+JUnitReportTest.testStackTraceLineBreaks was failing for me.
+------------------------------------------------------------------------
+r1199922 | jglick | 2011-11-09 14:20:04 -0500 (Wed, 09 Nov 2011) | 1 line
+
+JUnitReportTest.testEmptyFile was failing for me.
+------------------------------------------------------------------------
+r1190244 | bodewig | 2011-10-28 06:48:06 -0400 (Fri, 28 Oct 2011) | 1 line
+
+whitespace only
+------------------------------------------------------------------------
+r1190243 | bodewig | 2011-10-28 06:46:33 -0400 (Fri, 28 Oct 2011) | 1 line
+
+add an option to suppress the artifical package-info.class files created by <javac>.  PR 52096
+------------------------------------------------------------------------
+r1190219 | bodewig | 2011-10-28 05:29:14 -0400 (Fri, 28 Oct 2011) | 1 line
+
+make loadfile/resource less noisy for empty resources when asked to be quiet.  PR 52107.
+------------------------------------------------------------------------
+r1178820 | bodewig | 2011-10-04 10:54:11 -0400 (Tue, 04 Oct 2011) | 1 line
+
+Empty package-info.class is created in wrong directory if no destdir is specified.  PR 51947
+------------------------------------------------------------------------
+r1177307 | bodewig | 2011-09-29 09:52:19 -0400 (Thu, 29 Sep 2011) | 1 line
+
+Make <move> use tryHardToDelete under the covers
+------------------------------------------------------------------------
+r1177305 | bodewig | 2011-09-29 09:40:56 -0400 (Thu, 29 Sep 2011) | 1 line
+
+Add an option to <delete> to run the GC before retrying a failed build on non-Windows OSes as well.  Might fix the NFS problem described in PR 45786
+------------------------------------------------------------------------
+r1159661 | mbenson | 2011-08-19 11:33:56 -0400 (Fri, 19 Aug 2011) | 1 line
+
+provide read access to Mkdir.dir. PR 51684
+------------------------------------------------------------------------
+r1158470 | jglick | 2011-08-16 19:08:11 -0400 (Tue, 16 Aug 2011) | 1 line
+
+#51668: JAXP regression preventing <junitreport> from working in JDK 7 w/ SecurityManager.
+------------------------------------------------------------------------
+r1158454 | jglick | 2011-08-16 17:35:49 -0400 (Tue, 16 Aug 2011) | 1 line
+
+Fails to reproduce https://netbeans.org/bugzilla/show_bug.cgi?id=201022 but might as well leave it here.
+------------------------------------------------------------------------
+r1155197 | bodewig | 2011-08-08 23:28:32 -0400 (Mon, 08 Aug 2011) | 1 line
+
+make AntClassLoader$ResourceEnumeration adhere to the Enumeration contract.  PR 51579
+------------------------------------------------------------------------
+r1154551 | bodewig | 2011-08-06 13:11:53 -0400 (Sat, 06 Aug 2011) | 1 line
+
+never filter out the first line of the exception stack trace in junit so the failure message is preserved
+------------------------------------------------------------------------
+r1154190 | bodewig | 2011-08-05 08:42:54 -0400 (Fri, 05 Aug 2011) | 1 line
+
+JUnit's filtertrace swallows the assert failure message if it contains the word 'more' as reported on the user list - http://mail-archives.apache.org/mod_mbox/ant-user/201107.mbox/%3CCAPsH_EDFnhkW4Y4r87U2jmN2gKPAyK6ZJX5F-4ohC6tJ9rXi6Q@mail.gmail.com%3E
+------------------------------------------------------------------------
+r1154107 | bodewig | 2011-08-05 03:33:25 -0400 (Fri, 05 Aug 2011) | 1 line
+
+there is an off-by-one error in the loop that searches for the 'end of central directory record'
+------------------------------------------------------------------------
+r1153485 | bodewig | 2011-08-03 09:40:35 -0400 (Wed, 03 Aug 2011) | 1 line
+
+finalize deflater instance in ZipOutputStream.
+------------------------------------------------------------------------
+r1151714 | bodewig | 2011-07-27 23:44:27 -0400 (Wed, 27 Jul 2011) | 1 line
+
+complete task cleanup, likely not necessary but looks better
+------------------------------------------------------------------------
+r1151473 | bodewig | 2011-07-27 10:08:00 -0400 (Wed, 27 Jul 2011) | 1 line
+
+restore RCW id once augment has performed its job so it can be reused by other targets.  PR 50894
+------------------------------------------------------------------------
+r1151388 | bodewig | 2011-07-27 04:55:00 -0400 (Wed, 27 Jul 2011) | 1 line
+
+no reason to keep a reference to the enclosing Restrict instance
+------------------------------------------------------------------------
+r1151386 | bodewig | 2011-07-27 04:50:44 -0400 (Wed, 27 Jul 2011) | 1 line
+
+when working on resources <sync> forgot about the source resources that are not out-of date.  PR 51462
+------------------------------------------------------------------------
+r1151369 | bodewig | 2011-07-27 03:34:45 -0400 (Wed, 27 Jul 2011) | 1 line
+
+support multiple resource collections in sync.  PR 51462
+------------------------------------------------------------------------
+r1151269 | hibou | 2011-07-26 18:02:37 -0400 (Tue, 26 Jul 2011) | 3 lines
+
+BR 51161:
+ - don't close System.in otherwise it won't be readable anymore
+
+------------------------------------------------------------------------
+r1150331 | hibou | 2011-07-24 06:35:58 -0400 (Sun, 24 Jul 2011) | 4 lines
+
+BR 41986
+ - add a quiet attribute to the copy task to not print warning messages
+Thanks to Timoteo Ohara
+
+------------------------------------------------------------------------
+r1148910 | jglick | 2011-07-20 15:22:19 -0400 (Wed, 20 Jul 2011) | 1 line
+
+FindBugs.
+------------------------------------------------------------------------
+r1146031 | bodewig | 2011-07-13 09:55:43 -0400 (Wed, 13 Jul 2011) | 1 line
+
+merge tracking
+------------------------------------------------------------------------
+r1146020 | bodewig | 2011-07-13 09:44:20 -0400 (Wed, 13 Jul 2011) | 1 line
+
+clean up Inflater instance as some JDKs won't do it for us.  PR 42696.  Submitted by Mounir
+------------------------------------------------------------------------
+r1140351 | jglick | 2011-06-27 18:38:55 -0400 (Mon, 27 Jun 2011) | 2 lines
+
+Using apparently official URL base, at least according to the HTTP redirect.
+
+------------------------------------------------------------------------
+r1097584 | hibou | 2011-04-28 15:39:53 -0400 (Thu, 28 Apr 2011) | 3 lines
+
+Fix for BR #48789.
+Handle an IOE with "Pipe broken" just like a one with "Write end dead". They are raised for the same reason but not at the same time.
+
+------------------------------------------------------------------------
+r1097261 | hibou | 2011-04-27 18:14:03 -0400 (Wed, 27 Apr 2011) | 2 lines
+
+Revert commit #1095768 on java.xml and fix the redirector to not funnel streams if there is an errorProperty set
+
+------------------------------------------------------------------------
+r1097260 | hibou | 2011-04-27 18:11:54 -0400 (Wed, 27 Apr 2011) | 2 lines
+
+Improve javadoc
+
+------------------------------------------------------------------------
+r1096209 | antoine | 2011-04-23 15:25:54 -0400 (Sat, 23 Apr 2011) | 1 line
+
+Missing space between finished and timestamp in task/target finish message from ProfileLogger, bugrep 51109
+------------------------------------------------------------------------
+r1095784 | antoine | 2011-04-21 13:49:28 -0400 (Thu, 21 Apr 2011) | 1 line
+
+accept sh.exe from env.Path as well as from env.PATH to be able to run the tests
+------------------------------------------------------------------------
+r1095768 | antoine | 2011-04-21 12:18:32 -0400 (Thu, 21 Apr 2011) | 1 line
+
+tweaking tests affecting by having made flush a no-op in fixing bug 50507
+------------------------------------------------------------------------
+r1095736 | antoine | 2011-04-21 10:57:02 -0400 (Thu, 21 Apr 2011) | 1 line
+
+Exec task may mix the stderr and stdout output while logging it. Bugzilla 50507
+------------------------------------------------------------------------
+r1095270 | bodewig | 2011-04-20 01:10:21 -0400 (Wed, 20 Apr 2011) | 1 line
+
+raise a more useful error when a class cannot be loaded because of a SecurityException in the hasmethod condition.  PR 51035.
+------------------------------------------------------------------------
+r1095224 | antoine | 2011-04-19 18:04:37 -0400 (Tue, 19 Apr 2011) | 1 line
+
+I had hardcoded the test.can.run property, also I had emptied the cleanup
+------------------------------------------------------------------------
+r1095222 | antoine | 2011-04-19 17:45:54 -0400 (Tue, 19 Apr 2011) | 1 line
+
+creating test for bugrep 50507 Exec task may mix the stderr and stdout output while logging it
+------------------------------------------------------------------------
+r1092610 | bodewig | 2011-04-15 03:24:35 -0400 (Fri, 15 Apr 2011) | 1 line
+
+commons-net trunk has removed all static final ints from FTPReply
+------------------------------------------------------------------------
+r1090450 | mbenson | 2011-04-08 17:19:47 -0400 (Fri, 08 Apr 2011) | 1 line
+
+readFully(), then index into a char[], rather than calling substring(1) after each read() call
+------------------------------------------------------------------------
+r1090431 | mbenson | 2011-04-08 16:27:04 -0400 (Fri, 08 Apr 2011) | 1 line
+
+Bug 51044 - Allow a <propertyset> in an <expandproperties> filter
+------------------------------------------------------------------------
+r1090430 | mbenson | 2011-04-08 16:22:41 -0400 (Fri, 08 Apr 2011) | 1 line
+
+sp
+------------------------------------------------------------------------
+r1090366 | mbenson | 2011-04-08 13:54:50 -0400 (Fri, 08 Apr 2011) | 1 line
+
+add basic functionality test for expandproperties filter
+------------------------------------------------------------------------
+r1090356 | mbenson | 2011-04-08 13:27:16 -0400 (Fri, 08 Apr 2011) | 1 line
+
+javadoc
+------------------------------------------------------------------------
+r1090354 | mbenson | 2011-04-08 13:20:08 -0400 (Fri, 08 Apr 2011) | 1 line
+
+Resource collection implementation of mapped PropertySet returned unusable resources.
+------------------------------------------------------------------------
+r1090350 | mbenson | 2011-04-08 12:53:48 -0400 (Fri, 08 Apr 2011) | 1 line
+
+add a basic resources test, plus a failing test demonstrating that propertysets with mappers don't function properly wrt returning resource iterators
+------------------------------------------------------------------------
+r1090340 | mbenson | 2011-04-08 12:39:50 -0400 (Fri, 08 Apr 2011) | 1 line
+
+move propertyset test to antunit
+------------------------------------------------------------------------
+r1090325 | mbenson | 2011-04-08 12:24:19 -0400 (Fri, 08 Apr 2011) | 1 line
+
+fix fileResource specified using basedir/name attributes
+------------------------------------------------------------------------
+r1090323 | mbenson | 2011-04-08 12:21:12 -0400 (Fri, 08 Apr 2011) | 1 line
+
+add (failing) testcase that exposes a current weakness of fileResource
+------------------------------------------------------------------------
+r1090319 | mbenson | 2011-04-08 12:16:30 -0400 (Fri, 08 Apr 2011) | 1 line
+
+ws consistency
+------------------------------------------------------------------------

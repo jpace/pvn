@@ -71,14 +71,14 @@ module PVN
       assert_equal exp, rev.revision
     end
     
-    def test_integers
+    def xtest_integers
       assert_revision 4, 4
       assert_revision 4, "4"
       assert_revision 44, "44"
       assert_revision 10234, 10234
     end
     
-    def test_negative_in_range
+    def xtest_negative_in_range
       uses "svn/ant/core/src/full.txt"
 
       assert_revision 1199931, -1
@@ -87,16 +87,16 @@ module PVN
       assert_revision 1190244, -4
     end
 
-    def xtest_negative_out_of_range
-      uses "svn/ant/core/src/full.txt"
+    def test_negative_out_of_range
+      uses "svn/ant/core/src/limit50.txt"
 
       assert_revision nil, -1000000
       assert_revision nil, -100000
       assert_revision nil, -10000
       assert_revision nil, -1000
       assert_revision nil, -100
-      assert_revision 5, -50
-      assert_revision 11, -49
+      assert_revision 1090319, -50
+      assert_revision 1090323, -49
     end
   end
 end
