@@ -9,14 +9,19 @@ Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class MockLogExecutor < MockCommandExecutor
-  end
+  # class MockLogExecutor < MockCommandExecutor
+  #   # super(MockLogCommand.new)
+  # end
 
   class TestLog < Test::Unit::TestCase
     include Loggable
 
+    def setup
+      MockLogExecutor.instance.reset
+    end
+
     def uses fname
-      MockLogCommand.current_file = File.dirname(__FILE__) + '/' + fname
+      MockLogExecutor.instance.addfile File.dirname(__FILE__) + '/' + fname
     end    
 
     def test_revision_re
@@ -32,10 +37,10 @@ module PVN
 
     def assert_log_command_mock exp, cmdargs = nil
       origargs = cmdargs && cmdargs.dup
-      assert_equal exp, LogCommand.new(:executor => MockLogExecutor.new, :execute => true, :command_args => cmdargs).command, "arguments: " + origargs.to_s
+      assert_equal exp, LogCommand.new(:execute => true, :command_args => cmdargs).command, "arguments: " + origargs.to_s
     end
 
-    def xtest_command_basic
+    def test_command_basic
       assert_log_command "svn log -l 5"
       assert_log_command "svn log -l 10", %w{ -l 10 }
       assert_log_command "svn log -l 10 foo", %w{ -l 10 foo }
@@ -46,7 +51,7 @@ module PVN
       assert_log_command "svn log", %w{ --nolimit }
     end
 
-    def xtest_command_using_unconverted_revision
+    def test_command_using_unconverted_revision
       assert_log_command "svn log -l 5 -r 11", %w{ -r 11 }
       assert_log_command "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
     end

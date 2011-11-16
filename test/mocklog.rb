@@ -2,11 +2,14 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 
 require 'rubygems'
 require 'riel'
+require 'singleton'
 require 'pvn/log'
 require 'pvn/cmdexec'
 
 module PVN
   class MockLogCommand < LogCommand
+    include Loggable
+
     @@current_file = nil
     
     def self.current_file= fname
@@ -30,12 +33,21 @@ module PVN
   end
 end
 
-
 module PVN
   class MockCommandExecutor < CommandExecutor
-    def initialize cmdcls
-      @cmdcls = cmdcls
+    include Loggable, Singleton
+
+    def initialize
+      reset
       super()
+    end
+
+    def addfile fname
+      @fnames << fname
+    end
+
+    def reset
+      @fnames = Array.new
     end
 
     def run cmd
