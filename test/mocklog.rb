@@ -57,3 +57,49 @@ module PVN
     end
   end
 end
+
+module PVN
+  class MockLogExecutor < CommandExecutor
+    include Loggable
+
+    def file=(fname)
+      @file = fname
+    end
+
+    def run args
+      info "args: #{args}".yellow
+      cmd, subcmd, *cmdargs = args.split
+      info "cmd: #{cmd}".yellow
+      info "subcmd: #{subcmd}".yellow
+      info "cmdargs: #{cmdargs}".yellow
+
+      limit = nil
+
+      if idx = cmdargs.index("-l")
+        info "idx: #{idx}".on_blue
+        limit = cmdargs[idx + 1].to_i
+      end
+
+      info "limit: #{limit}".yellow
+      
+      n_matches = 0
+      output = Array.new
+      IO.readlines(@file).each do |line|
+        if limit && PVN::LogCommand::LOG_REVISION_LINE.match(line)
+          n_matches += 1
+          info "n_matches: #{n_matches}".yellow
+          info "limit: #{limit}".yellow
+
+          if n_matches > limit
+            break
+          end
+        end
+        output << line
+      end
+
+      puts output
+
+      output
+    end
+  end
+end
