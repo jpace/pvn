@@ -59,11 +59,11 @@ module PVN
       logargs << "-l"
       logargs << (args[:limit] || "5")
 
-      info "args: #{args}".green
+      info "args: #{args}"
 
       while cmdargs.length > 0
         arg = cmdargs.shift
-        info "arg: #{arg}".cyan
+        info "arg: #{arg}"
 
         if arg == '-r' && cmdargs.length > 0
           revarg = cmdargs.shift
@@ -95,13 +95,13 @@ module PVN
 
       args[:command_args] = logargs
 
-      info "args: #{args}".green
+      info "args: #{args}"
 
       super
     end
 
     def to_revision arg, fname
-      args = { :logcmdclass => self.class, :fname => fname, :value => arg }
+      args = { :executor => @executor, :fname => fname, :value => arg }
       info "args: #{args}".bold
       Revision.new(args).revision
     end

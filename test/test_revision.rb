@@ -22,19 +22,18 @@ module PVN
     end
 
     def assert_revision exp, val
-      # rev = Revision.new val, "foo", MockLogCommand
       rev = Revision.new :value => val, :fname => "foo", :executor => @mle
       assert_equal exp, rev.revision
     end
     
-    def xtest_integers
+    def test_integers
       assert_revision 4, 4
       assert_revision 4, "4"
       assert_revision 44, "44"
       assert_revision 10234, 10234
     end
     
-    def xtest_negative_in_range
+    def test_negative_in_range
       uses "svn/ant/core/src/full.txt"
 
       assert_revision 1199931, -1

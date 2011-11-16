@@ -67,29 +67,26 @@ module PVN
     end
 
     def run args
-      info "args: #{args}".yellow
+      info "args: #{args}"
       cmd, subcmd, *cmdargs = args.split
-      info "cmd: #{cmd}".yellow
-      info "subcmd: #{subcmd}".yellow
-      info "cmdargs: #{cmdargs}".yellow
+      info "cmd: #{cmd}"
+      info "subcmd: #{subcmd}"
+      info "cmdargs: #{cmdargs}"
 
       limit = nil
 
       if idx = cmdargs.index("-l")
-        info "idx: #{idx}".on_blue
+        info "idx: #{idx}"
         limit = cmdargs[idx + 1].to_i
       end
 
-      info "limit: #{limit}".yellow
+      info "limit: #{limit}"
       
       n_matches = 0
       output = Array.new
       IO.readlines(@file).each do |line|
         if limit && PVN::LogCommand::LOG_REVISION_LINE.match(line)
           n_matches += 1
-          info "n_matches: #{n_matches}".yellow
-          info "limit: #{limit}".yellow
-
           if n_matches > limit
             break
           end
@@ -97,7 +94,7 @@ module PVN
         output << line
       end
 
-      puts output
+      # puts output
 
       output
     end
