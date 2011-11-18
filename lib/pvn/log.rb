@@ -51,8 +51,6 @@ module PVN
       @@options << [ varname, tag, *args ]
     end
 
-    # has_option :limit, '-l', :type => :numeric, :default => 5, :negatable => true
-
     def self.has_option optname, tag, args = Hash.new
       @@options << [ optname, tag, args ]
     end
@@ -81,7 +79,7 @@ module PVN
     LOG_REVISION_LINE = Regexp.new('^r(\d+)\s*\|\s*(\w+)')
     
     def initialize args = Hash.new
-      info "args: #{args}".cyan
+      info "args: #{args}"
       cmdargs = args[:command_args] || Array.new
       execute = args[:execute].nil? || args[:execute]
       @executor = args[:executor]
@@ -95,45 +93,6 @@ module PVN
 
     def svncommand
       "log"
-    end
-
-    def process_options cmdargs, args
-      ca = self.class.make_command_args args
-      
-      while cmdargs.length > 0
-        info "cmdargs: #{cmdargs}"
-        unless process_option ca, cmdargs
-          break
-        end
-      end
-
-      info "ca: #{ca}"
-      info "ca.to_a: #{ca.to_a.inspect}"
-      info "cmdargs: #{cmdargs}"
-
-      allargs = Array.new
-      allargs << svncommand
-      allargs.concat ca.to_a
-      allargs.concat cmdargs
-
-      allargs
-    end
-
-    def process_option ca, cmdargs
-      arg = cmdargs.shift
-      info "arg: #{arg}"
-      info "cmdargs: #{cmdargs}"
-
-      if ca.process self, arg, cmdargs
-        true
-      else
-        cmdargs.unshift arg
-        false
-      end
-    end
-
-    def get_next_argument_as_integer cmdargs
-      cmdargs.shift.to_i
     end
 
     def revision_from_args cmdargs
