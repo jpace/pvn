@@ -4,6 +4,7 @@
 require 'pvn/util'
 require 'pvn/command'
 require 'pvn/revision'
+require 'pvn/cmdargs'
 
 module PVN
   class LogCommand < Command
@@ -40,89 +41,113 @@ module PVN
       Command.make_help_for self
     end
 
-    def self.has_argument tag, varname, *args
-      puts "tag: #{tag}".on_blue
-      puts "varname: #{varname}".on_blue
-      puts "args: #{args}".on_blue
+    @@options = Array.new    
+
+    def self.has_option_orig varname, tag, *args
+      puts "varname: #{varname}"
+      puts "tag: #{tag}"
+      puts "args: #{args}"
+
+      @@options << [ varname, tag, *args ]
     end
 
-    has_argument '-l', :limit, :type => :numeric, :default => 5
+    # has_option :limit, '-l', :type => :numeric, :default => 5, :negatable => true
+
+    def self.has_option optname, tag, args = Hash.new
+      @@options << [ optname, tag, args ]
+    end
+
+    DEFAULT_LIMIT = 5
+
+    has_option :limit,    '-l', :default => DEFAULT_LIMIT, :type => :integer, :setter => :get_next_argument_as_integer, :negate => [ %r{^--no-?limit} ]
+    has_option :revision, '-r', :setter => :revision_from_args
+
+    def self.make_command_args args
+      ca = CommandArgs.new
+      @@options.each do |opt|
+        ca.add_known_arg(*opt)
+      end
+      args.each do |key, val|
+        Log.info "key: #{key}; val: #{val}".yellow
+        if ca.has_key? key
+          Log.info "key: #{key}; val: #{val}".magenta
+          ca.set_arg key, val
+        end
+      end
+      ca
+    end      
 
     # yes, there's more to it ...
     LOG_REVISION_LINE = Regexp.new('^r(\d+)\s*\|\s*(\w+)')
-
-    DEFAULT_LIMIT = 5
     
     def initialize args = Hash.new
-      info "args: #{args}"
+      info "args: #{args}".cyan
       cmdargs = args[:command_args] || Array.new
-      execute = args[:execute].nil? ? true : args[:execute]
+      execute = args[:execute].nil? || args[:execute]
       @executor = args[:executor]
-      
-      limit    = DEFAULT_LIMIT
-      revision = nil
 
-      logargs = Hash.new
-      logargs[:limit] = (args[:limit] || "5")
-
-      info "args: #{args}"
-
-      while cmdargs.length > 0
-        arg = cmdargs.shift
-        info "arg: #{arg}"
-
-        if arg == '-r' && cmdargs.length > 0
-          update_revision_arg logargs, cmdargs
-        elsif arg == '-l' && cmdargs.length > 0
-          logargs[:limit] = cmdargs.shift.to_i
-        elsif %w{ --no-limit --nolimit }.include?(arg)
-          remove_limit_arg logargs
-        else
-          cmdargs.unshift arg
-          break
-        end        
-      end
-
-      allargs = Array.new
-      allargs << "log"
-      if logargs[:limit]
-        allargs << '-l' << logargs[:limit]
-      end
-
-      if logargs[:revision]
-        allargs << '-r' << logargs[:revision]
-      end
-
-      allargs.concat(cmdargs)
-
-      args[:command_args] = allargs
+      args[:command_args] = process_options cmdargs, args
 
       info "args: #{args}"
 
       super
     end
 
-    def remove_limit_arg logargs
-      logargs[:limit] = nil
+    def svncommand
+      "log"
     end
 
-    def update_revision_arg logargs, cmdargs
+    def process_options cmdargs, args
+      ca = self.class.make_command_args args
+      
+      while cmdargs.length > 0
+        info "cmdargs: #{cmdargs}"
+        unless process_option ca, cmdargs
+          break
+        end
+      end
+
+      info "ca: #{ca}"
+      info "ca.to_a: #{ca.to_a.inspect}"
+      info "cmdargs: #{cmdargs}"
+
+      allargs = Array.new
+      allargs << svncommand
+      allargs.concat ca.to_a
+      allargs.concat cmdargs
+
+      allargs
+    end
+
+    def process_option ca, cmdargs
+      arg = cmdargs.shift
+      info "arg: #{arg}"
+      info "cmdargs: #{cmdargs}"
+
+      if ca.process self, arg, cmdargs
+        true
+      else
+        cmdargs.unshift arg
+        false
+      end
+    end
+
+    def get_next_argument_as_integer cmdargs
+      cmdargs.shift.to_i
+    end
+
+    def revision_from_args cmdargs
       revarg = cmdargs.shift
-      info "revarg: #{revarg}"
-      rev = to_revision(revarg, cmdargs[-1])
-      info "rev: #{rev}"
+      Log.info "revarg: #{revarg}"
+      Log.info "@executor: #{@executor}"
+
+      rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
+      Log.info "rev: #{rev}"
 
       if rev.nil?
         raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
       end
-
-      logargs[:revision] = rev
-    end
-
-    def to_revision arg, fname
-      args = { :executor => @executor, :fname => fname, :value => arg }
-      info "args: #{args}".bold
-      Revision.new(args).revision
+      rev
     end
   end
 end
