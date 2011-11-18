@@ -38,25 +38,25 @@ module PVN
     end
 
     def test_command_basic
-      # assert_log_command "svn log -l 5"
+      assert_log_command "svn log -l 5"
       assert_log_command "svn log -l 10", %w{ -l 10 }
       assert_log_command "svn log -l 10 foo", %w{ -l 10 foo }
       assert_log_command "svn log -l 5 foo", %w{ foo }
     end
 
-    def xtest_command_nolimit
+    def test_command_nolimit
       assert_log_command "svn log foo", %w{ --no-limit foo }
       assert_log_command "svn log foo", %w{ --nolimit foo }
       assert_log_command "svn log", %w{ --no-limit }
       assert_log_command "svn log", %w{ --nolimit }
     end
 
-    def xtest_command_using_unconverted_revision
+    def test_command_using_unconverted_revision
       assert_log_command "svn log -l 5 -r 11", %w{ -r 11 }
       assert_log_command "svn log -l 10 -r 11", %w{ -l 10 -r 11 }
     end
 
-    def xtest_command_using_converted_revision
+    def test_command_using_converted_revision
       uses "svn/ant/core/src/limit50.txt"
 
       assert_log_command_mock "svn log -l 5 -r 1199931", %w{ -r -1 }

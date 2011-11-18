@@ -43,14 +43,6 @@ module PVN
 
     @@options = Array.new    
 
-    def self.has_option_orig varname, tag, *args
-      puts "varname: #{varname}"
-      puts "tag: #{tag}"
-      puts "args: #{args}"
-
-      @@options << [ varname, tag, *args ]
-    end
-
     def self.has_option optname, tag, args = Hash.new
       @@options << [ optname, tag, args ]
     end

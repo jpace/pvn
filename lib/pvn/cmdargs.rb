@@ -9,7 +9,7 @@ module PVN
     attr_reader :key
     attr_reader :tag
     attr_reader :options
-    attr_reader :value
+    attr_accessor :value
 
     def initialize key, tag, options
       @key = key
@@ -19,7 +19,7 @@ module PVN
     end
 
     def to_s
-      "#{@key} (#{@tag}) #{@options.inspect}"
+      "#{@key} (#{@tag}) #{@options.inspect} => #{@value}"
     end
   end
 
@@ -28,13 +28,19 @@ module PVN
     
     def initialize fromargs = Hash.new
       @known_args = Array.new
-      @args = Hash.new
-      @args.merge! fromargs
-      info "args: #{@args}".red
+      fromargs.each do |key, value|
+        if entry = entry_for_key(key)
+          entry.value = value
+        end
+      end
       info "known_args: #{@known_args}".red
     end
 
     def has_key? key
+      entry_for_key key
+    end
+
+    def entry_for_key key
       @known_args.detect { |ka| ka.key == key }
     end
 
@@ -42,7 +48,6 @@ module PVN
       info "tag: #{tag}".green
       @known_args.each do |entry|
         info "entry: #{entry}".green
-        
         if entry.tag == tag
           return entry.key
         elsif entry.options && entry.options[:negate] && entry.options[:negate].select { |x| x.match(tag) }
@@ -68,8 +73,8 @@ module PVN
     def to_a
       array = Array.new
       @known_args.each do |entry|
-        if @args[entry.key]
-          array << entry.tag << @args[entry.key].to_s
+        if entry.value
+          array << entry.tag << entry.value.to_s
         end
       end
       array
@@ -80,9 +85,7 @@ module PVN
     end
 
     def set_arg key, val
-      @args[key] = val
-      info "args: #{@args}"
-      info "known_args: #{@known_args}"
+      entry_for_key(key).value = val
     end
 
     def unset_arg key
@@ -92,13 +95,13 @@ module PVN
     def process obj, arg, otherargs
       info "arg: #{arg}"
       info "arg: #{arg.class}"
-      info "otherargs: #{otherargs}".on_blue
+      info "otherargs: #{otherargs}"
       @known_args.each do |entry|
         info "entry: #{entry}"
         if entry.tag == arg
           return _set_arg obj, entry, otherargs
-        elsif entry.options && entry.options[:negate] && entry.options[:negate].detect { |x| info "x: #{x}".magenta; x.match(arg) }
-          info "matched negative: #{entry.key}".on_red
+        elsif entry.options && entry.options[:negate] && entry.options[:negate].detect { |x| x.match(arg) }
+          info "matched negative: #{entry.key}"
           unset_arg entry.key
           return true
         end
