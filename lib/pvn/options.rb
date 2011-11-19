@@ -11,33 +11,41 @@ module PVN
   module Optional
     include Loggable
 
-    @@options = Hash.new { |h, k| h[k] = Array.new }
-
-    def has_option optname, tag, args = Hash.new
-      Log.info "self: #{self}".on_magenta
-      Log.info "optname: #{optname}".on_magenta
-
-      @@options[self] << [ optname, tag, args ]
-
-      Log.info "options: #{@@options}".on_magenta
+    def self.included base
+      base.extend ClassMethods
     end
 
-    def make_command_args args
-      ca = CommandArgs.new
-      @@options[self].each do |opt|
-        ca.add_known_arg(*opt)
+    module ClassMethods
+      Log.info "self: #{self}"
+
+      def has_option optname, tag, args = Hash.new
+        Log.info "self: #{self}"
+        Log.info "optname: #{optname}"
+
+        self.instance_eval { (@options ||= Array.new) << [ optname, tag, args ] }
       end
-      args.each do |key, val|
-        Log.info "key: #{key}; val: #{val}"
-        if ca.has_key? key
-          Log.info "key: #{key}; val: #{val}"
-          ca.set_arg key, val
+
+      def make_command_args args
+        Log.info "self: #{self}"
+
+        self.instance_eval do
+          ca = CommandArgs.new
+          @options.each do |opt|
+            ca.add_known_arg(*opt)
+          end
+          args.each do |key, val|
+            Log.info "key: #{key}; val: #{val}"
+            if ca.has_key? key
+              Log.info "key: #{key}; val: #{val}"
+              ca.set_arg key, val
+            end
+          end
+          ca
         end
       end
-      ca
     end
 
-    def get_next_argument_as_integer cmdargs
+    def next_argument_as_integer cmdargs
       cmdargs.shift.to_i
     end
   end

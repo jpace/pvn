@@ -10,14 +10,16 @@ require 'pvn/diff'
 
 module PVN
   class LogCommand < Command
-    # subcommands %w{ log l }
+    subcommands %w{ log l }
+    description "Print log messages for the given files."
+    usage "[OPTIONS] FILE..."
+    # summary 
 
     def self.subcommands
       %w{ log l }
     end
 
-    def self.description
-      "Print log messages for the given files."
+    def self.description      
     end
 
     def self.usage

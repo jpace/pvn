@@ -6,12 +6,13 @@ require 'riel'
 require 'pvn/util'
 require 'pvn/cmdexec'
 require 'pvn/options'
+require 'pvn/doc'
 
 module PVN
   class Command
-    extend PVN::Optional
-    include PVN::Optional
+    include Optional
     include Loggable
+    include Doc
 
     def self.has_revision_option
       has_option :revision, '-r', :setter => :revision_from_args

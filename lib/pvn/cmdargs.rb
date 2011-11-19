@@ -21,6 +21,18 @@ module PVN
     def to_s
       "#{@key} (#{@tag}) #{@options.inspect} => #{@value}"
     end
+
+    def match? arg
+      exact_match?(arg) || negative_match?(arg)
+    end
+
+    def exact_match? arg
+      tag == arg
+    end
+
+    def negative_match? arg
+      @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
+    end
   end
 
   class CommandArgs
@@ -48,10 +60,7 @@ module PVN
       info "tag: #{tag}".green
       @known_args.each do |entry|
         info "entry: #{entry}".green
-        if entry.tag == tag
-          return entry.key
-        elsif entry.options && entry.options[:negate] && entry.options[:negate].select { |x| x.match(tag) }
-          info "matched negative: #{entry.key}"
+        if entry.match? tag
           return entry.key
         end
       end
@@ -61,20 +70,20 @@ module PVN
     def add_known_arg key, tag, options
       opts = options.dup
 
-      info "opts: #{opts}".on_yellow
+      info "opts: #{opts}"
 
       defval = val = opts[:default]
 
       if defval
         # interpret the type and setter based on the default type
         if val.class == Fixnum  # no, we're not handling Bignum
-          opts[:setter] ||= :get_next_argument_as_integer
+          opts[:setter] ||= :next_argument_as_integer
           opts[:type]   ||= :integer
         end        
       end
 
       @known_args << CommandEntry.new(key, tag, opts)
-      info "known_args: #{@known_args}".on_yellow
+      info "known_args: #{@known_args}"
 
       if defval
         set_arg key, options[:default]
@@ -113,9 +122,9 @@ module PVN
       info "otherargs: #{otherargs}"
       @known_args.each do |entry|
         info "entry: #{entry}"
-        if entry.tag == arg
+        if entry.exact_match? arg
           return _set_arg obj, entry, otherargs
-        elsif entry.options && entry.options[:negate] && entry.options[:negate].detect { |x| x.match(arg) }
+        elsif entry.negative_match? arg
           info "matched negative: #{entry.key}"
           unset_arg entry.key
           return true
