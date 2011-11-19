@@ -62,12 +62,23 @@ module PVN
         end
       end
 
-      [ :subcommands, :description, :usage, :summary, :examples ].each do |name|
+      [ :subcommands, :description, :usage, :summary ].each do |name|
         define_method name do |val|
           self.instance_eval do 
             @doc ||= Documenter.new
             meth = (name.to_s + '=').to_sym
+            Log.info "sending #{meth} #{val}".cyan
             @doc.send meth, val
+          end
+        end
+      end      
+
+      [ :examples ].each do |name|
+        define_method name do
+          self.instance_eval do 
+            @doc ||= Documenter.new
+            Log.info "sending #{name}".red
+            @doc.send name
           end
         end
       end

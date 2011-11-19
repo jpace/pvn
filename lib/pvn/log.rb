@@ -1,9 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/util'
 require 'pvn/command'
-require 'pvn/diff'
+# require 'pvn/diff'
 
 module PVN
   class LogCommand < Command
@@ -23,10 +22,7 @@ module PVN
               "  Prior to executing commit against Subversion, the \"check\"",
               "  command will be run against the given files." ]
     
-    examples [ 
-              [ "pvn log foo.rb",
-                "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
-             ]
+    examples << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option

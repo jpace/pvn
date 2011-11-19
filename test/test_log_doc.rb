@@ -15,9 +15,7 @@ module PVN
     def test_documentation
       strio = StringIO.new
       LogCommand.to_doc strio
-      puts "strio: #{strio.string}".green
-
-      
+      puts "strio: #{strio.string}".green      
     end
   end
 end

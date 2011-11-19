@@ -12,8 +12,9 @@ module PVN
     attr_accessor :description
     attr_accessor :usage
     attr_accessor :summary
-    attr_accessor :examples
-    attr_accessor :options
+    
+    attr_reader :examples
+    attr_reader :options
 
     def initialize
       @examples = Array.new

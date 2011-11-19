@@ -24,7 +24,7 @@ module PVN
     end
 
     def match? arg
-      exact_match?(arg) || negative_match?(arg)
+      exact_match?(arg) || negative_match?(arg) || regexp_match?(arg)
     end
 
     def exact_match? arg
@@ -33,6 +33,10 @@ module PVN
 
     def negative_match? arg
       @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
+    end
+
+    def regexp_match? arg
+      options[:regexp] && options[:regexp].match(arg)
     end
   end
 
@@ -116,15 +120,22 @@ module PVN
       set_arg key, nil
     end
 
-    def process obj, arg, otherargs
-      info "arg: #{arg}"
+    def process obj, args
+      arg = args[0]
+      info "arg: #{arg}".on_green
       info "arg: #{arg.class}"
-      info "otherargs: #{otherargs}"
+      info "args: #{args}"
       @known_options.each do |entry|
-        info "entry: #{entry}"
+        info "entry: #{entry}".on_blue
         if entry.exact_match? arg
-          return _set_arg obj, entry, otherargs
+          args.shift
+          return _set_arg obj, entry, args
+        # elsif entry.regexp_match? arg
+        #   info "arg: #{arg}".on_blue
+        #   args.shift
+        #   return _set_arg obj, entry, args
         elsif entry.negative_match? arg
+          args.shift
           info "matched negative: #{entry.key}"
           unset_arg entry.key
           return true
