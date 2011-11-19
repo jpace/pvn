@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'riel'
+require 'pvn/options'
 
 module PVN
   class CommandEntry
@@ -38,14 +39,12 @@ module PVN
   class CommandArgs
     include Loggable
     
-    def initialize fromargs = Hash.new
-      @known_args = Array.new
-      fromargs.each do |key, value|
-        if entry = entry_for_key(key)
-          entry.value = value
-        end
+    def initialize options
+      @known_options = Array.new
+      options.each do |opt|
+        add_known_option opt
       end
-      info "known_args: #{@known_args}".red
+      info "known_options: #{@known_options}".red
     end
 
     def has_key? key
@@ -53,13 +52,12 @@ module PVN
     end
 
     def entry_for_key key
-      @known_args.detect { |ka| ka.key == key }
+      @known_options.detect { |ka| ka.key == key }
     end
 
     def key_for_tag tag
-      info "tag: #{tag}".green
-      @known_args.each do |entry|
-        info "entry: #{entry}".green
+      info "tag: #{tag}"
+      @known_options.each do |entry|
         if entry.match? tag
           return entry.key
         end
@@ -67,8 +65,10 @@ module PVN
       nil
     end
 
-    def add_known_arg key, tag, options
-      opts = options.dup
+    def add_known_option opt
+      key = opt.name
+      tag = opt.tag
+      opts = opt.options.dup
 
       info "opts: #{opts}"
 
@@ -82,11 +82,11 @@ module PVN
         end        
       end
 
-      @known_args << CommandEntry.new(key, tag, opts)
-      info "known_args: #{@known_args}"
+      @known_options << CommandEntry.new(key, tag, opts)
+      info "known_options: #{@known_options}"
 
       if defval
-        set_arg key, options[:default]
+        set_arg key, defval
       end
     end
 
@@ -96,7 +96,7 @@ module PVN
 
     def to_a
       array = Array.new
-      @known_args.each do |entry|
+      @known_options.each do |entry|
         if entry.value
           array << entry.tag << entry.value.to_s
         end
@@ -120,7 +120,7 @@ module PVN
       info "arg: #{arg}"
       info "arg: #{arg.class}"
       info "otherargs: #{otherargs}"
-      @known_args.each do |entry|
+      @known_options.each do |entry|
         info "entry: #{entry}"
         if entry.exact_match? arg
           return _set_arg obj, entry, otherargs

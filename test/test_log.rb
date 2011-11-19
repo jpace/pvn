@@ -63,5 +63,10 @@ module PVN
       assert_log_command_mock "svn log -l 10 -r 1199922", %w{ -l 10 -r -3 }
       assert_log_command_mock "svn log -l 10 -r 1153485", %w{ -l 10 -r -17 }
     end
+
+    def test_documentation
+      doc = LogCommand.to_doc
+      puts "doc: #{doc}".on_green
+    end
   end
 end

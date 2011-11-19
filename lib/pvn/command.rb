@@ -6,16 +6,16 @@ require 'riel'
 require 'pvn/util'
 require 'pvn/cmdexec'
 require 'pvn/options'
-require 'pvn/doc'
+# require 'pvn/doc'
 
 module PVN
   class Command
     include Optional
     include Loggable
-    include Doc
+    # include Doc
 
     def self.has_revision_option
-      has_option :revision, '-r', :setter => :revision_from_args
+      has_option :revision, '-r', "revision", :setter => :revision_from_args
     end
     
     def self.make_help(subcommands, description)
@@ -129,7 +129,9 @@ module PVN
       info "cmdargs: #{cmdargs}"
 
       allargs = Array.new
-      allargs << svncommand
+      cmd = self.class::COMMAND
+      info "cmd: #{cmd.inspect}".yellow
+      allargs << cmd
       allargs.concat ca.to_a
       allargs.concat cmdargs
 

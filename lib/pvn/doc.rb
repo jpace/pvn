@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'riel'
+require 'pvn/documenter'
 
 Log.level = Log::DEBUG
 
@@ -15,17 +16,18 @@ module PVN
     end
 
     module ClassMethods
-      def _save key, val
-        Log.info "self: #{self}".on_blue
-        Log.info "key: #{key}".on_blue
-        Log.info "val: #{val}".on_blue
-        self.instance_eval { (@doc ||= Hash.new)[key] = val }
-      end
-
       [ :subcommands, :description, :usage, :summary, :examples ].each do |name|
         define_method name do |val|
-          _save name, val
+          self.instance_eval do 
+            @doc ||= Documenter.new
+            meth = (name.to_s + '=').to_sym
+            @doc.send meth, val
+          end
         end
+      end
+      
+      def to_doc io = $stdout
+        self.instance_eval { @doc.to_doc io }
       end
     end
   end

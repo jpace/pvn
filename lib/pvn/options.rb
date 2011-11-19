@@ -4,10 +4,25 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/cmdargs'
+require 'pvn/documenter'
 
 Log.level = Log::DEBUG
 
 module PVN
+  class Option
+    attr_accessor :name
+    attr_accessor :tag
+    attr_accessor :options
+    attr_accessor :description
+
+    def initialize name, tag, description, options
+      @name = name
+      @tag = tag
+      @description = description
+      @options = options
+    end
+  end
+
   module Optional
     include Loggable
 
@@ -18,21 +33,24 @@ module PVN
     module ClassMethods
       Log.info "self: #{self}"
 
-      def has_option optname, tag, args = Hash.new
+      def has_option optname, tag, desc, args = Hash.new
         Log.info "self: #{self}"
         Log.info "optname: #{optname}"
 
-        self.instance_eval { (@options ||= Array.new) << [ optname, tag, args ] }
+        self.instance_eval do 
+          opt = Option.new optname, tag, desc, args
+          (@options ||= Array.new) << opt
+
+          @doc ||= Documenter.new
+          @doc.options << opt
+        end
       end
 
       def make_command_args args
         Log.info "self: #{self}"
 
         self.instance_eval do
-          ca = CommandArgs.new
-          @options.each do |opt|
-            ca.add_known_arg(*opt)
-          end
+          ca = CommandArgs.new @options
           args.each do |key, val|
             Log.info "key: #{key}; val: #{val}"
             if ca.has_key? key
@@ -42,6 +60,20 @@ module PVN
           end
           ca
         end
+      end
+
+      [ :subcommands, :description, :usage, :summary, :examples ].each do |name|
+        define_method name do |val|
+          self.instance_eval do 
+            @doc ||= Documenter.new
+            meth = (name.to_s + '=').to_sym
+            @doc.send meth, val
+          end
+        end
+      end
+      
+      def to_doc io = $stdout
+        self.instance_eval { @doc.to_doc io }
       end
     end
 
