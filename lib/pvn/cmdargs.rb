@@ -59,9 +59,24 @@ module PVN
     end
 
     def add_known_arg key, tag, options
-      @known_args << CommandEntry.new(key, tag, options)
-      info "known_args: #{@known_args}"
-      if options[:default]
+      opts = options.dup
+
+      info "opts: #{opts}".on_yellow
+
+      defval = val = opts[:default]
+
+      if defval
+        # interpret the type and setter based on the default type
+        if val.class == Fixnum  # no, we're not handling Bignum
+          opts[:setter] ||= :get_next_argument_as_integer
+          opts[:type]   ||= :integer
+        end        
+      end
+
+      @known_args << CommandEntry.new(key, tag, opts)
+      info "known_args: #{@known_args}".on_yellow
+
+      if defval
         set_arg key, options[:default]
       end
     end

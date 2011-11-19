@@ -5,11 +5,18 @@ require 'rubygems'
 require 'riel'
 require 'pvn/util'
 require 'pvn/cmdexec'
+require 'pvn/options'
 
 module PVN
   class Command
+    extend PVN::Optional
+    include PVN::Optional
     include Loggable
 
+    def self.has_revision_option
+      has_option :revision, '-r', :setter => :revision_from_args
+    end
+    
     def self.make_help(subcommands, description)
       help = Array.new
 
@@ -87,11 +94,15 @@ module PVN
     attr_reader :output
     attr_reader :command
 
-    def initialize(args = Hash.new)
+    def initialize args = Hash.new
       info "args: #{args}"
-      @execute  = args[:execute].nil? ? true : args[:execute]
-      @args     = args[:command_args]
+      @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
+
+      cmdargs = args[:command_args] || Array.new
+
+      @args = process_options cmdargs, args
+
       @command = "svn " + @args.join(" ")
       info "@command: #{@command}"
       info "@executor: #{@executor}"
@@ -100,10 +111,6 @@ module PVN
       else
         debug "not executing: #{@command}".on_red
       end
-    end
-
-    def get_next_argument_as_integer cmdargs
-      cmdargs.shift.to_i
     end
 
     def process_options cmdargs, args
@@ -139,6 +146,20 @@ module PVN
         cmdargs.unshift arg
         false
       end
+    end
+
+    def revision_from_args cmdargs
+      revarg = cmdargs.shift
+      Log.info "revarg: #{revarg}".on_blue
+      Log.info "@executor: #{@executor}".on_blue
+
+      rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
+      Log.info "rev: #{rev}"
+
+      if rev.nil?
+        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
+      end
+      rev
     end
   end
 end
