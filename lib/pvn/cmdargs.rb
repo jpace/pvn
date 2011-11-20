@@ -151,7 +151,7 @@ module PVN
 
       if setter = entry.options[:setter]
         info "setter: #{setter}".on_black
-        set_arg entry.key, setter.to_proc.call(obj, args)
+        set_arg entry.key, setter.to_proc.call(obj, self, args)
       end
       true
     end

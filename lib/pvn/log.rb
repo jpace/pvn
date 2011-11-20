@@ -25,6 +25,12 @@ module PVN
     examples << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
-    has_revision_option
+    has_revision_option :unsets => :limit
+
+    def revision_from_args ca, cmdargs
+      rev = super
+      ca.unset_arg :limit
+      rev
+    end
   end
 end

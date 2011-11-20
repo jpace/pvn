@@ -21,6 +21,10 @@ module PVN
       @description = description
       @options = options
     end
+
+    def to_s
+      [ @name, @tag, @options ].join(", ")
+    end
   end
 
   module Optional
@@ -43,6 +47,12 @@ module PVN
 
           @doc ||= Documenter.new
           @doc.options << opt
+        end
+      end
+
+      def find_option optname
+        self.instance_eval do 
+          @options.find { |opt| opt.name == optname }
         end
       end
 
@@ -88,7 +98,7 @@ module PVN
       end
     end
 
-    def next_argument_as_integer cmdargs
+    def next_argument_as_integer ca, cmdargs
       cmdargs.shift.to_i
     end
   end

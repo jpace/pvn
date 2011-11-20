@@ -48,7 +48,8 @@ module PVN
         @revision = num
       elsif md = %r{^\+(\d+)}.match(num)
         num = md[1].to_i
-        log = LogCommand.new :filename => @fname, :executor => @executor
+        info "num: #{num}"
+        log = LogCommand.new :filename => @fname, :executor => @executor, :limit => nil
         info "log: #{log}"
         # info "log.output: #{log.output}"
         @revision = read_from_log_output num, log.output.reverse

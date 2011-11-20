@@ -12,7 +12,7 @@ module PVN
     include Optional
     include Loggable
 
-    def self.has_revision_option
+    def self.has_revision_option options = Hash.new
       has_option :revision, '-r', "revision", :setter => :revision_from_args, :regexp => Regexp.new('^[\-\+]?\d+$')
     end
     
@@ -36,6 +36,8 @@ module PVN
 
     def process_options cmdargs, args
       ca = self.class.make_command_args args
+
+      info "ca: #{ca}".yellow
       
       while cmdargs.length > 0
         info "cmdargs: #{cmdargs}"
@@ -64,7 +66,7 @@ module PVN
       end
     end
 
-    def revision_from_args cmdargs
+    def revision_from_args ca, cmdargs
       require 'pvn/revision'
       
       revarg = cmdargs.shift

@@ -67,16 +67,16 @@ module PVN
     end
 
     def run args
-      info "args: #{args}"
+      log "args: #{args}"
       cmd, subcmd, *cmdargs = args.split
       info "cmd: #{cmd}"
       info "subcmd: #{subcmd}"
-      info "cmdargs: #{cmdargs}"
+      info "cmdargs: #{cmdargs}".on_black
 
       limit = nil
 
       if idx = cmdargs.index("-l")
-        info "idx: #{idx}"
+        info "idx: #{idx}".on_yellow
         limit = cmdargs[idx + 1].to_i
       end
 
