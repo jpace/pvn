@@ -26,11 +26,5 @@ module PVN
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :unsets => :limit
-
-    def revision_from_args ca, cmdargs
-      rev = super
-      ca.unset_arg :limit
-      rev
-    end
   end
 end
