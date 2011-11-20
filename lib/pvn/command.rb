@@ -28,12 +28,13 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
       @args     = process_options cmdargs, args
-      @command  = "svn " + @args.join(" ")
-
-      run
+      run @args
     end
 
-    def run
+    def run args
+      allargs = [ self.class::COMMAND ] + args
+      @command  = "svn " + allargs.join(" ")
+
       if @execute
         @output = @executor.run(@command)
       else
@@ -57,10 +58,7 @@ module PVN
       info "ca.to_a: #{ca.to_a.inspect}"
       info "cmdargs: #{cmdargs}"
 
-      cmd = self.class::COMMAND
-      info "cmd: #{cmd}".yellow
-
-      [ self.class::COMMAND ] + ca.to_a + cmdargs
+      ca.to_a + cmdargs
     end
 
     def process_option ca, cmdargs
