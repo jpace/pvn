@@ -29,7 +29,11 @@ module PVN
       cmdargs   = args[:command_args] || Array.new
       @args     = process_options cmdargs, args
       @command  = "svn " + @args.join(" ")
-      
+
+      run
+    end
+
+    def run
       if @execute
         @output = @executor.run(@command)
       else

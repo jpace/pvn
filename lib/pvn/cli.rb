@@ -6,7 +6,7 @@ require 'riel'
 require 'optparse'
 require 'pvn/log'
 require 'pvn/cmdexec'
-require 'singleton'
+require 'pvn/diff'
 
 Log.level = Log::INFO
 Log.set_widths(-15, 5, -35)
@@ -66,10 +66,21 @@ module PVN
 
       subcmd = arguments.shift
       Log.info "subcmd: #{subcmd}"
-      
-      logargs = { :execute => false, :command_args => arguments, :executor => mle }
-      LogCommand.new logargs
-      return true if true
+
+      case subcmd
+      when "log"
+        logargs = { :execute => true, :command_args => arguments }
+        logcmd = LogCommand.new logargs
+        puts logcmd.output
+        return true if true
+      when "diff"
+        diffargs = { :execute => true, :command_args => arguments }
+        diffcmd = DiffCommand.new diffargs
+        puts diffcmd.output
+        return true if true
+      else
+        puts "don't understand subcommand: #{subcmd}"
+      end
 
       # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.
       options = {

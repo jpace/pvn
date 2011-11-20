@@ -18,5 +18,13 @@ module PVN
     has_option :whitespace, '-w', "whether to consider whitespace", :default => false, :negate => [ %r{^--no-?whitespace} ]
     has_option :javadiff, '-j', "specify the program for diffing java files"
     has_revision_option
+
+    def run
+      info "running!".on_blue
+
+      # this will be on a file-by-file basis, using specific diff programs for the file type.
+
+      super
+    end
   end
 end
