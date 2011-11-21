@@ -28,7 +28,7 @@ module PVN
     end
 
     def exact_match? arg
-      tag == arg
+      arg == tag || arg == '--' + @key.to_s
     end
 
     def negative_match? arg
