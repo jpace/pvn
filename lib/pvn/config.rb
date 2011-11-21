@@ -23,7 +23,14 @@ module PVN
 
     def self.read
       cfg = self.instance
-      require '/home/jpace/.pvn'
+      pvndir = ENV['HOME'] + '/.pvn'
+      cfgfile = pvndir + '/config'
+      
+      begin
+        require cfgfile
+      rescue LoadError => e
+        # no configuration
+      end
       cfg
     end
 

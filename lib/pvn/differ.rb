@@ -21,21 +21,10 @@ module PVN
       fromfile = args[-2]
       tofile = args[-1]
 
-      cfg = PVN::Configuration.read
+      diffcmd = diff_command_by_ext fromname
 
-      diffcfg = cfg.section "diff"
-
-      ext_to_diffcmd = Hash.new
-      diffcfg.each do |dc|
-        ext_to_diffcmd[dc[0]] = dc[1]
-      end
-
-      extname = Pathname.new(fromname).extname
-
-      if extname.empty?
-        run_diff_default fromlabel, tolabel, fromfile, tofile
-      elsif cmd = ext_to_diffcmd[extname[1 .. -1]]
-        workingcmd = cmd.dup
+      if diffcmd
+        workingcmd = diffcmd.dup
 
         [ fromlabel, tolabel, fromfile, tofile ].each_with_index do |str, idx|
           workingcmd.gsub! Regexp.new('\{' + idx.to_s + '\}'), str
@@ -45,6 +34,26 @@ module PVN
       else
         run_diff_default fromlabel, tolabel, fromfile, tofile
       end
+    end
+
+    def diff_command_by_ext fname
+      extname = Pathname.new(fname).extname
+      return nil if extname.empty?
+
+      ext = extname[1 .. -1]
+
+      cfg = PVN::Configuration.read
+
+      diffcfg = cfg.section "diff"
+      return nil unless diffcfg
+
+      diffcfg.each do |dc|
+        if dc[0] == ext
+          return dc[1]
+        end
+      end
+
+      nil
     end
 
     def run_diff_default fromfname, tofname, fromfile, tofile
