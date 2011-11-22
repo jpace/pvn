@@ -7,6 +7,7 @@ require 'pvn/cmdargs'
 require 'pvn/documenter'
 
 Log.level = Log::DEBUG
+Log.set_widths(-15, 5, -35)
 
 module PVN
   class Option
@@ -35,8 +36,6 @@ module PVN
     end
 
     module ClassMethods
-      Log.info "self: #{self}"
-
       def has_option optname, tag, desc, args = Hash.new
         Log.info "self: #{self}"
         Log.info "optname: #{optname}"
@@ -60,15 +59,15 @@ module PVN
         Log.info "self: #{self}"
 
         self.instance_eval do
-          ca = CommandArgs.new @options
+          optset = OptionSet.new @options
           args.each do |key, val|
             Log.info "key: #{key}; val: #{val}"
-            if ca.has_key? key
+            if optset.has_key? key
               Log.info "key: #{key}; val: #{val}"
-              ca.set_arg key, val
+              optset.set_arg key, val
             end
           end
-          ca
+          optset
         end
       end
 
@@ -77,7 +76,6 @@ module PVN
           self.instance_eval do 
             @doc ||= Documenter.new
             meth = (name.to_s + '=').to_sym
-            Log.info "sending #{meth} #{val}".cyan
             @doc.send meth, val
           end
         end
@@ -87,7 +85,6 @@ module PVN
         define_method name do
           self.instance_eval do 
             @doc ||= Documenter.new
-            Log.info "sending #{name}".red
             @doc.send name
           end
         end

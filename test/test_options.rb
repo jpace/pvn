@@ -8,9 +8,9 @@ Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class TestCommandArgs < Test::Unit::TestCase
-    def test_command_entry
-      ce = CommandEntry.new(:somekey, '-x', { :default => "algo" })
+  class TestOptionSet < Test::Unit::TestCase
+    def test_option_entry
+      ce = OptionEntry.new(:somekey, '-x', { :default => "algo" })
 
       assert_equal :somekey, ce.key
       assert_equal '-x', ce.tag

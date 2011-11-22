@@ -6,17 +6,17 @@ require 'riel'
 require 'pvn/options'
 
 module PVN
-  class CommandEntry
+  class OptionEntry
     attr_reader :key
     attr_reader :tag
     attr_reader :options
-    attr_accessor :value
+    attr_reader :value
 
     def initialize key, tag, options
       @key = key
       @tag = tag
       @options = options
-      @value = nil
+      @value = @options && @options[:multiple] ? Array.new : nil
     end
 
     def to_s
@@ -38,17 +38,25 @@ module PVN
     def regexp_match? arg
       options[:regexp] && options[:regexp].match(arg)
     end
+
+    def set val
+      if @options && @options[:multiple]
+        @value << val
+      else
+        @value = val
+      end
+    end
   end
 
-  class CommandArgs
+  class OptionSet
     include Loggable
     
     def initialize options
-      @known_options = Array.new
+      @options = Array.new
       options.each do |opt|
         add_known_option opt
       end
-      info "known_options: #{@known_options}".red
+      info "options: #{@options}".red
     end
 
     def has_key? key
@@ -56,12 +64,12 @@ module PVN
     end
 
     def entry_for_key key
-      @known_options.detect { |ka| ka.key == key }
+      @options.detect { |ka| ka.key == key }
     end
 
     def key_for_tag tag
       info "tag: #{tag}"
-      @known_options.each do |entry|
+      @options.each do |entry|
         if entry.match? tag
           return entry.key
         end
@@ -86,8 +94,8 @@ module PVN
         end        
       end
 
-      @known_options << CommandEntry.new(key, tag, opts)
-      info "known_options: #{@known_options}"
+      @options << OptionEntry.new(key, tag, opts)
+      info "options: #{@options}"
 
       if defval
         set_arg key, defval
@@ -100,7 +108,7 @@ module PVN
 
     def to_a
       array = Array.new
-      @known_options.each do |entry|
+      @options.each do |entry|
         if entry.value
           array << entry.tag << entry.value.to_s
         end
@@ -113,7 +121,7 @@ module PVN
     end
 
     def set_arg key, val
-      entry_for_key(key).value = val
+      entry_for_key(key).set val
     end
 
     def unset_arg key
@@ -122,16 +130,16 @@ module PVN
 
     def process obj, args
       arg = args[0]
-      info "arg: #{arg}".on_green
+      info "arg: #{arg}"
       info "arg: #{arg.class}"
       info "args: #{args}"
-      @known_options.each do |entry|
-        info "entry: #{entry}".on_blue
+      @options.each do |entry|
+        info "entry: #{entry}"
         if entry.exact_match? arg
           args.shift
           return _set_arg obj, entry, args
         elsif entry.regexp_match? arg
-          info "arg: #{arg}".on_blue
+          info "arg: #{arg}"
           # args.shift
           return _set_arg obj, entry, args
         elsif entry.negative_match? arg

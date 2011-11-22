@@ -16,7 +16,6 @@ module PVN
       allopts = options.dup
       allopts[:setter] = :revision_from_args
       allopts[:regexp] = Regexp.new('^[\-\+]?\d+$')
-      # :regexp => Regexp.new('^-\d+')
       has_option :revision, '-r', "revision", allopts
     end
     
@@ -24,7 +23,7 @@ module PVN
     attr_reader :command
 
     def initialize args = Hash.new
-      info "args: #{args}"
+      info "args: #{args}".on_green
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
@@ -36,7 +35,13 @@ module PVN
       allargs = [ self.class::COMMAND ] + args
       @command  = "svn " + allargs.join(" ")
 
+      info "self.class: #{self.class}"
+      info "@command  : #{@command}".on_black
+      info "@execute  : #{@execute}".on_black
+
       if @execute
+        info "@executor : #{@executor}".on_black
+
         @output = @executor.run(@command)
       else
         debug "not executing: #{@command}".on_red
@@ -78,6 +83,10 @@ module PVN
         raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
       end
       rev
+    end
+
+    def option optname
+      self.class.find_option optname
     end
   end
 end

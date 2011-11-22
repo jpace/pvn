@@ -7,6 +7,7 @@ require 'optparse'
 require 'pvn/log'
 require 'pvn/cmdexec'
 require 'pvn/diff'
+require 'pvn/describe'
 
 Log.level = Log::INFO
 Log.set_widths(-15, 5, -35)
@@ -59,6 +60,13 @@ module PVN
   
   class CLI
     include Loggable
+
+    def self.run_command_with_output cmdcls, execute, args
+      cmd = cmdcls.new :execute => execute, :command_args => args
+      Log.info "cmd: #{cmd}".on_black
+      puts cmd.output
+      true
+    end
     
     def self.execute stdout, arguments = Array.new
       mle = MockLogExecutor.new
@@ -69,15 +77,11 @@ module PVN
 
       case subcmd
       when "log"
-        logargs = { :execute => true, :command_args => arguments }
-        logcmd = LogCommand.new logargs
-        puts logcmd.output
-        return true if true
+        return run_command_with_output LogCommand, true, arguments
       when "diff"
-        diffargs = { :execute => true, :command_args => arguments }
-        diffcmd = DiffCommand.new diffargs
-        puts diffcmd.output
-        return true if true
+        return run_command_with_output DiffCommand, true, arguments
+      when "describe"
+        return run_command_with_output DescribeCommand, true, arguments
       else
         puts "don't understand subcommand: #{subcmd}"
       end
