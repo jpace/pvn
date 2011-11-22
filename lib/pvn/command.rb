@@ -55,7 +55,8 @@ module PVN
       
       while cmdargs.length > 0
         info "cmdargs: #{cmdargs}"
-        unless process_option ca, cmdargs
+        info "cmdargs: #{cmdargs}"
+        unless ca.process self, cmdargs
           break
         end
       end
@@ -65,11 +66,6 @@ module PVN
       info "cmdargs: #{cmdargs}"
 
       ca.to_a + cmdargs
-    end
-
-    def process_option ca, cmdargs
-      info "cmdargs: #{cmdargs}"
-      ca.process self, cmdargs
     end
 
     def revision_from_args ca, cmdargs

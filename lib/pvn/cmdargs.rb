@@ -7,36 +7,31 @@ require 'pvn/options'
 
 module PVN
   class OptionEntry
+    include Loggable
+    
     attr_reader :key
     attr_reader :tag
     attr_reader :options
     attr_reader :value
 
+    class << self
+      alias_method :new_orig, :new
+      
+      def new key, tag, options
+        cls = options && options[:multiple] ? MultiValueOptionEntry : OptionEntry
+        cls.new_orig key, tag, options
+      end
+    end
+
     def initialize key, tag, options
       @key = key
       @tag = tag
       @options = options
-      @value = @options && @options[:multiple] ? Array.new : nil
+      @value = nil
     end
 
     def to_s
       "#{@key} (#{@tag}) #{@options.inspect} => #{@value}"
-    end
-
-    def match? arg
-      exact_match?(arg) || negative_match?(arg) || regexp_match?(arg)
-    end
-
-    def exact_match? arg
-      arg == tag || arg == '--' + @key.to_s
-    end
-
-    def negative_match? arg
-      @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
-    end
-
-    def regexp_match? arg
-      options[:regexp] && options[:regexp].match(arg)
     end
 
     def set val
@@ -48,13 +43,25 @@ module PVN
     end
   end
 
+  class MultiValueOptionEntry < OptionEntry
+    def initialize key, tag, options
+      super
+      info "options: #{options}"
+      @value = Array.new
+    end
+
+    def set val
+      @value << val
+    end
+  end
+
   class OptionSet
     include Loggable
     
-    def initialize options
-      @options = Array.new
+    def initialize options = Array.new
+      @options = Hash.new
       options.each do |opt|
-        add_known_option opt
+        add_option opt
       end
       info "options: #{@options}".red
     end
@@ -64,23 +71,13 @@ module PVN
     end
 
     def entry_for_key key
-      @options.detect { |ka| ka.key == key }
+      @options.values.detect { |ka| ka.key == key }
     end
 
-    def key_for_tag tag
-      info "tag: #{tag}"
-      @options.each do |entry|
-        if entry.match? tag
-          return entry.key
-        end
-      end
-      nil
-    end
-
-    def add_known_option opt
-      key = opt.name
-      tag = opt.tag
-      opts = opt.options.dup
+    def add_option option
+      key = option.name
+      tag = option.tag
+      opts = option.options.dup
 
       info "opts: #{opts}"
 
@@ -94,11 +91,36 @@ module PVN
         end        
       end
 
-      @options << OptionEntry.new(key, tag, opts)
+      @options[option] = OptionEntry.new(key, tag, opts)
       info "options: #{@options}"
 
       if defval
         set_arg key, defval
+      end
+    end
+
+    def create_entry option
+      key = option.name
+      tag = option.tag
+      opts = option.options.dup
+
+      info "opts: #{opts}"
+
+      defval = val = opts[:default]
+
+      if defval
+        # interpret the type and setter based on the default type
+        if val.class == Fixnum  # no, we're not handling Bignum
+          opts[:setter] ||= :next_argument_as_integer
+          opts[:type]   ||= :integer
+        end        
+      end
+
+      @options[option] = OptionEntry.new(key, tag, opts)
+      info "options: #{@options}"
+
+      if defval
+        entry.set defval
       end
     end
 
@@ -108,7 +130,7 @@ module PVN
 
     def to_a
       array = Array.new
-      @options.each do |entry|
+      @options.values.each do |entry|
         if entry.value
           array << entry.tag << entry.value.to_s
         end
@@ -133,16 +155,17 @@ module PVN
       info "arg: #{arg}"
       info "arg: #{arg.class}"
       info "args: #{args}"
-      @options.each do |entry|
-        info "entry: #{entry}"
-        if entry.exact_match? arg
+      @options.each do |option, entry|
+        info "option: #{option}".on_blue
+        info "entry: #{entry}".on_blue
+        if option.exact_match? arg
           args.shift
           return _set_arg obj, entry, args
-        elsif entry.regexp_match? arg
+        elsif option.regexp_match? arg
           info "arg: #{arg}"
           # args.shift
           return _set_arg obj, entry, args
-        elsif entry.negative_match? arg
+        elsif option.negative_match? arg
           args.shift
           info "matched negative: #{entry.key}"
           unset_arg entry.key

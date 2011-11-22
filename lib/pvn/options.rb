@@ -26,6 +26,22 @@ module PVN
     def to_s
       [ @name, @tag, @options ].join(", ")
     end
+
+    def match? arg
+      exact_match?(arg) || negative_match?(arg) || regexp_match?(arg)
+    end
+
+    def exact_match? arg
+      arg == tag || arg == '--' + @name.to_s
+    end
+
+    def negative_match? arg
+      @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
+    end
+
+    def regexp_match? arg
+      options[:regexp] && options[:regexp].match(arg)
+    end
   end
 
   module Optional
@@ -41,8 +57,10 @@ module PVN
         Log.info "optname: #{optname}"
 
         self.instance_eval do 
+          @option_set ||= OptionSet.new
           opt = Option.new optname, tag, desc, args
           (@options ||= Array.new) << opt
+          @option_set.add_option opt
 
           @doc ||= Documenter.new
           @doc.options << opt
