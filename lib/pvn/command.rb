@@ -16,6 +16,7 @@ module PVN
       allopts = options.dup
       allopts[:setter] = :revision_from_args
       allopts[:regexp] = Regexp.new('^[\-\+]?\d+$')
+      # :regexp => Regexp.new('^-\d+')
       has_option :revision, '-r', "revision", allopts
     end
     

@@ -130,10 +130,10 @@ module PVN
         if entry.exact_match? arg
           args.shift
           return _set_arg obj, entry, args
-        # elsif entry.regexp_match? arg
-        #   info "arg: #{arg}".on_blue
-        #   args.shift
-        #   return _set_arg obj, entry, args
+        elsif entry.regexp_match? arg
+          info "arg: #{arg}".on_blue
+          # args.shift
+          return _set_arg obj, entry, args
         elsif entry.negative_match? arg
           args.shift
           info "matched negative: #{entry.key}"

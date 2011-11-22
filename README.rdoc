@@ -6,9 +6,39 @@
 
 FIX (describe your package)
 
+A frontend to svn, pvn has relative revision numbers (e.g. -1 means the most
+recent revision, +1 means the first revision), checks to run prior to checkin,
+statistics (files and lines changed; changes in file size), simplified undo
+operations (reverting changes of earlier checkins).
+
 == FEATURES/PROBLEMS:
 
 * FIX (list of features or problems)
+
+  pvn delta - adds and removes files automatically
+
+  pvn stat - shows lines and files changed
+
+  pvn desc - shows summary of a checkin
+
+  pvn sizes - show changes in size of files
+
+  pvn check - run checks on files
+
+  pvn devstats - show changes in code, per programmer
+
+  pvn diffhead - diff to head
+
+and the usual svn commands, with pvn revisions:
+
+  pvn diff -2 -1 - compare the last two checkins
+
+  pvn 
+
+A frontend to svn, pvn has relative revision numbers (e.g. -1 means the most
+recent revision, +1 means the first revision), checks to run prior to checkin,
+statistics (files and lines changed; changes in file size), simplified undo
+operations (reverting changes of earlier checkins).
 
 == SYNOPSIS:
 

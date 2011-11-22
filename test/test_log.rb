@@ -65,5 +65,14 @@ module PVN
       # a revision without a limit is just that entry.
       assert_log_command "svn log -r 1090319", %w{ -r +1 }
     end
+
+    def test_command_with_implied_revision
+      uses "svn/ant/core/src/limit50.txt"
+      
+      assert_log_command "svn log -r 1090319", %w{ +1 }
+      assert_log_command "svn log -r 1199931", %w{ -1 }
+      assert_log_command "svn log -r 1199922", %w{ -3 }
+      assert_log_command "svn log -r 1153485", %w{ -17 }
+    end
   end
 end
