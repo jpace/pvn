@@ -59,6 +59,22 @@ module PVN
 end
 
 module PVN
+  class MockSVNExecutor < CommandExecutor
+    include Loggable
+
+    def initialize location
+      @location = location
+      
+      super()
+    end
+
+    def run cmd
+      info "cmd: #{cmd}".on_magenta
+    end
+  end
+end
+
+module PVN
   class MockLogExecutor < CommandExecutor
     include Loggable
 

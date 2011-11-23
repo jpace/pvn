@@ -3,47 +3,11 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/cmdargs'
+require 'pvn/option/set'
+require 'pvn/option/option'
 require 'pvn/documenter'
 
-Log.level = Log::DEBUG
-Log.set_widths(-15, 5, -35)
-
 module PVN
-  class Option
-    attr_accessor :name
-    attr_accessor :tag
-    attr_accessor :options
-    attr_accessor :description
-
-    def initialize name, tag, description, options
-      @name = name
-      @tag = tag
-      @description = description
-      @options = options
-    end
-
-    def to_s
-      [ @name, @tag, @options ].join(", ")
-    end
-
-    def match? arg
-      exact_match?(arg) || negative_match?(arg) || regexp_match?(arg)
-    end
-
-    def exact_match? arg
-      arg == tag || arg == '--' + @name.to_s
-    end
-
-    def negative_match? arg
-      @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
-    end
-
-    def regexp_match? arg
-      options[:regexp] && options[:regexp].match(arg)
-    end
-  end
-
   module Optional
     include Loggable
 
@@ -60,7 +24,14 @@ module PVN
           @option_set ||= OptionSet.new
           opt = Option.new optname, tag, desc, args
           (@options ||= Array.new) << opt
+
+          Log.info "self: #{self}".on_red
+          Log.info "opt: #{opt.inspect}".on_red
+          Log.info "@options: #{@options.inspect}".on_red
+
           @option_set.add_option opt
+
+          Log.info "@option_set: #{@option_set.inspect}".on_red
 
           @doc ||= Documenter.new
           @doc.options << opt

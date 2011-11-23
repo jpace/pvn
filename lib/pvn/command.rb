@@ -1,11 +1,11 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
 require 'riel'
-require 'pvn/options'
-require 'pvn/util'
+require 'rubygems'
 require 'pvn/cmdexec'
+require 'pvn/option/optional'
+require 'pvn/util'
 
 module PVN
   class Command
@@ -23,7 +23,7 @@ module PVN
     attr_reader :command
 
     def initialize args = Hash.new
-      info "args: #{args}".on_green
+      info "args: #{args}"
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
@@ -40,11 +40,11 @@ module PVN
       info "@execute  : #{@execute}".on_black
 
       if @execute
-        info "@executor : #{@executor}".on_black
+        info "@executor : #{@executor}"
 
         @output = @executor.run(@command)
       else
-        debug "not executing: #{@command}".on_red
+        debug "not executing: #{@command}".red
       end
     end
 

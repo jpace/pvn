@@ -3,58 +3,9 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/options'
+require 'pvn/option/entry'
 
 module PVN
-  class OptionEntry
-    include Loggable
-    
-    attr_reader :key
-    attr_reader :tag
-    attr_reader :options
-    attr_reader :value
-
-    class << self
-      alias_method :new_orig, :new
-      
-      def new key, tag, options
-        cls = options && options[:multiple] ? MultiValueOptionEntry : OptionEntry
-        cls.new_orig key, tag, options
-      end
-    end
-
-    def initialize key, tag, options
-      @key = key
-      @tag = tag
-      @options = options
-      @value = nil
-    end
-
-    def to_s
-      "#{@key} (#{@tag}) #{@options.inspect} => #{@value}"
-    end
-
-    def set val
-      if @options && @options[:multiple]
-        @value << val
-      else
-        @value = val
-      end
-    end
-  end
-
-  class MultiValueOptionEntry < OptionEntry
-    def initialize key, tag, options
-      super
-      info "options: #{options}"
-      @value = Array.new
-    end
-
-    def set val
-      @value << val
-    end
-  end
-
   class OptionSet
     include Loggable
     
@@ -156,8 +107,8 @@ module PVN
       info "arg: #{arg.class}"
       info "args: #{args}"
       @options.each do |option, entry|
-        info "option: #{option}".on_blue
-        info "entry: #{entry}".on_blue
+        info "option: #{option}".cyan
+        info "entry: #{entry}".cyan
         if option.exact_match? arg
           args.shift
           return _set_arg obj, entry, args

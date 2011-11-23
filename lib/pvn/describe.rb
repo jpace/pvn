@@ -26,7 +26,8 @@ module PVN
 
     def run args
       info "args: #{args}".on_yellow
-      revisions = option(:revision).value
+      revisions = find_option(:revision).value
+      info "args: #{args}".on_yellow
 
       info "revisions: #{revisions}".yellow
 

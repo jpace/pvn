@@ -16,12 +16,12 @@ module PVN
     end
     
     def setup
-      # @mockexec = MockExecutor.new
+      @wiqexec = MockSVNExecutor.new "/home/jpace/Programs/wiquery"
     end
 
     def assert_describe_command exp, cmdargs = nil
       origargs = cmdargs && cmdargs.dup
-      assert_equal exp, DescribeCommand.new(:execute => false, :command_args => cmdargs, :executor => @mockexec).command, "arguments: " + origargs.to_s
+      assert_equal exp, DescribeCommand.new(:execute => false, :command_args => cmdargs, :executor => @wiqexec).command, "arguments: " + origargs.to_s
     end
 
     def test_one_revision
