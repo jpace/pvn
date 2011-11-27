@@ -27,4 +27,5 @@ module PVN
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :unsets => :limit
   end
+
 end
