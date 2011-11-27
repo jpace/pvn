@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 require 'rubygems'
 require 'riel'
 require 'pvn/commands/cachecmd'
-require 'mocklog'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
@@ -20,7 +19,7 @@ module PVN
         super
       end
       
-      def run_command cmd
+      def run_command
         @executed = true
         super
       end
@@ -29,13 +28,10 @@ module PVN
     WIQUERY_DIRNAME = "/home/jpace/Programs/wiquery"
 
     def remove_cache_dir
-      wiquery_dirname = "/home/jpace/Programs/wiquery"
-
-      # remove the cache directory ...
       cachetopdir = CachableCommand::CACHE_DIR
       info "cachetopdir: #{cachetopdir}".red
 
-      cachedir = cachetopdir + wiquery_dirname.to_s[1 .. -1]
+      cachedir = cachetopdir + WIQUERY_DIRNAME.to_s[1 .. -1]
       info "cachedir: #{cachedir}"
 
       if cachedir.exist?
@@ -63,25 +59,46 @@ module PVN
 
       origargs = cmdargs.dup
       assert_equal exp, fcc.executed, "arguments: #{origargs.inspect}"
-
-      # origargs = cmdargs && cmdargs.dup
-      # assert_equal exp, LogCommand.new(:execute => false, :command_args => cmdargs, :executor => @mle).command, "arguments: " + origargs.to_s
     end
 
-    def test_uncached
+    def assert_executed cmdargs = nil
+      assert_command true, cmdargs
+    end
+
+    def assert_not_executed cmdargs = nil
+      assert_command false, cmdargs
+    end
+
+    def assert_svn_log expected_executed, use_cache, logargs = Array.new
+      command = [ "svn", "log" ] + logargs
+      assert_command expected_executed, :use_cache => use_cache, :command => command
+    end
+
+    def test_cached_no_changes
       remove_cache_dir
       info "running first one ..."
-      assert_command true, [ "svn", "log" ]
+      assert_svn_log true, true
+
+      info "running second one ..."
+      assert_svn_log false, true
+    end
+
+    def test_cached_different_arguments
+      remove_cache_dir
+      info "running first one ..."
+      assert_svn_log true, true, [ '-l', 5 ]
       
       info "running second one ..."
-      assert_command false, [ "svn", "log" ]
+      assert_svn_log true, true, [ '-l', 6 ]
     end
 
-    def xtest_cached_no_change
-    end
-
-    def xtest_cached_changed
+    def test_uncached_command
+      remove_cache_dir
+      info "running first one ..."
+      assert_svn_log true, false
+      
+      info "running second one ..."
+      assert_svn_log true, false
     end
   end
 end
-
