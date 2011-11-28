@@ -43,11 +43,8 @@ module PVN
     end
 
     def remove_cache_dir
-      cachetopdir = CachableCommand::CACHE_DIR
-      info "cachetopdir: #{cachetopdir}".red
-
-      cachedir = cachetopdir + WIQUERY_DIRNAME.to_s[1 .. -1]
-      info "cachedir: #{cachedir}"
+      cachetopdir = CachableCommand::CACHE_DIR      
+      cachedir    = cachetopdir + WIQUERY_DIRNAME.to_s[1 .. -1]
 
       if cachedir.exist?
         cachedir.rmtree
@@ -55,14 +52,12 @@ module PVN
     end
 
     def setup
-      info "setting up".yellow
       @origdir = Pathname.pwd
       Dir.chdir WIQUERY_DIRNAME
       super
     end
 
     def teardown
-      info "tearing down".yellow
       Dir.chdir @origdir
       super
     end
