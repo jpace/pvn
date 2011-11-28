@@ -1,0 +1,64 @@
+------------------------------------------------------------------------
+r457 | hielke.hoeve@gmail.com | 2010-10-15 03:14:28 -0400 (Fri, 15 Oct 2010) | 1 line
+
+merged /branches/issue-67 r456 into trunk.
+------------------------------------------------------------------------
+r458 | roche.jul | 2010-10-17 15:51:44 -0400 (Sun, 17 Oct 2010) | 3 lines
+
+Wiquery 1.0.3 && WiQuery 1.1
+
+-> migrate to jquery 1.4.3
+------------------------------------------------------------------------
+r459 | roche.jul | 2010-10-17 15:57:05 -0400 (Sun, 17 Oct 2010) | 9 lines
+
+Wiquery 1.1 & 1.1 examples
+
+-> add the following maven repository:
+
+                <repository> 
+                        <id>maven.atlassian.com</id> 
+                        <name>maven.atlassian.com</name> 
+                        <url>https://maven.atlassian.com/3rdparty</url> 
+                </repository> 
+------------------------------------------------------------------------
+r460 | roche.jul | 2010-10-18 16:57:07 -0400 (Mon, 18 Oct 2010) | 3 lines
+
+Wiquery 1.0.3 && WiQuery 1.1
+
+-> fix issue 102
+------------------------------------------------------------------------
+r462 | reiern70 | 2010-10-18 22:59:08 -0400 (Mon, 18 Oct 2010) | 4 lines
+
+See issue 
+
+http://code.google.com/p/wiquery/issues/detail?id=111
+
+------------------------------------------------------------------------
+r463 | richardjohnwilkinson@gmail.com | 2010-10-19 08:14:45 -0400 (Tue, 19 Oct 2010) | 2 lines
+
+merged in autocomplete enhancements / fixes from /branches/issue-107.  also added the 'info' ui icon to the enum.
+issue-107
+------------------------------------------------------------------------
+r464 | hielke.hoeve@gmail.com | 2010-10-26 08:26:04 -0400 (Tue, 26 Oct 2010) | 1 line
+
+fix issue 115 and update dependencies to latest.
+------------------------------------------------------------------------
+r465 | hielke.hoeve@gmail.com | 2010-10-26 10:12:16 -0400 (Tue, 26 Oct 2010) | 1 line
+
+force maven central 1 as default repo. this is way faster than the other 2 and contains most dependencies.
+------------------------------------------------------------------------
+r468 | reiern70 | 2010-11-02 17:12:05 -0400 (Tue, 02 Nov 2010) | 1 line
+
+http://code.google.com/p/wiquery/issues/detail?id=117
+------------------------------------------------------------------------
+r469 | hielke.hoeve@gmail.com | 2010-11-04 05:06:55 -0400 (Thu, 04 Nov 2010) | 1 line
+
+setup of the tester suite. allows for more complex testpages. accordion contains a small example of a test panel.
+------------------------------------------------------------------------
+r470 | roche.jul | 2010-11-04 18:53:03 -0400 (Thu, 04 Nov 2010) | 4 lines
+
+Wiquery 1.1 && WiQuery 1.0.3
+
+-> fix issue 94
+-> little change for the ComponentTester: compliance with JDK 1.5
+------------------------------------------------------------------------
