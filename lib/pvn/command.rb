@@ -73,7 +73,7 @@ module PVN
       
       revarg = cmdargs.shift
       rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
-      Log.info "rev: #{rev}"
+      RIEL::Log.info "rev: #{rev}"
 
       if rev.nil?
         raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"

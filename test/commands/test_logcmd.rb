@@ -5,8 +5,8 @@ require 'riel'
 require 'pvn/commands/log'
 require 'commands/command_test'
 
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
+RIEL::Log.level = Log::DEBUG
+RIEL::Log.set_widths(-12, 4, -35)
 
 module PVN
   class TestLogEntry < CommandTest
@@ -17,10 +17,10 @@ module PVN
 
       logoutput.each_with_index do |line, lidx|
         ln = line.chomp
-        if PVN::Logx::Entry::LOG_SEPARATOR_RE.match(ln)
+        if PVN::Log::TextOutputReader::LOG_SEPARATOR_RE.match(ln)
           if lidx + 1 < logoutput.length
             logline = logoutput[lidx + 1]
-            md = PVN::Logx::Entry::LOG_RE.match(logline)
+            md = PVN::Log::TextOutputReader::LOG_RE.match(logline)
             assert_not_nil md, logline
           end
         end
@@ -102,7 +102,7 @@ module PVN
       entries = Array.new
       
       lidx = 0
-      while creation = PVN::Logx::Entry.create_from_text(logoutput, lidx)
+      while creation = PVN::Log::Entry.create_from_text(logoutput, lidx)
         entry = creation[0]
         info "entry: #{entry.inspect}"
         lidx = creation[1]

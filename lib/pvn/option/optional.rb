@@ -17,21 +17,21 @@ module PVN
 
     module ClassMethods
       def has_option optname, tag, desc, args = Hash.new
-        Log.info "self: #{self}"
-        Log.info "optname: #{optname}"
+        RIEL::Log.info "self: #{self}"
+        RIEL::Log.info "optname: #{optname}"
 
         self.instance_eval do 
           @option_set ||= OptionSet.new
           opt = Option.new optname, tag, desc, args
           (@options ||= Array.new) << opt
 
-          Log.info "self: #{self}".on_red
-          Log.info "opt: #{opt.inspect}".on_red
-          Log.info "@options: #{@options.inspect}".on_red
+          RIEL::Log.info "self: #{self}".on_red
+          RIEL::Log.info "opt: #{opt.inspect}".on_red
+          RIEL::Log.info "@options: #{@options.inspect}".on_red
 
           @option_set.add_option opt
 
-          Log.info "@option_set: #{@option_set.inspect}".on_red
+          RIEL::Log.info "@option_set: #{@option_set.inspect}".on_red
 
           @doc ||= Documenter.new
           @doc.options << opt
@@ -45,14 +45,14 @@ module PVN
       end
 
       def make_command_args args
-        Log.info "self: #{self}"
+        RIEL::Log.info "self: #{self}"
 
         self.instance_eval do
           optset = OptionSet.new @options
           args.each do |key, val|
-            Log.info "key: #{key}; val: #{val}"
+            RIEL::Log.info "key: #{key}; val: #{val}"
             if optset.has_key? key
-              Log.info "key: #{key}; val: #{val}"
+              RIEL::Log.info "key: #{key}; val: #{val}"
               optset.set_arg key, val
             end
           end

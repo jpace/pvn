@@ -9,8 +9,8 @@ require 'pvn/cmdexec'
 require 'pvn/diff'
 require 'pvn/describe'
 
-Log.level = Log::INFO
-Log.set_widths(-15, 5, -35)
+RIEL::Log.level = Log::INFO
+RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
   class MockLogExecutor < CommandExecutor
@@ -63,7 +63,7 @@ module PVN
 
     def self.run_command_with_output cmdcls, execute, args
       cmd = cmdcls.new :execute => execute, :command_args => args
-      Log.info "cmd: #{cmd}".on_black
+      RIEL::Log.info "cmd: #{cmd}".on_black
       puts cmd.output
       true
     end
@@ -73,7 +73,7 @@ module PVN
       # mle.file = Pathname.new(File.dirname(__FILE__) + '/files/' + fname).expand_path
 
       subcmd = arguments.shift
-      Log.info "subcmd: #{subcmd}"
+      RIEL::Log.info "subcmd: #{subcmd}"
 
       case subcmd
       when "log"

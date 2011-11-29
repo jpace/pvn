@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 
-Log.level = Log::DEBUG
+RIEL::Log.level = Log::DEBUG
 
 module PVN
   class Documenter
@@ -73,8 +73,8 @@ module PVN
       opttag  = opt.tag
       optdesc = opt.description
       
-      Log.debug "opttag: #{opttag}"
-      Log.debug "optdesc: #{optdesc}"
+      RIEL::Log.debug "opttag: #{opttag}"
+      RIEL::Log.debug "optdesc: #{optdesc}"
 
       # wrap optdesc?
       
