@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'optparse'
 require 'pvn/log'
-require 'pvn/cmdexec'
+require 'pvn/command/cmdexec'
 require 'pvn/diff'
 require 'pvn/describe'
 

@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/command'
+require 'pvn/command/command'
 # require 'pvn/diff'
 
 module PVN

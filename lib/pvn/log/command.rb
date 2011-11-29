@@ -1,9 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/command'
-# require 'pvn/diff'
-require 'pvn/commands/cachecmd'
+require 'pvn/command/command'
+require 'pvn/command/cachecmd'
 
 module PVN
   class LogCommand < Command

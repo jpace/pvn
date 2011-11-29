@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/util'
-require 'pvn/command'
+require 'pvn/command/command'
 require 'pvn/config'
 
 module PVN

@@ -4,7 +4,7 @@ require 'rubygems'
 require 'riel'
 require 'singleton'
 require 'pvn/log'
-require 'pvn/cmdexec'
+require 'pvn/command/cmdexec'
 
 module PVN
   class MockLogCommand < LogCommand

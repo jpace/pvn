@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 require 'rubygems'
 require 'riel'
 require 'pvn/revision'
-require 'pvn/cmdexec'
 require 'mocklog'
 
 Log.level = Log::DEBUG

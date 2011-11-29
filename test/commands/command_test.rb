@@ -2,7 +2,7 @@ require 'test_helper'
 
 require 'rubygems'
 require 'riel'
-require 'pvn/commands/cachecmd'
+require 'pvn/command/cachecmd'
 require 'pvn_test'
 
 Log.level = Log::DEBUG
