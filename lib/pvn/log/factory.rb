@@ -33,7 +33,7 @@ module PVN
       # lidx, matching the svn log separator line. Returns [ entry, new_index ],
       # where new_index is the updated index into the lines. Returns nil if the
       # text does not match the expected plain text format.
-      def self.create_from_text lines, lidx = 0
+      def self.create_entry lines, lidx = 0
         while lidx < lines.length
           if fielddata = match_log_start_line(lines, lidx)
             lidx += 2
