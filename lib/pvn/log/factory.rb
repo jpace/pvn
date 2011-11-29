@@ -3,11 +3,11 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/commands/cachecmd'
+require 'pvn/log/entry'
 
 module PVN
   module Log
-    class TextOutputReader
+    class TextFactory
       LOG_RE = Regexp.new('^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$')
       LOG_SEPARATOR_RE = Regexp.new('^-{72}$')
       LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
@@ -58,40 +58,6 @@ module PVN
           lidx += 1
         end
         nil
-      end
-    end
-
-    class Entry
-      FIELDS = [ :revision,
-                 :user,
-                 :date,
-                 :time,
-                 :tz,
-                 :dtg,
-                 :nlines,
-                 :files,
-                 :comment ]
-
-      FIELDS.each do |field|
-        attr_reader field
-      end
-
-      def set_from_args name, args
-        self.instance_variable_set '@' + name.to_s, args[name]
-      end
-
-      # Reads a log entry from the text, starting at the first line at or after
-      # lidx, matching the svn log separator line. Returns [ entry, new_index ],
-      # where new_index is the updated index into the lines. Returns nil if the
-      # text does not match the expected plain text format.
-      def self.create_from_text lines, lidx = 0
-        return TextOutputReader.create_from_text lines, lidx
-      end
-
-      def initialize args = Hash.new
-        FIELDS.each do |field|
-          set_from_args field, args
-        end
       end
     end
   end

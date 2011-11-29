@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 
 require 'rubygems'
 require 'riel'
-require 'pvn/commands/log'
+require 'pvn/log/entry'
+require 'pvn/log/factory'
 require 'commands/command_test'
 
 RIEL::Log.level = Log::DEBUG
@@ -17,10 +18,10 @@ module PVN
 
       logoutput.each_with_index do |line, lidx|
         ln = line.chomp
-        if PVN::Log::TextOutputReader::LOG_SEPARATOR_RE.match(ln)
+        if PVN::Log::TextFactory::LOG_SEPARATOR_RE.match(ln)
           if lidx + 1 < logoutput.length
             logline = logoutput[lidx + 1]
-            md = PVN::Log::TextOutputReader::LOG_RE.match(logline)
+            md = PVN::Log::TextFactory::LOG_RE.match(logline)
             assert_not_nil md, logline
           end
         end
@@ -102,7 +103,7 @@ module PVN
       entries = Array.new
       
       lidx = 0
-      while creation = PVN::Log::Entry.create_from_text(logoutput, lidx)
+      while creation = PVN::Log::TextFactory.create_from_text(logoutput, lidx)
         entry = creation[0]
         info "entry: #{entry.inspect}"
         lidx = creation[1]
