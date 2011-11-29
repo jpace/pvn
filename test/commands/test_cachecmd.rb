@@ -8,7 +8,7 @@ Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class TestCommand < CommandTest
+  class TestCommand < CommandTestCase
     include Loggable
 
     def test_cached_no_changes

@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + '/../test_helper.rb'
+require 'test_helper'
 
 require 'rubygems'
 require 'riel'
 require 'pvn/commands/cachecmd'
+require 'pvn_test'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
@@ -22,25 +23,8 @@ module PVN
     end
   end
 
-  class CommandTest < Test::Unit::TestCase
+  class CommandTestCase < PVN::TestCase
     include Loggable
-
-    WIQUERY_DIRNAME = "/home/jpace/Programs/wiquery/trunk"
-
-    def initialize(*args)
-      # save this because expand_path resolves to the current dir, which we
-      # change during the tests.
-      @original_dir = Pathname.new(__FILE__).expand_path
-      super
-    end
-
-    def testfile basename
-      @original_dir + '../../files' + basename
-    end
-
-    def read_testfile basename
-      IO.readlines testfile basename
-    end
 
     def remove_cache_dir
       cachetopdir = CachableCommand::CACHE_DIR      
@@ -84,10 +68,6 @@ module PVN
     def assert_svn_log expected_executed, use_cache, logargs = Array.new
       command = [ "svn", "log" ] + logargs
       assert_command expected_executed, :use_cache => use_cache, :command => command
-    end
-
-    # every testcase class must have a test method
-    def test_nothing
     end
   end
 end

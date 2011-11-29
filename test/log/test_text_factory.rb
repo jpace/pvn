@@ -11,7 +11,7 @@ RIEL::Log.set_widths(-12, 4, -35)
 
 module PVN
   module Log
-    class TestTextFactory < CommandTest
+    class TestTextFactory < PVN::TestCase
       include Loggable
 
       def test_log_line_regexp
