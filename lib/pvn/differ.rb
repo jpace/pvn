@@ -4,8 +4,6 @@
 require 'pathname'
 require 'pvn/config'
 
-Log.level = Log::DEBUG
-
 module PVN
   # the app for svn --diff-cmd
   class Differ

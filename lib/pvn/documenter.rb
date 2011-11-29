@@ -4,8 +4,6 @@
 require 'rubygems'
 require 'riel'
 
-RIEL::Log.level = Log::DEBUG
-
 module PVN
   class Documenter
     attr_accessor :subcommands
