@@ -6,10 +6,7 @@ require 'rubygems'
 require 'pvn/command/cmdexec'
 require 'pvn/option/optional'
 require 'pvn/util'
-# require 'pvn/revision'
 
-$orig_lib_path = $:.dup
-Log.info "$orig_lib_path: #{$orig_lib_path.inspect}".on_blue
 $orig_file_loc = Pathname.new(__FILE__).expand_path
 
 module PVN
