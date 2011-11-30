@@ -85,5 +85,9 @@ module PVN
     def option optname
       self.class.find_option optname
     end
+
+    def run_command
+      @output = @executor.run(command)
+    end
   end
 end

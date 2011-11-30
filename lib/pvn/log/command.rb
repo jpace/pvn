@@ -5,7 +5,7 @@ require 'pvn/command/command'
 require 'pvn/command/cachecmd'
 
 module PVN
-  class LogCommand < Command
+  class LogCommand < CachableCommand
     DEFAULT_LIMIT = 5
 
     # yes, there's more to it ...

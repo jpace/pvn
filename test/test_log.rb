@@ -33,6 +33,8 @@ module PVN
     end
 
     def test_command_basic
+      uses "svn/ant/core/src/limit50.txt"
+
       assert_log_command "svn log -l 5"
       assert_log_command "svn log -l 10", %w{ -l 10 }
       assert_log_command "svn log -l 10 foo", %w{ -l 10 foo }
@@ -40,6 +42,8 @@ module PVN
     end
 
     def test_command_nolimit
+      uses "svn/ant/core/src/limit50.txt"
+
       assert_log_command "svn log foo", %w{ --no-limit foo }
       assert_log_command "svn log foo", %w{ --nolimit foo }
       assert_log_command "svn log", %w{ --no-limit }
@@ -47,6 +51,8 @@ module PVN
     end
 
     def test_command_using_unconverted_revision
+      uses "svn/ant/core/src/limit50.txt"
+
       assert_log_command "svn log -r 11", %w{ -r 11 }
       assert_log_command "svn log -r 11", %w{ -l 10 -r 11 }
     end
