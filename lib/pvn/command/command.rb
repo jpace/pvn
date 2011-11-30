@@ -51,11 +51,31 @@ module PVN
       end
     end
 
-    def process_options cmdargs, args
+    def create_option_set args
       optset = self.class.args_to_option_set args
+      info "optset: #{optset}".yellow
+
+      optset2 = self.class.get_option_set
+      info "optset2: #{optset2}".on_yellow
+
+      optset3 = self.class.get_optset
+      info "optset3: #{optset3}".on_yellow
+
+      args.each do |key, val|
+        RIEL::Log.info "key: #{key}; val: #{val}"
+        if optset3.has_key? key
+          RIEL::Log.info "key: #{key}; val: #{val}"
+          optset3.set_arg key, val
+        end
+      end
 
       info "optset: #{optset}".yellow
-      
+      info "optset3: #{optset3}".yellow
+
+      optset
+    end
+
+    def update_option_set optset, cmdargs
       while cmdargs.length > 0
         info "cmdargs: #{cmdargs}"
         info "cmdargs: #{cmdargs}"
@@ -71,12 +91,25 @@ module PVN
       optset.to_a + cmdargs
     end
 
+    def process_options cmdargs, args
+      optset = create_option_set args
+      info "optset: #{optset}".yellow
+
+      update_option_set optset, cmdargs
+
+      info "optset: #{optset}".on_green
+      info "optset.to_a: #{optset.to_a.inspect}".on_green
+      info "cmdargs: #{cmdargs}"
+
+      optset.to_a + cmdargs
+    end
+
     def revision_from_args ca, cmdargs
       require $orig_file_loc.dirname.parent + 'revision.rb'
 
       revarg = cmdargs.shift
       rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
-      RIEL::Log.info "rev: #{rev}"
+      RIEL::Log.info "rev: #{rev}".on_cyan
 
       if rev.nil?
         raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"

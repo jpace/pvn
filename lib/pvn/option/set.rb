@@ -52,31 +52,6 @@ module PVN
       end
     end
 
-    def create_entry option
-      key = option.name
-      tag = option.tag
-      opts = option.options.dup
-
-      info "opts: #{opts}"
-
-      defval = val = opts[:default]
-
-      if defval
-        # interpret the type and setter based on the default type
-        if val.class == Fixnum  # no, we're not handling Bignum
-          opts[:setter] ||= :next_argument_as_integer
-          opts[:type]   ||= :integer
-        end        
-      end
-
-      @options[option] = OptionEntry.new(key, tag, opts)
-      info "options: #{@options}"
-
-      if defval
-        entry.set defval
-      end
-    end
-
     def to_s
       to_a.join(' ')
     end

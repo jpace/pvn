@@ -61,6 +61,20 @@ module PVN
         end
       end
 
+      def get_option_set
+        RIEL::Log.info "self: #{self}"
+
+        self.instance_eval do
+          OptionSet.new @options
+        end
+      end
+
+      def get_optset
+        self.instance_eval do 
+          @option_set
+        end
+      end
+
       [ :subcommands, :description, :usage, :summary ].each do |name|
         define_method name do |val|
           self.instance_eval do 
