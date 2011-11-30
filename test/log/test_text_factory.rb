@@ -4,7 +4,6 @@ require 'rubygems'
 require 'riel'
 require 'pvn/log/entry'
 require 'pvn/log/factory'
-require 'commands/command_test'
 
 RIEL::Log.level = Log::DEBUG
 RIEL::Log.set_widths(-12, 4, -35)

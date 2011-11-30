@@ -4,11 +4,12 @@
 require 'riel'
 require 'rubygems'
 require 'pvn/command/cmdexec'
+require 'pvn/command/command'
 require 'pvn/option/optional'
 require 'pvn/util'
 
 module PVN
-  class CachableCommand
+  class CachableCommand < Command
     include Optional
     include Loggable
 
@@ -21,12 +22,15 @@ module PVN
       info "args: #{args}"
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      @cmd = args[:command].join(' ')
 
+      super
+    end
+
+    def run args
       if use_cache?
-        run_cached_command
+        run_cached_command args
       else
-        run_command
+        super
       end      
     end
 
@@ -34,7 +38,11 @@ module PVN
       @use_cache
     end
 
-    def get_cache_file
+    def to_command args
+      args[:command].join(' ')
+    end
+
+    def get_cache_file args
       pwd = Pathname.pwd.to_s.sub(%r{^/}, '')
 
       fname = CACHE_DIR + pwd + @cmd.gsub(' ', '')
@@ -42,7 +50,7 @@ module PVN
       fname
     end
 
-    def run_cached_command
+    def run_cached_command args
       cfile = get_cache_file
       if cfile.exist?
         @lines = cfile.readlines

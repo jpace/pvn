@@ -20,7 +20,6 @@ module PVN
     end
     
     attr_reader :output
-    attr_reader :command
 
     def initialize args = Hash.new
       info "args: #{args}"
@@ -28,23 +27,25 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
       @args     = process_options cmdargs, args
-      run @args
+      @fullargs = [ "svn", self.class::COMMAND ] + @args
+
+      run @fullargs
+    end
+
+    def command
+      @fullargs.join(" ")
     end
 
     def run args
-      allargs = [ self.class::COMMAND ] + args
-      @command  = "svn " + allargs.join(" ")
-
       info "self.class: #{self.class}"
-      info "@command  : #{@command}".on_black
+      info "@command  : #{command}".on_black
       info "@execute  : #{@execute}".on_black
 
       if @execute
         info "@executor : #{@executor}"
-
-        @output = @executor.run(@command)
+        @output = @executor.run(command)
       else
-        debug "not executing: #{@command}".red
+        debug "not executing: #{command}".red
       end
     end
 
