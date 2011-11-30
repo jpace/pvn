@@ -11,7 +11,7 @@ module PVN
   class TestCommand < CommandTestCase
     include Loggable
 
-    def test_cached_no_changes
+    def xtest_cached_no_changes
       remove_cache_dir
       info "running first one ..."
       assert_svn_log true, true
@@ -20,7 +20,7 @@ module PVN
       assert_svn_log false, true
     end
 
-    def test_cached_different_arguments
+    def xtest_cached_different_arguments
       remove_cache_dir
       info "running first one ..."
       assert_svn_log true, true, [ '-l', 5 ]
@@ -29,7 +29,7 @@ module PVN
       assert_svn_log true, true, [ '-l', 6 ]
     end
 
-    def test_uncached_command
+    def xtest_uncached_command
       remove_cache_dir
       info "running first one ..."
       assert_svn_log true, false

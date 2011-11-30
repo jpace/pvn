@@ -22,6 +22,7 @@ module PVN
       info "args: #{args.inspect}".yellow
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
+      info "@use_cache: #{@use_cache}".on_blue
 
       super
     end

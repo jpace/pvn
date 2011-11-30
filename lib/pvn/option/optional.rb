@@ -44,8 +44,9 @@ module PVN
         end
       end
 
-      def make_command_args args
+      def args_to_option_set args
         RIEL::Log.info "self: #{self}"
+        RIEL::Log.info "args: #{args}".on_red
 
         self.instance_eval do
           optset = OptionSet.new @options

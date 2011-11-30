@@ -4,25 +4,18 @@ require 'rubygems'
 require 'riel'
 require 'pvn/log'
 require 'mocklog'
+require 'pvn_cmd_test'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class TestLog < Test::Unit::TestCase
+  class TestLog < CommandTestCase
     include Loggable
-
-    def uses fname
-      @mle.file = Pathname.new(File.dirname(__FILE__) + '/files/' + fname).expand_path
-    end
-    
-    def setup
-      @mle = MockLogExecutor.new
-    end
 
     def assert_log_command exp, cmdargs = nil
       origargs = cmdargs && cmdargs.dup
-      assert_equal exp, LogCommand.new(:execute => false, :command_args => cmdargs, :executor => @mle).command, "arguments: " + origargs.to_s
+      assert_equal exp, LogCommand.new(:execute => false, :command_args => cmdargs, :use_cache => false).command, "arguments: " + origargs.to_s
     end
 
     def test_revision_re
@@ -33,8 +26,6 @@ module PVN
     end
 
     def test_command_basic
-      uses "svn/ant/core/src/limit50.txt"
-
       assert_log_command "svn log -l 5"
       assert_log_command "svn log -l 10", %w{ -l 10 }
       assert_log_command "svn log -l 10 foo", %w{ -l 10 foo }
@@ -42,8 +33,6 @@ module PVN
     end
 
     def test_command_nolimit
-      uses "svn/ant/core/src/limit50.txt"
-
       assert_log_command "svn log foo", %w{ --no-limit foo }
       assert_log_command "svn log foo", %w{ --nolimit foo }
       assert_log_command "svn log", %w{ --no-limit }
@@ -51,34 +40,26 @@ module PVN
     end
 
     def test_command_using_unconverted_revision
-      uses "svn/ant/core/src/limit50.txt"
-
       assert_log_command "svn log -r 11", %w{ -r 11 }
       assert_log_command "svn log -r 11", %w{ -l 10 -r 11 }
     end
 
     def test_command_using_negative_revision
-      uses "svn/ant/core/src/limit50.txt"
-
-      assert_log_command "svn log -r 1199931", %w{ -r -1 }
-      assert_log_command "svn log -r 1199922", %w{ -l 10 -r -3 }
-      assert_log_command "svn log -r 1153485", %w{ -l 10 -r -17 }
+      assert_log_command "svn log -r 1947", %w{ -r -1 }
+      assert_log_command "svn log -r 1945", %w{ -l 10 -r -3 }
+      assert_log_command "svn log -r 1720", %w{ -l 10 -r -17 }
     end
 
     def test_command_with_positive_revision
-      uses "svn/ant/core/src/limit50.txt"
-      
       # a revision without a limit is just that entry.
-      assert_log_command "svn log -r 1090319", %w{ -r +1 }
+      assert_log_command "svn log -r 412", %w{ -r +1 }
     end
 
     def test_command_with_implied_revision
-      uses "svn/ant/core/src/limit50.txt"
-      
-      assert_log_command "svn log -r 1090319", %w{ +1 }
-      assert_log_command "svn log -r 1199931", %w{ -1 }
-      assert_log_command "svn log -r 1199922", %w{ -3 }
-      assert_log_command "svn log -r 1153485", %w{ -17 }
+      assert_log_command "svn log -r 412", %w{ +1 }
+      assert_log_command "svn log -r 1947", %w{ -1 }
+      assert_log_command "svn log -r 1945", %w{ -3 }
+      assert_log_command "svn log -r 1720", %w{ -17 }
     end
   end
 end

@@ -64,7 +64,7 @@ module PVN
       info "limit: #{limit}"
       log = LogCommand.new :limit => limit, :filename => @fname, :executor => @executor
       info "log: #{log}"
-      info "log.output: #{log.output}"
+      # info "log.output: #{log.output}"
       revision = read_from_log_output 1, log.output.reverse
     end
 

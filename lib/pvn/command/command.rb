@@ -6,6 +6,11 @@ require 'rubygems'
 require 'pvn/command/cmdexec'
 require 'pvn/option/optional'
 require 'pvn/util'
+# require 'pvn/revision'
+
+$orig_lib_path = $:.dup
+Log.info "$orig_lib_path: #{$orig_lib_path.inspect}".on_blue
+$orig_file_loc = Pathname.new(__FILE__).expand_path
 
 module PVN
   class Command
@@ -50,28 +55,28 @@ module PVN
     end
 
     def process_options cmdargs, args
-      ca = self.class.make_command_args args
+      optset = self.class.args_to_option_set args
 
-      info "ca: #{ca}".yellow
+      info "optset: #{optset}".yellow
       
       while cmdargs.length > 0
         info "cmdargs: #{cmdargs}"
         info "cmdargs: #{cmdargs}"
-        unless ca.process self, cmdargs
+        unless optset.process self, cmdargs
           break
         end
       end
 
-      info "ca: #{ca}"
-      info "ca.to_a: #{ca.to_a.inspect}"
+      info "optset: #{optset}".on_green
+      info "optset.to_a: #{optset.to_a.inspect}".on_green
       info "cmdargs: #{cmdargs}"
 
-      ca.to_a + cmdargs
+      optset.to_a + cmdargs
     end
 
     def revision_from_args ca, cmdargs
-      require 'pvn/revision'
-      
+      require $orig_file_loc.dirname.parent + 'revision.rb'
+
       revarg = cmdargs.shift
       rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
       RIEL::Log.info "rev: #{rev}"

@@ -8,13 +8,15 @@ require 'pvn/option/entry'
 module PVN
   class OptionSet
     include Loggable
+
+    attr_reader :options
     
     def initialize options = Array.new
       @options = Hash.new
       options.each do |opt|
         add_option opt
       end
-      info "options: #{@options}".red
+      info "options: #{@options}"
     end
 
     def has_key? key
@@ -30,7 +32,7 @@ module PVN
       tag = option.tag
       opts = option.options.dup
 
-      info "opts: #{opts}"
+      # info "opts: #{opts}"
 
       defval = val = opts[:default]
 
@@ -107,8 +109,8 @@ module PVN
       info "arg: #{arg.class}"
       info "args: #{args}"
       @options.each do |option, entry|
-        info "option: #{option}".cyan
-        info "entry: #{entry}".cyan
+        info "option: #{option}"
+        info "entry: #{entry}"
         if option.exact_match? arg
           args.shift
           return _set_arg obj, entry, args
