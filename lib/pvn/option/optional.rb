@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/option/set'
-# require 'pvn/option/set'
 require 'pvn/option/option'
 require 'pvn/documenter'
 
@@ -24,14 +23,10 @@ module PVN
         self.instance_eval do 
           @option_set ||= OptionSet.new
           opt = Option.new optname, tag, desc, args
-          (@options ||= Array.new) << opt
+          @option_set.options << opt
 
           RIEL::Log.info "self: #{self}".on_red
           RIEL::Log.info "opt: #{opt.inspect}".on_red
-          RIEL::Log.info "@options: #{@options.inspect}".on_red
-
-          @option_set.add_option opt
-
           RIEL::Log.info "@option_set: #{@option_set.inspect}".on_red
 
           @doc ||= Documenter.new
@@ -41,38 +36,16 @@ module PVN
 
       def find_option optname
         self.instance_eval do 
-          @options.find { |opt| opt.name == optname }
+          @option_set.find_by_name optname
         end
       end
 
-      def args_to_option_set args
+      def args_to_option_results args
         RIEL::Log.info "self: #{self}"
         RIEL::Log.info "args: #{args}".on_red
 
         self.instance_eval do
-          optset = OptionSet.new @options
-          args.each do |key, val|
-            RIEL::Log.info "key: #{key}; val: #{val}"
-            if optset.has_key? key
-              RIEL::Log.info "key: #{key}; val: #{val}"
-              optset.set_arg key, val
-            end
-          end
-          optset
-        end
-      end
-
-      def get_option_set
-        RIEL::Log.info "self: #{self}"
-
-        self.instance_eval do
-          OptionSet.new @options
-        end
-      end
-
-      def get_optset
-        self.instance_eval do 
-          @option_set
+          @option_set.results args
         end
       end
 

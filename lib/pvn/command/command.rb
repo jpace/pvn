@@ -51,57 +51,40 @@ module PVN
       end
     end
 
-    def create_option_set args
-      optset = self.class.args_to_option_set args
-      info "optset: #{optset}".yellow
-
-      optset2 = self.class.get_option_set
-      info "optset2: #{optset2}"
-
-      optset3 = self.class.get_optset
-      info "optset3: #{optset3}".on_yellow
-
-      args.each do |key, val|
-        RIEL::Log.info "key: #{key}; val: #{val}"
-        if optset3.has_key? key
-          RIEL::Log.info "key: #{key}; val: #{val}"
-          optset3.set_arg key, val
-        end
-      end
-
-      info "optset: #{optset}".yellow
-      info "optset3: #{optset3}".yellow
-
-      optset
+    def create_option_results args
+      optresults = self.class.args_to_option_results args
+      info "optresults: #{optresults}".yellow
+      
+      optresults
     end
 
-    def update_option_set optset, cmdargs
+    def update_option_results optresults, cmdargs
       while cmdargs.length > 0
         info "cmdargs: #{cmdargs}"
         info "cmdargs: #{cmdargs}"
-        unless optset.process self, cmdargs
+        unless optresults.process self, cmdargs
           break
         end
       end
 
-      info "optset: #{optset}".on_green
-      info "optset.to_a: #{optset.to_a.inspect}".on_green
+      info "optresults: #{optresults}".on_green
+      info "optresults.to_a: #{optresults.to_a.inspect}".on_green
       info "cmdargs: #{cmdargs}"
 
-      optset.to_a + cmdargs
+      optresults.to_a + cmdargs
     end
 
     def process_options cmdargs, args
-      optset = create_option_set args
-      info "optset: #{optset}".yellow
+      optresults = create_option_results args
+      info "optresults: #{optresults}".yellow
 
-      update_option_set optset, cmdargs
+      update_option_results optresults, cmdargs
 
-      info "optset: #{optset}".on_green
-      info "optset.to_a: #{optset.to_a.inspect}".on_green
+      info "optresults: #{optresults}".on_green
+      info "optresults.to_a: #{optresults.to_a.inspect}".on_green
       info "cmdargs: #{cmdargs}"
 
-      optset.to_a + cmdargs
+      optresults.to_a + cmdargs
     end
 
     def revision_from_args ca, cmdargs
