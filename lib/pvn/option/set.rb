@@ -45,11 +45,15 @@ module PVN
       end
 
       @options[option] = OptionEntry.new(key, tag, opts)
-      info "options: #{@options}"
+      # info "options: #{@options}"
 
       if defval
         set_arg key, defval
       end
+    end
+
+    def inspect
+      @options.collect { |opt| opt.inspect }.join("\n")
     end
 
     def to_s

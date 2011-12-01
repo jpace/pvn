@@ -56,7 +56,7 @@ module PVN
       info "optset: #{optset}".yellow
 
       optset2 = self.class.get_option_set
-      info "optset2: #{optset2}".on_yellow
+      info "optset2: #{optset2}"
 
       optset3 = self.class.get_optset
       info "optset3: #{optset3}".on_yellow
@@ -108,7 +108,10 @@ module PVN
       require $orig_file_loc.dirname.parent + 'revision.rb'
 
       revarg = cmdargs.shift
-      rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg).revision
+      RIEL::Log.info "revarg: #{revarg}".on_blue
+      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
+
+      rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
       RIEL::Log.info "rev: #{rev}".on_cyan
 
       if rev.nil?

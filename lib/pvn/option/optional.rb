@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/option/set'
+# require 'pvn/option/set'
 require 'pvn/option/option'
 require 'pvn/documenter'
 

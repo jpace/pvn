@@ -44,9 +44,17 @@ module PVN
       assert_log_command "svn log -r 11", %w{ -l 10 -r 11 }
     end
 
-    def test_command_using_negative_revision
+    def test_command_using_negative_revision_only_revision_specified
       assert_log_command "svn log -r 1947", %w{ -r -1 }
+      assert_log_command "svn log -r 1946", %w{ -r -2 }
+    end
+
+    def test_command_using_negative_revision_log_limit_specified
       assert_log_command "svn log -r 1945", %w{ -l 10 -r -3 }
+      assert_log_command "svn log -r 1946", %w{ -l 10 -r -2 }
+    end
+
+    def test_command_using_negative_revision_log_limit_specified_out_of_range
       assert_log_command "svn log -r 1720", %w{ -l 10 -r -17 }
     end
 
