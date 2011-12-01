@@ -38,6 +38,28 @@ module PVN
           set_from_args field, args
         end
       end
+
+      def write
+        # ------------------------------------------------------------------------
+        # r1907 | hielke.hoeve@gmail.com | 2011-11-14 05:50:38 -0500 (Mon, 14 Nov 2011) | 1 line
+        #
+        # back to dev
+
+        $stdout.puts self.inspect
+        # should allow reformatting of date and time
+        puts revision.yellow + "    " + user.cyan + "    " + date.red + " " + time.red
+        if files
+          files.each do |file|
+            puts file
+          end
+        end
+
+        if comment
+          comment.each do |line|
+            puts "    " + line.magenta
+          end
+        end
+      end
     end
   end
 end

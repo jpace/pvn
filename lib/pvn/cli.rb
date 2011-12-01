@@ -68,16 +68,26 @@ module PVN
       true
     end
     
+    def self.run_command_as_entries cmdcls, execute, args
+      cmd = cmdcls.new :execute => execute, :command_args => args
+      RIEL::Log.info "cmd: #{cmd}".on_black
+      cmd.entries.each do |entry|
+        entry.write
+      end
+      true
+    end
+    
     def self.execute stdout, arguments = Array.new
       mle = MockLogExecutor.new
       # mle.file = Pathname.new(File.dirname(__FILE__) + '/files/' + fname).expand_path
 
       subcmd = arguments.shift
-      RIEL::Log.info "subcmd: #{subcmd}"
+      RIEL::Log.debug "subcmd: #{subcmd}"
 
       case subcmd
       when "log"
-        return run_command_with_output LogCommand, true, arguments
+        # return run_command_with_output LogCommand, true, arguments
+        return run_command_as_entries LogCommand, true, arguments
       when "diff"
         return run_command_with_output DiffCommand, true, arguments
       when "describe"

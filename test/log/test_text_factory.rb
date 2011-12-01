@@ -46,8 +46,8 @@ module PVN
 
         entry_idx = 0
 
-        entries = Hash.new
-        entries[0] = { 
+        exp_entries = Hash.new
+        exp_entries[0] = { 
           :revision => '457', 
           :user     => 'hielke.hoeve@gmail.com',
           :date     => '2010-10-15',
@@ -61,7 +61,7 @@ module PVN
                        ]
         }
 
-        entries[2] = { 
+        exp_entries[2] = { 
           :revision => '459',
           :user     => 'roche.jul',
           :date     => '2010-10-17',
@@ -83,7 +83,7 @@ module PVN
                        ]
         }
 
-        entries[10] = { 
+        exp_entries[10] = { 
           :revision => '470',
           :user     => 'roche.jul',
           :date     => '2010-11-04',
@@ -100,26 +100,16 @@ module PVN
                        ]
         }
 
-        entries = Array.new
-        
-        lidx = 0
-        while creation = PVN::Log::TextFactory.create_entry(logoutput, lidx)
-          entry = creation[0]
-          info "entry: #{entry.inspect}"
-          lidx = creation[1]
-          info "lidx: #{lidx}"
+        tf = PVN::Log::TextFactory.new logoutput
+        entries = tf.entries
+        assert_equal 11, entries.length
 
-          expected = entries[entry_idx]
+        entries.each_with_index do |entry, idx|
+          expected = exp_entries[idx]
           if expected
             assert_entries_match expected, entry
           end
-
-          entries << entry
-
-          entry_idx += 1
         end
-
-        assert_equal 11, entries.length
       end
     end
   end

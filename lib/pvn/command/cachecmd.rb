@@ -19,10 +19,10 @@ module PVN
     attr_accessor :lines
 
     def initialize args = Hash.new
-      info "args: #{args.inspect}".yellow
+      debug "args: #{args.inspect}".yellow
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      info "@use_cache: #{@use_cache}".on_blue
+      debug "@use_cache: #{@use_cache}".on_blue
 
       super
     end
@@ -45,14 +45,11 @@ module PVN
 
     def get_cache_file args
       pwd = Pathname.pwd.to_s.sub(%r{^/}, '')
-
-      fname = CACHE_DIR + pwd + command.gsub(' ', '')
-      info "fname: #{fname}"
-      fname
+      CACHE_DIR + pwd + command.gsub(' ', '')
     end
 
     def run_cached_command args
-      info "args: #{args}".cyan
+      debug "args: #{args}".cyan
       cfile = get_cache_file args
       if cfile.exist?
         @output = cfile.readlines

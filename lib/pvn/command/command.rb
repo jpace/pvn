@@ -53,7 +53,7 @@ module PVN
 
     def create_option_results args
       optresults = self.class.args_to_option_results args
-      info "optresults: #{optresults}".yellow
+      info "optresults: #{optresults}"
       
       optresults
     end
@@ -74,8 +74,6 @@ module PVN
 
     def process_options cmdargs, args
       optresults = create_option_results args
-      info "optresults: #{optresults}".yellow
-
       update_option_results optresults, cmdargs
     end
 

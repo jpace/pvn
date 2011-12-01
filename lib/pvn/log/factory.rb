@@ -12,18 +12,34 @@ module PVN
       LOG_SEPARATOR_RE = Regexp.new('^-{72}$')
       LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
 
-      def self.match_log_start_line lines, lidx
-        LOG_SEPARATOR_RE.match(lines[lidx]) && LOG_RE.match(lines[lidx + 1])
+      def initialize lines
+        @lines = lines
+        @lidx = 0
+        @entries = nil
       end
 
-      def self.read_comment lines, lidx
+      def entries
+        @entries ||= begin
+                       entries = Array.new
+                       while entry = create_next_entry
+                         entries << entry
+                       end
+                       entries
+                     end
+      end
+
+      def match_log_start_line
+        LOG_SEPARATOR_RE.match(@lines[@lidx]) && LOG_RE.match(@lines[@lidx + 1])
+      end
+
+      def read_comment
         comment = Array.new
 
-        while lidx < lines.length && !LOG_SEPARATOR_RE.match(lines[lidx])
-          RIEL::Log.info "lines[#{lidx}]: #{lines[lidx]}".cyan
-          comment << lines[lidx].chomp
+        while @lidx < @lines.length && !LOG_SEPARATOR_RE.match(@lines[@lidx])
+          RIEL::Log.info "lines[#{@lidx}]: #{@lines[@lidx]}".cyan
+          comment << @lines[@lidx].chomp
           RIEL::Log.info "comment: #{comment}".cyan
-          lidx += 1
+          @lidx += 1
         end
 
         comment
@@ -33,29 +49,29 @@ module PVN
       # lidx, matching the svn log separator line. Returns [ entry, new_index ],
       # where new_index is the updated index into the lines. Returns nil if the
       # text does not match the expected plain text format.
-      def self.create_entry lines, lidx = 0
-        while lidx < lines.length
-          if fielddata = match_log_start_line(lines, lidx)
-            lidx += 2
+      def create_next_entry
+        while @lidx < @lines.length
+          if fielddata = match_log_start_line
+            @lidx += 2
             fields = Hash[Entry::FIELDS.zip(fielddata[1 .. -1])]
             
-            if LOG_VERBOSE_START_RE.match(lines[lidx])
-              # todo
+            if LOG_VERBOSE_START_RE.match @lines[@lidx]
+              # todo: handle files
               return -1
             end
 
             # skip the blank line
-            lidx += 1
+            @lidx += 1
 
-            RIEL::Log.info "line: #{lines[lidx]}".yellow
+            RIEL::Log.info "line: #{@lines[@lidx]}".yellow
 
-            fields[:comment] = read_comment(lines, lidx)
+            fields[:comment] = read_comment
             
             RIEL::Log.info "fields: #{fields}"
 
-            return [ Entry.new(fields), lidx ]
+            return Entry.new(fields)
           end
-          lidx += 1
+          @lidx += 1
         end
         nil
       end

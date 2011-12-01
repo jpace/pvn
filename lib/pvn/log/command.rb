@@ -3,6 +3,7 @@
 
 require 'pvn/command/command'
 require 'pvn/command/cachecmd'
+require 'pvn/log/factory'
 
 module PVN
   class LogCommand < CachableCommand
@@ -26,6 +27,14 @@ module PVN
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :unsets => :limit
+
+    def entries
+      info "yo!".on_green
+
+      # of course this assumes that output is in plain text (non-XML)
+      factory = PVN::Log::TextFactory.new output
+      factory.entries
+    end
   end
 
   module Log
