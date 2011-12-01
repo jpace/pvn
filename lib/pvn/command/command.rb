@@ -60,15 +60,13 @@ module PVN
 
     def update_option_results optresults, cmdargs
       while cmdargs.length > 0
-        info "cmdargs: #{cmdargs}"
-        info "cmdargs: #{cmdargs}"
         unless optresults.process self, cmdargs
           break
         end
       end
 
-      info "optresults: #{optresults}".on_green
-      info "optresults.to_a: #{optresults.to_a.inspect}".on_green
+      info "optresults: #{optresults}"
+      info "optresults.to_a: #{optresults.to_a.inspect}"
       info "cmdargs: #{cmdargs}"
 
       optresults.to_a + cmdargs
@@ -79,12 +77,6 @@ module PVN
       info "optresults: #{optresults}".yellow
 
       update_option_results optresults, cmdargs
-
-      info "optresults: #{optresults}".on_green
-      info "optresults.to_a: #{optresults.to_a.inspect}".on_green
-      info "cmdargs: #{cmdargs}"
-
-      optresults.to_a + cmdargs
     end
 
     def revision_from_args ca, cmdargs
