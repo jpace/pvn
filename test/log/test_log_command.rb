@@ -48,7 +48,12 @@ module PVN
       entries = lc.entries
       info "entries: #{entries}"
       
-      assert_equal 5, entries.length, "number of entries for default log command"
+      assert_equal 5, entries.length, "number of entries for default log command, verbose"
+
+      entries.each do |entry|
+        info "entry: #{entry}"
+        entry.write
+      end
     end
   end
 end

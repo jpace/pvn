@@ -21,6 +21,8 @@ module PVN
         attr_reader field
       end
 
+      WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
+
       def set_from_args name, args
         self.instance_variable_set '@' + name.to_s, args[name]
       end
@@ -45,12 +47,15 @@ module PVN
         #
         # back to dev
 
-        $stdout.puts self.inspect
         # should allow reformatting of date and time
+        summary = '#{revision.yellow}\n    #{user.cyan}    #{date.red} #{time.blue}'
+        msg = eval('"' + summary + '"')
+        puts summary
+        puts msg
         puts revision.yellow + "    " + user.cyan + "    " + date.red + " " + time.red
         if files
           files.each do |file|
-            puts file
+            puts "    " + file.green
           end
         end
 

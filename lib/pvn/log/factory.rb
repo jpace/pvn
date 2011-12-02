@@ -8,9 +8,12 @@ require 'pvn/log/entry'
 module PVN
   module Log
     class TextFactory
+      include Loggable
+
       LOG_RE = Regexp.new('^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$')
       LOG_SEPARATOR_RE = Regexp.new('^-{72}$')
       LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
+      LOG_FILE_NAME_RE = Regexp.new('^   \w (.*)$')
 
       def initialize lines
         @lines = lines
@@ -28,18 +31,33 @@ module PVN
                      end
       end
 
+      def match_line re, offset = 0
+        re.match line(offset)
+      end
+
       def match_log_start_line
-        LOG_SEPARATOR_RE.match(@lines[@lidx]) && LOG_RE.match(@lines[@lidx + 1])
+        match_line(LOG_SEPARATOR_RE) && match_line(LOG_RE, 1)
+      end
+
+      def line offset = 0
+        @lines[@lidx + offset]
+      end
+
+      def has_line
+        @lidx < @lines.length
+      end
+
+      def advance_line offset = 1
+        @lidx += offset
       end
 
       def read_comment
         comment = Array.new
 
-        while @lidx < @lines.length && !LOG_SEPARATOR_RE.match(@lines[@lidx])
-          RIEL::Log.debug "lines[#{@lidx}]: #{@lines[@lidx]}".cyan
-          comment << @lines[@lidx].chomp
-          RIEL::Log.debug "comment: #{comment}".cyan
-          @lidx += 1
+        while has_line && !match_line(LOG_SEPARATOR_RE)
+          comment << line.chomp
+          debug "comment: #{comment}".cyan
+          advance_line
         end
 
         comment
@@ -50,24 +68,37 @@ module PVN
       # where new_index is the updated index into the lines. Returns nil if the
       # text does not match the expected plain text format.
       def create_next_entry
-        while @lidx < @lines.length
+        while has_line
           if fielddata = match_log_start_line
-            @lidx += 2
+            advance_line 2
             fields = Hash[Entry::FIELDS.zip(fielddata[1 .. -1])]
             
-            if LOG_VERBOSE_START_RE.match @lines[@lidx]
-              # todo: handle files
-              return -1
+            if match_line(LOG_VERBOSE_START_RE)
+              advance_line
+              
+              # files 
+
+              fields[:files] = Array.new
+
+              while (ln = line) && !ln.strip.empty?
+                fname = match_line(LOG_FILE_NAME_RE)[1]
+
+                info "fname: #{fname}".red
+
+                fields[:files] << fname
+                
+                advance_line
+              end
             end
 
             # skip the blank line
-            @lidx += 1
+            advance_line
 
-            RIEL::Log.debug "line: #{@lines[@lidx]}"
+            debug "line: #{@lines[@lidx]}"
 
             fields[:comment] = read_comment
             
-            RIEL::Log.debug "fields: #{fields}"
+            debug "fields: #{fields}"
 
             return Entry.new(fields)
           end

@@ -52,10 +52,12 @@ module PVN
       debug "args: #{args}".cyan
       cfile = get_cache_file args
       if cfile.exist?
+        debug "reading from cache file: #{cfile}".cyan
         @output = cfile.readlines
       else
         run_command
         cfile.parent.mkpath
+        debug "saving output to cache file: #{cfile}".cyan
         File.put_via_temp_file cfile do
           output
         end
