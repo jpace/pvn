@@ -36,9 +36,9 @@ module PVN
         comment = Array.new
 
         while @lidx < @lines.length && !LOG_SEPARATOR_RE.match(@lines[@lidx])
-          RIEL::Log.info "lines[#{@lidx}]: #{@lines[@lidx]}".cyan
+          RIEL::Log.debug "lines[#{@lidx}]: #{@lines[@lidx]}".cyan
           comment << @lines[@lidx].chomp
-          RIEL::Log.info "comment: #{comment}".cyan
+          RIEL::Log.debug "comment: #{comment}".cyan
           @lidx += 1
         end
 
@@ -63,11 +63,11 @@ module PVN
             # skip the blank line
             @lidx += 1
 
-            RIEL::Log.info "line: #{@lines[@lidx]}".yellow
+            RIEL::Log.debug "line: #{@lines[@lidx]}"
 
             fields[:comment] = read_comment
             
-            RIEL::Log.info "fields: #{fields}"
+            RIEL::Log.debug "fields: #{fields}"
 
             return Entry.new(fields)
           end

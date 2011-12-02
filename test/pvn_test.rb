@@ -2,12 +2,13 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 
 require 'rubygems'
 require 'riel'
+require 'runit/testcase'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class TestCase < Test::Unit::TestCase
+  class TestCase < RUNIT::TestCase
     include Loggable
 
     WIQUERY_DIRNAME = "/home/jpace/Programs/wiquery/trunk"
