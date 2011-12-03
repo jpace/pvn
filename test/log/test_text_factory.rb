@@ -18,10 +18,10 @@ module PVN
 
         logoutput.each_with_index do |line, lidx|
           ln = line.chomp
-          if PVN::Log::TextFactory::LOG_SEPARATOR_RE.match(ln)
+          if PVN::Log::SVN_LOG_SEPARATOR_LINE_RE.match(ln)
             if lidx + 1 < logoutput.length
               logline = logoutput[lidx + 1]
-              md = PVN::Log::TextFactory::LOG_RE.match(logline)
+              md = PVN::Log::SVN_LOG_SUMMARY_LINE_RE.match(logline)
               assert_not_nil md, logline
             end
           end

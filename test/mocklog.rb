@@ -7,33 +7,6 @@ require 'pvn/log'
 require 'pvn/command/cmdexec'
 
 module PVN
-  class MockLogCommand < LogCommand
-    include Loggable
-
-    @@current_file = nil
-    
-    def self.current_file= fname
-      @@current_file = fname
-    end
-    
-    def initialize args
-      limit = args[:limit]
-      n_matches = 0
-      @output = Array.new
-      IO.readlines(@@current_file).each do |line|
-        if limit && PVN::LogCommand::LOG_REVISION_LINE.match(line)
-          n_matches += 1
-          if n_matches > limit
-            break
-          end
-        end
-        @output << line
-      end
-    end
-  end
-end
-
-module PVN
   class MockCommandExecutor < CommandExecutor
     include Loggable, Singleton
 
@@ -101,7 +74,7 @@ module PVN
       n_matches = 0
       output = Array.new
       IO.readlines(@file).each do |line|
-        if limit && PVN::LogCommand::LOG_REVISION_LINE.match(line)
+        if limit && PVN::Log::SVN_LOG_REVISION_LINE_RE.match(line)
           n_matches += 1
           if n_matches > limit
             break

@@ -7,13 +7,13 @@ require 'pvn/log/entry'
 
 module PVN
   module Log
+    SVN_LOG_SUMMARY_LINE_RE = Regexp.new('^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$')
+    SVN_LOG_SEPARATOR_LINE_RE = Regexp.new('^-{72}$')
+    SVN_LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
+    SVN_LOG_FILE_NAME_RE = Regexp.new('^   \w (.*)$')
+
     class TextFactory
       include Loggable
-
-      LOG_RE = Regexp.new('^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$')
-      LOG_SEPARATOR_RE = Regexp.new('^-{72}$')
-      LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
-      LOG_FILE_NAME_RE = Regexp.new('^   \w (.*)$')
 
       def initialize lines
         @lines = lines
@@ -36,7 +36,7 @@ module PVN
       end
 
       def match_log_start_line
-        match_line(LOG_SEPARATOR_RE) && match_line(LOG_RE, 1)
+        match_line(SVN_LOG_SEPARATOR_LINE_RE) && match_line(SVN_LOG_SUMMARY_LINE_RE, 1)
       end
 
       def line offset = 0
@@ -54,7 +54,7 @@ module PVN
       def read_comment
         comment = Array.new
 
-        while has_line && !match_line(LOG_SEPARATOR_RE)
+        while has_line && !match_line(SVN_LOG_SEPARATOR_LINE_RE)
           comment << line.chomp
           debug "comment: #{comment}".cyan
           advance_line
@@ -73,7 +73,7 @@ module PVN
             advance_line 2
             fields = Hash[Entry::FIELDS.zip(fielddata[1 .. -1])]
             
-            if match_line(LOG_VERBOSE_START_RE)
+            if match_line SVN_LOG_VERBOSE_START_RE
               advance_line
               
               # files 
@@ -81,7 +81,7 @@ module PVN
               fields[:files] = Array.new
 
               while (ln = line) && !ln.strip.empty?
-                fname = match_line(LOG_FILE_NAME_RE)[1]
+                fname = match_line(SVN_LOG_FILE_NAME_RE)[1]
 
                 info "fname: #{fname}".red
 

@@ -19,10 +19,10 @@ module PVN
     end
 
     def test_revision_re
-      assert_match LogCommand::LOG_REVISION_LINE, "r61 | dhimuxrb | 2011-11-04 06:37:36 -0400 (Fri, 04 Nov 2011) | 1 line"
-      assert_match LogCommand::LOG_REVISION_LINE, "r1053 | pxjrmir | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
-      assert_match LogCommand::LOG_REVISION_LINE, "r1053 | pxjrmir-jkjkl | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
-      assert_no_match LogCommand::LOG_REVISION_LINE, "r1053 pxjrmir | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
+      assert_match Log::SVN_LOG_SUMMARY_LINE_RE, "r61 | dhimuxrb | 2011-11-04 06:37:36 -0400 (Fri, 04 Nov 2011) | 1 line"
+      assert_match Log::SVN_LOG_SUMMARY_LINE_RE, "r1053 | pxjrmir | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
+      assert_match Log::SVN_LOG_SUMMARY_LINE_RE, "r1053 | pxjrmir-jkjkl | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
+      assert_no_match Log::SVN_LOG_SUMMARY_LINE_RE, "r1053 pxjrmir | 2011-11-09 17:46:29 -0500 (Wed, 09 Nov 2011) | 2 lines"
     end
 
     def test_command_basic

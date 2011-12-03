@@ -76,7 +76,7 @@ module PVN
 
     def read_from_log_output n_matches, loglines
       loglines.each do |line|
-        next unless md = PVN::LogCommand::LOG_REVISION_LINE.match(line)
+        next unless md = PVN::Log::SVN_LOG_SUMMARY_LINE_RE.match(line)
         n_matches -= 1
         if n_matches == 0
           return md[1].to_i
