@@ -46,6 +46,8 @@ module PVN
         return run_command_with_output DiffCommand, true, arguments
       when "describe"
         return run_command_with_output DescribeCommand, true, arguments
+      when "help"
+        return run_command_with_output DescribeCommand, true, arguments
       else
         puts "don't understand subcommand: #{subcmd}"
       end
