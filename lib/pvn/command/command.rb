@@ -28,14 +28,20 @@ module PVN
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
-      @args     = process_options cmdargs, args
-      @fullargs = [ "svn", self.class::COMMAND ] + @args
 
-      run @fullargs
+      optresults  = self.class.args_to_option_results args
+      fullcmdargs = update_option_results optresults, cmdargs
+
+      @svncmd     = to_svn_command fullcmdargs
+      run @svncmd
+    end
+
+    def to_svn_command fullcmdargs
+      [ "svn", self.class::COMMAND ] + fullcmdargs
     end
 
     def command
-      @fullargs.join(" ")
+      @svncmd.join(" ")
     end
 
     def run args
@@ -49,13 +55,6 @@ module PVN
       else
         debug "not executing: #{command}".red
       end
-    end
-
-    def create_option_results args
-      optresults = self.class.args_to_option_results args
-      info "optresults: #{optresults}"
-      
-      optresults
     end
 
     def update_option_results optresults, cmdargs
@@ -73,7 +72,7 @@ module PVN
     end
 
     def process_options cmdargs, args
-      optresults = create_option_results args
+      optresults = self.class.args_to_option_results args
       update_option_results optresults, cmdargs
     end
 

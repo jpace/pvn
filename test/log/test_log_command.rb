@@ -55,5 +55,22 @@ module PVN
         entry.write
       end
     end
+
+    def test_log_direct_invoke
+      lc = LogCommand.new :fromdate => Date.new(2010, 9, 18), :todate => Date.new(2010, 9, 22), :limit => nil
+      lc.run Array.new
+
+      info "output: #{lc.output}"
+      
+      entries = lc.entries
+      info "entries: #{entries}"
+      
+      assert_equal 6, entries.length, "number of entries for log direct invoke"
+
+      entries.each do |entry|
+        info "entry: #{entry}"
+        entry.write
+      end
+    end
   end
 end

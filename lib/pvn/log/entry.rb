@@ -47,24 +47,25 @@ module PVN
         #
         # back to dev
 
-        # should allow reformatting of date and time
+        # @todo allow reformatting of date and time
         summary = '#{revision.yellow}\t#{user.cyan}\t#{date} #{time}'
         msg = eval('"' + summary + '"')
         puts msg
 
         if comment
+          # @todo add word wrapping
           comment.each do |line|
             puts "    " + line
           end
+          puts
         end
 
         if files
           files.each do |file|
-            puts "    " + file.green
+            puts "    " + file
           end
           puts
         end
-        puts
       end
     end
   end

@@ -39,10 +39,6 @@ module PVN
       @use_cache
     end
 
-    def to_command args
-      args[:command].join(' ')
-    end
-
     def get_cache_file args
       pwd = Pathname.pwd.to_s.sub(%r{^/}, '')
       CACHE_DIR + pwd + command.gsub(' ', '')

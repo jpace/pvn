@@ -14,6 +14,8 @@ module PVN
 
     COMMAND = "log"
 
+    REVISION_ARG = '-r'
+
     subcommands [ COMMAND, 'l' ]
     description "Print log messages for the given files."
     usage "[OPTIONS] FILE..."
@@ -27,6 +29,35 @@ module PVN
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :unsets => :limit
+
+    def initialize args = Hash.new
+      debug "args: #{args.inspect}".on_yellow
+
+      @fromdate = args[:fromdate]
+      @todate = args[:todate]
+
+      super
+    end
+
+    def to_svn_revision_date date
+      '{' + date.to_s + '}'
+    end
+
+    def to_svn_command fullcmdargs
+      info "fullcmdargs: #{fullcmdargs}".on_blue
+
+      info "@fromdate: #{@fromdate}".on_blue
+      info "@todate: #{@todate}".on_blue
+
+      updated_args = fullcmdargs.dup
+
+      if @fromdate && @todate
+        revarg = REVISION_ARG + to_svn_revision_date(@fromdate) + ':' + to_svn_revision_date(@todate)
+        updated_args.insert 0, revarg
+      end
+
+      super updated_args
+    end
 
     def entries
       # of course this assumes that output is in plain text (non-XML)
