@@ -29,8 +29,6 @@ module PVN
     has_revision_option :unsets => :limit
 
     def entries
-      info "yo!".on_green
-
       # of course this assumes that output is in plain text (non-XML)
       factory = PVN::Log::TextFactory.new output
       factory.entries
@@ -51,7 +49,7 @@ module PVN
         elsif args[:fromdate] && args[:todate]
           command << "-r" << "\{#{fromdate}\}:\{#{todate}\}"
         end
-        info "command: #{command}".on_red
+        debug "command: #{command}".on_red
       end
     end
   end

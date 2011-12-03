@@ -16,7 +16,7 @@ module PVN
       options.each do |opt|
         add_option opt
       end
-      info "options: #{@options}"
+      debug "options: #{@options}"
     end
 
     def has_key? key
@@ -32,7 +32,7 @@ module PVN
       tag = option.tag
       opts = option.options.dup
 
-      # info "opts: #{opts}"
+      # debug "opts: #{opts}"
 
       defval = val = opts[:default]
 
@@ -45,7 +45,7 @@ module PVN
       end
 
       @options[option] = OptionEntry.new(key, tag, opts)
-      # info "options: #{@options}"
+      # debug "options: #{@options}"
 
       if defval
         set_arg key, defval
@@ -84,22 +84,22 @@ module PVN
 
     def process obj, args
       arg = args[0]
-      info "arg: #{arg}"
-      info "arg: #{arg.class}"
-      info "args: #{args}"
+      debug "arg: #{arg}"
+      debug "arg: #{arg.class}"
+      debug "args: #{args}"
       @options.each do |option, entry|
-        info "option: #{option}"
-        info "entry: #{entry}"
+        debug "option: #{option}"
+        debug "entry: #{entry}"
         if option.exact_match? arg
           args.shift
           return _set_arg obj, entry, args
         elsif option.regexp_match? arg
-          info "arg: #{arg}"
+          debug "arg: #{arg}"
           # args.shift
           return _set_arg obj, entry, args
         elsif option.negative_match? arg
           args.shift
-          info "matched negative: #{entry.key}"
+          debug "matched negative: #{entry.key}"
           unset_arg entry.key
           return true
         end
@@ -110,17 +110,17 @@ module PVN
     def _set_arg obj, entry, args
       return nil unless entry
 
-      info "entry: #{entry}".on_black
+      debug "entry: #{entry}".on_black
 
       if setter = entry.options[:setter]
-        info "setter: #{setter}".on_black
+        debug "setter: #{setter}".on_black
         set_arg entry.key, setter.to_proc.call(obj, self, args)
       else
         set_arg entry.key, true
       end
 
       if unsets = entry.options[:unsets]
-        info "unsets: #{unsets}".on_green
+        debug "unsets: #{unsets}".on_green
         unset_arg unsets
       end
       true

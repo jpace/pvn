@@ -27,9 +27,9 @@ module PVN
     def results args
       optresult = OptionsResults.new @options
       args.each do |key, val|
-        RIEL::Log.info "key: #{key}; val: #{val}"
+        RIEL::Log.debug "key: #{key}; val: #{val}"
         if optresult.has_key? key
-          RIEL::Log.info "key: #{key}; val: #{val}"
+          RIEL::Log.debug "key: #{key}; val: #{val}"
           optresult.set_arg key, val
         end
       end

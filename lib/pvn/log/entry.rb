@@ -48,22 +48,23 @@ module PVN
         # back to dev
 
         # should allow reformatting of date and time
-        summary = '#{revision.yellow}\n    #{user.cyan}    #{date.red} #{time.blue}'
+        summary = '#{revision.yellow}\t#{user.cyan}\t#{date} #{time}'
         msg = eval('"' + summary + '"')
-        puts summary
         puts msg
-        puts revision.yellow + "    " + user.cyan + "    " + date.red + " " + time.red
+
+        if comment
+          comment.each do |line|
+            puts "    " + line
+          end
+        end
+
         if files
           files.each do |file|
             puts "    " + file.green
           end
+          puts
         end
-
-        if comment
-          comment.each do |line|
-            puts "    " + line.magenta
-          end
-        end
+        puts
       end
     end
   end

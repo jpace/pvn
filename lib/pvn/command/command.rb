@@ -20,11 +20,11 @@ module PVN
       allopts[:regexp] = Regexp.new('^[\-\+]?\d+$')
       has_option :revision, '-r', "revision", allopts
     end
-    
+
     attr_reader :output
 
     def initialize args = Hash.new
-      info "args: #{args}"
+      debug "args: #{args}"
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new

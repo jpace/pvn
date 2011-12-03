@@ -9,7 +9,7 @@ require 'pvn/command/cmdexec'
 require 'pvn/diff'
 require 'pvn/describe'
 
-RIEL::Log.level = Log::INFO
+RIEL::Log.level = Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
