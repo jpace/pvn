@@ -21,6 +21,22 @@ module PVN
       has_option :revision, '-r', "revision", allopts
     end
 
+    def self.revision_from_args ca, cmdargs
+      require $orig_file_loc.dirname.parent + 'revision.rb'
+
+      revarg = cmdargs.shift
+      RIEL::Log.info "revarg: #{revarg}".on_blue
+      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
+
+      rev = Revision.new(:fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
+      RIEL::Log.info "rev: #{rev}".on_cyan
+
+      if rev.nil?
+        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
+      end
+      rev
+    end
+
     attr_reader :output
 
     def initialize args = Hash.new
@@ -65,31 +81,15 @@ module PVN
       end
 
       info "optresults: #{optresults}"
-      info "optresults.to_a: #{optresults.to_a.inspect}"
+      info "optresults.values: #{optresults.values.inspect}"
       info "cmdargs: #{cmdargs}"
 
-      optresults.to_a + cmdargs
+      optresults.values + cmdargs
     end
 
     def process_options cmdargs, args
       optresults = self.class.args_to_option_results args
       update_option_results optresults, cmdargs
-    end
-
-    def revision_from_args ca, cmdargs
-      require $orig_file_loc.dirname.parent + 'revision.rb'
-
-      revarg = cmdargs.shift
-      RIEL::Log.info "revarg: #{revarg}".on_blue
-      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
-
-      rev = Revision.new(:executor => @executor, :fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
-      RIEL::Log.info "rev: #{rev}".on_cyan
-
-      if rev.nil?
-        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
-      end
-      rev
     end
 
     def option optname

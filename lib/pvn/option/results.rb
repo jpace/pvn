@@ -57,17 +57,21 @@ module PVN
     end
 
     def to_s
-      to_a.join(' ')
+      values.join(' ')
+    end
+
+    def values
+      vals = Array.new
+      @options.values.each do |entry|
+        if entry.value
+          vals << entry.tag << entry.value.to_s
+        end
+      end
+      vals
     end
 
     def to_a
-      array = Array.new
-      @options.values.each do |entry|
-        if entry.value
-          array << entry.tag << entry.value.to_s
-        end
-      end
-      array
+      values
     end
 
     def set_from_proc key, args, proc
@@ -114,7 +118,7 @@ module PVN
 
       if setter = entry.options[:setter]
         debug "setter: #{setter}".on_black
-        set_arg entry.key, setter.to_proc.call(obj, self, args)
+        set_arg entry.key, setter.to_proc.call(obj.class, self, args)
       else
         set_arg entry.key, true
       end

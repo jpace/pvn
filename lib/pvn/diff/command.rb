@@ -1,6 +1,3 @@
-#!/usr/bin/ruby -w
-# -*- ruby -*-
-
 require 'pvn/util'
 require 'pvn/command/command'
 require 'pvn/config'
@@ -34,16 +31,11 @@ module PVN
 
       # usediffopt = find_option :diffcmd
 
-      differ = (pn + '../../../bin/pvndiff').expand_path 
+      differ = (pn + '../../../../bin/pvndiff').expand_path 
       # info "differ: #{differ}"
 
       args.insert 0, "--diff-cmd", differ
       super
     end
   end
-end
-
-
-if __FILE__ == $0
-  puts "diffing!"
 end

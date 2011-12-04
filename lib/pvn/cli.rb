@@ -6,7 +6,7 @@ require 'riel'
 require 'optparse'
 require 'pvn/log'
 require 'pvn/command/cmdexec'
-require 'pvn/diff'
+require 'pvn/diff/command'
 require 'pvn/describe'
 
 RIEL::Log.level = Log::WARN
@@ -33,6 +33,19 @@ module PVN
       end
       true
     end
+
+    SUBCOMMANDS = [ LogCommand, DiffCommand, DescribeCommand ]
+
+    def self.run_help arguments
+      forwhat = arguments[0]
+
+      cls = SUBCOMMANDS.find { |cls| cls::COMMAND == forwhat }
+      if cls
+        puts cls.to_doc
+      else
+        show_help
+      end
+    end
     
     def self.execute stdout, arguments = Array.new
       subcmd = arguments.shift
@@ -47,7 +60,7 @@ module PVN
       when "describe"
         return run_command_with_output DescribeCommand, true, arguments
       when "help"
-        return run_command_with_output DescribeCommand, true, arguments
+        return run_help arguments
       else
         puts "don't understand subcommand: #{subcmd}"
       end
@@ -59,7 +72,7 @@ module PVN
       mandatory_options = %w(  )
 
       parser = OptionParser.new do |opts|
-        opts.banner = <<-BANNER.gsub(/^          /,'')
+        opts.banner = <<-BANNER.gsub(/^          /, '')
           This application is wonderful because...
 
           Usage: #{File.basename($0)} [options]

@@ -14,6 +14,20 @@ module PVN
   #  n means the literal revision number.  
   class Revision
     include Loggable
+
+    def self.revision_from_args results, cmdargs
+      revarg = cmdargs.shift
+      RIEL::Log.info "revarg: #{revarg}".on_blue
+      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
+
+      rev = Revision.new(:fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
+      RIEL::Log.info "rev: #{rev}".on_cyan
+
+      if rev.nil?
+        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
+      end
+      rev
+    end
     
     attr_reader :revision
 

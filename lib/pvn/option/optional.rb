@@ -71,10 +71,10 @@ module PVN
       def to_doc io = $stdout
         self.instance_eval { @doc.to_doc io }
       end
-    end
 
-    def next_argument_as_integer ca, cmdargs
-      cmdargs.shift.to_i
+      def next_argument_as_integer ca, cmdargs
+        cmdargs.shift.to_i
+      end
     end
   end
 end
