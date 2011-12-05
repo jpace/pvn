@@ -13,8 +13,6 @@ RIEL::Log.level = Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
-  VERSION = "0.0.1"
-  
   class CLI
     include Loggable
 

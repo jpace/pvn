@@ -23,7 +23,7 @@ module PVN
       @lines[@lidx + offset]
     end
 
-    def has_line
+    def has_line?
       @lidx < @lines.length
     end
 
