@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/log/entry'
+require 'pvn/textlines'
 
 module PVN
   module Log
@@ -16,8 +17,7 @@ module PVN
       include Loggable
 
       def initialize lines
-        @lines = lines
-        @lidx = 0
+        @textlines = TextLines.new lines
         @entries = nil
       end
 
@@ -31,33 +31,17 @@ module PVN
                      end
       end
 
-      def match_line re, offset = 0
-        re.match line(offset)
-      end
-
       def match_log_start_line
-        match_line(SVN_LOG_SEPARATOR_LINE_RE) && match_line(SVN_LOG_SUMMARY_LINE_RE, 1)
-      end
-
-      def line offset = 0
-        @lines[@lidx + offset]
-      end
-
-      def has_line
-        @lidx < @lines.length
-      end
-
-      def advance_line offset = 1
-        @lidx += offset
+        @textlines.match_line(SVN_LOG_SEPARATOR_LINE_RE) && @textlines.match_line(SVN_LOG_SUMMARY_LINE_RE, 1)
       end
 
       def read_comment
         comment = Array.new
 
-        while has_line && !match_line(SVN_LOG_SEPARATOR_LINE_RE)
-          comment << line.chomp
-          debug "comment: #{comment}".cyan
-          advance_line
+        while @textlines.has_line && !@textlines.match_line(SVN_LOG_SEPARATOR_LINE_RE)
+          comment << @textlines.line.chomp
+          # debug "comment: #{comment}"
+          @textlines.advance_line
         end
 
         comment
@@ -68,33 +52,33 @@ module PVN
       # where new_index is the updated index into the lines. Returns nil if the
       # text does not match the expected plain text format.
       def create_next_entry
-        while has_line
+        while @textlines.has_line
           if fielddata = match_log_start_line
-            advance_line 2
+            @textlines.advance_line 2
             fields = Hash[Entry::FIELDS.zip(fielddata[1 .. -1])]
             
-            if match_line SVN_LOG_VERBOSE_START_RE
-              advance_line
+            if @textlines.match_line SVN_LOG_VERBOSE_START_RE
+              @textlines.advance_line
               
               # files 
 
               fields[:files] = Array.new
 
-              while (ln = line) && !ln.strip.empty?
-                fname = match_line(SVN_LOG_FILE_NAME_RE)[1]
+              while (ln = @textlines.line) && !ln.strip.empty?
+                fname = @textlines.match_line(SVN_LOG_FILE_NAME_RE)[1]
 
                 info "fname: #{fname}".red
 
                 fields[:files] << fname
                 
-                advance_line
+                @textlines.advance_line
               end
             end
 
             # skip the blank line
-            advance_line
+            @textlines.advance_line
 
-            debug "line: #{@lines[@lidx]}"
+            # debug "line: #{@textlines.lines[@lidx]}"
 
             fields[:comment] = read_comment
             
@@ -102,7 +86,7 @@ module PVN
 
             return Entry.new(fields)
           end
-          @lidx += 1
+          @textlines.advance_line
         end
         nil
       end

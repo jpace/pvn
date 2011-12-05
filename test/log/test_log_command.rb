@@ -45,17 +45,17 @@ module PVN
     end
 
     def test_command_using_negative_revision_only_revision_specified
-      assert_log_command "svn log -r 1947", %w{ -r -1 }
-      assert_log_command "svn log -r 1946", %w{ -r -2 }
+      assert_log_command "svn log -r 1950", %w{ -r -1 }
+      assert_log_command "svn log -r 1947", %w{ -r -2 }
     end
 
     def test_command_using_negative_revision_log_limit_specified
-      assert_log_command "svn log -r 1945", %w{ -l 10 -r -3 }
-      assert_log_command "svn log -r 1946", %w{ -l 10 -r -2 }
+      assert_log_command "svn log -r 1946", %w{ -l 10 -r -3 }
+      assert_log_command "svn log -r 1947", %w{ -l 10 -r -2 }
     end
 
     def test_command_using_negative_revision_log_limit_specified_out_of_range
-      assert_log_command "svn log -r 1720", %w{ -l 10 -r -17 }
+      assert_log_command "svn log -r 1721", %w{ -l 10 -r -17 }
     end
 
     def test_command_with_positive_revision
@@ -65,9 +65,9 @@ module PVN
 
     def test_command_with_implied_revision
       assert_log_command "svn log -r 412", %w{ +1 }
-      assert_log_command "svn log -r 1947", %w{ -1 }
-      assert_log_command "svn log -r 1945", %w{ -3 }
-      assert_log_command "svn log -r 1720", %w{ -17 }
+      assert_log_command "svn log -r 1950", %w{ -1 }
+      assert_log_command "svn log -r 1946", %w{ -3 }
+      assert_log_command "svn log -r 1721", %w{ -17 }
     end
 
     LOG_SEP_LINE = "------------------------------------------------------------------------"
@@ -75,11 +75,6 @@ module PVN
     def test_default_output
       lc = LogCommand.new Hash.new
       output = lc.run Array.new
-      info "output: #{output}"
-
-      output.each_with_index do |line, lidx|
-        info "output[#{lidx}]: #{line}"
-      end
 
       # the last 5 entries happen to be four lines apart, with only one line of
       # comment text each.
@@ -117,8 +112,6 @@ module PVN
       lc = LogCommand.new :fromdate => Date.new(2010, 9, 18), :todate => Date.new(2010, 9, 22), :limit => nil
       lc.run Array.new
 
-      info "output: #{lc.output}"
-      
       entries = lc.entries
       info "entries: #{entries}"
       

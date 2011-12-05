@@ -11,7 +11,7 @@ module PVN
   class TestCase < RUNIT::TestCase
     include Loggable
 
-    WIQUERY_DIRNAME = "/home/jpace/Programs/wiquery/trunk"
+    WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
 
     def initialize(*args)
       # save this because expand_path resolves to the current dir, which we
