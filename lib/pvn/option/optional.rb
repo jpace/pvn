@@ -67,6 +67,11 @@ module PVN
           end
         end
       end
+
+      def doc
+        @doc ||= Documenter.new
+        yield @doc if block_given?
+      end
       
       def to_doc io = $stdout
         self.instance_eval { @doc.to_doc io }

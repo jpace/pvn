@@ -6,7 +6,7 @@ module PVN
     def initialize
     end
 
-    def run(cmd)
+    def run cmd
       IO.popen(cmd).readlines
     end
   end

@@ -17,10 +17,13 @@ module PVN
     def initialize
       @examples = Array.new
       @options = Array.new
+      @subcommands = nil
+      @description = nil
+      @usage = nil
+      @summary = nil
     end
 
     def to_doc io = $stdout
-      io.puts "yo"
       doc = Array.new
 
       subcmds = @subcommands

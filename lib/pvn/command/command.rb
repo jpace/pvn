@@ -67,7 +67,7 @@ module PVN
 
       if @execute
         info "@executor : #{@executor}"
-        @output = @executor.run(command)
+        @output = @executor.run command
       else
         debug "not executing: #{command}".red
       end
