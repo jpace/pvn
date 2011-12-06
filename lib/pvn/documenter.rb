@@ -15,12 +15,12 @@ module PVN
     attr_reader :options
 
     def initialize
-      @examples = Array.new
-      @options = Array.new
       @subcommands = nil
       @description = nil
       @usage = nil
       @summary = nil
+      @options = Array.new
+      @examples = Array.new
     end
 
     def to_doc io = $stdout
@@ -36,7 +36,7 @@ module PVN
       io.puts subcmdstr + ": " + @description
       io.puts "usage: " + subcmds[0] + " " + @usage
       io.puts ""
-      io.puts @summary
+      io.puts @summary.collect { |line| "  " + line }
 
       write_section "options", @options, io do |opt, io|
         option_to_doc opt, io

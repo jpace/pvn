@@ -18,12 +18,12 @@ module PVN
 
     subcommands [ COMMAND, 'l' ]
     description "Print log messages for the given files."
-    usage "[OPTIONS] FILE..."
-    summary [ "  Prints log messages for the given files.",
-              "  If a string without a preceding option is given, and is not",
-              "  a file name, then it will be used as the comment.",
-              "  Prior to executing commit against Subversion, the \"check\"",
-              "  command will be run against the given files." ]
+    usage       "[OPTIONS] FILE..."
+    summary   [ "Prints log messages for the given files.",
+                "If a string without a preceding option is given, and is not",
+                "a file name, then it will be used as the comment.",
+                "Prior to executing commit against Subversion, the \"check\"",
+                "command will be run against the given files." ]
     
     examples << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
     

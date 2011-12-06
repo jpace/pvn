@@ -69,7 +69,7 @@ module PVN
       elsif md = %r{^\+(\d+)}.match(num)
         num = md[1].to_i
         debug "num: #{num}"
-        log = LogCommand.new :filename => @fname, :executor => @executor, :limit => nil
+        log = run_log_command @fname, nil
         debug "log: #{log}"
         # debug "log.output: #{log.output}"
         @revision = read_from_log_output num, log.output.reverse
@@ -82,7 +82,7 @@ module PVN
       # count the limit backward, and get the "first" (last) match
       limit = -1 * neg
       debug "limit: #{limit}"
-      log = LogCommand.new :limit => limit, :filename => @fname, :executor => @executor
+      log = run_log_command @fname, limit
       debug "log: #{log}"
       # debug "log.output: #{log.output}"
       revision = read_from_log_output 1, log.output.reverse
@@ -97,6 +97,10 @@ module PVN
         end
       end
       nil
+    end
+
+    def run_log_command fname, limit
+      LogCommand.new :limit => limit, :filename => fname, :executor => @executor
     end
   end
 end

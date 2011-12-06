@@ -13,7 +13,7 @@ module PVN
       doc.subcommands = [ COMMAND ]
       doc.description = "Displays differences."
       doc.usage       = "[OPTIONS] FILE..."
-      doc.summary     = [ "  Compares the given files." ]
+      doc.summary     = [ "Compares the given files." ]
       doc.examples << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
     end
 
@@ -22,9 +22,9 @@ module PVN
     has_revision_option
 
     # @todo implement
-    if false
+    if true
       self.options do |opts|
-        opts.add :diffcmd
+        # opts.add :diffcmd
       end
     end
 

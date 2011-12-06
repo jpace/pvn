@@ -73,6 +73,11 @@ module PVN
         yield @doc if block_given?
       end
       
+      def options
+        @option_set ||= OptionSet.new
+        yield @option_set if block_given?
+      end
+      
       def to_doc io = $stdout
         self.instance_eval { @doc.to_doc io }
       end
