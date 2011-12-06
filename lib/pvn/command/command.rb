@@ -24,17 +24,7 @@ module PVN
     def self.revision_from_args ca, cmdargs
       require $orig_file_loc.dirname.parent + 'revision.rb'
 
-      revarg = cmdargs.shift
-      RIEL::Log.info "revarg: #{revarg}".on_blue
-      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
-
-      rev = Revision.new(:fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
-      RIEL::Log.info "rev: #{rev}".on_cyan
-
-      if rev.nil?
-        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
-      end
-      rev
+      Revision.revision_from_args ca, cmdargs
     end
 
     attr_reader :output

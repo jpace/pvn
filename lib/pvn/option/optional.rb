@@ -25,9 +25,9 @@ module PVN
           opt = Option.new optname, tag, desc, args
           @option_set.options << opt
 
-          RIEL::Log.debug "self: #{self}".on_red
-          RIEL::Log.debug "opt: #{opt.inspect}".on_red
-          RIEL::Log.debug "@option_set: #{@option_set.inspect}".on_red
+          RIEL::Log.debug "self: #{self}"
+          RIEL::Log.debug "opt: #{opt.inspect}"
+          RIEL::Log.debug "@option_set: #{@option_set.inspect}"
 
           @doc ||= Documenter.new
           @doc.options << opt
@@ -42,7 +42,7 @@ module PVN
 
       def args_to_option_results args
         RIEL::Log.debug "self: #{self}"
-        RIEL::Log.debug "args: #{args}".on_red
+        RIEL::Log.debug "args: #{args}"
 
         self.instance_eval do
           @option_set.results args

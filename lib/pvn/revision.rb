@@ -17,11 +17,11 @@ module PVN
 
     def self.revision_from_args results, cmdargs
       revarg = cmdargs.shift
-      RIEL::Log.info "revarg: #{revarg}".on_blue
-      RIEL::Log.info "cmdargs: #{cmdargs}".on_blue
+      RIEL::Log.debug "revarg: #{revarg}"
+      RIEL::Log.debug "cmdargs: #{cmdargs}"
 
       rev = Revision.new(:fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
-      RIEL::Log.info "rev: #{rev}".on_cyan
+      RIEL::Log.debug "rev: #{rev}"
 
       if rev.nil?
         raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
@@ -69,10 +69,7 @@ module PVN
       elsif md = %r{^\+(\d+)}.match(num)
         num = md[1].to_i
         debug "num: #{num}"
-        log = run_log_command @fname, nil
-        debug "log: #{log}"
-        # debug "log.output: #{log.output}"
-        @revision = read_from_log_output num, log.output.reverse
+        @revision = get_revision @fname, nil, num
       else
         @revision = num.to_i
       end
@@ -81,11 +78,16 @@ module PVN
     def get_negative_revision neg
       # count the limit backward, and get the "first" (last) match
       limit = -1 * neg
-      debug "limit: #{limit}"
-      log = run_log_command @fname, limit
-      debug "log: #{log}"
-      # debug "log.output: #{log.output}"
-      revision = read_from_log_output 1, log.output.reverse
+      get_revision @fname, limit, 1
+    end
+
+    def get_revision fname, limit, num
+      logcmd = run_log_command fname, limit
+      get_nth_revision logcmd, num
+    end
+
+    def get_nth_revision logcmd, num
+      read_from_log_output num, logcmd.output.reverse
     end
 
     def read_from_log_output n_matches, loglines

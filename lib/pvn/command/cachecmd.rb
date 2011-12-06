@@ -19,10 +19,10 @@ module PVN
     attr_accessor :lines
 
     def initialize args = Hash.new
-      debug "args: #{args.inspect}".yellow
+      debug "args: #{args.inspect}"
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      debug "@use_cache: #{@use_cache}".on_blue
+      debug "@use_cache: #{@use_cache}"
 
       super
     end
