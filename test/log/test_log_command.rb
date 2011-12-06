@@ -2,8 +2,8 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 
 require 'rubygems'
 require 'riel'
-require 'pvn/log/command'
-require 'pvn/log/entry'
+require 'pvn/log/logcmd'
+require 'pvn/log/logentry'
 require 'pvn_cmd_test'
 
 RIEL::Log.level = Log::DEBUG
