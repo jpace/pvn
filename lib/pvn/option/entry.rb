@@ -34,11 +34,7 @@ module PVN
     end
 
     def set val
-      if @options && @options[:multiple]
-        @value << val
-      else
-        @value = val
-      end
+      @value = val
     end
   end
 
@@ -46,11 +42,10 @@ module PVN
     def initialize key, tag, options
       super
       info "options: #{options}"
-      @value = Array.new
     end
 
     def set val
-      @value << val
+      (@value ||= Array.new) << val
     end
   end
 end

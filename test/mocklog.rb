@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 require 'rubygems'
 require 'riel'
 require 'singleton'
-require 'pvn/log'
+require 'pvn/log/logfactory'
 require 'pvn/command/cmdexec'
 
 module PVN
@@ -74,7 +74,7 @@ module PVN
       n_matches = 0
       output = Array.new
       IO.readlines(@file).each do |line|
-        if limit && PVN::Log::SVN_LOG_REVISION_LINE_RE.match(line)
+        if limit && PVN::Log::SVN_LOG_SUMMARY_LINE_RE.match(line)
           n_matches += 1
           if n_matches > limit
             break

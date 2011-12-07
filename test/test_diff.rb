@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 
 require 'rubygems'
 require 'riel'
-require 'pvn/diff/command'
+require 'pvn/diff/diffcmd'
 # require 'mockdiff'
 
 Log.level = Log::DEBUG

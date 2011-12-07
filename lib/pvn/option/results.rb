@@ -99,7 +99,6 @@ module PVN
           return _set_arg obj, entry, args
         elsif option.regexp_match? arg
           debug "arg: #{arg}"
-          # args.shift
           return _set_arg obj, entry, args
         elsif option.negative_match? arg
           args.shift

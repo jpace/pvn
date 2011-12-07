@@ -9,9 +9,6 @@ module PVN
   class LogCommand < CachableCommand
     DEFAULT_LIMIT = 5
 
-    # yes, there's more to it ...
-    LOG_REVISION_LINE = Regexp.new('^r(\d+)\s*\|\s*(\w+)')
-
     COMMAND = "log"
 
     REVISION_ARG = '-r'

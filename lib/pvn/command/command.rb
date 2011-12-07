@@ -21,22 +21,26 @@ module PVN
       has_option :revision, '-r', "revision", allopts
     end
 
-    def self.revision_from_args ca, cmdargs
+    def self.revision_from_args results, cmdargs
       require $orig_file_loc.dirname.parent + 'revision.rb'
-
-      Revision.revision_from_args ca, cmdargs
+      
+      Revision.revision_from_args results, cmdargs
     end
 
     attr_reader :output
 
     def initialize args = Hash.new
-      debug "args: #{args}"
+      debug "args: #{args}".red
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
 
       optresults  = self.class.args_to_option_results args
       fullcmdargs = update_option_results optresults, cmdargs
+
+      if args[:filename]
+        fullcmdargs << args[:filename]
+      end
 
       @svncmd     = to_svn_command fullcmdargs
       run @svncmd

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 require 'rubygems'
 require 'riel'
 require 'stringio'
-require 'pvn/diff/command'
+require 'pvn/diff/diffcmd'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

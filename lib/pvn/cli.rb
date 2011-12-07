@@ -6,10 +6,10 @@ require 'riel'
 require 'optparse'
 require 'pvn/log'
 require 'pvn/command/cmdexec'
-require 'pvn/diff/command'
+require 'pvn/diff/diffcmd'
 require 'pvn/describe'
 
-RIEL::Log.level = Log::WARN
+RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
@@ -46,21 +46,28 @@ module PVN
     end
     
     def self.execute stdout, arguments = Array.new
-      subcmd = arguments.shift
-      RIEL::Log.debug "subcmd: #{subcmd}"
+      while arguments.size > 0
+        arg = arguments.shift
+        RIEL::Log.debug "arg: #{arg}"
 
-      case subcmd
-      when "log"
-        # return run_command_with_output LogCommand, true, arguments
-        return run_command_as_entries LogCommand, true, arguments
-      when "diff"
-        return run_command_with_output DiffCommand, true, arguments
-      when "describe"
-        return run_command_with_output DescribeCommand, true, arguments
-      when "help"
-        return run_help arguments
-      else
-        puts "don't understand subcommand: #{subcmd}"
+        if arg == "--verbose"
+          RIEL::Log.level = RIEL::Log::DEBUG
+          next
+        end
+
+        case arg
+        when "log"
+          # return run_command_with_output LogCommand, true, arguments
+          return run_command_as_entries LogCommand, true, arguments
+        when "diff"
+          return run_command_with_output DiffCommand, true, arguments
+        when "describe"
+          return run_command_with_output DescribeCommand, true, arguments
+        when "help"
+          return run_help arguments
+        else
+          puts "don't understand subcommand: #{arg}"
+        end
       end
 
       # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.

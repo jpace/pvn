@@ -60,6 +60,7 @@ module PVN
     end
 
     def run_command cmd
+      info "cmd: #{cmd}".red
       IO.popen(cmd) do |io|
         io.each do |line|
           puts line

@@ -21,6 +21,8 @@ module PVN
     has_option :diffcmd, "--diff-cmd", "the program to run diff through", :default => DIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
     has_revision_option
 
+    has_option :change, '-c', "the change made by revision ARG", { :setter => :revision_from_args }
+
     # @todo implement
     if true
       self.options do |opts|
