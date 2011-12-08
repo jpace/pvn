@@ -1,7 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper.rb'
-
-require 'rubygems'
-require 'riel'
+require 'test_helper'
 require 'pvn/log/logcmd'
 require 'pvn/log/logentry'
 require 'pvn_cmd_test'

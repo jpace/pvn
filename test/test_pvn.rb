@@ -1,7 +1,6 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
+require 'test_helper'
 
 class TestPvn < Test::Unit::TestCase
-
   def setup
   end
   

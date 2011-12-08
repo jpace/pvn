@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), "test_helper.rb")
+require 'test_helper'
+
 require 'pvn/cli'
 
 class TestPVNCli < Test::Unit::TestCase

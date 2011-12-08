@@ -2,8 +2,6 @@ require 'test_helper'
 
 at_exit { puts "bye!".on_red }
 
-require 'rubygems'
-require 'riel'
 require 'pvn/command/cachecmd'
 require 'pvn_test'
 

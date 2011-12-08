@@ -1,7 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
-
-require 'rubygems'
-require 'riel'
+require 'test_helper'
 require 'pvn/diff/diffcmd'
 
 Log.level = Log::DEBUG
@@ -33,6 +30,33 @@ module PVN
       # write ~/.pvn/config.rb and load it ...
       doc = DiffCommand.to_doc
       puts "doc: #{doc}".on_green
+    end
+
+    def test_no_change
+      # 
+    end
+
+    def test_against_head
+    end
+
+    def test_between_two_revisions
+      # diff -r 132:412
+    end
+
+    def test_change
+      # diff -c 317
+    end
+
+    def test_revision_against_head
+      # diff -r 317 (same as -r 317:HEAD)
+    end
+
+    def test_filter_known_type_java
+      # diff --diff-cmd diffj Foo.java
+    end
+
+    def test_filter_unknown_type
+      # diff foo.yaml
     end
   end
 end

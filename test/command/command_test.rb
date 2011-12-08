@@ -1,7 +1,4 @@
 require 'test_helper'
-
-require 'rubygems'
-require 'riel'
 require 'pvn/command/cachecmd'
 require 'pvn_test'
 
