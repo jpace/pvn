@@ -10,6 +10,32 @@ module PVN
 
     WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
 
+    class << self
+      def setup
+        RIEL::Log.info "SETTING UP".on_blue
+        @@orig_location = Pathname.pwd
+        # super
+      end
+
+      def teardown
+        RIEL::Log.info "TEARING DOWN".on_yellow
+        Dir.chdir @@orig_location
+      end
+
+      def suite
+        RIEL::Log.info "self: #{self}".negative
+        @@cls = self
+
+        ste = super
+        def ste.run(*args)
+          @@cls.setup
+          super
+          @@cls.teardown
+        end
+        ste
+      end
+    end
+
     def initialize(*args)
       # save this because expand_path resolves to the current dir, which we
       # change during the tests.

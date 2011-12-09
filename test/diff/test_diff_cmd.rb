@@ -9,14 +9,21 @@ module PVN
     include Loggable
 
     WIQUERY_URL = "file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk"
+    TMP_DIR = "/proj/tmp"       # SSD here; /tmp is HDD
 
     def setup
-      @orig_location = Pathname.pwd
+      info "setting up".blue
       super
     end
 
     def teardown
-      Dir.chdir @orig_location
+      info "tearing down".yellow
+    end
+
+    def backup_svn_repo
+    end
+
+    def restore_svn_repo
     end
 
     def goto_test_trunk
@@ -69,7 +76,7 @@ module PVN
       goto_test_trunk
       run_svn_checkout
       cmd = DiffCommand.new :execute => true, :command_args => []
-      # @ assert_no_output cmd
+      # @todo assert_no_output cmd
     end
 
     def xxx_test_change
