@@ -5,15 +5,22 @@ Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
 module PVN
-  class TestDiff < Test::Unit::TestCase
+  class TestDiff < PVN::TestCase
     include Loggable
 
-    def uses fname
-      # @mle.file = Pathname.new(File.dirname(__FILE__) + '/files/' + fname).expand_path
-    end
-    
+    WIQUERY_URL = "file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk"
+
     def setup
-      # @mle = MockDiffExecutor.new
+      @orig_location = Pathname.pwd
+      super
+    end
+
+    def teardown
+      Dir.chdir @orig_location
+    end
+
+    def goto_test_trunk
+      Dir.chdir WIQUERY_DIRNAME
     end
 
     def assert_diff_command exp, cmdargs = nil
@@ -26,17 +33,69 @@ module PVN
       assert_equal exp, DiffCommand.new(:execute => false, :command_args => cmdargs, :executor => @mle).command, "arguments: " + origargs.to_s
     end
 
+    def xtest_documentation
+      doc = DiffCommand.to_doc
+      puts "doc: #{doc}".on_green
+    end
+
+    def test_with_diffcmd
+      assert_diff_command 'svn diff --diff-cmd /proj/org/incava/pvn/bin/pvndiff', %w{ }
+    end
+
+    def test_no_diff_command
+      assert_diff_command 'svn diff', %w{ --no-diffcmd }
+      assert_diff_command 'svn diff', %w{ --no-diff-cmd }
+    end
+
     def test_none
       # write ~/.pvn/config.rb and load it ...
       doc = DiffCommand.to_doc
       puts "doc: #{doc}".on_green
     end
 
-    def test_no_change
-      # 
+    def assert_no_output cmd
+      assert_equals 0, cmd.output.length
     end
 
-    def test_against_head
+    def run_svn_update
+      puts "run_svn_update".on_red
+    end
+
+    def run_svn_checkout
+      puts "run_svn_checkout".on_red
+    end
+
+    def test_no_change
+      goto_test_trunk
+      run_svn_checkout
+      cmd = DiffCommand.new :execute => true, :command_args => []
+      # @ assert_no_output cmd
+    end
+
+    def xxx_test_change
+      goto_test_trunk
+      run_svn_update
+      append_to_file "somefile.txt", "new line\n"
+
+      cmd = DiffCommand.new :execute => true, :command_args => []
+      assert_output cmd, "> new line\n"
+    end
+
+    def xxx_test_against_head
+      goto_test_trunk_two       # not the primary testing directory
+      run_svn_update
+      remove_from_file "anotherfile.txt", "goner line\n"
+
+      cmd = DiffCommand.new :execute => true, :command_args => []
+      assert_no_output cmd
+
+      goto_test_trunk
+      run_svn_update
+      cmd = DiffCommand.new :execute => true, :command_args => []
+      assert_no_output cmd
+
+      headcmd = DiffCommand.new :execute => true, :command_args => %w{ -r HEAD }
+      assert_output headcmd, "< goner line\n"
     end
 
     def test_between_two_revisions

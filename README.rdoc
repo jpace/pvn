@@ -29,6 +29,8 @@ operations (reverting changes of earlier checkins).
 
   pvn diffhead - diff to head
 
+  pvn grep/glark - search for a regexp matching added, changed, or deleted code
+
 and the usual svn commands, with pvn revisions:
 
   pvn diff -2 -1 - compare the last two checkins
