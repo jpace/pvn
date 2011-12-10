@@ -2,7 +2,29 @@ require 'pvn/util'
 require 'pvn/command/command'
 require 'pvn/config'
 
+require 'pvn/subcmd/scexec'
+require 'pvn/subcmd/scdoc'
+require 'pvn/subcmd/scoptions'
+require 'pvn/subcmd/command'
+
 module PVN
+  module Diff
+    class DiffExec < Subcommand::Exec
+    end
+
+    class DiffDoc < Subcommand::Doc
+    end
+
+    class DiffOptions < Subcommand::Options
+    end
+
+    class DiffSubcmd < Subcommand::Command
+      executor :DiffExec
+      documentor :DiffDoc
+      options :DiffOptions
+    end
+  end
+
   class DiffCommand < Command
     COMMAND = "diff"
     

@@ -1,0 +1,6 @@
+require 'pvn/util'
+
+module PVN
+  class Exec
+  end
+end
