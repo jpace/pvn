@@ -14,7 +14,7 @@ module PVN
       doc.description = "Displays differences."
       doc.usage       = "[OPTIONS] FILE..."
       doc.summary     = [ "Compares the given files." ]
-      doc.examples << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
+      doc.examples   << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
     end
 
     DIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'

@@ -8,13 +8,14 @@ module PVN
   class DescribeCommand < Command
     COMMAND = "describe"
 
-    subcommands [ COMMAND, 'desc' ]
-    description "Describes the changes of one or more revisions."
-    usage "[OPTIONS] FILE..."
-    summary [ "  Prints the log message and the files changed for the given",
-              "  revisions." ]
-    
-    examples << [ "pvn describe -1 foo.rb", "Prints the summary for the most recent revision of foo.rb." ]
+    self.doc do |doc|
+      doc.subcommands = [ COMMAND, 'desc' ]
+      doc.description = "Describes the changes of one or more revisions."
+      doc.usage       =  "[OPTIONS] FILE..."
+      doc.summary     = [ "  Prints the log message and the files changed for the given",
+                          "  revisions." ]
+      doc.examples   << [ "pvn describe -1 foo.rb", "Prints the summary for the most recent revision of foo.rb." ]
+    end
     
     # has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :multiple => true

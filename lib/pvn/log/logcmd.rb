@@ -16,22 +16,23 @@ module PVN
 
     REVISION_ARG = '-r'
 
-    subcommands [ COMMAND, 'l' ]
-    description "Print log messages for the given files."
-    usage       "[OPTIONS] FILE..."
-    summary   [ "Prints log messages for the given files.",
-                "If a string without a preceding option is given, and is not",
-                "a file name, then it will be used as the comment.",
-                "Prior to executing commit against Subversion, the \"check\"",
-                "command will be run against the given files." ]
-    
-    examples << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
+    self.doc do |doc|
+      doc.subcommands = [ COMMAND, 'l' ]
+      doc.description = "Print log messages for the given files."
+      doc.usage       = "[OPTIONS] FILE..."
+      doc.summary     = [ "Prints log messages for the given files.",
+                          "If a string without a preceding option is given, and is not",
+                          "a file name, then it will be used as the comment.",
+                          "Prior to executing commit against Subversion, the \"check\"",
+                          "command will be run against the given files." ]
+      doc.examples   << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
+    end
     
     has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :unsets => :limit
 
     def initialize args = Hash.new
-      debug "args: #{args.inspect}".on_yellow
+      debug "args: #{args.inspect}"
 
       @fromdate = args[:fromdate]
       @todate = args[:todate]
@@ -44,10 +45,10 @@ module PVN
     end
 
     def to_svn_command fullcmdargs
-      info "fullcmdargs: #{fullcmdargs}".on_blue
+      info "fullcmdargs: #{fullcmdargs}"
 
-      info "@fromdate: #{@fromdate}".on_blue
-      info "@todate: #{@todate}".on_blue
+      info "@fromdate: #{@fromdate}"
+      info "@todate: #{@todate}"
 
       updated_args = fullcmdargs.dup
 

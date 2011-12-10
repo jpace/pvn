@@ -29,7 +29,6 @@ module PVN
           RIEL::Log.debug "opt: #{opt.inspect}"
           RIEL::Log.debug "@option_set: #{@option_set.inspect}"
 
-          @doc ||= Documenter.new
           @doc.options << opt
         end
       end
@@ -46,25 +45,6 @@ module PVN
 
         self.instance_eval do
           @option_set.results args
-        end
-      end
-
-      [ :subcommands, :description, :usage, :summary ].each do |name|
-        define_method name do |val|
-          self.instance_eval do 
-            @doc ||= CommandDoc.new
-            meth = (name.to_s + '=').to_sym
-            @doc.send meth, val
-          end
-        end
-      end      
-
-      [ :examples ].each do |name|
-        define_method name do
-          self.instance_eval do 
-            @doc ||= CommandDoc.new
-            @doc.send name
-          end
         end
       end
 
