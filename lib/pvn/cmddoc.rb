@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 
 module PVN
-  class Documenter
+  class CommandDoc
     attr_accessor :subcommands
     attr_accessor :description
     attr_accessor :usage
@@ -92,4 +92,3 @@ module PVN
     end
   end
 end
-

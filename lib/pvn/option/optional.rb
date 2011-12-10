@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'pvn/option/set'
 require 'pvn/option/option'
-require 'pvn/documenter'
+require 'pvn/cmddoc'
 
 module PVN
   module Optional
@@ -52,7 +52,7 @@ module PVN
       [ :subcommands, :description, :usage, :summary ].each do |name|
         define_method name do |val|
           self.instance_eval do 
-            @doc ||= Documenter.new
+            @doc ||= CommandDoc.new
             meth = (name.to_s + '=').to_sym
             @doc.send meth, val
           end
@@ -62,14 +62,14 @@ module PVN
       [ :examples ].each do |name|
         define_method name do
           self.instance_eval do 
-            @doc ||= Documenter.new
+            @doc ||= CommandDoc.new
             @doc.send name
           end
         end
       end
 
       def doc
-        @doc ||= Documenter.new
+        @doc ||= CommandDoc.new
         yield @doc if block_given?
       end
       

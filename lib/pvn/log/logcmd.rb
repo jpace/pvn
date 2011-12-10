@@ -6,6 +6,9 @@ require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
 
 module PVN
+  class LogOptionSet < OptionSet
+  end
+
   class LogCommand < CachableCommand
     DEFAULT_LIMIT = 5
 
