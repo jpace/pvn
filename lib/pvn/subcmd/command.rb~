@@ -1,9 +1,0 @@
-require 'pvn/util'
-require 'pvn/config'
-
-module PVN
-  class Subcommand
-    class Options
-    end
-  end
-end

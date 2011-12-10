@@ -1,7 +1,0 @@
-
-module PVN
-  module Subcommand
-    class SCDoc
-    end
-  end
-end
