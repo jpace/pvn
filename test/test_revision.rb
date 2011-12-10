@@ -49,5 +49,11 @@ module PVN
       assert_revision 1090319, -50
       assert_revision 1090323, -49
     end
+
+    def test_head
+      uses "svn/ant/core/src/limit50.txt"
+
+      assert_revision "HEAD", "HEAD"
+    end
   end
 end

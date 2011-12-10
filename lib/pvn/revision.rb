@@ -43,7 +43,9 @@ module PVN
       
       @revision = nil
 
-      if neg = Util.negative_integer?(num)
+      if num == "HEAD"
+        @revision = "HEAD"
+      elsif neg = Util.negative_integer?(num)
         debug "neg        : #{neg}"
 
         # if these two are the same number (revision(-3) == revision(-2)) then

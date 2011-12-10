@@ -7,9 +7,8 @@ require 'singleton'
 
 module PVN
   class Configuration
-    include Singleton
-
     def initialize
+      @@instance = self
       @values = Hash.new { |h, k| h[k] = Array.new }
     end
 
@@ -18,20 +17,22 @@ module PVN
     end
 
     def self.config &blk
-      self.instance.config(&blk)
+      @@instance.config(&blk)
     end
 
     def self.read
-      cfg = self.instance
-      pvndir = ENV['HOME'] + '/.pvn'
-      cfgfile = pvndir + '/config'
-      
-      begin
-        require cfgfile
-      rescue LoadError => e
-        # no configuration
+      @@instance ||= begin
+        cfg = self.new
+        pvndir = ENV['HOME'] + '/.pvn'
+        cfgfile = pvndir + '/config'
+        
+        begin
+          require cfgfile
+        rescue LoadError => e
+          # no configuration
+        end
+        cfg
       end
-      cfg
     end
 
     def value name, field

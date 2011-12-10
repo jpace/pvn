@@ -21,7 +21,8 @@ module PVN
         attr_reader field
       end
 
-      WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
+      # WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
+      WRITE_FORMAT_DEFAULT = '#{revision.yellow}\t#{user.green}\t#{date} #{time}\n#{list(comment)}\n#{list(files, :blue, :on_yellow)}\n'
 
       def set_from_args name, args
         self.instance_variable_set '@' + name.to_s, args[name]
@@ -41,6 +42,18 @@ module PVN
         end
       end
 
+      def list lines, *colors
+        return "" unless lines
+        
+        lines.collect do |line|
+          ln = line.chomp
+          colors.each do |color|
+            ln = ln.send(color)
+          end
+          "    " + ln + "\n"
+        end.join("")
+      end
+
       def write
         # ------------------------------------------------------------------------
         # r1907 | hielke.hoeve@gmail.com | 2011-11-14 05:50:38 -0500 (Mon, 14 Nov 2011) | 1 line
@@ -48,24 +61,9 @@ module PVN
         # back to dev
 
         # @todo allow reformatting of date and time
-        summary = '#{revision.yellow}\t#{user.cyan}\t#{date} #{time}'
-        msg = eval('"' + summary + '"')
+        format = WRITE_FORMAT_DEFAULT
+        msg = eval('"' + format + '"')
         puts msg
-
-        if comment
-          # @todo add word wrapping
-          comment.each do |line|
-            puts "    " + line
-          end
-          puts
-        end
-
-        if files
-          files.each do |file|
-            puts "    " + file
-          end
-          puts
-        end
       end
     end
   end

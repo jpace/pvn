@@ -12,13 +12,13 @@ module PVN
 
     class << self
       def setup
-        RIEL::Log.info "SETTING UP".on_blue
+        RIEL::Log.info "setting up".on_blue
         @@orig_location = Pathname.pwd
         # super
       end
 
       def teardown
-        RIEL::Log.info "TEARING DOWN".on_yellow
+        RIEL::Log.info "tearing down".on_yellow
         Dir.chdir @@orig_location
       end
 

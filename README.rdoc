@@ -17,9 +17,9 @@ operations (reverting changes of earlier checkins).
 
   pvn delta - adds and removes files automatically
 
-  pvn stat - shows lines and files changed
+  pvn stats - shows lines and files changed
 
-  pvn desc - shows summary of a checkin
+  pvn describe - shows summary of a checkin (log -v?)
 
   pvn sizes - show changes in size of files
 
@@ -30,6 +30,8 @@ operations (reverting changes of earlier checkins).
   pvn diffhead - diff to head
 
   pvn grep/glark - search for a regexp matching added, changed, or deleted code
+
+  pvn cleanup - remove pvn cache files; run periodically
 
 and the usual svn commands, with pvn revisions:
 
