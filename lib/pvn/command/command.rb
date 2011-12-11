@@ -54,6 +54,10 @@ module PVN
       @svncmd.join(" ")
     end
 
+    def to_s
+      command
+    end
+
     def run args
       info "self.class: #{self.class}"
       info "@command  : #{command}".on_black
