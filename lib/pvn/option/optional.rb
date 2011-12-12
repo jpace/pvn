@@ -51,11 +51,16 @@ module PVN
       def doc
         @doc ||= CommandDoc.new
         yield @doc if block_given?
+        @doc
       end
       
       def options
-        @option_set ||= OptionSet.new
-        yield @option_set if block_given?
+        self.instance_eval do
+          @option_set ||= OptionSet.new
+          RIEL::Log.debug "@option_set: #{@option_set}"
+          yield @option_set if block_given?
+          @option_set
+        end
       end
       
       def to_doc io = $stdout

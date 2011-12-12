@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/util'
-require 'pvn/log'
+require 'pvn/log/logcmd'
 
 module PVN
   # Returns the Nth revision from the given logging output.

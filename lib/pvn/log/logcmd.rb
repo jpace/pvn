@@ -6,7 +6,37 @@ require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
 
 module PVN
+  DEFAULT_LIMIT = 5
+
+  class RevisionOption < Option
+    def initialize revargs = Hash.new
+      revargs[:setter] = :revision_from_args
+      revargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
+      
+      super :revision, '-r', "revision", revargs
+    end
+  end
+
+  class LimitOption < Option
+    def initialize lmtargs = Hash.new
+      super :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
+    end
+  end
+
   class LogOptionSet < OptionSet
+    @@orig_file_loc = Pathname.new(__FILE__).expand_path
+    
+    def initialize
+      super
+
+      self << LimitOption.new
+      self << RevisionOption.new(:unsets => :limit)
+    end
+
+    def revision_from_args results, cmdargs
+      require @@orig_file_loc.dirname.parent + 'revision.rb'
+      Revision.revision_from_args results, cmdargs
+    end
   end
 
   class LogCommand < CachableCommand
@@ -28,10 +58,16 @@ module PVN
       doc.examples   << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
     end
     
-    has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
-    has_revision_option :unsets => :limit
+    # has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
+    # has_revision_option :unsets => :limit
+
+    def options
+      @options
+    end
 
     def initialize args = Hash.new
+      @options = LogOptionSet.new
+      
       debug "args: #{args.inspect}"
 
       @fromdate = args[:fromdate]

@@ -35,7 +35,7 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
 
-      optresults  = self.class.args_to_option_results args
+      optresults  = options.results args
       fullcmdargs = update_option_results optresults, cmdargs
 
       if args[:filename]
@@ -85,13 +85,12 @@ module PVN
       optresults.values + cmdargs
     end
 
-    def process_options cmdargs, args
-      optresults = self.class.args_to_option_results args
-      update_option_results optresults, cmdargs
-    end
-
     def option optname
       self.class.find_option optname
+    end
+
+    def options
+      self.class.options
     end
 
     def run_command
