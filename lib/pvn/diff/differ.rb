@@ -45,13 +45,8 @@ module PVN
       diffcfg = cfg.section "diff"
       return nil unless diffcfg
 
-      diffcfg.each do |dc|
-        if dc[0] == ext
-          return dc[1]
-        end
-      end
-
-      nil
+      diff_for_ext = diffcfg.assoc(ext)
+      diff_for_ext && diff_for_ext[1]
     end
 
     def run_diff_default fromfname, tofname, fromfile, tofile

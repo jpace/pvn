@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/option/results'
-require 'pvn/option/entry'
 
 module PVN
   class OptionSet
@@ -24,16 +23,25 @@ module PVN
       @options.find { |opt| opt.name == name }
     end
 
-    def results args
-      optresult = OptionsResults.new @options
+    def results obj, args, cmdargs
+      optresults = OptionsResults.new @options
       args.each do |key, val|
-        RIEL::Log.debug "key: #{key}; val: #{val}"
-        if optresult.has_key? key
-          RIEL::Log.debug "key: #{key}; val: #{val}"
-          optresult.set_arg key, val
+        if optresults.has_key? key
+          optresults.set_arg key, val
         end
       end
-      optresult
+      
+      while cmdargs.length > 0
+        unless optresults.process obj, cmdargs
+          break
+        end
+      end
+
+      info "optresults: #{optresults}"
+      info "optresults.values: #{optresults.values.inspect}"
+      info "cmdargs: #{cmdargs}"
+
+      optresults
     end
 
     def <<(option)

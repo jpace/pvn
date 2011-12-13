@@ -3,10 +3,13 @@
 
 require 'rubygems'
 require 'riel'
+require 'pvn/config'
 
 module PVN
   module Log
     class Entry
+      include Loggable
+
       FIELDS = [ :revision,
                  :user,
                  :date,
@@ -22,7 +25,7 @@ module PVN
       end
 
       # WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
-      WRITE_FORMAT_DEFAULT = '#{revision.yellow}\t#{user.green}\t#{date} #{time}\n#{list(comment)}\n#{list(files, :blue, :on_yellow)}\n'
+      WRITE_FORMAT_DEFAULT = '#{revision.yellow}\t#{user.green}\t#{date} #{time}\n#{list(comment)}#{cr(files)}#{list(files, :blue, :on_yellow)}\n'
 
       def set_from_args name, args
         self.instance_variable_set '@' + name.to_s, args[name]
@@ -42,8 +45,12 @@ module PVN
         end
       end
 
+      def cr ary
+        ary && !ary.empty? ? "\n" : ''
+      end
+
       def list lines, *colors
-        return "" unless lines
+        return '' unless lines
         
         lines.collect do |line|
           ln = line.chomp
@@ -51,7 +58,7 @@ module PVN
             ln = ln.send(color)
           end
           "    " + ln + "\n"
-        end.join("")
+        end.join('')
       end
 
       def write
@@ -60,10 +67,19 @@ module PVN
         #
         # back to dev
 
+        cfg = PVN::Configuration.read
+        
+        logcfg = cfg.section "log"
+        info "logcfg: #{logcfg}".on_red
+        format = logcfg && logcfg.assoc('format') && logcfg.assoc('format')[1]
+        info "format: #{format}".on_red
+
+        format ||= WRITE_FORMAT_DEFAULT
+
         # @todo allow reformatting of date and time
-        format = WRITE_FORMAT_DEFAULT
+        # format = WRITE_FORMAT_DEFAULT
         msg = eval('"' + format + '"')
-        puts msg
+        print msg
       end
     end
   end

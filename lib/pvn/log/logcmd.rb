@@ -8,15 +8,6 @@ require 'pvn/log/logfactory'
 module PVN
   DEFAULT_LIMIT = 5
 
-  class RevisionOption < Option
-    def initialize revargs = Hash.new
-      revargs[:setter] = :revision_from_args
-      revargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
-      
-      super :revision, '-r', "revision", revargs
-    end
-  end
-
   class LimitOption < Option
     def initialize lmtargs = Hash.new
       super :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]

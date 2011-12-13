@@ -10,20 +10,31 @@ require 'pvn/util'
 $orig_file_loc = Pathname.new(__FILE__).expand_path
 
 module PVN
+  class RevisionOption < Option
+    def initialize revargs = Hash.new
+      revargs[:setter] = :revision_from_args
+      revargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
+      
+      super :revision, '-r', "revision", revargs
+    end
+
+    def set
+      # @todo
+      require @@orig_file_loc.dirname.parent + 'revision.rb'
+      Revision.revision_from_args results, cmdargs
+    end
+  end
+
   class Command
     include Optional
     include Loggable
 
-    def self.has_revision_option options = Hash.new
-      allopts = options.dup
-      allopts[:setter] = :revision_from_args
-      allopts[:regexp] = Regexp.new('^[\-\+]?\d+$')
-      has_option :revision, '-r', "revision", allopts
+    def self.has_revision_option revopts = Hash.new
+      options << RevisionOption.new(revopts)
     end
-
+    
     def self.revision_from_args results, cmdargs
       require $orig_file_loc.dirname.parent + 'revision.rb'
-      
       Revision.revision_from_args results, cmdargs
     end
 
@@ -35,9 +46,9 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
 
-      optresults  = options.results args
-      fullcmdargs = update_option_results optresults, cmdargs
-
+      optresults  = options.results self, args, cmdargs
+      fullcmdargs = optresults.values + cmdargs
+      
       if args[:filename]
         fullcmdargs << args[:filename]
       end
@@ -69,20 +80,6 @@ module PVN
       else
         debug "not executing: #{command}".red
       end
-    end
-
-    def update_option_results optresults, cmdargs
-      while cmdargs.length > 0
-        unless optresults.process self, cmdargs
-          break
-        end
-      end
-
-      info "optresults: #{optresults}"
-      info "optresults.values: #{optresults.values.inspect}"
-      info "cmdargs: #{cmdargs}"
-
-      optresults.values + cmdargs
     end
 
     def option optname
