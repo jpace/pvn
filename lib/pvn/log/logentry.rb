@@ -70,9 +70,9 @@ module PVN
         cfg = PVN::Configuration.read
         
         logcfg = cfg.section "log"
-        info "logcfg: #{logcfg}".on_red
+        info "logcfg: #{logcfg}"
         format = logcfg && logcfg.assoc('format') && logcfg.assoc('format')[1]
-        info "format: #{format}".on_red
+        info "format: #{format}"
 
         format ||= WRITE_FORMAT_DEFAULT
 

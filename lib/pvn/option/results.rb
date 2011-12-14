@@ -28,28 +28,7 @@ module PVN
     end
 
     def add_option option
-      key = option.name
-      tag = option.tag
-      opts = option.options.dup
-
-      # debug "opts: #{opts}"
-
-      defval = val = opts[:default]
-
-      if defval
-        # interpret the type and setter based on the default type
-        if val.class == Fixnum  # no, we're not handling Bignum
-          opts[:setter] ||= :next_argument_as_integer
-          opts[:type]   ||= :integer
-        end        
-      end
-
-      @options[option] = OptionEntry.new(key, tag, opts)
-      # debug "options: #{@options}"
-
-      if defval
-        set_arg key, defval
-      end
+      @options[option] = option.entry
     end
 
     def inspect
@@ -74,12 +53,12 @@ module PVN
       values
     end
 
-    def set_from_proc key, args, proc
-      set_arg key, proc.call(args)
+    def set_arg key, val
+      set_entry entry_for_key(key), val
     end
 
-    def set_arg key, val
-      entry_for_key(key).set val
+    def set_entry entry, val
+      entry.set val
     end
 
     def unset_arg key
@@ -117,9 +96,9 @@ module PVN
 
       if setter = entry.options[:setter]
         debug "setter: #{setter}".on_black
-        set_arg entry.key, setter.to_proc.call(obj.class, self, args)
+        set_entry entry, setter.to_proc.call(obj.class, self, args)
       else
-        set_arg entry.key, true
+        set_entry entry, true
       end
 
       if unsets = entry.options[:unsets]
