@@ -26,7 +26,7 @@ module PVN
     def results obj, args, cmdargs
       optresults = OptionsResults.new @options
       args.each do |key, val|
-        if optresults.has_key? key
+        if optresults.has_option? key
           optresults.set_arg key, val
         end
       end

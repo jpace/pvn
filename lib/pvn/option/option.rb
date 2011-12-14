@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'riel'
+require 'pvn/option/entry'
 
 module PVN
   class Option
@@ -56,8 +57,33 @@ module PVN
       options[:regexp] && options[:regexp].match(arg)
     end
 
+    def process results, cmdobj, args
+      arg = args[0]
+      debug "arg: #{arg}".magenta
+      debug "arg: #{arg.class}"
+      debug "args: #{args}"
+
+      debug "self: #{self}"
+      if (exact_match?(arg) && (args.shift || true)) ||
+          regexp_match?(arg)
+        info "option: #{self}".on_blue
+        info "option.class: #{self.class}".on_blue
+        set results, cmdobj, args
+        return true
+      elsif negative_match? arg
+        args.shift
+        unset
+        return true
+      end
+      nil
+    end    
+
     def unset
       @entry.set nil
+    end
+
+    def set_value val
+      @entry.set val
     end
 
     def set results, cmdobj, args

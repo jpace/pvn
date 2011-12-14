@@ -23,9 +23,6 @@ module PVN
     end
 
     def initialize key, tag, options
-      @key = key
-      @tag = tag
-      @options = options
       @value = nil
     end
 

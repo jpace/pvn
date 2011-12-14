@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/option/entry'
 
 module PVN
   class OptionsResults
@@ -12,23 +11,23 @@ module PVN
     attr_reader :options
     
     def initialize options = Array.new
-      @options = Hash.new
+      @options = Array.new
       options.each do |opt|
         add_option opt
       end
       debug "options: #{@options}"
     end
 
-    def has_key? key
-      entry_for_key key
+    def has_option? name
+      option_for_name name
     end
 
-    def entry_for_key key
-      @options.values.detect { |ka| ka.key == key }
+    def option_for_name name
+      @options.detect { |opt| opt.name == name }
     end
 
     def add_option option
-      @options[option] = option.entry
+      @options << option
     end
 
     def inspect
@@ -41,9 +40,9 @@ module PVN
 
     def values
       vals = Array.new
-      @options.values.each do |entry|
-        if entry.value
-          vals << entry.tag << entry.value.to_s
+      @options.each do |opt|
+        if opt.entry.value
+          vals << opt.tag << opt.entry.value.to_s
         end
       end
       vals
@@ -54,36 +53,18 @@ module PVN
     end
 
     def set_arg key, val
-      set_entry entry_for_key(key), val
-    end
-
-    def set_entry entry, val
-      entry.set val
+      opt = option_for_name key
+      opt && opt.set_value(val)
     end
 
     def unset_arg key
       set_arg key, nil
     end
 
-    def unset_entry entry
-      entry.set nil
-    end
-
     def process cmdobj, args
       arg = args[0]
-      debug "arg: #{arg}".magenta
-      debug "arg: #{arg.class}"
-      debug "args: #{args}"
-      @options.keys.each do |option|
-        debug "option: #{option}"
-        if (option.exact_match?(arg) && (args.shift || true)) ||
-            option.regexp_match?(arg)
-          info "option: #{option}".on_blue
-          info "option.class: #{option.class}".on_blue
-          return option.set self, cmdobj, args
-        elsif option.negative_match? arg
-          args.shift
-          option.unset
+      @options.each do |opt|
+        if opt.process(self, cmdobj, args)
           return true
         end
       end
