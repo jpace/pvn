@@ -65,6 +65,10 @@ module PVN
       set_arg key, nil
     end
 
+    def unset_entry entry
+      entry.set nil
+    end
+
     def process cmdobj, args
       arg = args[0]
       debug "arg: #{arg}".magenta
@@ -75,41 +79,22 @@ module PVN
         debug "entry: #{entry}"
         if option.exact_match? arg
           args.shift
-          return _set_arg cmdobj, entry, args
+          return _set_arg cmdobj, option, args
         elsif option.regexp_match? arg
           debug "arg: #{arg}"
-          return _set_arg cmdobj, entry, args
+          return _set_arg cmdobj, option, args
         elsif option.negative_match? arg
           args.shift
-          debug "matched negative: #{entry.key}"
-          unset_arg entry.key
+          debug "matched negative: #{entry}"
+          unset_entry entry
           return true
         end
       end
       nil
-    end
-    
-    def _set_arg cmdobj, entry, args
-      return nil unless entry
+    end    
 
-      debug "entry: #{entry}".on_black
-
-      if setter = entry.options[:setter]
-        info "setter: #{setter}".on_black
-        info "setter.to_proc: #{setter.to_proc}".on_black
-        # setters are class methods:
-        setter_proc = setter.to_proc
-        val = setter_proc.call cmdobj.class, self, args
-        set_entry entry, val
-      else
-        set_entry entry, true
-      end
-
-      if unsets = entry.options[:unsets]
-        debug "unsets: #{unsets}".on_green
-        unset_arg unsets
-      end
-      true
+    def _set_arg cmdobj, option, args
+      option.entry.set_arg self, cmdobj, args
     end
   end
 end
