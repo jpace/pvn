@@ -46,7 +46,7 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
 
-      optresults  = options.results self, args, cmdargs
+      optresults  = options.process self, args, cmdargs
       fullcmdargs = optresults.values + cmdargs
       
       if args[:filename]

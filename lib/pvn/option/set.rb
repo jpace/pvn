@@ -23,19 +23,35 @@ module PVN
       @options.find { |opt| opt.name == name }
     end
 
-    def results obj, args, cmdargs
-      optresults = OptionsResults.new @options
+    def has_option? name
+      option_for_name name
+    end
+
+    def option_for_name name
+      @options.detect { |opt| opt.name == name }
+    end
+
+    def set_options_by_keys optresults, args
       args.each do |key, val|
-        if optresults.has_option? key
-          optresults.set_arg key, val
+        if opt = option_for_name(key)
+          opt.set_value val
         end
       end
-      
+    end
+
+    def set_options_from_args optresults, obj, cmdargs
       while cmdargs.length > 0
         unless optresults.process obj, cmdargs
           break
         end
       end
+    end
+    
+    def process obj, optargs, cmdargs
+      optresults = OptionsResults.new @options
+
+      set_options_by_keys optresults, optargs
+      set_options_from_args optresults, obj, cmdargs
 
       info "optresults: #{optresults}"
       info "optresults.values: #{optresults.values.inspect}"

@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/option/entry'
 
 module PVN
   class Option
@@ -13,13 +12,13 @@ module PVN
     attr_accessor :tag
     attr_accessor :options
     attr_accessor :description
-    attr_accessor :entry
 
     def initialize name, tag, description, options
       @name = name
       @tag = tag
       @description = description
       @options = options
+      @value = nil
 
       defval = options[:default]
 
@@ -29,11 +28,8 @@ module PVN
         @options[:type]   ||= :integer
       end
 
-      @entry = OptionEntry.new @name, @tag, @options
-      # debug "options: #{@options}"
-
       if defval
-        @entry.set defval
+        @value = defval
       end
     end
 
@@ -54,7 +50,7 @@ module PVN
     end
 
     def regexp_match? arg
-      options[:regexp] && options[:regexp].match(arg)
+      @options[:regexp] && @options[:regexp].match(arg)
     end
 
     def process results, cmdobj, args
@@ -79,11 +75,15 @@ module PVN
     end    
 
     def unset
-      @entry.set nil
+      @value = nil
     end
 
     def set_value val
-      @entry.set val
+      @value = val
+    end
+
+    def value
+      @value
     end
 
     def set results, cmdobj, args
@@ -94,10 +94,9 @@ module PVN
         info "setter.to_proc: #{setter.to_proc}".on_black
         # setters are class methods:
         setter_proc = setter.to_proc
-        val = setter_proc.call cmdobj.class, results, args
-        @entry.set val
+        @value = setter_proc.call cmdobj.class, results, args
       else
-        @entry.set true
+        @value = true
       end
 
       if unsets = @options[:unsets]

@@ -41,8 +41,8 @@ module PVN
     def values
       vals = Array.new
       @options.each do |opt|
-        if opt.entry.value
-          vals << opt.tag << opt.entry.value.to_s
+        if opt.value
+          vals << opt.tag << opt.value.to_s
         end
       end
       vals
@@ -58,7 +58,8 @@ module PVN
     end
 
     def unset_arg key
-      set_arg key, nil
+      opt = option_for_name key
+      opt && opt.unset
     end
 
     def process cmdobj, args
