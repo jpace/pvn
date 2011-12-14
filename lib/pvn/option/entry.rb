@@ -36,28 +36,6 @@ module PVN
     def set val
       @value = val
     end
-
-    def set_arg results, cmdobj, args
-      debug "self: #{self}".on_black
-
-      if setter = @options[:setter]
-        info "setter: #{setter}".on_black
-        info "setter.to_proc: #{setter.to_proc}".on_black
-        # setters are class methods:
-        setter_proc = setter.to_proc
-        val = setter_proc.call cmdobj.class, results, args
-        set val
-      else
-        set true
-      end
-
-      if unsets = @options[:unsets]
-        debug "unsets: #{unsets}".on_green
-        results.unset_arg unsets
-      end
-      true
-    end
-
   end
 
   class MultiValueOptionEntry < OptionEntry

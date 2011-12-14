@@ -18,7 +18,7 @@ module PVN
       super :revision, '-r', "revision", revargs
     end
 
-    def set
+    def xxxset
       # @todo
       require @@orig_file_loc.dirname.parent + 'revision.rb'
       Revision.revision_from_args results, cmdargs

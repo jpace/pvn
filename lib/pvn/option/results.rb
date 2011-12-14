@@ -78,7 +78,9 @@ module PVN
         debug "option: #{option}"
         if (option.exact_match?(arg) && (args.shift || true)) ||
             option.regexp_match?(arg)
-          return option.set_arg self, cmdobj, args
+          info "option: #{option}".on_blue
+          info "option.class: #{option.class}".on_blue
+          return option.set self, cmdobj, args
         elsif option.negative_match? arg
           args.shift
           option.unset
@@ -87,9 +89,5 @@ module PVN
       end
       nil
     end    
-
-    def _set_arg cmdobj, option, args
-      option.set_arg self, cmdobj, args
-    end
   end
 end

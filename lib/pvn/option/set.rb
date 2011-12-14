@@ -44,7 +44,7 @@ module PVN
       optresults
     end
 
-    def <<(option)
+    def << option
       @options << option
     end
   end

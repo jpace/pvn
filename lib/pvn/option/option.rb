@@ -6,6 +6,8 @@ require 'riel'
 
 module PVN
   class Option
+    include Loggable
+    
     attr_accessor :name
     attr_accessor :tag
     attr_accessor :options
@@ -54,31 +56,25 @@ module PVN
       options[:regexp] && options[:regexp].match(arg)
     end
 
-    def set_arg results, cmdobj, args
-      @entry.set_arg results, cmdobj, args
-    end
-
     def unset
       @entry.set nil
     end
 
-    def set results, cmdobj, entry, args
-      return nil unless entry
+    def set results, cmdobj, args
+      debug "self: #{self}".on_black
 
-      debug "entry: #{entry}".on_black
-
-      if setter = entry.options[:setter]
+      if setter = @options[:setter]
         info "setter: #{setter}".on_black
         info "setter.to_proc: #{setter.to_proc}".on_black
         # setters are class methods:
         setter_proc = setter.to_proc
-        val = setter_proc.call cmdobj.class, self, args
-        set_entry entry, val
+        val = setter_proc.call cmdobj.class, results, args
+        @entry.set val
       else
-        set_entry entry, true
+        @entry.set true
       end
 
-      if unsets = entry.options[:unsets]
+      if unsets = @options[:unsets]
         debug "unsets: #{unsets}".on_green
         results.unset_arg unsets
       end
