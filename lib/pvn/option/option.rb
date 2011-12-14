@@ -54,24 +54,27 @@ module PVN
       options[:regexp] && options[:regexp].match(arg)
     end
 
-    def process results, obj, args
-      return nil unless @entry
+    def set results, cmdobj, entry, args
+      return nil unless entry
 
-      debug "@entry: #{@entry}".on_black
+      debug "entry: #{entry}".on_black
 
-      if setter = @entry.options[:setter]
-        debug "setter: #{setter}".on_black
-        @entry.set setter.to_proc.call(obj.class, results, args)
+      if setter = entry.options[:setter]
+        info "setter: #{setter}".on_black
+        info "setter.to_proc: #{setter.to_proc}".on_black
+        # setters are class methods:
+        setter_proc = setter.to_proc
+        val = setter_proc.call cmdobj.class, self, args
+        set_entry entry, val
       else
         set_entry entry, true
       end
 
       if unsets = entry.options[:unsets]
         debug "unsets: #{unsets}".on_green
-        unset_arg unsets
+        results.unset_arg unsets
       end
       true
     end
-
   end
 end
