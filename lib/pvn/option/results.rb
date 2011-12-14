@@ -74,19 +74,14 @@ module PVN
       debug "arg: #{arg}".magenta
       debug "arg: #{arg.class}"
       debug "args: #{args}"
-      @options.each do |option, entry|
+      @options.keys.each do |option|
         debug "option: #{option}"
-        debug "entry: #{entry}"
-        if option.exact_match? arg
-          args.shift
-          return _set_arg cmdobj, option, args
-        elsif option.regexp_match? arg
-          debug "arg: #{arg}"
-          return _set_arg cmdobj, option, args
+        if (option.exact_match?(arg) && (args.shift || true)) ||
+            option.regexp_match?(arg)
+          return option.set_arg self, cmdobj, args
         elsif option.negative_match? arg
           args.shift
-          debug "matched negative: #{entry}"
-          unset_entry entry
+          option.unset
           return true
         end
       end
@@ -94,7 +89,7 @@ module PVN
     end    
 
     def _set_arg cmdobj, option, args
-      option.entry.set_arg self, cmdobj, args
+      option.set_arg self, cmdobj, args
     end
   end
 end

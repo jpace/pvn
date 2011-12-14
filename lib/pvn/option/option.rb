@@ -54,6 +54,14 @@ module PVN
       options[:regexp] && options[:regexp].match(arg)
     end
 
+    def set_arg results, cmdobj, args
+      @entry.set_arg results, cmdobj, args
+    end
+
+    def unset
+      @entry.set nil
+    end
+
     def set results, cmdobj, entry, args
       return nil unless entry
 
