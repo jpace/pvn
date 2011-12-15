@@ -15,7 +15,7 @@ module PVN
   class Revision
     include Loggable
 
-    def self.revision_from_args results, cmdargs
+    def self.revision_from_args optset, cmdargs
       revarg = cmdargs.shift
       RIEL::Log.debug "revarg: #{revarg}"
       RIEL::Log.debug "cmdargs: #{cmdargs}"

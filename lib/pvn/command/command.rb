@@ -21,7 +21,7 @@ module PVN
     def xxxset
       # @todo
       require @@orig_file_loc.dirname.parent + 'revision.rb'
-      Revision.revision_from_args results, cmdargs
+      Revision.revision_from_args optset, cmdargs
     end
   end
 
@@ -33,9 +33,9 @@ module PVN
       options << RevisionOption.new(revopts)
     end
     
-    def self.revision_from_args results, cmdargs
+    def self.revision_from_args optset, cmdargs
       require $orig_file_loc.dirname.parent + 'revision.rb'
-      Revision.revision_from_args results, cmdargs
+      Revision.revision_from_args optset, cmdargs
     end
 
     attr_reader :output
@@ -46,8 +46,8 @@ module PVN
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
 
-      optresults  = options.process self, args, cmdargs
-      fullcmdargs = optresults.values + cmdargs
+      options.process self, args, cmdargs
+      fullcmdargs = options.values + cmdargs
       
       if args[:filename]
         fullcmdargs << args[:filename]

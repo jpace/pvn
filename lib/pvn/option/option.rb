@@ -53,7 +53,7 @@ module PVN
       @options[:regexp] && @options[:regexp].match(arg)
     end
 
-    def process results, cmdobj, args
+    def process optset, cmdobj, args
       arg = args[0]
       debug "arg: #{arg}".magenta
       debug "arg: #{arg.class}"
@@ -64,7 +64,7 @@ module PVN
           regexp_match?(arg)
         info "option: #{self}".on_blue
         info "option.class: #{self.class}".on_blue
-        set results, cmdobj, args
+        set optset, cmdobj, args
         return true
       elsif negative_match? arg
         args.shift
@@ -86,7 +86,7 @@ module PVN
       @value
     end
 
-    def set results, cmdobj, args
+    def set optset, cmdobj, args
       debug "self: #{self}".on_black
 
       if setter = @options[:setter]
@@ -94,14 +94,14 @@ module PVN
         info "setter.to_proc: #{setter.to_proc}".on_black
         # setters are class methods:
         setter_proc = setter.to_proc
-        @value = setter_proc.call cmdobj.class, results, args
+        @value = setter_proc.call cmdobj.class, optset, args
       else
         @value = true
       end
 
       if unsets = @options[:unsets]
         debug "unsets: #{unsets}".on_green
-        results.unset_arg unsets
+        optset.unset unsets
       end
       true
     end

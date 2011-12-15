@@ -24,9 +24,9 @@ module PVN
       self << RevisionOption.new(:unsets => :limit)
     end
 
-    def revision_from_args results, cmdargs
+    def revision_from_args optset, cmdargs
       require @@orig_file_loc.dirname.parent + 'revision.rb'
-      Revision.revision_from_args results, cmdargs
+      Revision.revision_from_args optset, cmdargs
     end
   end
 

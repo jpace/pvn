@@ -39,15 +39,6 @@ module PVN
         end
       end
 
-      def args_to_option_results args
-        RIEL::Log.debug "self: #{self}"
-        RIEL::Log.debug "args: #{args}"
-
-        self.instance_eval do
-          @option_set.results args
-        end
-      end
-
       def doc
         @doc ||= CommandDoc.new
         yield @doc if block_given?

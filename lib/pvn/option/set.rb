@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/option/results'
 
 module PVN
   class OptionSet
@@ -31,7 +30,17 @@ module PVN
       @options.detect { |opt| opt.name == name }
     end
 
-    def set_options_by_keys optresults, args
+    def values
+      vals = Array.new
+      @options.each do |opt|
+        if opt.value
+          vals << opt.tag << opt.value.to_s
+        end
+      end
+      vals
+    end
+
+    def set_options_by_keys args
       args.each do |key, val|
         if opt = option_for_name(key)
           opt.set_value val
@@ -39,11 +48,11 @@ module PVN
       end
     end
 
-    def set_options_from_args optresults, cmdobj, cmdargs
+    def set_options_from_args cmdobj, cmdargs
       while cmdargs.length > 0
         processed = false
         @options.each do |opt|
-          if opt.process(optresults, cmdobj, cmdargs)
+          if opt.process(self, cmdobj, cmdargs)
             processed = true
             break
           end
@@ -53,17 +62,18 @@ module PVN
       end
     end
     
+    def unset key
+      opt = option_for_name key
+      opt && opt.unset
+    end
+
     def process obj, optargs, cmdargs
-      optresults = OptionsResults.new @options
+      set_options_by_keys optargs
+      set_options_from_args obj, cmdargs
 
-      set_options_by_keys optresults, optargs
-      set_options_from_args optresults, obj, cmdargs
-
-      info "optresults: #{optresults}"
-      info "optresults.values: #{optresults.values.inspect}"
       info "cmdargs: #{cmdargs}"
 
-      optresults
+      self
     end
 
     def << option
