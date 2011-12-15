@@ -1,5 +1,5 @@
 require 'pvn/util'
-require 'pvn/command/command'
+require 'pvn/command/cachecmd'
 require 'pvn/config'
 
 require 'pvn/subcmd/scexec'
@@ -47,16 +47,32 @@ module PVN
   #   end
   # end
 
+  class DiffRevisionOption < Option
+    def initialize revargs = Hash.new
+      revargs[:setter] = :revision_from_args      
+      super :revision, '-r', "revision", revargs
+    end
+  end
+  
+  class DiffChangeOption < Option
+    def initialize chgargs = Hash.new
+      chgargs[:setter] = :revision_from_args
+      chgargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
+      
+      super :change, '-c', "change", chgargs
+    end
+  end
+
   class DiffOptionSet < OptionSet
     def initialize
       super
       
       @diffcmdopt = Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
-      @changeopt = Option.new :change, '-c', "the change made by revision ARG", { :setter => :revision_from_args }
+      # @changeopt = Option.new :change, '-c', "the change made by revision ARG", { :setter => :revision_from_args }
       
       self << @diffcmdopt
-      self << @changeopt
-      self << RevisionOption.new
+      self << DiffChangeOption.new
+      self << DiffRevisionOption.new
 
       # whitespaceopt = Option.new(:key => :whitespace, 
       #                            :tag => '-w',
@@ -71,7 +87,7 @@ module PVN
     end
   end
   
-  class DiffCommand < Command
+  class DiffCommand < CachableCommand
     COMMAND = "diff"
     PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
     
