@@ -39,11 +39,17 @@ module PVN
       end
     end
 
-    def set_options_from_args optresults, obj, cmdargs
+    def set_options_from_args optresults, cmdobj, cmdargs
       while cmdargs.length > 0
-        unless optresults.process obj, cmdargs
-          break
+        processed = false
+        @options.each do |opt|
+          if opt.process(optresults, cmdobj, cmdargs)
+            processed = true
+            break
+          end
         end
+
+        return unless processed
       end
     end
     

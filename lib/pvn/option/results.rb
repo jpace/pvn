@@ -18,20 +18,12 @@ module PVN
       debug "options: #{@options}"
     end
 
-    def has_option? name
-      option_for_name name
-    end
-
     def option_for_name name
       @options.detect { |opt| opt.name == name }
     end
 
     def add_option option
       @options << option
-    end
-
-    def inspect
-      @options.collect { |opt| opt.inspect }.join("\n")
     end
 
     def to_s
@@ -52,18 +44,12 @@ module PVN
       values
     end
 
-    def set_arg key, val
-      opt = option_for_name key
-      opt && opt.set_value(val)
-    end
-
     def unset_arg key
       opt = option_for_name key
       opt && opt.unset
     end
 
     def process cmdobj, args
-      arg = args[0]
       @options.each do |opt|
         if opt.process(self, cmdobj, args)
           return true
