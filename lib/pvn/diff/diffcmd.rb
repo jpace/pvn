@@ -47,6 +47,9 @@ module PVN
   #   end
   # end
 
+  # "pvn diff -3" == "pvn diff -c -3", not "pvn diff -r -3", because
+  # we diff for the change, not from that revision to head.
+
   class DiffRevisionOption < Option
     def initialize revargs = Hash.new
       revargs[:setter] = :revision_from_args      
@@ -57,39 +60,47 @@ module PVN
   class DiffChangeOption < Option
     def initialize chgargs = Hash.new
       chgargs[:setter] = :revision_from_args
-      chgargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
+      chgargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
+      
+      super :change, '-c', "change", chgargs
+    end
+  end
+
+  class DiffWhitespaceOption < Option
+    def initialize wsargs = Hash.new
+      chgargs[:setter] = :revision_from_args
+      chgargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
       
       super :change, '-c', "change", chgargs
     end
   end
 
   class DiffOptionSet < OptionSet
+    attr_reader :change
+    attr_reader :revision
+    
     def initialize
       super
       
       @diffcmdopt = Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
-      # @changeopt = Option.new :change, '-c', "the change made by revision ARG", { :setter => :revision_from_args }
       
       self << @diffcmdopt
-      self << DiffChangeOption.new
-      self << DiffRevisionOption.new
+      self << (@change = DiffChangeOption.new)
+      self << (@revision = DiffRevisionOption.new)
 
       # whitespaceopt = Option.new(:key => :whitespace, 
       #                            :tag => '-w',
       #                            :svnarg => '-x -w -x -b -x --ignore-eol-style',
       #                            :description => "ignore all whitespace (including blank lines and end of lines)",
       #                            :default => false)
-
-      # changeopt = Option.new(:key => :change,
-      #                        :tag => '-c', 
-      #                        :svnarg => '-c (#{revision_from_args(args.next)})',
-      #                        :description => "the change made by revision ARG")
     end
   end
   
   class DiffCommand < CachableCommand
     COMMAND = "diff"
     PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
+
+    attr_reader :options
     
     self.doc do |doc|
       doc.subcommands = [ COMMAND ]
@@ -98,16 +109,17 @@ module PVN
       doc.summary     = [ "Compares the given files." ]
       doc.examples   << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
     end
-
-    def options
-      @options
-    end
-
+    
     def initialize args = Hash.new
       @options = DiffOptionSet.new
       debug "args: #{args.inspect}".yellow
 
       super
+    end
+
+    def use_cache?
+      # use cache unless the diff is against head.
+      super && (@options.change.value || @options.revision.value)
     end
     
     # @todo implement

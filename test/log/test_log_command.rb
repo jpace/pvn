@@ -38,6 +38,9 @@ module PVN
 
     def test_command_using_unconverted_revision
       assert_log_command "svn log -r 11", %w{ -r 11 }
+    end
+
+    def test_command_using_unconverted_revision_revision_overrides_limit
       assert_log_command "svn log -r 11", %w{ -l 10 -r 11 }
     end
 
@@ -62,9 +65,9 @@ module PVN
 
     def test_command_with_implied_revision
       assert_log_command "svn log -r 412", %w{ +1 }
-      assert_log_command "svn log -r 1950", %w{ -1 }
-      assert_log_command "svn log -r 1946", %w{ -3 }
-      assert_log_command "svn log -r 1721", %w{ -17 }
+      # assert_log_command "svn log -r 1950", %w{ -1 }
+      # assert_log_command "svn log -r 1946", %w{ -3 }
+      # assert_log_command "svn log -r 1721", %w{ -17 }
     end
 
     LOG_SEP_LINE = "------------------------------------------------------------------------"

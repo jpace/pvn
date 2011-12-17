@@ -3,6 +3,8 @@
 
 module PVN
   module Util
+    POS_NEG_NUMERIC_RE = Regexp.new('^([\-\+])?(\d+)$')
+
     # returns the value as an integer, if it is not negative
     def self.negative_integer? val
       negnumre = Regexp.new '^(\-\d+)$'

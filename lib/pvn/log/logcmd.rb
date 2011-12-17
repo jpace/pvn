@@ -16,12 +16,14 @@ module PVN
 
   class LogOptionSet < OptionSet
     @@orig_file_loc = Pathname.new(__FILE__).expand_path
+
+    attr_accessor :revision
     
     def initialize
       super
 
       self << LimitOption.new
-      self << RevisionOption.new(:unsets => :limit)
+      self << (@revision = RevisionOption.new :unsets => :limit)
     end
 
     def revision_from_args optset, cmdargs
@@ -32,10 +34,10 @@ module PVN
 
   class LogCommand < CachableCommand
     DEFAULT_LIMIT = 5
-
     COMMAND = "log"
-
     REVISION_ARG = '-r'
+
+    attr_reader :options
 
     self.doc do |doc|
       doc.subcommands = [ COMMAND, 'l' ]
@@ -49,10 +51,6 @@ module PVN
       doc.examples   << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
     end
     
-    def options
-      @options
-    end
-
     def initialize args = Hash.new
       @options = LogOptionSet.new
       
@@ -62,6 +60,11 @@ module PVN
       @todate = args[:todate]
 
       super
+    end
+
+    def use_cache?
+      # use cache unless log is to head.
+      super && (@options.revision.value)
     end
 
     def to_svn_revision_date date

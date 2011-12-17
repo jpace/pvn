@@ -13,8 +13,7 @@ module PVN
   class RevisionOption < Option
     def initialize revargs = Hash.new
       revargs[:setter] = :revision_from_args
-      revargs[:regexp] = Regexp.new('^[\-\+]?\d+$')
-      
+      revargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
       super :revision, '-r', "revision", revargs
     end
 
@@ -53,7 +52,7 @@ module PVN
         fullcmdargs << args[:filename]
       end
 
-      @svncmd     = to_svn_command fullcmdargs
+      @svncmd = to_svn_command fullcmdargs
       run @svncmd
     end
 

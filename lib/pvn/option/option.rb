@@ -74,6 +74,26 @@ module PVN
       nil
     end    
 
+    def process_new optset, cmdobj, optargs, cmdargs
+      debug "arg: #{arg}".magenta
+      debug "arg: #{arg.class}"
+      debug "args: #{args}"
+
+      debug "self: #{self}"
+      if (exact_match?(arg) && (args.shift || true)) ||
+          regexp_match?(arg)
+        info "option: #{self}".on_blue
+        info "option.class: #{self.class}".on_blue
+        set optset, cmdobj, optargs, cmdargs
+        return true
+      elsif negative_match? arg
+        args.shift
+        unset
+        return true
+      end
+      nil
+    end    
+
     def unset
       @value = nil
     end
@@ -88,6 +108,7 @@ module PVN
 
     def set optset, cmdobj, args
       debug "self: #{self}".on_black
+      debug "args: #{args}".on_black
 
       if setter = @options[:setter]
         info "setter: #{setter}".on_black
