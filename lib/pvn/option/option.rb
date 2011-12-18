@@ -13,14 +13,23 @@ module PVN
     attr_accessor :options
     attr_accessor :description
 
-    def initialize name, tag, description, options
-      @name = name
-      @tag = tag
-      @description = description
-      @options = options
-      @value = nil
+    def initialize *args
+      if args.class == Hash
+        initialize_from_hash args
+      else
+        name, tag, description, options = *args
+        initialize_from_hash :name => name, :tag => tag, :description => description, :options => options
+      end
+    end
 
-      defval = options[:default]
+    def initialize_from_hash args
+      @name = args[:name]
+      @tag = args[:tag]
+      @description = args[:description]
+      @options = args[:options]
+      @value = args[:value]
+
+      defval = @options[:default]
 
       # interpret the type and setter based on the default type
       if defval && defval.class == Fixnum  # no, we're not handling Bignum
@@ -31,6 +40,10 @@ module PVN
       if defval
         @value = defval
       end
+    end
+
+    def to_command_line
+      value && [ tag, value ]
     end
 
     def to_s
@@ -52,47 +65,6 @@ module PVN
     def regexp_match? arg
       @options[:regexp] && @options[:regexp].match(arg)
     end
-
-    def process optset, cmdobj, args
-      arg = args[0]
-      debug "arg: #{arg}".magenta
-      debug "arg: #{arg.class}"
-      debug "args: #{args}"
-
-      debug "self: #{self}"
-      if (exact_match?(arg) && (args.shift || true)) ||
-          regexp_match?(arg)
-        info "option: #{self}".on_blue
-        info "option.class: #{self.class}".on_blue
-        set optset, cmdobj, args
-        return true
-      elsif negative_match? arg
-        args.shift
-        unset
-        return true
-      end
-      nil
-    end    
-
-    def process_new optset, cmdobj, optargs, cmdargs
-      debug "arg: #{arg}".magenta
-      debug "arg: #{arg.class}"
-      debug "args: #{args}"
-
-      debug "self: #{self}"
-      if (exact_match?(arg) && (args.shift || true)) ||
-          regexp_match?(arg)
-        info "option: #{self}".on_blue
-        info "option.class: #{self.class}".on_blue
-        set optset, cmdobj, optargs, cmdargs
-        return true
-      elsif negative_match? arg
-        args.shift
-        unset
-        return true
-      end
-      nil
-    end    
 
     def unset
       @value = nil
@@ -125,6 +97,10 @@ module PVN
         optset.unset unsets
       end
       true
+    end
+
+    def to_svn_revision_date date
+      '{' + date.to_s + '}'
     end
   end
 end

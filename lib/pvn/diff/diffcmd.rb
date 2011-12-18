@@ -68,10 +68,7 @@ module PVN
 
   class DiffWhitespaceOption < Option
     def initialize wsargs = Hash.new
-      chgargs[:setter] = :revision_from_args
-      chgargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
-      
-      super :change, '-c', "change", chgargs
+      super :whitespace, '-W', "whitespace", wsargs
     end
   end
 

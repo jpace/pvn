@@ -55,5 +55,10 @@ module PVN
 
       assert_revision "HEAD", "HEAD"
     end
+
+    def test_date
+      assert_revision '{' + Date.new(1997, 6, 2).to_s + '}', '{1997-06-02}'
+      # assert_revision Date.new(1997, 6, 2).to_s, '{1997-06-02}:{1999-12-31}'
+    end
   end
 end

@@ -30,14 +30,15 @@ module PVN
       @options.detect { |opt| opt.name == name }
     end
 
-    def values
-      vals = Array.new
+    def to_command_line
+      cmdline = Array.new
       @options.each do |opt|
-        if opt.value
-          vals << opt.tag << opt.value.to_s
+        cl = opt.to_command_line
+        if cl
+          cmdline.concat cl
         end
       end
-      vals
+      cmdline
     end
 
     def set_options_by_keys args
@@ -123,24 +124,6 @@ module PVN
         elsif type == :unset
           opt.unset
         end
-      end
-
-      # cmdargs.slice!(0, cidx)
-    end
-    
-    def set_options_from_args_orig cmdobj, cmdargs
-      # optargs = cmdargs.dup
-      
-      while cmdargs.length > 0
-        processed = false
-        @options.each do |opt|
-          if opt.process self, cmdobj, cmdargs
-            processed = true
-            break
-          end
-        end
-
-        return unless processed
       end
     end
     

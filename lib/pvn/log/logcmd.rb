@@ -59,6 +59,14 @@ module PVN
       @fromdate = args[:fromdate]
       @todate = args[:todate]
 
+      if @fromdate
+        @options.revision.fromdate = @fromdate
+      end
+
+      if @todate
+        @options.revision.todate = @todate
+      end
+
       super
     end
 
@@ -69,22 +77,6 @@ module PVN
 
     def to_svn_revision_date date
       '{' + date.to_s + '}'
-    end
-
-    def to_svn_command fullcmdargs
-      info "fullcmdargs: #{fullcmdargs}"
-
-      info "@fromdate: #{@fromdate}"
-      info "@todate: #{@todate}"
-
-      updated_args = fullcmdargs.dup
-
-      if @fromdate && @todate
-        revarg = REVISION_ARG + to_svn_revision_date(@fromdate) + ':' + to_svn_revision_date(@todate)
-        updated_args.insert 0, revarg
-      end
-
-      super updated_args
     end
 
     def entries

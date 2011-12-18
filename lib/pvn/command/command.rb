@@ -11,10 +11,33 @@ $orig_file_loc = Pathname.new(__FILE__).expand_path
 
 module PVN
   class RevisionOption < Option
+    attr_accessor :fromdate
+    attr_accessor :todate
+    
     def initialize revargs = Hash.new
       revargs[:setter] = :revision_from_args
       revargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
+      @fromdate = nil
+      @todate = nil
       super :revision, '-r', "revision", revargs
+    end
+    
+    def value
+      val = nil
+      if @fromdate
+        val = to_svn_revision_date @fromdate
+      end
+
+      if @todate
+        val = val ? val + ':' : ''
+        val += to_svn_revision_date @todate
+      end
+
+      if val
+        val
+      else
+        super
+      end
     end
 
     def xxxset
@@ -46,7 +69,9 @@ module PVN
       cmdargs   = args[:command_args] || Array.new
 
       options.process self, args, cmdargs
-      fullcmdargs = options.values + cmdargs
+      fullcmdargs = options.to_command_line + cmdargs
+
+      info "fullcmdargs: #{fullcmdargs}".green
       
       if args[:filename]
         fullcmdargs << args[:filename]
