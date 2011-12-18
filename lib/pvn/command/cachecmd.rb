@@ -5,14 +5,10 @@ require 'riel'
 require 'rubygems'
 require 'pvn/command/cmdexec'
 require 'pvn/command/command'
-require 'pvn/option/optional'
 require 'pvn/util'
 
 module PVN
   class CachableCommand < Command
-    include Optional
-    include Loggable
-
     TMP_DIR = ENV['PVN_TMP_DIR'] || '/tmp/pvncache'
     CACHE_DIR = Pathname.new TMP_DIR
 

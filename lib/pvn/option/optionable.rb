@@ -8,7 +8,7 @@ require 'pvn/option/option'
 require 'pvn/cmddoc'
 
 module PVN
-  module Optional
+  module Optionable
     include Loggable
 
     def self.included base

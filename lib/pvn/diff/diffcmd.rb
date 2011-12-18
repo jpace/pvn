@@ -115,8 +115,11 @@ module PVN
     end
 
     def use_cache?
-      # use cache unless the diff is against head.
-      super && (@options.change.value || @options.revision.value)
+      super && against_head?
+    end
+
+    def against_head?
+      @options.change.value.nil? && @options.revision.head?
     end
     
     # @todo implement
