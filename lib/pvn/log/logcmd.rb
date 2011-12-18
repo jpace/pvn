@@ -64,7 +64,11 @@ module PVN
 
     def use_cache?
       # use cache unless log is to head.
-      super && (@options.revision.value)
+      super && !against_head?
+    end
+
+    def against_head?
+      @options.revision.value.nil? || @options.revision.value == 'HEAD'
     end
 
     def to_svn_revision_date date
