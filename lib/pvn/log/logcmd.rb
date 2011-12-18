@@ -56,16 +56,8 @@ module PVN
       
       debug "args: #{args.inspect}"
 
-      @fromdate = args[:fromdate]
-      @todate = args[:todate]
-
-      if @fromdate
-        @options.revision.fromdate = @fromdate
-      end
-
-      if @todate
-        @options.revision.todate = @todate
-      end
+      @options.revision.fromdate = args[:fromdate]
+      @options.revision.todate = args[:todate]
 
       super
     end

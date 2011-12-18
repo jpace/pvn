@@ -111,7 +111,7 @@ module PVN
     end
 
     def options
-      self.class.options
+      # self.class.options
     end
 
     def run_command

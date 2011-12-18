@@ -16,6 +16,7 @@ module PVN
     include Loggable
 
     DATE_REGEXP = Regexp.new('^\{(.*?)\}')
+    SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
 
     def self.revision_from_args optset, cmdargs
       revarg = cmdargs.shift
@@ -54,8 +55,8 @@ module PVN
     end
 
     def convert_to_revision arg
-      if arg == "HEAD"
-        @revision = "HEAD"
+      if SVN_REVISION_WORDS.include?(arg)
+        @revision = arg
       elsif neg = Util.negative_integer?(arg)
         get_negative_revision neg
       elsif arg.kind_of? Fixnum
