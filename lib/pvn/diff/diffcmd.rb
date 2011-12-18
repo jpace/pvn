@@ -55,6 +55,10 @@ module PVN
       revargs[:setter] = :revision_from_args      
       super :revision, '-r', "revision", revargs
     end
+
+    def head?
+      value.nil? || value == 'HEAD'
+    end
   end
   
   class DiffChangeOption < Option
@@ -68,7 +72,13 @@ module PVN
 
   class DiffWhitespaceOption < Option
     def initialize wsargs = Hash.new
-      super :whitespace, '-W', "whitespace", wsargs
+      super :whitespace, '-W', "ignore all whitespace", wsargs
+    end
+
+    def to_command_line
+      if value
+        %w{ -x -w -x -b -x --ignore-eol-style }
+      end
     end
   end
 
@@ -82,14 +92,9 @@ module PVN
       @diffcmdopt = Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
       
       self << @diffcmdopt
-      self << (@change = DiffChangeOption.new)
-      self << (@revision = DiffRevisionOption.new)
-
-      # whitespaceopt = Option.new(:key => :whitespace, 
-      #                            :tag => '-w',
-      #                            :svnarg => '-x -w -x -b -x --ignore-eol-style',
-      #                            :description => "ignore all whitespace (including blank lines and end of lines)",
-      #                            :default => false)
+      self << (@change     = DiffChangeOption.new)
+      self << (@revision   = DiffRevisionOption.new)
+      self << (@whitespace = DiffWhitespaceOption.new)
     end
   end
   
@@ -115,7 +120,7 @@ module PVN
     end
 
     def use_cache?
-      super && against_head?
+      super && !against_head?
     end
 
     def against_head?
