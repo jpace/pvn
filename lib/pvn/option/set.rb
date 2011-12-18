@@ -51,21 +51,16 @@ module PVN
 
     def match_option opt, args
       arg = args[0]
-      debug "arg: #{arg}"
-      debug "arg: #{arg.class}"
 
-      debug "self: #{self}".red
       if opt.exact_match? arg
-        debug "opt: #{opt}".red
-        return [ :set, 1 ]
+        [ :set, 1 ]
       elsif opt.regexp_match? arg
-        debug "opt: #{opt}".yellow
-        return [ :set, 0 ]
+        [ :set, 0 ]
       elsif opt.negative_match? arg
-        debug "opt: #{opt}".green
-        return [ :unset, 0 ]
+        [ :unset, 0 ]
+      else
+        nil
       end
-      nil
     end    
 
     def set_options_from_args cmdobj, cmdargs
@@ -75,49 +70,26 @@ module PVN
       processed = true
       cidx = 0
       while true
-        info "cmdargs: #{cmdargs}".on_blue
         processed = false
         @options.each do |opt|
-          info "opt: #{opt}"
           if na = match_option(opt, cmdargs)
-            info "opt: #{opt}".yellow
-            info "cidx: #{cidx}".yellow
-            info "na: #{na}".yellow
             type = na[0]
             nargs = na[1]
             options_to_set << [ opt, cidx, type, cmdargs[nargs] ]
             cidx += na[1].size
-            info "cidx: #{cidx}".yellow
-            info "cmdargs: #{cmdargs}".on_blue
             cmdargs.slice!(0, nargs + 1)
-            info "cmdargs: #{cmdargs}".on_blue
             processed = true
             break
           end
         end
-        info "cmdargs: #{cmdargs}".on_blue
         break unless processed
       end
 
       options_to_set.each do |optentry|
-        info "optentry: #{optentry}".yellow
-      end
-
-      unprocargs = cmdargs[cidx ... cmdargs.length]
-      info "unprocargs: #{unprocargs}".yellow
-      
-      options_to_set.each do |optentry|
-        info "optentry: #{optentry}".yellow
-        
-        opt = optentry[0]
-        idx = optentry[1]
+        opt  = optentry[0]
+        idx  = optentry[1]
         type = optentry[2]
         args = optentry[3]
-
-        info "  opt  : #{opt}".yellow
-        info "  idx  : #{idx}".yellow
-        info "  type : #{type}".yellow
-        info "  args : #{args}".yellow
 
         if type == :set
           opt.set self, cmdobj, [ args ]

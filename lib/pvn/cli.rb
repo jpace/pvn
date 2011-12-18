@@ -7,6 +7,7 @@ require 'optparse'
 require 'pvn/log'
 require 'pvn/command/cmdexec'
 require 'pvn/diff/diffcmd'
+require 'pvn/pct/pctcmd'
 require 'pvn/describe'
 
 RIEL::Log.level = RIEL::Log::WARN
@@ -63,6 +64,8 @@ module PVN
           return run_command_with_output DiffCommand, true, arguments
         when "describe"
           return run_command_with_output DescribeCommand, true, arguments
+        when "pct"
+          return run_command_with_output PctCommand, true, arguments
         when "help"
           return run_help arguments
         else

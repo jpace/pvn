@@ -15,8 +15,6 @@ module PVN
   end
 
   class LogOptionSet < OptionSet
-    @@orig_file_loc = Pathname.new(__FILE__).expand_path
-
     attr_accessor :revision
     
     def initialize
@@ -24,11 +22,6 @@ module PVN
 
       self << LimitOption.new
       self << (@revision = RevisionOption.new :unsets => :limit)
-    end
-
-    def revision_from_args optset, cmdargs
-      require @@orig_file_loc.dirname.parent + 'revision.rb'
-      Revision.revision_from_args optset, cmdargs
     end
   end
 

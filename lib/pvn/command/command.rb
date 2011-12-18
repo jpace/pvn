@@ -27,7 +27,7 @@ module PVN
     attr_reader :output
 
     def initialize args = Hash.new
-      debug "args: #{args}".red
+      debug "args: #{args}"
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       cmdargs   = args[:command_args] || Array.new
@@ -35,7 +35,7 @@ module PVN
       options.process self, args, cmdargs
       fullcmdargs = options.to_command_line + cmdargs
 
-      info "fullcmdargs: #{fullcmdargs}".green
+      info "fullcmdargs: #{fullcmdargs}"
       
       if args[:filename]
         fullcmdargs << args[:filename]
@@ -54,19 +54,19 @@ module PVN
     end
 
     def to_s
-      command
+      ""
     end
 
     def run args
       info "self.class: #{self.class}"
-      info "@command  : #{command}".on_black
-      info "@execute  : #{@execute}".on_black
+      info "@command  : #{command}"
+      info "@execute  : #{@execute}"
 
       if @execute
         info "@executor : #{@executor}"
         @output = @executor.run command
       else
-        debug "not executing: #{command}".red
+        debug "not executing: #{command}"
       end
     end
 
