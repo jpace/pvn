@@ -99,7 +99,7 @@ module PVN
         files = fileargs.collect do |fn|
           pn = Pathname.new fn
           if pn.directory?
-            # not handled
+            info "not handled: #{pn}".on_red
           else
             pn
           end
