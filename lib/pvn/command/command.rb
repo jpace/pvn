@@ -8,19 +8,19 @@ require 'pvn/option/optionable'
 require 'pvn/option/revopt'
 require 'pvn/util'
 
-$orig_file_loc = Pathname.new(__FILE__).expand_path
-
 module PVN
   class Command
     include Optionable
     include Loggable
+
+    @@orig_file_loc = Pathname.new(__FILE__).expand_path
 
     def self.has_revision_option revopts = Hash.new
       options << RevisionOption.new(revopts)
     end
     
     def self.revision_from_args optset, cmdargs
-      require $orig_file_loc.dirname.parent + 'revision.rb'
+      require @@orig_file_loc.dirname.parent + 'revision.rb'
       Revision.revision_from_args optset, cmdargs
     end
 
@@ -30,18 +30,33 @@ module PVN
       debug "args: #{args}"
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
-      cmdargs   = args[:command_args] || Array.new
 
-      options.process self, args, cmdargs
-      fullcmdargs = options.to_command_line + cmdargs
+      args[:command_args] ||= Array.new
 
-      info "fullcmdargs: #{fullcmdargs}"
+      set_options args
+      
+      cmdline = get_command_line args
       
       if args[:filename]
-        fullcmdargs << args[:filename]
+        cmdline << args[:filename]
       end
 
-      @svncmd = to_svn_command fullcmdargs
+      run_command_line cmdline
+    end
+
+    def set_options args
+      options.process self, args, args[:command_args]
+    end
+
+    def get_command_line args
+      fullcmdargs = options.to_command_line + args[:command_args]
+      info "fullcmdargs: #{fullcmdargs}"
+
+      fullcmdargs
+    end
+
+    def run_command_line cmdline
+      @svncmd = to_svn_command cmdline
       run @svncmd
     end
 
