@@ -18,6 +18,7 @@ module PVN
   class WordCount
     attr_accessor :local
     attr_accessor :svn
+    attr_accessor :name
 
     def initialize args = Hash.new
       @name  = args[:name]  || ""
@@ -26,7 +27,8 @@ module PVN
     end
 
     def +(other)
-      WordCount.new :local => @local + other.local, :svn => @svn + other.svn
+      # the new wc has the name of the lhs of the add:
+      WordCount.new :local => @local + other.local, :svn => @svn + other.svn, :name => @name
     end
 
     def diff
@@ -52,13 +54,14 @@ module PVN
 
       info "args: #{args}".magenta
 
-      optset = PctOptionSet.new
+      @options = PctOptionSet.new
 
-      info "args[:command_args]: #{args[:command_args]}".magenta
-      optset.process self, args, args[:command_args]
-      info "args[:command_args]: #{args[:command_args]}".magenta
+      @options.process self, args, args[:command_args]
       files = get_files args[:command_args]
-      info "files: #{files.inspect}".red
+      info "files: #{files.inspect}"
+
+      rev = @options.revision.value
+      info "rev: #{rev}"
       
       @output = Array.new
 
@@ -66,9 +69,9 @@ module PVN
 
       files.sort.each do |file|
         filewc = WordCount.new :local => numlines(file), :name => file
-        info "filewc: #{filewc.inspect}"
         
-        IO.popen "svn cat #{file}" do |io|
+        cmd = to_command "cat", file
+        IO.popen cmd do |io|
           filewc.svn = numlines io
           info "filewc: #{filewc.inspect}"
         end
@@ -82,13 +85,46 @@ module PVN
       totalwc.write
     end
 
+    def to_command subcmd, *args
+      cmd = "svn #{subcmd}"
+      info "cmd: #{cmd}".on_blue
+      info "args: #{args}".on_blue
+      args = args.flatten
+
+      revcl = @options.revision.to_command_line
+      if revcl
+        cmd << " " << revcl.join(" ")
+      end
+      cmd << quote_args(args)
+      info "cmd: #{cmd}".on_blue
+      cmd
+    end
+
+    def quote_args args
+      str = ""
+      if args.length > 0
+        args.each do |arg|
+          sa = arg.to_s
+          if sa.index(' ')
+            sa = "\"#{sa}\""
+          end
+          str << " " << sa
+        end
+      end
+      str
+    end
+    
     def get_files fileargs
       info "fileargs: #{fileargs}".yellow
 
       files = nil
       if fileargs.empty?
         files = Array.new
-        IO.popen "svn st" do |io|
+
+        # if a revision is set, then this should be "log -v" to determine the
+        # fileset of that revision.
+        cmd = to_command "st", files
+        IO.popen cmd do |io|
           io.each do |line|
             next if line.index %r{^\?}
             pn = Pathname.new line.chomp[8 .. -1]
@@ -107,7 +143,6 @@ module PVN
       end
       files
     end
-
 
     def numlines io
       info "io: #{io}".red
