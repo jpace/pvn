@@ -20,8 +20,8 @@ module PVN
     def initialize
       super
 
-      self << LimitOption.new
-      self << (@revision = RevisionOption.new :unsets => :limit)
+      add LimitOption.new
+      @revision = add RevisionOption.new(:unsets => :limit)
     end
   end
 

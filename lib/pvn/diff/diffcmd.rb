@@ -89,12 +89,11 @@ module PVN
     def initialize
       super
       
-      @diffcmdopt = Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
-      
-      self << @diffcmdopt
-      self << (@change     = DiffChangeOption.new)
-      self << (@revision   = DiffRevisionOption.new)
-      self << (@whitespace = DiffWhitespaceOption.new)
+      # diffcmd is old/new option style (non-subclass of Option)
+      @diffcmdopt = add Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
+      @change     = add DiffChangeOption.new
+      @revision   = add DiffRevisionOption.new
+      @whitespace = add DiffWhitespaceOption.new
     end
   end
   

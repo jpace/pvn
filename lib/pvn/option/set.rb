@@ -116,5 +116,10 @@ module PVN
     def << option
       @options << option
     end
+
+    def add option
+      @options << option
+      option
+    end
   end
 end

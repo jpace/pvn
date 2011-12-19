@@ -94,7 +94,7 @@ module PVN
     end
 
     def run_command
-      @output = @executor.run(command)
+      @output = @executor.run command
     end
   end
 end
