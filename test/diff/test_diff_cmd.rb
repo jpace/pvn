@@ -32,12 +32,7 @@ module PVN
 
     def assert_diff_command exp, cmdargs = nil
       origargs = cmdargs && cmdargs.dup
-      assert_equal exp, DiffCommand.new(:execute => false, :command_args => cmdargs, :executor => @mle).command, "arguments: " + origargs.to_s
-    end
-
-    def assert_diff_command_mock exp, cmdargs = nil
-      origargs = cmdargs && cmdargs.dup
-      assert_equal exp, DiffCommand.new(:execute => false, :command_args => cmdargs, :executor => @mle).command, "arguments: " + origargs.to_s
+      assert_equal exp, DiffCommand.new(:execute => false, :command_args => cmdargs).command, "arguments: " + origargs.to_s
     end
 
     def xtest_documentation

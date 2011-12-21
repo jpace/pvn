@@ -56,8 +56,7 @@ module PVN
     end
 
     def run_command_line cmdline
-      @svncmd = to_svn_command cmdline
-      run @svncmd
+      raise "abstract method invoked"
     end
 
     def to_svn_command fullcmdargs

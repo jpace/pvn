@@ -7,10 +7,15 @@ require 'pvn/subcmd/scdoc'
 require 'pvn/subcmd/scoptions'
 require 'pvn/subcmd/command'
 
+require 'pvn/command/svncmd'
+
 require 'pvn/option/set'
 
 module PVN
-  PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
+  thisfile = Pathname.new __FILE__
+  PVNDIFF_CMD = (thisfile.parent.parent.parent.parent + "bin/pvndiff").expand_path
+  
+  # PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
 
   # module Diff
   #   COMMAND = "diff"
@@ -97,7 +102,7 @@ module PVN
     end
   end
   
-  class DiffCommand < CachableCommand
+  class DiffCommand < SVNCommand
     COMMAND = "diff"
     PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
 

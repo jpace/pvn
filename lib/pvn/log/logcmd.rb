@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/command/command'
+require 'pvn/command/svncmd'
 require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
 
@@ -25,7 +26,7 @@ module PVN
     end
   end
 
-  class LogCommand < CachableCommand
+  class LogCommand < SVNCommand
     DEFAULT_LIMIT = 5
     COMMAND = "log"
     REVISION_ARG = '-r'

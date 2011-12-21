@@ -107,12 +107,31 @@ module PVN
     end
 
     def get_nth_revision logcmd, num
-      read_from_log_output num, logcmd.output.reverse
+      entry = get_nth_log_entry num, logcmd
+      entry && entry.revision.to_i
     end
 
-    def read_from_log_output n_matches, loglines
+    def get_nth_log_entry n, logcmd
+      entries = logcmd.entries
+      entries[-1 * n]
+    end
+
+    # this may be faster than get_nth_entry
+    def read_from_log_output n_matches, logcmd
+      loglines = logcmd.output.reverse
+
+      entries = logcmd.entries
+      entry = entries[-1 * n_matches]
+      
+      if true
+        return entry && entry.revision.to_i
+      end
+
       loglines.each do |line|
         next unless md = PVN::Log::SVN_LOG_SUMMARY_LINE_RE.match(line)
+        
+        info "md: #{md}".yellow
+        
         n_matches -= 1
         if n_matches == 0
           return md[1].to_i
