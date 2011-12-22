@@ -30,45 +30,26 @@ module PVN
       debug "args: #{args}"
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
-
-      args[:command_args] ||= Array.new
-
-      set_options args
       
-      cmdline = get_command_line args
+      options.process self, args, args[:command_args] || Array.new
       
-      if args[:filename]
-        cmdline << args[:filename]
-      end
-
-      run_command_line cmdline
-    end
-
-    def set_options args
-      options.process self, args, args[:command_args]
+      execute
     end
 
     def get_command_line args
-      fullcmdargs = options.to_command_line + args[:command_args]
+      fullcmdargs = options.to_command_line + options.arguments
       info "fullcmdargs: #{fullcmdargs}"
 
       fullcmdargs
     end
 
-    def run_command_line cmdline
+    def execute
+      # see SVNCommand#execute
       raise "abstract method invoked"
     end
 
-    def to_svn_command fullcmdargs
-      [ "svn", self.class::COMMAND ] + fullcmdargs
-    end
-
     def command
-      @svncmd.join(" ")
-    end
-
-    def to_s
-      ""
+      raise "abstract method invoked"
     end
 
     def run args
@@ -90,10 +71,6 @@ module PVN
 
     def options
       # self.class.options
-    end
-
-    def run_command
-      @output = @executor.run command
     end
   end
 end

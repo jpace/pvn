@@ -20,6 +20,7 @@ module PVN
       tofile = args[-1]
 
       diffcmd = diff_command_by_ext fromname
+      info "diffcmd: #{diffcmd}"
 
       if diffcmd
         workingcmd = diffcmd.dup
@@ -28,7 +29,11 @@ module PVN
           workingcmd.gsub! Regexp.new('\{' + idx.to_s + '\}'), str
         end
 
-        run_command workingcmd
+        IO.popen(workingcmd) do |io|
+          io.each do |line|
+            puts line
+          end
+        end
       else
         run_diff_default fromlabel, tolabel, fromfile, tofile
       end

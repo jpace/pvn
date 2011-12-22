@@ -74,7 +74,7 @@ module PVN
 
     def test_default_output
       lc = LogCommand.new Hash.new
-      output = lc.run Array.new
+      output = lc.output
 
       # the last 5 entries happen to be four lines apart, with only one line of
       # comment text each.
@@ -110,7 +110,7 @@ module PVN
 
     def test_log_direct_invoke
       lc = LogCommand.new :fromdate => Date.new(2010, 9, 18), :todate => Date.new(2010, 9, 22), :limit => nil
-      lc.run Array.new
+      # lc.run Array.new
 
       entries = lc.entries
       info "entries: #{entries}"

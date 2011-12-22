@@ -23,6 +23,15 @@ module PVN
       super
     end
 
+    def sysexec cmd
+      info "cmd: #{cmd}".on_red
+      if use_cache?
+        run_cached_command cmd
+      else
+        @output = IO.popen(cmd).readlines
+      end
+    end
+
     def run args
       if use_cache?
         run_cached_command args
@@ -35,19 +44,19 @@ module PVN
       @use_cache
     end
 
-    def get_cache_file args
+    def get_cache_file cmd
       pwd = Pathname.pwd.to_s.sub(%r{^/}, '')
-      CACHE_DIR + pwd + command.gsub(' ', '')
+      CACHE_DIR + pwd + cmd.gsub(' ', '')
     end
 
-    def run_cached_command args
-      debug "args: #{args}".cyan
-      cfile = get_cache_file args
+    def run_cached_command cmd
+      debug "cmd: #{cmd}".cyan
+      cfile = get_cache_file cmd
       if cfile.exist?
         debug "reading from cache file: #{cfile}".cyan
         @output = cfile.readlines
       else
-        run_command
+        @output = IO.popen(cmd).readlines
         cfile.parent.mkpath
         debug "saving output to cache file: #{cfile}".cyan
         File.put_via_temp_file cfile do

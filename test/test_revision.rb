@@ -1,7 +1,6 @@
 require 'test_helper'
 require 'pvn/revision'
 require 'pvn_cmd_test'
-require 'mocklog'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

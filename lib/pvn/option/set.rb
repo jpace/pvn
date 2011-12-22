@@ -9,9 +9,11 @@ module PVN
     include Loggable
 
     attr_reader :options
+    attr_reader :arguments
     
     def initialize options = Array.new
       @options = options
+      @arguments = Array.new
     end
 
     def inspect
@@ -64,6 +66,7 @@ module PVN
     end    
 
     def set_options_from_args cmdobj, cmdargs
+      @arguments = cmdargs.dup
       allargs = cmdargs.dup
       options_to_set = Array.new
 
@@ -72,12 +75,12 @@ module PVN
       while true
         processed = false
         @options.each do |opt|
-          if na = match_option(opt, cmdargs)
+          if na = match_option(opt, @arguments)
             type = na[0]
             nargs = na[1]
-            options_to_set << [ opt, cidx, type, cmdargs[nargs] ]
+            options_to_set << [ opt, cidx, type, @arguments[nargs] ]
             cidx += na[1].size
-            cmdargs.slice!(0, nargs + 1)
+            @arguments.slice!(0, nargs + 1)
             processed = true
             break
           end
@@ -120,6 +123,10 @@ module PVN
     def add option
       @options << option
       option
+    end
+
+    def as_command_line
+      to_command_line + arguments
     end
   end
 end

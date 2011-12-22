@@ -141,7 +141,7 @@ module PVN
     end
 
     def run_log_command fname, limit
-      LogCommand.new :limit => limit, :filename => fname, :executor => @executor
+      LogCommand.new :limit => limit, :command_args => [ fname ], :executor => @executor
     end
   end
 end

@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'pvn/describe'
-require 'mocklog'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
@@ -13,7 +12,7 @@ module PVN
     end
     
     def setup
-      @wiqexec = MockSVNExecutor.new "/home/jpace/Programs/wiquery"
+      # @wiqexec = MockSVNExecutor.new "/home/jpace/Programs/wiquery"
     end
 
     def assert_describe_command exp, cmdargs = nil

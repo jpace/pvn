@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'pvn/log'
-require 'mocklog'
 require 'pvn_test'
 
 Log.level = Log::DEBUG
