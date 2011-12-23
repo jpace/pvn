@@ -66,6 +66,8 @@ module PVN
           return run_command_with_output DescribeCommand, true, arguments
         when "pct"
           return run_command_with_output PctCommand, true, arguments
+        when "stat"
+          return run_command_with_output StatCommand, true, arguments
         when "help"
           return run_help arguments
         else

@@ -55,7 +55,7 @@ module PVN
       arg = args[0]
 
       if opt.exact_match? arg
-        [ :set, 1 ]
+        [ :set, opt.takes_value? ? 1 : 0 ]
       elsif opt.regexp_match? arg
         [ :set, 0 ]
       elsif opt.negative_match? arg

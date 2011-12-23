@@ -29,11 +29,7 @@ module PVN
           workingcmd.gsub! Regexp.new('\{' + idx.to_s + '\}'), str
         end
 
-        IO.popen(workingcmd) do |io|
-          io.each do |line|
-            puts line
-          end
-        end
+        run_command workingcmd
       else
         run_diff_default fromlabel, tolabel, fromfile, tofile
       end

@@ -12,12 +12,7 @@ module PVN
     def initialize args
       @executed = false
       super
-    end
-    
-    def run_command
-      @executed = true
-      super
-    end
+    end    
   end
 
   class CommandTestCase < PVN::TestCase

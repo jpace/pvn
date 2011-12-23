@@ -22,6 +22,10 @@ module PVN
       end
     end
 
+    def takes_value?
+      true
+    end
+
     def initialize_from_hash args
       @name = args[:name]
       @tag = args[:tag]
