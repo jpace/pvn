@@ -35,7 +35,7 @@ module PVN
     end
 
     def diffpct
-      100.0 * diff / @svn
+      @svn.zero? ? "0" : 100.0 * diff / @svn
     end
 
     def write
@@ -45,8 +45,25 @@ module PVN
 
   class PctCommand < Command
     DEFAULT_LIMIT = 5
-    COMMAND = "log"
+    COMMAND = "pct"
     REVISION_ARG = '-r'
+
+    self.doc do |doc|
+      doc.subcommands = [ COMMAND ]
+      doc.description = "Print the comparison of size of locally-changed files."
+      doc.usage       = "[OPTIONS] FILE..."
+      doc.summary     = [ "Prints the changes in the size (length) of files that have ",
+                          "been changed locally, to show the extent to which they have",
+                          "increased or decreased. The columns are:",
+                          " - length in svn repository",
+                          " - length in local version",
+                          " - difference",
+                          " - percentage change",
+                          " - file name",
+                          "When more than one file is specified, the total is displayed",
+                          "as the last line." ]
+      doc.examples   << [ "pvn pct main.c", "Prints the number of lines and percentage by which main.c has changed." ]
+    end
 
     def initialize args
       # not calling super, since all of our stuff goes on in this ctor.
@@ -81,7 +98,9 @@ module PVN
         info "totalwc: #{totalwc.inspect}"
       end
 
-      totalwc.write
+      if files.size > 1
+        totalwc.write
+      end
     end
 
     def to_command subcmd, *args
@@ -112,31 +131,33 @@ module PVN
       end
       str
     end
+
+    def get_changed_files filespec
+      files = Array.new
+      cmd = to_command "st", filespec
+      IO.popen cmd do |io|
+        io.each do |line|
+          next if line.index %r{^\?}
+          pn = Pathname.new line.chomp[8 .. -1]
+          files << pn if pn.file?
+        end
+      end
+      files
+    end
     
     def get_files fileargs
       info "fileargs: #{fileargs}".yellow
 
-      files = nil
+      files = Array.new
       if fileargs.empty?
-        files = Array.new
-
-        # if a revision is set, then this should be "log -v" to determine the
-        # fileset of that revision.
-        cmd = to_command "st", files
-        IO.popen cmd do |io|
-          io.each do |line|
-            next if line.index %r{^\?}
-            pn = Pathname.new line.chomp[8 .. -1]
-            files << pn if pn.file?
-          end
-        end
+        files = get_changed_files fileargs
       else
-        files = fileargs.collect do |fn|
+        fileargs.collect do |fn|
           pn = Pathname.new fn
           if pn.directory?
-            info "not handled: #{pn}".on_red
+            files.concat get_changed_files(fn)
           else
-            pn
+            files << pn
           end
         end
       end

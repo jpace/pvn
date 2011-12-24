@@ -64,6 +64,10 @@ module PVN
       super
     end
 
+    def has_entries?
+      true
+    end
+
     def use_cache?
       # use cache unless log is to head.
       super && !@options.revision.head?

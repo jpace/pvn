@@ -69,6 +69,10 @@ module PVN
       self.class.find_option optname
     end
 
+    def has_entries?
+      false
+    end
+
     def options
       # self.class.options
     end
