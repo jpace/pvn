@@ -27,7 +27,7 @@ module PVN
       if use_cache?
         run_cached_command cmd
       else
-        @output = IO.popen(cmd).readlines
+        @output = ::IO.popen(cmd).readlines
       end
     end
 

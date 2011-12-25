@@ -2,7 +2,8 @@
 # -*- ruby -*-
 
 require 'pvn/command/command'
-require 'pvn/log/logfactory'
+require 'pvn/wordcount'
+require 'pvn/io'
 
 module PVN
   class PctOptionSet < OptionSet
@@ -11,35 +12,6 @@ module PVN
     def initialize
       super
       @revision = add RevisionOption.new
-    end
-  end
-
-  class WordCount
-    attr_accessor :local
-    attr_accessor :svn
-    attr_accessor :name
-
-    def initialize args = Hash.new
-      @name  = args[:name]  || ""
-      @local = args[:local] || 0
-      @svn   = args[:svn]   || 0
-    end
-
-    def +(other)
-      # the new wc has the name of the lhs of the add:
-      WordCount.new :local => @local + other.local, :svn => @svn + other.svn, :name => @name
-    end
-
-    def diff
-      @local - @svn
-    end
-
-    def diffpct
-      @svn.zero? ? "0" : 100.0 * diff / @svn
-    end
-
-    def write
-      printf "%8d %8d %8d %8.1f%% %s\n", @svn, @local, diff, diffpct, @name
     end
   end
 
@@ -73,7 +45,9 @@ module PVN
       @options = PctOptionSet.new
 
       @options.process self, args, args[:command_args]
-      files = get_files args[:command_args]
+      info "args: #{args}".cyan
+
+      files = get_files @options.arguments
       info "files: #{files.inspect}"
 
       rev = @options.revision.value
@@ -84,11 +58,11 @@ module PVN
       totalwc = WordCount.new :name => "total"
 
       files.sort.each do |file|
-        filewc = WordCount.new :local => numlines(file), :name => file
+        filewc = WordCount.new :local => IO::numlines(file), :name => file
         
         cmd = to_command "cat", file
-        IO.popen cmd do |io|
-          filewc.svn = numlines io
+        ::IO.popen cmd do |io|
+          filewc.svn = IO::numlines io
           info "filewc: #{filewc.inspect}"
         end
 
@@ -113,29 +87,51 @@ module PVN
       if revcl
         cmd << " " << revcl.join(" ")
       end
-      cmd << quote_args(args)
+      cmd << " " << Util::quote_list(args)
       info "cmd: #{cmd}".on_blue
       cmd
     end
 
-    def quote_args args
-      str = ""
-      if args.length > 0
-        args.each do |arg|
-          sa = arg.to_s
-          if sa.index(' ')
-            sa = "\"#{sa}\""
-          end
-          str << " " << sa
-        end
+    def get_changed_files filespec
+      rev = @options.revision.value
+      info "rev: #{rev}"
+      
+      if rev
+        get_changed_files_revision filespec
+      else
+        get_changed_files_wc filespec
       end
-      str
     end
 
-    def get_changed_files filespec
+    def svn_fullname_to_local_file svnname
+      info "svnname: #{svnname}".bold
+
+      svninfo = %x{svn info}
+      info "svninfo: #{svninfo}".on_black
+
+      svninfo = %x{svn info #{svnname}}
+      info "svninfo: #{svninfo}".on_black
+    end
+
+    def get_changed_files_revision filespec
+      lc = LogCommand.new :revision => @options.revision.value, :verbose => true
+      info "lc: #{lc}"
+      entry = lc.entries[0]
+      return Array.new if entry.nil?
+
+      entry.write
+
+      files = entry.files.collect do |svnfile|
+        svn_fullname_to_local_file svnfile
+      end
+      info "files: #{files}".yellow
+      files
+    end
+
+    def get_changed_files_wc filespec
       files = Array.new
       cmd = to_command "st", filespec
-      IO.popen cmd do |io|
+      ::IO.popen cmd do |io|
         io.each do |line|
           next if line.index %r{^\?}
           pn = Pathname.new line.chomp[8 .. -1]
@@ -162,14 +158,6 @@ module PVN
         end
       end
       files
-    end
-
-    def numlines io
-      info "io: #{io}".red
-      # info "io.readlines: #{io.readlines}".red
-      sz = io.readlines.size
-      info "sz: #{sz}".red
-      sz
     end
   end
 end
