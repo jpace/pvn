@@ -2,8 +2,12 @@
 # -*- ruby -*-
 
 require 'pvn/command/command'
-require 'pvn/wordcount'
+require 'pvn/linecount'
 require 'pvn/io'
+require 'pvn/io/fselement'
+require 'pvn/svnelement'
+require 'pvn/io/element'
+require 'pvn/file'
 
 module PVN
   class PctOptionSet < OptionSet
@@ -55,25 +59,29 @@ module PVN
       
       @output = Array.new
 
-      totalwc = WordCount.new :name => "total"
+      totallc = LineCount.new :name => "total"
 
       files.sort.each do |file|
-        filewc = WordCount.new :local => IO::numlines(file), :name => file
+        info "file: #{file}".on_yellow
+
+        fromlc, tolc = if rev
+                         [ file.svn.line_count(rev - 1), file.svn.line_count(rev) ]
+                       else
+                         [ file.svn.line_count(rev), file.local.line_count ]
+                       end
+
+        info "fromlc: #{fromlc}".yellow
+        info "tolc: #{tolc}".yellow
         
-        cmd = to_command "cat", file
-        ::IO.popen cmd do |io|
-          filewc.svn = IO::numlines io
-          info "filewc: #{filewc.inspect}"
-        end
+        filelc = LineCount.new :from => fromlc, :to => tolc, :name => file.local.name
+        filelc.write
 
-        filewc.write
-
-        totalwc += filewc
-        info "totalwc: #{totalwc.inspect}"
+        totallc += filelc
+        info "totallc: #{totallc.inspect}"
       end
 
       if files.size > 1
-        totalwc.write
+        totallc.write
       end
     end
 
@@ -105,12 +113,16 @@ module PVN
 
     def svn_fullname_to_local_file svnname
       info "svnname: #{svnname}".bold
+      
+      here = SVNElement.new :name => '.'
 
-      svninfo = %x{svn info}
-      info "svninfo: #{svninfo}".on_black
+      hereinfo    = here.info
+      reporoot    = hereinfo[:repository_root]
+      fullsvnname = reporoot + svnname
+      localname   = fullsvnname[hereinfo[:url].length + 1 .. -1]
+      info "localname: #{localname}"
 
-      svninfo = %x{svn info #{svnname}}
-      info "svninfo: #{svninfo}".on_black
+      localname
     end
 
     def get_changed_files_revision filespec
@@ -122,7 +134,8 @@ module PVN
       entry.write
 
       files = entry.files.collect do |svnfile|
-        svn_fullname_to_local_file svnfile
+        localfile = svn_fullname_to_local_file svnfile
+        Element.new :file => localfile
       end
       info "files: #{files}".yellow
       files
@@ -134,10 +147,11 @@ module PVN
       ::IO.popen cmd do |io|
         io.each do |line|
           next if line.index %r{^\?}
-          pn = Pathname.new line.chomp[8 .. -1]
-          files << pn if pn.file?
+          pn = Element.new :file => line.chomp[8 .. -1]
+          files << pn if pn.local.file?
         end
       end
+      info "files: #{files}".red
       files
     end
     
@@ -149,7 +163,7 @@ module PVN
         files = get_changed_files fileargs
       else
         fileargs.collect do |fn|
-          pn = Pathname.new fn
+          pn = Element.new :file => fn
           if pn.directory?
             files.concat get_changed_files(fn)
           else
@@ -157,6 +171,9 @@ module PVN
           end
         end
       end
+
+      info "files: #{files}".yellow
+
       files
     end
   end
