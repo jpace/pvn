@@ -70,6 +70,8 @@ module PVN
       allargs = cmdargs.dup
       options_to_set = Array.new
 
+      info "@arguments: #{@arguments}".on_blue
+
       processed = true
       cidx = 0
       while true
@@ -88,14 +90,17 @@ module PVN
         break unless processed
       end
 
+      info "@arguments: #{@arguments}".on_blue
+
       options_to_set.each do |optentry|
+        info "optentry: #{optentry}".on_blue
         opt  = optentry[0]
         idx  = optentry[1]
         type = optentry[2]
-        args = optentry[3]
+        optargs = optentry[3]
 
         if type == :set
-          opt.set self, cmdobj, [ args ]
+          opt.set self, cmdobj, [ optargs ]
         elsif type == :unset
           opt.unset
         end

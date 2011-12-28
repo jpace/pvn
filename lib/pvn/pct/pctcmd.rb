@@ -22,7 +22,6 @@ module PVN
   class PctCommand < Command
     DEFAULT_LIMIT = 5
     COMMAND = "pct"
-    REVISION_ARG = '-r'
 
     self.doc do |doc|
       doc.subcommands = [ COMMAND ]
@@ -144,7 +143,7 @@ module PVN
     def get_changed_files_wc filespec
       files = Array.new
       cmd = to_command "st", filespec
-      ::IO.popen cmd do |io|
+      IO.popen cmd do |io|
         io.each do |line|
           next if line.index %r{^\?}
           pn = Element.new :file => line.chomp[8 .. -1]
@@ -164,7 +163,7 @@ module PVN
       else
         fileargs.collect do |fn|
           pn = Element.new :file => fn
-          if pn.directory?
+          if pn.local.directory?
             files.concat get_changed_files(fn)
           else
             files << pn

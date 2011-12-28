@@ -18,24 +18,24 @@ module PVN
     DATE_REGEXP = Regexp.new('^\{(.*?)\}')
     SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
 
-    def self.revision_from_args optset, cmdargs
-      revarg = cmdargs.shift
+    def self.revision_from_args optset, optargs
+      revarg = optargs.shift
       RIEL::Log.debug "revarg: #{revarg}"
-      RIEL::Log.debug "cmdargs: #{cmdargs}"
+      RIEL::Log.debug "optargs: #{optargs}"
 
-      rev = Revision.new(:fname => cmdargs[-1], :value => revarg, :use_cache => false).revision
+      rev = Revision.new(:fname => optset.arguments[0], :value => revarg, :use_cache => false).revision
       RIEL::Log.debug "rev: #{rev}"
 
       if rev.nil?
-        raise ArgumentError.new "invalid revision: #{revarg} on #{cmdargs[-1]}"
+        raise ArgumentError.new "invalid revision: #{revarg} on #{optargs[-1]}"
       end
       rev
     end
     
     attr_reader :revision
 
-    # this assumes that fname is specified, and is a filename, as opposed to '.'
     def initialize args = Hash.new
+      debug "args        : #{args}".yellow
       value = args[:value]
       num = value.kind_of?(String) ? value.strip : value
       debug "num        : #{num}".yellow
@@ -55,7 +55,7 @@ module PVN
     end
 
     def convert_to_revision arg
-      if SVN_REVISION_WORDS.include?(arg)
+      if SVN_REVISION_WORDS.include? arg
         @revision = arg
       elsif neg = Util.negative_integer?(arg)
         get_negative_revision neg
@@ -102,46 +102,10 @@ module PVN
     end
 
     def get_revision fname, limit, num
-      logcmd = run_log_command fname, limit
-      get_nth_revision logcmd, num
-    end
-
-    def get_nth_revision logcmd, num
-      entry = get_nth_log_entry num, logcmd
+      logcmd = LogCommand.new :limit => limit, :command_args => [ fname ]
+      entries = logcmd.entries
+      entry = entries[-1 * num]
       entry && entry.revision.to_i
-    end
-
-    def get_nth_log_entry n, logcmd
-      entries = logcmd.entries
-      entries[-1 * n]
-    end
-
-    # this may be faster than get_nth_entry
-    def read_from_log_output n_matches, logcmd
-      loglines = logcmd.output.reverse
-
-      entries = logcmd.entries
-      entry = entries[-1 * n_matches]
-      
-      if true
-        return entry && entry.revision.to_i
-      end
-
-      loglines.each do |line|
-        next unless md = PVN::Log::SVN_LOG_SUMMARY_LINE_RE.match(line)
-        
-        info "md: #{md}".yellow
-        
-        n_matches -= 1
-        if n_matches == 0
-          return md[1].to_i
-        end
-      end
-      nil
-    end
-
-    def run_log_command fname, limit
-      LogCommand.new :limit => limit, :command_args => [ fname ], :executor => @executor
     end
   end
 end

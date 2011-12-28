@@ -2,12 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/command/command'
-require 'pvn/linecount'
 require 'pvn/io'
-require 'pvn/io/fselement'
-require 'pvn/svnelement'
-require 'pvn/io/element'
-require 'pvn/file'
 
 module PVN
   class UppOptionSet < OptionSet
@@ -101,8 +96,8 @@ module PVN
       # get properties list (this could probably be cached, but it's relatively fast)
       proplistcmd = "svn pl -R"
       fd = nil
-      fdre = Regexp.new('^Properties on \'(.*)\':$')
-      extre = Regexp.new('^\s*svn:externals$')
+      fdre = Regexp.new '^Properties on \'(.*)\':$'
+      extre = Regexp.new '^\s*svn:externals$'
       IO.popen(proplistcmd) do |io|
         io.each do |line|
           if md = fdre.match(line)

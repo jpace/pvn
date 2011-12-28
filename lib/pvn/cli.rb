@@ -9,6 +9,7 @@ require 'pvn/command/cmdexec'
 require 'pvn/diff/diffcmd'
 require 'pvn/pct/pctcmd'
 require 'pvn/describe'
+require 'pvn/upp/uppcmd'
 
 RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)

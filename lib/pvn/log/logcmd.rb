@@ -61,6 +61,8 @@ module PVN
       @options.revision.fromdate = args[:fromdate]
       @options.revision.todate = args[:todate]
 
+      @entries = nil
+
       super
     end
 
@@ -78,9 +80,44 @@ module PVN
     end
 
     def entries
-      # of course this assumes that output is in plain text (non-XML)
-      factory = PVN::Log::TextFactory.new output
-      factory.entries
+      @entries ||= begin
+                     # of course this assumes that output is in plain text (non-XML)
+                     factory = PVN::Log::TextFactory.new output
+                     factory.entries
+                   end
+    end
+
+    def revision_of_nth_entry num
+      entry = nth_entry num
+      entry && entry.revision.to_i
+    end
+
+    def nth_entry n
+      entries[-1 * n]
+    end
+
+    # this may be faster than get_nth_entry
+    def read_from_log_output n_matches
+      loglines = output.reverse
+
+      entries = entries
+      entry = entries[-1 * n_matches]
+      
+      if true
+        return entry && entry.revision.to_i
+      end
+
+      loglines.each do |line|
+        next unless md = SVN_LOG_SUMMARY_LINE_RE.match(line)
+        
+        info "md: #{md}".yellow
+        
+        n_matches -= 1
+        if n_matches == 0
+          return md[1].to_i
+        end
+      end
+      nil
     end
   end
 
