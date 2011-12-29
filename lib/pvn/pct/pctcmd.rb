@@ -110,16 +110,37 @@ module PVN
       end
     end
 
+    # returns the topmost directory for the repo root of the current directory
+    def svn_element_for_repo_root
+      dir = Pathname.new('.').expand_path
+      
+      while dir.to_s != '/'
+        elmt = SVNElement.new :name => dir
+        elmtinfo = elmt.info
+        info "elmtinfo[:url]: #{elmtinfo[:url]}".bold
+        info "elmtinfo[:repository_root]: #{elmtinfo[:repository_root]}".bold
+        return elmt if elmtinfo[:repository_root] == elmtinfo[:url]
+        return nil  if elmtinfo[:repository_root].nil?
+        dir += '..'
+      end
+    end
+
     def svn_fullname_to_local_file svnname
-      info "svnname: #{svnname}".bold
+      info "svnname       : #{svnname}".bold
+
+      svnroot = svn_element_for_repo_root
+      info "svnroot       : #{svnroot}".bold
       
       here = SVNElement.new :name => '.'
 
       hereinfo    = here.info
+      info "hereinfo[:url]: #{hereinfo[:url]}".bold
       reporoot    = hereinfo[:repository_root]
+      info "reporoot      : #{reporoot}".bold
       fullsvnname = reporoot + svnname
+      info "fullsvnname   : #{fullsvnname}".bold
       localname   = fullsvnname[hereinfo[:url].length + 1 .. -1]
-      info "localname: #{localname}"
+      info "localname     : #{localname}".bold
 
       localname
     end
@@ -162,11 +183,11 @@ module PVN
         files = get_changed_files fileargs
       else
         fileargs.collect do |fn|
-          pn = Element.new :file => fn
-          if pn.local.directory?
+          elmt = Element.new :file => fn
+          if elmt.local.directory?
             files.concat get_changed_files(fn)
           else
-            files << pn
+            files << elmt
           end
         end
       end

@@ -8,6 +8,8 @@ require 'pvn/io'
 require 'pvn/util'
 
 module PVN
+  # An element unites an svn element and a file/directory (at least one of which
+  # should exist).
   class Element
     include Loggable
 

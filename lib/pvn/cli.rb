@@ -44,7 +44,7 @@ module PVN
         puts "usage: pvn [--verbose] <command> [<options>] [<args>]"
         puts "PVN, version #{PVN::VERSION}"
         puts
-        puts "PVN is a front-end for the subcommands:"
+        puts "PVN has the subcommands:"
         SUBCOMMANDS.each do |sc|
           printf "   %-10s %s\n", sc.doc.subcommands[0], sc.doc.description
         end
@@ -66,7 +66,6 @@ module PVN
         end
 
         SUBCOMMANDS.each do |sc|
-          puts "sc: #{sc}"
           if sc.doc.subcommands.include?(arg)
             cmd = sc.new :execute => true, :command_args => args
             if cmd.has_entries?
@@ -77,7 +76,7 @@ module PVN
           end
         end
         
-        puts "don't understand subcommand: #{arg}"
+        $stderr.puts "ERROR: subcommand not valid: #{arg}"
       end
     end
   end

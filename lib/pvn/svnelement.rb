@@ -3,9 +3,9 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/linecount'
 require 'pvn/io'
 require 'pvn/util'
+require 'pvn/svn/svninfo'
 
 module PVN
   class SVNElement
@@ -15,6 +15,7 @@ module PVN
     def initialize args
       RIEL::Log.info "args: #{args}".green
       @name = args[:name]
+      RIEL::Log.info "@name: #{@name}".green
     end
 
     def to_command subcmd, revcl, *args
@@ -33,26 +34,7 @@ module PVN
     end
 
     def info
-      cmd = "svn info #{name}"
-      output = %x{#{cmd}}
-      debug "output: #{output}".on_black
-      debug "output: #{output.class}".on_black
-
-      re = Regexp.new '^(.*?):\s*(.*)'
-      
-      info = Hash.new
-      output.split("\n").each do |line|
-        key, value = re.match(line)[1, 2]
-       
-        debug "key: #{key}"
-        debug "value: #{value}"
-
-        keysym = key.downcase.gsub(' ', '_').to_sym
-        debug "keysym: #{keysym}"
-
-        info[keysym] = value
-      end
-      info
+      SVN::Info.new :name => @name
     end
 
     def line_count revision = nil
@@ -65,6 +47,14 @@ module PVN
       end
 
       lc
+    end
+    
+    def to_s
+      @name.to_s
+    end
+
+    def inspect
+      @name
     end
 
     def <=>(other)
