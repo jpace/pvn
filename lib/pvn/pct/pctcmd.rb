@@ -117,30 +117,28 @@ module PVN
       while dir.to_s != '/'
         elmt = SVNElement.new :name => dir
         elmtinfo = elmt.info
-        info "elmtinfo[:url]: #{elmtinfo[:url]}".bold
-        info "elmtinfo[:repository_root]: #{elmtinfo[:repository_root]}".bold
         return elmt if elmtinfo[:repository_root] == elmtinfo[:url]
         return nil  if elmtinfo[:repository_root].nil?
         dir += '..'
       end
+
+      nil
     end
 
     def svn_fullname_to_local_file svnname
-      info "svnname       : #{svnname}".bold
-
       svnroot = svn_element_for_repo_root
-      info "svnroot       : #{svnroot}".bold
+      info "svnroot       : #{svnroot}"
       
       here = SVNElement.new :name => '.'
 
       hereinfo    = here.info
-      info "hereinfo[:url]: #{hereinfo[:url]}".bold
+      info "hereinfo[:url]: #{hereinfo[:url]}"
       reporoot    = hereinfo[:repository_root]
-      info "reporoot      : #{reporoot}".bold
-      fullsvnname = reporoot + svnname
-      info "fullsvnname   : #{fullsvnname}".bold
-      localname   = fullsvnname[hereinfo[:url].length + 1 .. -1]
-      info "localname     : #{localname}".bold
+
+      info "reporoot      : #{reporoot}"
+
+      localname   = svnroot.to_s + svnname
+      info "localname     : #{localname}"
 
       localname
     end
