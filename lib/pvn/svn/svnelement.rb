@@ -11,10 +11,20 @@ module PVN
   class SVNElement
     include Loggable
     attr_reader :name
+
+    require 'pvn/svn/svnroot'
     
     def initialize args
       RIEL::Log.info "args: #{args}".green
-      @name = args[:name]
+      
+      # technically, name is what svn info calls "URL"
+      name = args[:name]
+      if name.nil? && (fname = args[:filename])
+        svnroot = SVNRootElement.new
+        name = svnroot.info[:url] + (fname - svnroot.info[:path])
+      end
+
+      @name = name
       RIEL::Log.info "@name: #{@name}".green
     end
 

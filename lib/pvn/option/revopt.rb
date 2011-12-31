@@ -4,7 +4,6 @@
 require 'riel'
 require 'rubygems'
 require 'pvn/util'
-# require 'pvn/revision'
 
 module PVN
   class RevisionOption < Option
@@ -35,12 +34,6 @@ module PVN
       else
         super
       end
-    end
-
-    def xxxset
-      # @todo
-      require @@orig_file_loc.dirname.parent + 'revision.rb'
-      Revision.revision_from_args optset, cmdargs
     end
 
     def head?

@@ -59,7 +59,12 @@ module PVN
     end
 
     def exact_match? arg
-      arg == tag || arg == '--' + @name.to_s
+      info "arg: #{arg}".yellow
+      info "name: #{name}".yellow
+
+      m = arg == tag || arg == '--' + @name.to_s
+      info "m: #{m}".yellow
+      m
     end
 
     def negative_match? arg

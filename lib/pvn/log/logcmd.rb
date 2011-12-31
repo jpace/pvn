@@ -5,37 +5,10 @@ require 'pvn/command/command'
 require 'pvn/command/svncmd'
 require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
-require 'pvn/option/boolopt'
+require 'pvn/log/logoptions'
 
 module PVN
-  DEFAULT_LIMIT = 5
-
-  class LimitOption < Option
-    def initialize lmtargs = Hash.new
-      super :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
-    end
-  end
-
-  class VerboseOption < BooleanOption
-    def initialize optargs = Hash.new
-      super :verbose, '-v', "print additional output", :default => false
-    end
-  end
-
-  class LogOptionSet < OptionSet
-    attr_accessor :revision
-    
-    def initialize
-      super
-
-      add LimitOption.new
-      @revision = add RevisionOption.new(:unsets => :limit)
-      @verbose  = add VerboseOption.new
-    end
-  end
-
   class LogCommand < SVNCommand
-    DEFAULT_LIMIT = 5
     COMMAND = "log"
     REVISION_ARG = '-r'
 
@@ -57,9 +30,13 @@ module PVN
       @options = LogOptionSet.new
       
       debug "args: #{args.inspect}"
-
+      
       @options.revision.fromdate = args[:fromdate]
       @options.revision.todate = args[:todate]
+
+      @options.options.each do |opt|
+        info "opt: #{opt}".blue
+      end
 
       @entries = nil
 

@@ -17,7 +17,11 @@ module PVN
     attr_reader :local
     
     def initialize args = Hash.new
-      @svn   = args[:svn]   || (args[:file] && SVNElement.new(:name => args[:file]))
+      svnurl = args[:svnurl]
+      fname  = args[:filename] || args[:file] # legacy
+      # $$$ todo: map svnurl to SVNElement, and fname to FSElement
+
+      @svn   = args[:svn]   || (args[:file] && SVNElement.new(:filename => args[:file]))
       @local = args[:local] || (args[:file] && FSElement.new(args[:file]))
     end
 
@@ -42,6 +46,10 @@ module PVN
 
     def <=>(other)
       @svn <=> other.svn
+    end
+
+    def to_s
+      "svn => " + @svn.to_s + "; local => " + @local
     end
   end
 end

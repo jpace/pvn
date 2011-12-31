@@ -5,7 +5,8 @@ require 'pvn/command/command'
 require 'pvn/linecount'
 require 'pvn/io'
 require 'pvn/io/fselement'
-require 'pvn/svnelement'
+require 'pvn/svn/svnelement'
+require 'pvn/svn/svnroot'
 require 'pvn/io/element'
 require 'pvn/file'
 
@@ -61,7 +62,7 @@ module PVN
       totallc = LineCount.new :name => "total"
 
       files.sort.each do |file|
-        info "file: #{file}".on_yellow
+        info "file: #{file}"
 
         fromlc, tolc = if rev
                          [ file.svn.line_count(rev - 1), file.svn.line_count(rev) ]
@@ -69,8 +70,8 @@ module PVN
                          [ file.svn.line_count(rev), file.local.line_count ]
                        end
 
-        info "fromlc: #{fromlc}".yellow
-        info "tolc: #{tolc}".yellow
+        info "fromlc: #{fromlc}"
+        info "tolc: #{tolc}"
         
         filelc = LineCount.new :from => fromlc, :to => tolc, :name => file.local.name
         filelc.write
@@ -86,8 +87,8 @@ module PVN
 
     def to_command subcmd, *args
       cmd = "svn #{subcmd}"
-      info "cmd: #{cmd}".on_blue
-      info "args: #{args}".on_blue
+      info "cmd: #{cmd}"
+      info "args: #{args}"
       args = args.flatten
 
       revcl = @options.revision.to_command_line
@@ -110,23 +111,8 @@ module PVN
       end
     end
 
-    # returns the topmost directory for the repo root of the current directory
-    def svn_element_for_repo_root
-      dir = Pathname.new('.').expand_path
-      
-      while dir.to_s != '/'
-        elmt = SVNElement.new :name => dir
-        elmtinfo = elmt.info
-        return elmt if elmtinfo[:repository_root] == elmtinfo[:url]
-        return nil  if elmtinfo[:repository_root].nil?
-        dir += '..'
-      end
-
-      nil
-    end
-
     def svn_fullname_to_local_file svnname
-      svnroot = svn_element_for_repo_root
+      svnroot = SVNRootElement.new
       info "svnroot       : #{svnroot}"
       
       here = SVNElement.new :name => '.'
