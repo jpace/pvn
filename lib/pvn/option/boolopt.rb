@@ -6,14 +6,16 @@ require 'riel'
 require 'pvn/option/option'
 
 module PVN
+  # a boolean option maps to a single tag, not a tag and value. For example,
+  # "-v" (verbose) is a boolean option, but "-r 3444" (revision) is a option
+  # with a value.
   class BooleanOption < Option
-    
     def takes_value?
       false
     end
 
     def to_command_line
-      value && [ tag ]
+      super && [ tag ]
     end
   end
 end

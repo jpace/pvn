@@ -70,7 +70,7 @@ module PVN
       allargs = cmdargs.dup
       options_to_set = Array.new
 
-      info "@arguments: #{@arguments}".on_blue
+      info "@arguments: #{@arguments}"
 
       processed = true
       cidx = 0
@@ -90,10 +90,10 @@ module PVN
         break unless processed
       end
 
-      info "@arguments: #{@arguments}".on_blue
+      info "@arguments: #{@arguments}"
 
       options_to_set.each do |optentry|
-        info "optentry: #{optentry}".on_blue
+        info "optentry: #{optentry}"
         opt  = optentry[0]
         idx  = optentry[1]
         type = optentry[2]

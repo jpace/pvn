@@ -11,7 +11,7 @@ module PVN
     SVN_LOG_SUMMARY_LINE_RE = Regexp.new('^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$')
     SVN_LOG_SEPARATOR_LINE_RE = Regexp.new('^-{72}$')
     SVN_LOG_VERBOSE_START_RE = Regexp.new('^Changed paths:$')
-    SVN_LOG_FILE_NAME_RE = Regexp.new('^   \w (.*)$')
+    SVN_LOG_FILE_NAME_RE = Regexp.new('^   (\w) (.*)$')
 
     class TextFactory
       include Loggable
@@ -66,7 +66,9 @@ module PVN
         advance_line
         files = Array.new
         while (ln = current_line) && !ln.strip.empty?
-          fname = match_line(SVN_LOG_FILE_NAME_RE)[1]
+          md = match_line(SVN_LOG_FILE_NAME_RE)
+          changetype = md[1]
+          fname = md[2]
           files << fname
           advance_line
         end        

@@ -26,9 +26,7 @@ module PVN
     
     def self.run_command_as_entries cmd
       RIEL::Log.info "cmd: #{cmd}".on_black
-      cmd.entries.each do |entry|
-        entry.write
-      end
+      cmd.write_entries
       true
     end
 

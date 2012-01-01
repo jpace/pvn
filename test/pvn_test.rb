@@ -12,24 +12,32 @@ module PVN
 
     class << self
       def setup
-        RIEL::Log.info "setting up".on_blue
+        RIEL::Log.debug "setting up: #{self}".on_blue
         @@orig_location = Pathname.pwd
         # super
       end
 
       def teardown
-        RIEL::Log.info "tearing down".on_yellow
+        RIEL::Log.debug "tearing down: #{self}".on_yellow
         Dir.chdir @@orig_location
       end
 
       def suite
-        RIEL::Log.info "self: #{self}".negative
+        RIEL::Log.debug "self: #{self}".negative
         @@cls = self
+        RIEL::Log.debug "@@cls: #{@@cls}".negative
 
         ste = super
+        RIEL::Log.debug "ste: #{ste}".negative
+
         def ste.run(*args)
+          RIEL::Log.debug "self: #{self}".negative
+          RIEL::Log.debug "@@cls: #{@@cls}".negative
+
           @@cls.setup
           super
+          RIEL::Log.debug "self: #{self}".negative
+          RIEL::Log.debug "@@cls: #{@@cls}".negative
           @@cls.teardown
         end
         ste

@@ -46,8 +46,18 @@ module PVN
       end
     end
 
+    def has_svn_option?
+      @options.include? :as_svn_option && @options[:as_svn_option]
+    end
+
     def to_command_line
-      value && [ tag, value ]
+      return nil unless value
+      
+      if @options.include? :as_svn_option
+        @options[:as_svn_option]
+      else
+        [ tag, value ]
+      end
     end
 
     def to_s
@@ -68,7 +78,7 @@ module PVN
     end
 
     def negative_match? arg
-      @options && @options[:negate] && @options[:negate].detect { |x| x.match(arg) }
+      arg && @options && @options[:negate] && @options[:negate].detect { |x| arg.index(x) }
     end
 
     def regexp_match? arg

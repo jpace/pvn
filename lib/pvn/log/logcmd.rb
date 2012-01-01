@@ -73,6 +73,16 @@ module PVN
       entries[-1 * n]
     end
 
+    def write_entries
+      info "@options: #{@options.inspect}"
+      info "@options.format: #{@options.format.inspect}".yellow
+
+      entries.each do |entry|
+        info "@options.format.value: #{@options.format.value}"
+        entry.write @options.format.value
+      end
+    end
+
     # this may be faster than get_nth_entry
     def read_from_log_output n_matches
       loglines = output.reverse

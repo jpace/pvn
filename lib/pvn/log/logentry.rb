@@ -25,8 +25,14 @@ module PVN
       end
 
       # WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
-      WRITE_FORMAT_DEFAULT = '#{revision.yellow}\t#{user.green}\t#{date} #{time}\n#{list(comment)}#{cr(files)}#{list(files, :blue, :on_yellow)}\n'
-
+      WRITE_FORMAT_DEFAULT = ('#{revision.yellow}\t#{user.green}\t#{date} #{time}\n' +
+                              '#{list(comment)}#{cr(files)}' +
+                              '#{list(files, :blue, :on_yellow)}\n')
+      
+      WRITE_UNFORMATTED = ('r#{revision} | #{user} | #{date} #{time} #{tz} (#{dtg}) | #{nlines} #{nlines.to_i == 1 ? "line" : "lines"}\n\n' +
+                           '#{plainlist(comment)}#{cr(files)}' +
+                           '#{list(files)}\n')
+      
       def set_from_args name, args
         self.instance_variable_set '@' + name.to_s, args[name]
       end
@@ -61,25 +67,40 @@ module PVN
         end.join('')
       end
 
-      def write
+      def plainlist lines
+        return '' unless lines
+        
+        lines.collect do |line|
+          line.chomp + "\n"
+        end.join('')
+      end
+
+      def write formatted
         # ------------------------------------------------------------------------
         # r1907 | hielke.hoeve@gmail.com | 2011-11-14 05:50:38 -0500 (Mon, 14 Nov 2011) | 1 line
         #
         # back to dev
 
-        cfg = PVN::Configuration.read
-        
-        logcfg = cfg.section "log"
-        info "logcfg: #{logcfg}"
-        format = logcfg && logcfg.assoc('format') && logcfg.assoc('format')[1]
-        info "format: #{format}"
+        if formatted
+          cfg = PVN::Configuration.read
+          
+          logcfg = cfg.section "log"
+          info "logcfg: #{logcfg}"
+          format = logcfg && logcfg.assoc('format') && logcfg.assoc('format')[1]
+          info "format: #{format}"
 
-        format ||= WRITE_FORMAT_DEFAULT
+          format ||= WRITE_FORMAT_DEFAULT
 
-        # @todo allow reformatting of date and time
-        # format = WRITE_FORMAT_DEFAULT
-        msg = eval('"' + format + '"')
-        print msg
+          # @todo allow reformatting of date and time
+          # format = WRITE_FORMAT_DEFAULT
+          msg = eval('"' + format + '"')
+          print msg
+        else
+          banner = '-' * 72
+          puts banner
+          
+          puts eval('"' + WRITE_UNFORMATTED + '"')
+        end
       end
     end
   end

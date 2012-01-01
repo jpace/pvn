@@ -20,14 +20,15 @@ module PVN
     end
   end
 
-  class FormatOption < Option
+  class FormatOption < BooleanOption
     def initialize optargs = Hash.new
-      super :format, '-f', "specify the output format", :default => nil, :negate => [ %r{^--no-?format} ]
+      super :format, '-f', "use the custom format", :default => true, :negate => [ %r{^--no-?format}, '-F' ], :as_svn_option => nil
     end
   end
 
   class LogOptionSet < OptionSet
     attr_accessor :revision
+    attr_reader :format
     
     def initialize
       super

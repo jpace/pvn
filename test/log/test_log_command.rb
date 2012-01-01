@@ -104,7 +104,7 @@ module PVN
 
       entries.each do |entry|
         info "entry: #{entry}"
-        entry.write
+        entry.write true
       end
     end
 
@@ -119,7 +119,7 @@ module PVN
 
       entries.each do |entry|
         info "entry: #{entry}"
-        entry.write
+        entry.write true
       end
     end
   end
