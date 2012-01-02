@@ -71,24 +71,7 @@ module PVN
     end
 
     def option_to_doc opt, io
-      opttag  = opt.tag
-      optdesc = opt.description
-      
-      RIEL::Log.debug "opttag: #{opttag}"
-      RIEL::Log.debug "optdesc: #{optdesc}"
-
-      # wrap optdesc?
-      
-      optdesc.each_with_index do |descline, idx|
-        lhs = if idx == 0
-                sprintf("%-24s :", opttag)
-              else
-                " " * 26
-              end
-        optstr = sprintf "  %4s %s", lhs, descline
-        
-        io.puts optstr
-      end
+      opt.to_doc io
     end
   end
 end

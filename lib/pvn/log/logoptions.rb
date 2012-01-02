@@ -16,13 +16,13 @@ module PVN
 
   class VerboseOption < BooleanOption
     def initialize optargs = Hash.new
-      super :verbose, '-v', "print additional output", :default => false
+      super :verbose, '-v', [ "include the files in the change" ], :default => false
     end
   end
 
   class FormatOption < BooleanOption
     def initialize optargs = Hash.new
-      super :format, '-f', "use the custom format", :default => true, :negate => [ %r{^--no-?format}, '-F' ], :as_svn_option => nil
+      super :format, '-f', "use the custom (colorized) format", :default => true, :negate => [ '-F', %r{^--no-?format} ], :as_svn_option => nil
     end
   end
 

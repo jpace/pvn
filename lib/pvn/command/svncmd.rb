@@ -3,14 +3,15 @@
 
 require 'riel'
 require 'rubygems'
-require 'pvn/command/cmdexec'
 require 'pvn/command/cachecmd'
 
 module PVN
+  # A command that is a simple pass-through (more or less)
+  # to a svn command.
   class SVNCommand < CachableCommand
     def initialize args = Hash.new
       super
-      info "self: #{self}".yellow
+      info "self: #{self}"
     end
 
     def to_svn_command fullcmdargs

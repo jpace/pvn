@@ -9,13 +9,20 @@ module PVN
   class RevisionOption < Option
     attr_accessor :fromdate
     attr_accessor :todate
+
+    REVISION_DESCRIPTION = [ "revision to apply.",
+                             "ARG can be relative, of the form:",
+                             "    +N : N revisions from the BASE",
+                             "    -N : N revisions from the HEAD,",
+                             "         when -1 is the previous revision" ,
+                           ]
     
     def initialize revargs = Hash.new
       revargs[:setter] = :revision_from_args
       revargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
       @fromdate = nil
       @todate = nil
-      super :revision, '-r', "revision", revargs
+      super :revision, '-r', REVISION_DESCRIPTION, revargs
     end
     
     def value

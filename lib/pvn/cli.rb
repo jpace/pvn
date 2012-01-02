@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'optparse'
 require 'pvn/log'
 require 'pvn/command/cmdexec'
 require 'pvn/diff/diffcmd'
@@ -30,12 +29,19 @@ module PVN
       true
     end
 
-    SUBCOMMANDS = [ LogCommand, DiffCommand, DescribeCommand, PctCommand ]
-
+    SUBCOMMANDS = [ LogCommand,
+                    DiffCommand, 
+                    DescribeCommand, 
+                    PctCommand
+                  ]
+    
     def self.run_help args
       forwhat = args[0]
 
-      cls = SUBCOMMANDS.find { |cls| cls::COMMAND == forwhat }
+      cls = SUBCOMMANDS.find do |cls|
+        cls.doc.subcommands.include? forwhat
+      end
+
       if cls
         cls.to_doc
       else

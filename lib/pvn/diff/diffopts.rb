@@ -8,43 +8,6 @@ module PVN
   thisfile = Pathname.new __FILE__
   PVNDIFF_CMD = (thisfile.parent.parent.parent.parent + "bin/pvndiff").expand_path
   
-  # PVNDIFF_CMD = '/proj/org/incava/pvn/bin/pvndiff'
-
-  # module Diff
-  #   COMMAND = "diff"
-
-  #   class DiffExec < Subcommand::Exec
-  #   end
-
-  #   class DiffDoc < Subcommand::Doc
-  #     # subcommands = [ COMMAND ]
-  #     # description = "Displays differences."
-  #     # usage       = "[OPTIONS] FILE..."
-  #     # summary     = [ "Compares the given files." ]
-  #     # examples   << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
-  #   end
-
-  #   class DiffOptions < Subcommand::Options
-  #     def initialize
-  #       super
-
-  #       @diffcmdopt = Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
-
-  #       self << @diffcmdopt
-  #     end
-  #   end
-
-  #   class DiffSubcmd < Subcommand::Command
-  #     def initialize
-  #       super(:executor => DiffExec.new, :documentor => DiffDoc.new, :options => DiffOptions.new)
-  #     end
-
-  #     def execute args
-  #       @executor.run @options, args
-  #     end
-  #   end
-  # end
-
   # "pvn diff -3" == "pvn diff -c -3", not "pvn diff -r -3", because
   # we diff for the change, not from that revision to head.
 
@@ -88,7 +51,8 @@ module PVN
       super
       
       # diffcmd is old/new option style (non-subclass of Option)
-      @diffcmdopt = add Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => PVNDIFF_CMD, :negate => [ %r{^--no-?diff-?cmd} ]
+      diffcmd = PVNDIFF_CMD.exist? && PVNDIFF_CMD
+      @diffcmdopt = add Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => diffcmd, :negate => [ %r{^--no-?diff-?cmd} ]
       @change     = add DiffChangeOption.new
       @revision   = add DiffRevisionOption.new
       @whitespace = add DiffWhitespaceOption.new

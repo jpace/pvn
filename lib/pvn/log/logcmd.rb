@@ -18,12 +18,19 @@ module PVN
       doc.subcommands = [ COMMAND, 'l' ]
       doc.description = "Print log messages for the given files."
       doc.usage       = "[OPTIONS] FILE..."
-      doc.summary     = [ "Prints log messages for the given files.",
-                          "If a string without a preceding option is given, and is not",
-                          "a file name, then it will be used as the comment.",
-                          "Prior to executing commit against Subversion, the \"check\"",
-                          "command will be run against the given files." ]
-      doc.examples   << [ "pvn log foo.rb", "Prints the log for foo.rb, with the default limit of #{DEFAULT_LIMIT}." ]
+      doc.summary     = [ "Prints the log entries for the given files, with colorized",
+                          "output. Unlike 'svn log', which prints all log entries, ",
+                          "'pvn log' prints #{DEFAULT_LIMIT} entries by default.",
+                          "As with other pvn commands, 'pvn log' accepts relative ",
+                          "revisions."
+                        ]
+      doc.options.concat LogOptionSet.new.options
+      doc.examples   << [ "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb." ]
+      doc.examples   << [ "pvn log -l 25 foo.rb", "Prints 25 log entries for the file." ]
+      doc.examples   << [ "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)." ]
+      doc.examples   << [ "pvn log +3 foo.rb",    "Prints the 3rd log entry." ]
+      doc.examples   << [ "pvn log -l 10 -F",     "Prints the latest 10 entries, unformatted." ]
+      doc.examples   << [ "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change." ]
     end
     
     def initialize args = Hash.new
@@ -80,6 +87,9 @@ module PVN
       entries.each do |entry|
         info "@options.format.value: #{@options.format.value}"
         entry.write @options.format.value
+      end
+      unless @options.format
+        puts PVN::Log::Entry::BANNER
       end
     end
 

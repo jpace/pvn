@@ -24,14 +24,21 @@ module PVN
         attr_reader field
       end
 
-      # WRITE_FORMAT_DEFAULT = '#{entry.revision}.yellow\n'
       WRITE_FORMAT_DEFAULT = ('#{revision.yellow}\t#{user.green}\t#{date} #{time}\n' +
                               '#{list(comment)}#{cr(files)}' +
                               '#{list(files, :blue, :on_yellow)}\n')
       
-      WRITE_UNFORMATTED = ('r#{revision} | #{user} | #{date} #{time} #{tz} (#{dtg}) | #{nlines} #{nlines.to_i == 1 ? "line" : "lines"}\n\n' +
-                           '#{plainlist(comment)}#{cr(files)}' +
-                           '#{list(files)}\n')
+      WRITE_SUMMARY_LINE = 'r#{revision} | #{user} | #{date} #{time} #{tz} (#{dtg}) | #{nlines} #{nlines.to_i == 1 ? "line" : "lines"}\n'
+      
+      WRITE_UNFORMATTED_VERBOSE = (WRITE_SUMMARY_LINE + 
+                                   'Changed Paths:\n' +
+                                   '#{list(files)}\n' +
+                                   '#{plainlist(comment)}')
+      
+      WRITE_UNFORMATTED_TERSE = (WRITE_SUMMARY_LINE + '\n' +
+                                 '#{plainlist(comment)}')
+
+      BANNER = '-' * 72
       
       def set_from_args name, args
         self.instance_variable_set '@' + name.to_s, args[name]
@@ -70,6 +77,7 @@ module PVN
       def plainlist lines
         return '' unless lines
         
+        # ensure that each has a newline
         lines.collect do |line|
           line.chomp + "\n"
         end.join('')
@@ -96,10 +104,11 @@ module PVN
           msg = eval('"' + format + '"')
           print msg
         else
-          banner = '-' * 72
-          puts banner
+          puts BANNER
+
+          fmt = files ? WRITE_UNFORMATTED_VERBOSE : WRITE_UNFORMATTED_TERSE
           
-          puts eval('"' + WRITE_UNFORMATTED + '"')
+          puts eval('"' + fmt + '"')
         end
       end
     end
