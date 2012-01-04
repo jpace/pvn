@@ -18,6 +18,7 @@ module PVN
         elmt = SVNElement.new :name => dir
         elmtinfo = elmt.info
         return elmt if elmtinfo[:repository_root] == elmtinfo[:url]
+        return elmt if !(dir.parent + '.svn').exist?
         return nil  if elmtinfo[:repository_root].nil?
         dir += '..'
       end

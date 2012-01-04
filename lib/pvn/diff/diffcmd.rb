@@ -24,8 +24,13 @@ module PVN
       doc.subcommands = [ COMMAND ]
       doc.description = "Displays differences between revisions."
       doc.usage       = "[OPTIONS] FILE..."
-      doc.summary     = [ "Compare two revisions, filtering through" ]
+      doc.summary     = [ "Compare two revisions, filtering through external programs.",
+                          "For each file compared, the file extension is used to find",
+                          "a diff program." ]
+      doc.options.concat DiffOptionSet.new.options
       doc.examples   << [ "pvn diff foo.rb", "Compares foo.rb against the last updated version." ]
+      doc.examples   << [ "pvn diff -3 StringExt.java", "Compares StringExt.java at change (HEAD - 3), using a Java-specific program such as DiffJ." ]
+      doc.examples   << [ "pvn diff -r +4 -w", "Compares the 4th revision against the working copy, ignoring whitespace." ]
     end
     
     def initialize args = Hash.new

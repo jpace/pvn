@@ -3,6 +3,7 @@
 
 require 'pvn/util'
 require 'pvn/option/set'
+require 'pvn/option/revopt'
 
 module PVN
   thisfile = Pathname.new __FILE__
@@ -11,12 +12,7 @@ module PVN
   # "pvn diff -3" == "pvn diff -c -3", not "pvn diff -r -3", because
   # we diff for the change, not from that revision to head.
 
-  class DiffRevisionOption < Option
-    def initialize revargs = Hash.new
-      revargs[:setter] = :revision_from_args      
-      super :revision, '-r', "revision", revargs
-    end
-
+  class DiffRevisionOption < RevisionOption
     def head?
       value.nil? || value == 'HEAD'
     end

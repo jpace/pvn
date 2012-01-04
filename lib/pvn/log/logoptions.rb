@@ -4,6 +4,7 @@
 require 'pvn/option/set'
 require 'pvn/option/option'
 require 'pvn/option/boolopt'
+require 'pvn/option/revreopt'
 
 module PVN
   DEFAULT_LIMIT = 5
@@ -34,7 +35,7 @@ module PVN
       super
 
       add LimitOption.new
-      @revision = add RevisionOption.new(:unsets => :limit)
+      @revision = add RevisionRegexpOption.new(:unsets => :limit)
       @verbose  = add VerboseOption.new
       @format   = add FormatOption.new
     end

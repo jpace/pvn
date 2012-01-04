@@ -3,9 +3,12 @@
 
 require 'riel'
 require 'rubygems'
+require 'pvn/option/revopt'
+require 'pvn/util'
 
 module PVN
-  class RevisionOption < Option
+  # A revision that is also set by -N and +N.
+  class RevisionRegexpOption < RevisionOption
     attr_accessor :fromdate
     attr_accessor :todate
 
@@ -17,32 +20,8 @@ module PVN
                            ]
     
     def initialize revargs = Hash.new
-      revargs[:setter] = :revision_from_args
-      @fromdate = nil
-      @todate = nil
-      super :revision, '-r', REVISION_DESCRIPTION, revargs
-    end
-    
-    def value
-      val = nil
-      if @fromdate
-        val = to_svn_revision_date @fromdate
-      end
-
-      if @todate
-        val = val ? val + ':' : ''
-        val += to_svn_revision_date @todate
-      end
-
-      if val
-        val
-      else
-        super
-      end
-    end
-
-    def head?
-      value.nil? || value == 'HEAD'
-    end
+      revargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
+      super
+    end    
   end
 end

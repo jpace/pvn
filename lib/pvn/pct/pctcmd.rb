@@ -16,7 +16,7 @@ module PVN
     
     def initialize
       super
-      @revision = add RevisionOption.new
+      @revision = add RevisionRegexpOption.new
     end
   end
 

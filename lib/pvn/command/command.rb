@@ -16,7 +16,7 @@ module PVN
     @@orig_file_loc = Pathname.new(__FILE__).expand_path
 
     def self.has_revision_option revopts = Hash.new
-      options << RevisionOption.new(revopts)
+      options << RevisionRegexpOption.new(revopts)
     end
     
     def self.revision_from_args optset, cmdargs
