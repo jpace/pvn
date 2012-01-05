@@ -135,7 +135,7 @@ module PVN
       entry = lc.entries[0]
       return Array.new if entry.nil?
 
-      entry.write
+      # entry.write true
 
       files = entry.files.collect do |svnfile|
         localfile = svn_fullname_to_local_file svnfile
