@@ -44,12 +44,12 @@ module PVN
     def initialize args
       # not calling super, since all of our stuff goes on in this ctor.
 
-      info "args: #{args}".magenta
+      info "args: #{args}"
 
       @options = PctOptionSet.new
 
       @options.process self, args, args[:command_args]
-      info "args: #{args}".cyan
+      info "args: #{args}"
 
       files = get_files @options.arguments
       info "files: #{files.inspect}"
@@ -113,18 +113,22 @@ module PVN
 
     def svn_fullname_to_local_file svnname
       svnroot = SVNRootElement.new
-      info "svnroot       : #{svnroot}"
+      info "svnroot       : #{svnroot}".yellow
+
+      info "svnroot.info  : #{svnroot.info}".yellow
       
       here = SVNElement.new :name => '.'
 
       hereinfo    = here.info
-      info "hereinfo[:url]: #{hereinfo[:url]}"
+      info "hereinfo[:url]: #{hereinfo[:url]}".yellow
       reporoot    = hereinfo[:repository_root]
 
-      info "reporoot      : #{reporoot}"
+      info "reporoot      : #{reporoot}".yellow
+
+      info "svnroot[:url]  : #{svnroot.info[:url]}".yellow
 
       localname   = svnroot.to_s + svnname
-      info "localname     : #{localname}"
+      info "localname     : #{localname}".yellow
 
       localname
     end

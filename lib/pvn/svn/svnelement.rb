@@ -15,7 +15,7 @@ module PVN
     require 'pvn/svn/svnroot'
     
     def initialize args
-      RIEL::Log.info "args: #{args}".green
+      RIEL::Log.info "args: #{args}"
       
       # technically, name is what svn info calls "URL"
       name = args[:name]
@@ -30,8 +30,8 @@ module PVN
 
     def to_command subcmd, revcl, *args
       cmd = "svn #{subcmd}"
-      debug "cmd: #{cmd}".on_blue
-      debug "args: #{args}".on_blue
+      debug "cmd: #{cmd}"
+      debug "args: #{args}"
       args = args.flatten
 
       # revcl is [ -r, 3484 ]
@@ -39,7 +39,7 @@ module PVN
         cmd << " -r #{revcl}"
       end
       cmd << " " << Util::quote_list(args)
-      debug "cmd: #{cmd}".on_blue
+      debug "cmd: #{cmd}".cyan
       cmd
     end
 
@@ -68,7 +68,6 @@ module PVN
     end
 
     def <=>(other)
-      debug "@name: #{@name}".green
       @name <=> other.name
     end
   end
