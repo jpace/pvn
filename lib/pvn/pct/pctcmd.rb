@@ -112,25 +112,42 @@ module PVN
     end
 
     def svn_fullname_to_local_file svnname
-      svnroot = SVNRootElement.new
-      info "svnroot       : #{svnroot}".yellow
+      svnelement = SVNElement.new :name => '.'
+      info "svnelement.info: #{svnelement.info}"
 
-      info "svnroot.info  : #{svnroot.info}".yellow
-      
+      fullurl = svnelement.info[:repository_root] + svnname
+      info "fullurl        : #{fullurl}".yellow
+
+      svnroot = SVNRootElement.new
+      info "svnroot        : #{svnroot}".yellow
+
+      info "svnroot.info   : #{svnroot.info}".yellow
+
       here = SVNElement.new :name => '.'
 
       hereinfo    = here.info
-      info "hereinfo[:url]: #{hereinfo[:url]}".yellow
+      info "hereinfo[:url] : #{hereinfo[:url]}".yellow
       reporoot    = hereinfo[:repository_root]
 
-      info "reporoot      : #{reporoot}".yellow
+      info "reporoot       : #{reporoot}".yellow
 
       info "svnroot[:url]  : #{svnroot.info[:url]}".yellow
 
-      localname   = svnroot.to_s + svnname
-      info "localname     : #{localname}".yellow
+      rootpath = svnroot.name
+      rooturl  = svnroot.info[:url]
 
-      localname
+      info "rootpath       : #{rootpath}".yellow
+      info "rooturl        : #{rooturl}".yellow
+
+      if fullurl.index(rooturl) == 0
+        localname = fullurl[rooturl.length .. -1]
+        info "localname      : #{localname}".yellow
+        localname
+      else
+        info "fullurl        : #{fullurl}".on_red
+        nil
+      end
+
     end
 
     def get_changed_files_revision filespec

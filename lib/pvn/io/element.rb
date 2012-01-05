@@ -49,7 +49,7 @@ module PVN
     end
 
     def to_s
-      "svn => " + @svn.to_s + "; local => " + @local
+      "svn => " + @svn.to_s + "; local => " + @local.to_s
     end
   end
 end
