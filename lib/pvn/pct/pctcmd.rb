@@ -171,6 +171,7 @@ module PVN
       cmd = to_command "st", filespec
       IO.popen cmd do |io|
         io.each do |line|
+          info "line: #{line}".yellow
           next if line.index %r{^\?}
           pn = Element.new :file => line.chomp[8 .. -1]
           files << pn if pn.local.file?

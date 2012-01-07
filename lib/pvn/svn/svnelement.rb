@@ -16,12 +16,28 @@ module PVN
     
     def initialize args
       RIEL::Log.info "args: #{args}"
+
+      # $$$ this should handle local paths and full urls.
       
       # technically, name is what svn info calls "URL"
       name = args[:name]
       if name.nil? && (fname = args[:filename])
-        svnroot = SVNRootElement.new
-        name = svnroot.info[:url] + (fname - svnroot.info[:path])
+        name = fname
+
+        if false
+          debug "fname  : #{fname}"
+
+          fullpath = Pathname.new(fname).expand_path
+          debug "fullpath: #{fullpath}".yellow
+
+          svnroot = SVNRootElement.new
+          debug "svnroot: #{svnroot}"
+          sri = svnroot.info
+          debug "svnroot.info[:url]: #{sri[:url]}"
+          debug "svnroot.info[:path]: #{sri[:path]}"
+          name = svnroot.info[:url] + '/' + fname
+          debug "name: #{name}"
+        end
       end
 
       @name = name

@@ -9,6 +9,7 @@ require 'pvn/diff/diffcmd'
 require 'pvn/pct/pctcmd'
 require 'pvn/describe'
 require 'pvn/upp/uppcmd'
+require 'pvn/wherecmd'
 
 RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)
@@ -32,7 +33,8 @@ module PVN
     SUBCOMMANDS = [ LogCommand,
                     DiffCommand, 
                     DescribeCommand, 
-                    PctCommand
+                    PctCommand,
+                    WhereCommand,
                   ]
     
     def self.run_help args
