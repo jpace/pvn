@@ -14,7 +14,6 @@ module PVN
       def setup
         RIEL::Log.debug "setting up: #{self}".on_blue
         @@orig_location = Pathname.pwd
-        # super
       end
 
       def teardown
@@ -31,11 +30,14 @@ module PVN
         RIEL::Log.debug "ste: #{ste}".negative
 
         def ste.run(*args)
-          RIEL::Log.debug "self: #{self}".negative
-          RIEL::Log.debug "@@cls: #{@@cls}".negative
+          RIEL::Log.debug "self: #{self}".bold
+          RIEL::Log.debug "@@cls: #{@@cls}".bold
 
           @@cls.setup
+
+          RIEL::Log.debug "self: #{self}".bold
           super
+          
           RIEL::Log.debug "self: #{self}".negative
           RIEL::Log.debug "@@cls: #{@@cls}".negative
           @@cls.teardown

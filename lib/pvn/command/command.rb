@@ -13,14 +13,12 @@ module PVN
     include Optionable
     include Loggable
 
-    @@orig_file_loc = Pathname.new(__FILE__).expand_path
-
     def self.has_revision_option revopts = Hash.new
       options << RevisionRegexpOption.new(revopts)
     end
     
     def self.revision_from_args optset, cmdargs
-      require @@orig_file_loc.dirname.parent + 'revision.rb'
+      require 'pvn/revision'
       Revision.revision_from_args optset, cmdargs
     end
 

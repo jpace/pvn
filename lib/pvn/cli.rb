@@ -35,6 +35,7 @@ module PVN
                     DescribeCommand, 
                     PctCommand,
                     WhereCommand,
+#                    UndeleteCommand,
                   ]
     
     def self.run_help args
