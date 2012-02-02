@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/util'
 require 'pvn/log/logcmd'
 
 module PVN
@@ -57,7 +56,7 @@ module PVN
     def convert_to_revision arg
       if SVN_REVISION_WORDS.include? arg
         @revision = arg
-      elsif neg = Util.negative_integer?(arg)
+      elsif neg = Integer.negative?(arg)
         get_negative_revision neg
       elsif arg.kind_of? Fixnum
         @revision = arg

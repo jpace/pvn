@@ -41,7 +41,7 @@ module PVN
     end
     
     def line_counts
-      [ @svnelement && @svnelement.line_count, @fselement & @fselement.line_count ]
+      [ @svnelement && @svnelement.line_count, @fselement && @fselement.line_count ]
     end
 
     def <=>(other)
