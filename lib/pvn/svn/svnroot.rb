@@ -27,3 +27,6 @@ module PVN
     end    
   end
 end
+cd ~lib
+
+
