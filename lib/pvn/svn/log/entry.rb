@@ -3,26 +3,40 @@
 
 require 'rubygems'
 require 'riel'
+require 'pvn/svn/log/xmlentry'
 
 module PVN
   module SVN
     class Entry
       include Loggable
 
+      class << self
+        def create_from_xml_element xmlelement
+          entry = XMLEntry.new xmlelement
+          new({ :revision => entry.revision, :author => entry.author, :date => entry.date, :message => entry.message, :paths => entry.paths })
+        end
+      end
+
       LOG_SUMMARY_RE = Regexp.new '^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$'
 
-      attr_reader :revision, :user, :date, :time, :tz, :dtg, :nlines, :files, :comment
+      attr_reader :revision, :author, :date, :paths, :message
       
       def initialize args = Hash.new
         @revision = args[:revision]
-        @user = args[:user]
+        @author = args[:author]
         @date = args[:date]
-        @time = args[:time]
-        @tz = args[:tz]
-        @dtg = args[:dtg]
-        @nlines = args[:nlines]
-        @files = args[:files]
-        @comment = args[:comment]
+        @paths = args[:paths]
+        @message = args[:message]
+      end
+    end
+
+    class LogEntryPath
+      attr_reader :kind, :action, :name
+      
+      def initialize args = Hash.new
+        @kind = args[:kind]
+        @action = args[:action]
+        @name = args[:name]
       end
     end
   end
