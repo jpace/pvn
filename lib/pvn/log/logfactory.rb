@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/log/logentry'
-require 'pvn/textlines'
+require 'pvn/base/textlines'
 
 module PVN
   module Log

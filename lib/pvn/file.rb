@@ -4,8 +4,8 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/linecount'
-require 'pvn/io'
-require 'pvn/util'
+require 'pvn/base/io'
+require 'pvn/base/util'
 
 module PVN
   class File < ::File

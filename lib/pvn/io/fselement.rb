@@ -3,9 +3,7 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/linecount'
-require 'pvn/io'
-require 'pvn/util'
+require 'pvn/base/io'
 
 module PVN
   # A filesystem element (directory or file).
@@ -19,7 +17,7 @@ module PVN
     end
     
     def line_count
-      IO::numlines(self)
+      IO::numlines self
     end
   end
 end

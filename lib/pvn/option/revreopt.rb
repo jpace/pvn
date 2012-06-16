@@ -4,7 +4,7 @@
 require 'riel'
 require 'rubygems'
 require 'pvn/option/revopt'
-require 'pvn/util'
+require 'pvn/base/util'
 
 module PVN
   # A revision that is also set by -N and +N.

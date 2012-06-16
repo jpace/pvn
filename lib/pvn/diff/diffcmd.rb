@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/util'
+require 'pvn/base/util'
 require 'pvn/command/cachecmd'
 require 'pvn/config'
 

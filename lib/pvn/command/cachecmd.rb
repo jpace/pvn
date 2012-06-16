@@ -4,7 +4,7 @@
 require 'riel'
 require 'rubygems'
 require 'pvn/command/command'
-require 'pvn/util'
+require 'pvn/base/util'
 
 module PVN
   class CachableCommand < Command

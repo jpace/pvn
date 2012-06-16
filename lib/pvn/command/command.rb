@@ -6,7 +6,7 @@ require 'rubygems'
 require 'pvn/command/cmdexec'
 require 'pvn/option/optionable'
 require 'pvn/option/revopt'
-require 'pvn/util'
+require 'pvn/base/util'
 
 module PVN
   class Command

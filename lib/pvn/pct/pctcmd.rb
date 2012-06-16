@@ -3,7 +3,7 @@
 
 require 'pvn/command/command'
 require 'pvn/linecount'
-require 'pvn/io'
+require 'pvn/base/io'
 require 'pvn/io/fselement'
 require 'pvn/svn/svnelement'
 require 'pvn/svn/svnroot'
