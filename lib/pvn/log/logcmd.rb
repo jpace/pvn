@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/command/command'
-require 'pvn/command/svncmd'
+require 'pvn/svn/command/svncmd'
 require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
 require 'pvn/log/logoptions'

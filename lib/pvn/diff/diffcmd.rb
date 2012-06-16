@@ -10,7 +10,7 @@ require 'pvn/subcmd/scdoc'
 require 'pvn/subcmd/scoptions'
 require 'pvn/subcmd/command'
 
-require 'pvn/command/svncmd'
+require 'pvn/svn/command/svncmd'
 
 require 'pvn/diff/diffopts'
 
