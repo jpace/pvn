@@ -1,10 +1,10 @@
 require 'test_helper'
 
-require 'pvn/cli'
+require 'pvn/app/cli'
 
 class TestPVNCli < Test::Unit::TestCase
   def setup
-    PVN::CLI.execute(@stdout_io = StringIO.new, Array.new)
+    PVN::CLI.execute @stdout_io = StringIO.new, Array.new
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
@@ -15,7 +15,7 @@ class TestPVNCli < Test::Unit::TestCase
   
   def xxx_test_help
     io = StringIO.new
-    PVN::CLI.execute(io, %w{ --help })
+    PVN::CLI.execute io, %w{ --help }
     io.rewind
     io = io.read
     # assert_match(/To update this executable/, io)
