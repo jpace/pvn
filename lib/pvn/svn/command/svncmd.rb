@@ -19,7 +19,7 @@ module PVN
     end
 
     def command
-      @svncmd.join(" ")
+      @svncmd.join " "
     end
 
     def execute
