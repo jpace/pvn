@@ -16,11 +16,6 @@ module PVN
     def self.has_revision_option revopts = Hash.new
       options << RevisionRegexpOption.new(revopts)
     end
-    
-    def self.revision_from_args optset, cmdargs
-      require 'pvn/revision'
-      Revision.revision_from_args optset, cmdargs
-    end
 
     attr_reader :output
 

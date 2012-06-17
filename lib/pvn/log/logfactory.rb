@@ -83,7 +83,7 @@ module PVN
         end
         advance_line
         fields[:comment] = read_comment
-        return Entry.new(fields)
+        return Entry.new fields
       end
 
       def create_next_entry

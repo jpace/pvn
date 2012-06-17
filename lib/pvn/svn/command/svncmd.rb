@@ -9,6 +9,11 @@ module PVN
   # A command that is a simple pass-through (more or less)
   # to a svn command.
   class SVNCommand < CachableCommand
+    def self.revision_from_args optset, cmdargs
+      require 'pvn/revision'
+      Revision.revision_from_args optset, cmdargs
+    end
+
     def initialize args = Hash.new
       super
       info "self: #{self}"
