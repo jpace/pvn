@@ -14,6 +14,7 @@ module PVN
       
       # this is log/logentry from "svn log -v (optional) --xml"
       def initialize xmlelement
+
         @revision = get_attribute xmlelement, 'revision'
         @author = get_element_text xmlelement, 'author'
         @date = get_element_text xmlelement, 'date'
@@ -30,12 +31,12 @@ module PVN
         end
       end
 
-      def get_attribute xmlentry, attrname
-        xmlentry.attributes[attrname]
+      def get_attribute xmlelement, attrname
+        xmlelement.attributes[attrname]
       end
 
-      def get_element_text xmlentry, elmtname
-        xmlentry.elements[elmtname].text
+      def get_element_text xmlelement, elmtname
+        xmlelement.elements[elmtname].text
       end
     end
   end

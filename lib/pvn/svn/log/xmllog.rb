@@ -9,16 +9,19 @@ require 'pvn/svn/log/xmlentry'
 module PVN
   module SVN
     class XMLLog < REXML::Document
-      attr_reader :entries
+      include Loggable
+      
+      attr_reader :xmlentries
       
       def initialize lines
         super
 
-        @entries = Array.new
+        @xmlentries = Array.new
 
         # log/logentry
         elements.each('log/logentry') do |entryelement|
-          @entries << XMLEntry.new entryelement
+          info "entryelement: #{entryelement.class}".yellow
+          @xmlentries << XMLEntry.new(entryelement)
         end
       end
     end

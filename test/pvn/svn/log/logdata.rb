@@ -3,19 +3,10 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn_test'
-require 'pvn/svn/log/entry'
-# require 'pvn/svn/log/xmllog'
-require 'rexml/document'
-
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
 
 module PVN
   module SVN
-    class TestLogEntry < PVN::TestCase
-      include Loggable
-
+    class LogData
       TEST_LINES = Array.new
       TEST_LINES << '<?xml version="1.0"?>'
       TEST_LINES << '<log>'
@@ -237,68 +228,6 @@ module PVN
       TEST_LINES << '<msg>Upload by wagon-svn</msg>'
       TEST_LINES << '</logentry>'
       TEST_LINES << '</log>'
-
-      def assert_log_re_match line, expdata
-        md = Entry::LOG_SUMMARY_RE.match line
-
-        assert_not_nil md
-        (1 .. 7).each do |idx|
-          assert_equals expdata[idx - 1], md[idx], "field: #{idx}"
-        end
-
-        md
-      end
-
-      def assert_xml_document_match line, expdata
-        md = Entry::LOG_SUMMARY_RE.match line
-
-        assert_not_nil md
-        (1 .. 7).each do |idx|
-          assert_equals expdata[idx - 1], md[idx], "field: #{idx}"
-        end
-
-        md
-      end
-
-      def assert_entry_equals entry, expdata
-        assert_equals expdata[0], entry.revision
-        assert_equals expdata[1], entry.author
-        assert_equals expdata[2], entry.date
-        assert_equals expdata[3], entry.message
-        entry.paths.each_with_index do |path, idx|
-          info path.inspect.yellow
-          assert_equals expdata[4 + idx][:kind], path.kind
-          assert_equals expdata[4 + idx][:action], path.action
-          assert_equals expdata[4 + idx][:name], path.name
-        end
-      end
-
-      def get_attribute xmlentry, attrname
-        xmlentry.attributes[attrname]
-      end
-
-      def get_element_text xmlentry, elmtname
-        xmlentry.elements[elmtname].text
-      end
-      
-      def test_entry_from_xml
-        expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
-        expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
-
-        doc = REXML::Document.new TEST_LINES.join('')
-        info "doc: #{doc}"
-
-        entries = Array.new
-
-        # log/logentry
-        xmlentry = doc.elements[1].elements[3]
-        info "xmlentry: #{xmlentry}".on_blue
-
-        entry = Entry.create_from_xml_element xmlentry
-        
-        # md = assert_log_re_match TEST_LINES[1], expdata
-        assert_entry_equals entry, expdata
-      end
     end
   end
 end
