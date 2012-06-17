@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/command/command'
+require 'pvn/base/command/command'
 require 'pvn/base/io'
 
 module PVN

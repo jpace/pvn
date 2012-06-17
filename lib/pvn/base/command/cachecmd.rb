@@ -3,7 +3,7 @@
 
 require 'riel'
 require 'rubygems'
-require 'pvn/command/command'
+require 'pvn/base/command/command'
 require 'pvn/base/util'
 
 module PVN

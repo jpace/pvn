@@ -2,7 +2,7 @@ require 'test_helper'
 
 at_exit { puts "bye!".on_red }
 
-require 'pvn/command/cachecmd'
+require 'pvn/base/command/cachecmd'
 require 'pvn_test'
 
 Log.level = Log::DEBUG

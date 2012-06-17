@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'singleton'
 require 'pvn/log/logfactory'
-require 'pvn/command/cmdexec'
+require 'pvn/base/command/cmdexec'
 
 module PVN
   class MockCommandExecutor < CommandExecutor

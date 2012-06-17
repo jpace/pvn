@@ -1,9 +1,9 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/command/command'
+require 'pvn/base/command/command'
+require 'pvn/base/command/cachecmd'
 require 'pvn/svn/command/svncmd'
-require 'pvn/command/cachecmd'
 require 'pvn/log/logfactory'
 require 'pvn/log/logoptions'
 

@@ -4,7 +4,6 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/log/logcmd'
-require 'pvn/command/cmdexec'
 require 'pvn/diff/diffcmd'
 require 'pvn/pct/pctcmd'
 require 'pvn/describe'
