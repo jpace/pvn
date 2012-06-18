@@ -5,42 +5,17 @@ require 'rubygems'
 require 'riel'
 require 'pvn/base/command/cachecmd'
 require 'pvn/base/command/cmdline'
+require 'pvn/svn/revision/revision'
 
 module PVN
   module SVN
-    class Revision
-      attr_reader :from_revision
-      attr_reader :to_revision
-
-      attr_reader :from_date
-      attr_reader :to_date
-
-      def initialize args
-        @from_revision = args[:from_revision]
-        @to_revision   = args[:to_revision]
-
-        @from_date     = args[:from_date]
-        @to_date       = args[:to_date]
-      end
-
-      def arguments
-        args = Array.new
-        if @from_revision && @to_revision
-          args << "-r" << "#{@from_revision}:#{@to_revision}"
-        elsif @from_date && @to_date
-          args << "-r" << "\{#{@from_date}\}:\{#{@to_date}\}"
-        end
-        args
-      end
-    end    
-    
     class LogOptions
       attr_reader :revision
     end
     
     class LogCommandLine < CommandLine
       def initialize(*args)
-        cmdargs = %w{ svn log }.concat args
+        cmdargs = %w{ svn log --xml }.concat args
         info "cmdargs: #{cmdargs}".blue
         super cmdargs
       end
@@ -52,6 +27,12 @@ module PVN
       def use_cache?
         true
       end
+    end
+
+    class LogCommandArgs
+    end
+
+    class LogOptions
     end
     
     class LogCommand < CachableCommand
