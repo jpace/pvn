@@ -24,7 +24,9 @@ module PVN
       @execute  = args[:execute].nil? || args[:execute]
       @executor = args[:executor] || CommandExecutor.new
       
-      options.process self, args, args[:command_args] || Array.new
+      if options
+        options.process self, args, args[:command_args] || Array.new
+      end
       
       execute
     end
