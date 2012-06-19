@@ -17,7 +17,7 @@ module PVN
       debug "args: #{args.inspect}"
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      debug "@use_cache: #{@use_cache}"
+      info "@use_cache: #{@use_cache}".blue
 
       super
     end
@@ -25,6 +25,7 @@ module PVN
     def sysexec cmd
       info "cmd: #{cmd}".on_red
       if use_cache?
+        info "cmd: #{cmd}".on_green
         run_cached_command cmd
       else
         @output = ::IO.popen(cmd).readlines
@@ -57,7 +58,7 @@ module PVN
       else
         @output = IO.popen(cmd).readlines
         cfile.parent.mkpath
-        debug "saving output to cache file: #{cfile}".cyan
+        stack "saving output to cache file: #{cfile}".cyan
         File.put_via_temp_file cfile do
           output
         end

@@ -11,9 +11,9 @@ module PVN
     attr_reader :output
     attr_accessor :use_cache
 
-    def initialize(*args)
+    def initialize use_cache, args = Array.new
       @args = args.dup
-      @use_cache = false
+      @use_cache = use_cache
     end
 
     def use_cache?
@@ -29,7 +29,6 @@ module PVN
     end
 
     def execute
-      info "@args: #{@args}".on_red
       if use_cache?
         run_cached_command
       else
@@ -64,7 +63,7 @@ module PVN
       else
         @output = IO.popen(to_command).readlines
         cachefile.parent.mkpath
-        debug "saving output to cache file: #{cachefile}".cyan
+        debug "saving output to cache file: #{cachefile}".on_cyan
         File.put_via_temp_file cachefile do
           @output
         end
