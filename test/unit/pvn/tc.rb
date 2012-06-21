@@ -4,7 +4,7 @@ require 'riel'
 require 'stringio'
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/../../lib/pvn'
+require 'pvn'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
