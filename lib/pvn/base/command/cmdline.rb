@@ -55,7 +55,7 @@ module PVN
     end
 
     def run_cached_command
-      debug "@args: #{@args}".cyan
+      stack "@args: #{@args}".cyan
       cachefile = get_cache_file
       if cachefile.exist?
         debug "reading from cache file: #{cachefile}".cyan

@@ -50,7 +50,7 @@ module PVN
     end
 
     def run_cached_command cmd
-      debug "cmd: #{cmd}".cyan
+      stack "cmd: #{cmd}".cyan
       cfile = get_cache_file cmd
       if cfile.exist?
         debug "reading from cache file: #{cfile}".cyan

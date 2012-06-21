@@ -6,6 +6,20 @@ require 'pvn/svn/log/command'
 require 'rexml/document'
 
 module PVN
+  class CommandLine
+    def execute
+      info "args".on_green
+
+      if use_cache?
+        run_cached_command
+      else
+        @output = ::IO.popen(to_command).readlines
+      end
+    end
+  end
+end
+
+module PVN
   module SVN
     class TestLogCommand < PVN::TestCase
       include Loggable
