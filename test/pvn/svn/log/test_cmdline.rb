@@ -14,7 +14,7 @@ module PVN
       def test
         cmdline = LogCommandLine.new true
         info "cmdline: #{cmdline}".blue
-        assert_equals PVN::Environment.instance.cache_dir, cmdline.cache_dir
+        assert_equal PVN::Environment.instance.cache_dir, cmdline.cache_dir
         assert cmdline.use_cache?
       end
     end

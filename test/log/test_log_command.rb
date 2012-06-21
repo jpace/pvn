@@ -79,7 +79,7 @@ module PVN
       # the last 5 entries happen to be four lines apart, with only one line of
       # comment text each.
       [ 0, 4, 8, 12, 16, 20 ].each do |lnum|
-        assert_equals LOG_SEP_LINE, output[lnum].chomp, "log entry separator line"
+        assert_equal LOG_SEP_LINE, output[lnum].chomp, "log entry separator line"
       end
 
       # @todo - extend the tests for output

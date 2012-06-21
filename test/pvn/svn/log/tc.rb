@@ -1,13 +1,15 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
+require 'rubygems'
+require 'riel'
 require 'pvn/tc'
 require 'pvn/svn/log/command'
 require 'rexml/document'
 
 module PVN
   module SVN
-    class TestLogCommand < PVN::TestCase
+    class LogTestCase < PVN::PVNTestCase
       include Loggable
 
       def setup

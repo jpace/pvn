@@ -1,25 +1,26 @@
-require 'test_helper'
-require 'runit/testcase'
-require 'pvn/tc'
+require 'rubygems'
+require 'riel'
+
+require 'stringio'
+require 'test/unit'
+
+require File.dirname(__FILE__) + '/../../lib/pvn'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
-__END__
 module PVN
-  class TestCase < RUNIT::TestCase
+  class TestCase < Test::Unit::TestCase
     include Loggable
 
     WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
 
     class << self
       def setup
-        # RIEL::Log.debug "setting up: #{self}".on_blue
         @@orig_location = Pathname.pwd
       end
 
       def teardown
-        # RIEL::Log.debug "tearing down: #{self}".on_yellow
         Dir.chdir @@orig_location
       end
 
@@ -57,7 +58,7 @@ module PVN
     end
 
     def testfile basename
-      @original_dir + '../files' + basename
+      @original_dir + '../../files' + basename
     end
 
     def read_testfile basename

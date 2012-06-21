@@ -56,7 +56,7 @@ module PVN
     end
 
     def assert_no_output cmd
-      assert_equals 0, cmd.output.length
+      assert_equal 0, cmd.output.length
     end
 
     def run_svn_update

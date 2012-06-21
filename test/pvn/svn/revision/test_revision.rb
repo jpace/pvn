@@ -14,12 +14,12 @@ module PVN
       def assert_revision_equals expdata, revdata
         rev = Revision.new revdata
         
-        assert_equals expdata[:from_revision], rev.from_revision
-        assert_equals expdata[:to_revision],   rev.to_revision
+        assert_equal expdata[:from_revision], rev.from_revision
+        assert_equal expdata[:to_revision],   rev.to_revision
 
-        assert_equals expdata[:from_date],     rev.from_date
-        assert_equals expdata[:to_date],       rev.to_date
-        assert_equals expdata[:arguments],     rev.arguments
+        assert_equal expdata[:from_date],     rev.from_date
+        assert_equal expdata[:to_date],       rev.to_date
+        assert_equal expdata[:arguments],     rev.arguments
       end
 
       def create_expdata args
