@@ -2,7 +2,6 @@ require 'rubygems'
 require 'riel'
 require 'rake/testtask'
 require 'fileutils'
-require 'rake/testtask'
 
 require './lib/pvn'
 
@@ -14,13 +13,15 @@ class PvnTestTask < Rake::TestTask
 
     libs << "lib"
     libs << "test"
+    libs << "test/unit"
+    libs << "test/integration"
     warning = true
     verbose = true
   end
 end
 
 PvnTestTask.new do |t|
-  t.test_files = FileList['test/**/test*.rb'].exclude("test/integration/**")
+  t.test_files = FileList['test/unit/test*.rb']
 end
 
 PvnTestTask.new('test:integration') do |t|
