@@ -4,17 +4,42 @@
 require 'pvn/tc'
 require 'pvn/svn/log/command'
 require 'rexml/document'
+require 'pvn/svn/log/logdata'
 
 module PVN
-  class CommandLine
-    def execute
-      info "args".on_green
+  class Environment
+    TEST_DIR = '/Programs/wiquery/trunk'
+  end
+end
 
-      if use_cache?
-        run_cached_command
-      else
-        @output = ::IO.popen(to_command).readlines
-      end
+$orig_location = Pathname.new(__FILE__).expand_path
+
+module PVN
+  class ResourceFile < File
+    include Loggable
+
+    def initialize args
+      info "args: #{args}".on_green
+
+      dir = PVN::Environment::TEST_DIR
+
+      loc = $orig_location
+      6.times { loc = loc.parent }
+      resdir = loc + 'test/resources'
+      fname   = resdir + (dir.sub(%r{^/}, '').gsub('/', '_') + '__' + args.join('_'))
+      info "fname: #{fname}".cyan
+
+      super fname
+    end
+  end
+  
+  class CommandLine
+    def command_to_resource_file
+    end
+
+    def execute
+      rf = ResourceFile.new @args
+      @output = rf.readlines
     end
   end
 end

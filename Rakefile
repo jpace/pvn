@@ -21,7 +21,7 @@ class PvnTestTask < Rake::TestTask
 end
 
 PvnTestTask.new do |t|
-  t.test_files = FileList['test/unit/test*.rb']
+  t.test_files = FileList['test/unit/**/test*.rb']
 end
 
 PvnTestTask.new('test:integration') do |t|
