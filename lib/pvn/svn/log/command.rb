@@ -4,7 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'system/cachecmd'
-require 'system/cmdline'
+require 'system/command/line'
 require 'pvn/svn/revision/revision'
 require 'pvn/svn/environment'
 
@@ -16,7 +16,7 @@ module PVN
       attr_reader :revision
     end
     
-    class LogCommandLine < CommandLine
+    class LogCommandLine < PVN::System::CommandLine
       def initialize use_cache, args = Array.new
         cmdargs = %w{ svn log --xml }.concat args
         info "cmdargs: #{cmdargs}".blue

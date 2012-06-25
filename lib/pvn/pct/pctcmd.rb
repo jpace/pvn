@@ -2,13 +2,11 @@
 # -*- ruby -*-
 
 require 'system/command'
-require 'pvn/base/linecount'
-require 'pvn/base/io'
+require 'pvn/pct/linecount'
 require 'pvn/io/fselement'
 require 'pvn/svn/svnelement'
 require 'pvn/svn/svnroot'
 require 'pvn/io/element'
-require 'pvn/file'
 
 module PVN
   class PctOptionSet < OptionSet

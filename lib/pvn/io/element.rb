@@ -3,8 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/base/linecount'
-require 'pvn/base/io'
 require 'pvn/base/util'
 
 module PVN

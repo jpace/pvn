@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'system/command'
-require 'pvn/base/io'
 
 module PVN
   class UppOptionSet < OptionSet

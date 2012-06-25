@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/base/util'
-require 'system/cachecmd'
 require 'pvn/config'
 
 require 'pvn/subcmd/scexec'

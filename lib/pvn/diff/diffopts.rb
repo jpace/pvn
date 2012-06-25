@@ -1,13 +1,14 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/base/util'
 require 'pvn/option/set'
 require 'pvn/option/revopt'
 
 module PVN
   thisfile = Pathname.new __FILE__
   PVNDIFF_CMD = (thisfile.parent.parent.parent.parent + "bin/pvndiff").expand_path
+
+  POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]?\d+$')
   
   # "pvn diff -3" == "pvn diff -c -3", not "pvn diff -r -3", because
   # we diff for the change, not from that revision to head.
@@ -21,7 +22,7 @@ module PVN
   class DiffChangeOption < Option
     def initialize chgargs = Hash.new
       chgargs[:setter] = :revision_from_args
-      chgargs[:regexp] = PVN::Util::POS_NEG_NUMERIC_RE
+      chgargs[:regexp] = POS_NEG_NUMERIC_RE
       
       super :change, '-c', "change", chgargs
     end

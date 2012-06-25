@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/base/io'
 require 'pvn/base/util'
 require 'pvn/svn/svninfo'
 
@@ -68,7 +67,7 @@ module PVN
       
       cmd = to_command "cat", revision, @name
       ::IO.popen cmd do |io|
-        lc = IO::numlines io
+        lc = io.readlines.size
         debug "lc: #{lc.inspect}"
       end
 
