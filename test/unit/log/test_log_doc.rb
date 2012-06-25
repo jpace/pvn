@@ -1,5 +1,4 @@
-require 'test_helper'
-require 'stringio'
+require 'pvn/tc'
 require 'pvn/log/logcmd'
 
 Log.level = Log::DEBUG

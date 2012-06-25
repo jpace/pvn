@@ -1,5 +1,5 @@
-require 'test_helper'
 require 'pvn/log/logfactory'
+require 'pvn/tc'
 
 RIEL::Log.level = Log::DEBUG
 RIEL::Log.set_widths(-12, 4, -35)

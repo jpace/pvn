@@ -1,5 +1,5 @@
-require 'test_helper'
 require 'pvn/base/command/test_command'
+require 'pvn_test'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

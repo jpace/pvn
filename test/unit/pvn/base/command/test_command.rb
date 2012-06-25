@@ -1,6 +1,5 @@
-require 'test_helper'
-require 'system/cachecmd'
 require 'pvn_test'
+require 'system/cachecmd'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

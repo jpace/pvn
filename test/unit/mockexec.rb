@@ -1,6 +1,5 @@
-require 'test_helper'
 require 'singleton'
-require 'pvn/cmdexec'
+# require 'pvn/cmdexec'
 
 module PVN
   class MockExecutor # < Executor

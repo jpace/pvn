@@ -1,6 +1,5 @@
-require 'test_helper'
+require 'pvn/tc'
 require 'pvn/log/logentry'
-require 'pvn_test'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

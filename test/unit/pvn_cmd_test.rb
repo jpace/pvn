@@ -1,9 +1,7 @@
-require 'test_helper'
-
 at_exit { puts "bye!".on_red }
 
 require 'system/cachecmd'
-require 'pvn_test'
+require 'pvn/tc'
 
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)

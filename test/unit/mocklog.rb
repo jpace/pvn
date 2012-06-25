@@ -1,4 +1,3 @@
-require 'test_helper'
 require 'singleton'
 require 'pvn/log/logfactory'
 require 'pvn/base/command/cmdexec'

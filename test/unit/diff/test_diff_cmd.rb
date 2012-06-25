@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'pvn/tc'
 require 'pvn/diff/diffcmd'
 
 Log.level = Log::DEBUG

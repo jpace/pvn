@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'pvn/tc'
 require 'pvn/log/logcmd'
 require 'pvn/log/logentry'
 require 'pvn_cmd_test'

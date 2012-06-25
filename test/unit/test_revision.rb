@@ -1,4 +1,4 @@
-require 'test_helper'
+require 'pvn/tc'
 require 'pvn/revision'
 require 'pvn_cmd_test'
 

@@ -1,9 +1,5 @@
-require 'test_helper'
-require 'stringio'
+require 'pvn/tc'
 require 'pvn/diff/diffcmd'
-
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
 
 module PVN
   class TestDiffDoc < Test::Unit::TestCase

@@ -1,5 +1,4 @@
-require 'test_helper'
-
+require 'pvn/tc'
 require 'pvn/app/cli'
 
 class TestPVNCli < Test::Unit::TestCase
