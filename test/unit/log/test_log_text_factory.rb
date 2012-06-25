@@ -11,6 +11,7 @@ module PVN
 
       def test_log_line_regexp
         logoutput = read_testfile 'svnlog.r450.r470.txt'
+        info "logoutput: #{logoutput}"
 
         logoutput.each_with_index do |line, lidx|
           ln = line.chomp

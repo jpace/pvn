@@ -8,7 +8,7 @@ require 'pvn/base/io'
 require 'pvn/base/util'
 
 module PVN
-  class File < ::File
+  class PvnFile < ::File
     include Loggable
     
     def initialize args

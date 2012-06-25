@@ -9,7 +9,12 @@ require 'pvn'
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
+puts Pathname.new(__FILE__).expand_path
+
 module PVN
+  RESOURCE_DIR = Pathname.new(__FILE__).expand_path.parent.parent.parent + 'resources'
+  puts "RESOURCE_DIR: #{RESOURCE_DIR}"
+
   class TestCase < Test::Unit::TestCase
     include Loggable
 
@@ -58,11 +63,13 @@ module PVN
     end
 
     def testfile basename
-      @original_dir + '../../files' + basename
+      RESOURCE_DIR + basename
     end
 
     def read_testfile basename
-      IO.readlines testfile basename
+      fname = testfile basename
+      info "fname: #{fname}".on_red
+      IO.readlines fname
     end
 
     # every testcase class must have a test method
