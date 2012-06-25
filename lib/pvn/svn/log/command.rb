@@ -3,8 +3,8 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/base/command/cachecmd'
-require 'pvn/base/command/cmdline'
+require 'system/cachecmd'
+require 'system/cmdline'
 require 'pvn/svn/revision/revision'
 require 'pvn/svn/environment'
 

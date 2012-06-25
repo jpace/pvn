@@ -3,7 +3,7 @@
 
 require 'riel'
 require 'rubygems'
-require 'pvn/base/command/cmdexec'
+require 'system/cmdexec'
 require 'pvn/option/optionable'
 require 'pvn/option/revopt'
 require 'pvn/base/util'

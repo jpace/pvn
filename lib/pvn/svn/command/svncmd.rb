@@ -3,7 +3,7 @@
 
 require 'riel'
 require 'rubygems'
-require 'pvn/base/command/cachecmd'
+require 'system/cachecmd'
 
 module PVN
   # A command that is a simple pass-through (more or less)

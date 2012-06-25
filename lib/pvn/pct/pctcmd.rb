@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/base/command/command'
+require 'system/command'
 require 'pvn/base/linecount'
 require 'pvn/base/io'
 require 'pvn/io/fselement'

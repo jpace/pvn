@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'pvn/base/command/cachecmd'
+require 'system/cachecmd'
 require 'pvn_test'
 
 Log.level = Log::DEBUG

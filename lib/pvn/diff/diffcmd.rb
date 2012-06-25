@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/base/util'
-require 'pvn/base/command/cachecmd'
+require 'system/cachecmd'
 require 'pvn/config'
 
 require 'pvn/subcmd/scexec'
