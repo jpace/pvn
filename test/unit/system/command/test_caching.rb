@@ -23,13 +23,11 @@ module PVN
       def test_ctor
         cl = CachingCommandLine.new [ "ls" ]
         assert_equal "ls", cl.to_command
-        assert cl.use_cache?
       end
 
       def test_lshift
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
-        assert cl.use_cache?
         assert_equal "ls /tmp", cl.to_command
       end
 
@@ -37,7 +35,6 @@ module PVN
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
         assert_equal "ls /tmp", cl.to_command
-        assert cl.use_cache?
         assert_nil cl.cache_dir
       end
 
@@ -45,7 +42,6 @@ module PVN
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
         assert_equal "ls /tmp", cl.to_command
-        assert cl.use_cache?
         assert_nil cl.cache_dir
         def cl.cache_dir; CACHE_DIR.to_s; end
         assert_not_nil cl.cache_dir
@@ -59,7 +55,6 @@ module PVN
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
         assert_equal "ls /tmp", cl.to_command
-        assert cl.use_cache?
         assert_nil cl.cache_dir
         def cl.cache_dir; CACHE_DIR.to_s; end
         assert_not_nil cl.cache_dir

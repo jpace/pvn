@@ -14,22 +14,23 @@ module PVN
 
     class LogOptions
       attr_reader :revision
-    end
-    
+    end    
+
     class LogCommandLine < PVN::System::CommandLine
-      def initialize use_cache, args = Array.new
+      def initialize args = Array.new
         cmdargs = %w{ svn log --xml }.concat args
-        info "cmdargs: #{cmdargs}".blue
-        @use_cache = use_cache
-        super use_cache, cmdargs
+        super cmdargs
+      end
+    end
+
+    class LogCommandLineCaching < PVN::System::CachingCommandLine
+      def initialize args = Array.new
+        cmdargs = %w{ svn log --xml }.concat args
+        super cmdargs
       end
 
       def cache_dir
         PVN::Environment.instance.cache_dir
-      end
-
-      def use_cache?
-        @use_cache
       end
     end
 
@@ -65,7 +66,7 @@ module PVN
       end
 
       def command_line
-        LogCommandLine.new @use_cache
+        @use_cache ? LogCommandLineCaching.new : LogCommandLine.new
       end
       
       def execute

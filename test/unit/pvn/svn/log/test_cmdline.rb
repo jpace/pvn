@@ -14,10 +14,8 @@ module PVN
       include Loggable
 
       def test_something
-        cmdline = LogCommandLine.new true
+        cmdline = LogCommandLine.new
         info "cmdline: #{cmdline}".blue
-        assert_equal PVN::Environment.instance.cache_dir, cmdline.cache_dir
-        assert cmdline.use_cache?
       end
     end
   end
