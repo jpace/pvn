@@ -4,6 +4,7 @@
 require 'riel'
 require 'rubygems'
 require 'system/command/line'
+require 'system/command/cachefile'
 
 module PVN
   module System

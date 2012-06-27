@@ -6,7 +6,6 @@ require 'rubygems'
 
 module PVN
   module System
-    # this will become CommandLine
     class CacheFile
       include Loggable
       
