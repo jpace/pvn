@@ -9,8 +9,14 @@ require 'system/command/cachefile'
 module PVN
   module System
     class CachingCommandLine < CommandLine
+      puts "$0: #{$0}".yellow
+      puts "__FILE__: #{__FILE__}".yellow
+      puts "pwd: #{Pathname.pwd}".yellow
+
       # caches its input and values.
-      @@cache_dir = nil
+      @@cache_dir = '/tmp' + Pathname.new($0).expand_path
+
+      puts "@@cache_dir: #{@@cache_dir}".yellow
 
       class << self
         def cache_dir

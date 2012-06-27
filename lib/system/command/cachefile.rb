@@ -10,10 +10,11 @@ module PVN
       include Loggable
       
       def initialize cache_dir, args
-        pwd = Pathname.pwd.split_path.join('')
-        info "pwd: #{pwd}"
+        # pwd = Pathname.pwd.split_path.join('')
+        # info "pwd: #{pwd}"
         @command = args.join ' '
-        @pn = Pathname.new(cache_dir) + pwd + args.join('-')
+        @pn = Pathname.new(cache_dir) + args.join('-').gsub('/', '\/')
+        info "pn: #{@pn}".yellow
       end
 
       def readlines
