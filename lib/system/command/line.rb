@@ -3,18 +3,42 @@
 
 require 'riel'
 require 'rubygems'
+require 'system/command/arg'
+require 'system/command/cachefile'
 
 module PVN
   module System
-    class CommandLine
+    # this will become CommandLine
+    class CommandLineNonCached
       include Loggable
 
       attr_reader :output
+
+      def initialize args = Array.new
+        @args = args.dup
+      end
+
+      def << arg
+        # @args << Argument.new(arg)
+        @args << arg
+      end
+
+      def execute
+        @output = ::IO.popen(to_command).readlines
+      end
+
+      def to_command
+        @args.join ' '
+      end
+    end
+
+    # this will become CachableCommandLine
+    class CommandLine < CommandLineNonCached
       attr_accessor :use_cache
 
       def initialize use_cache, args = Array.new
-        @args = args.dup
         @use_cache = use_cache
+        super args
       end
 
       def use_cache?
@@ -25,50 +49,25 @@ module PVN
         nil
       end
 
-      def << arg
-        @args << arg
-      end
-
       def execute
         if use_cache?
           run_cached_command
         else
-          @output = ::IO.popen(to_command).readlines
+          super
         end
       end
 
-      def to_command
-        @args.join ' '
-      end
-
-      def run args
-        if use_cache?
-          run_cached_command
-        else
-          super
-        end      
-      end
-
-      def get_cache_file
+      def cache_file
         pwd = Pathname.pwd.split_path.join('')
         info "pwd: #{pwd}"
-        Pathname.new(cache_dir) + pwd + @args.join('-')
+        # Pathname.new(cache_dir) + pwd + @args.join('-')
+        CacheFile.new cache_dir, @args
       end
 
       def run_cached_command
         stack "@args: #{@args}".cyan
-        cachefile = get_cache_file
-        if cachefile.exist?
-          debug "reading from cache file: #{cachefile}".cyan
-          @output = cachefile.readlines
-        else
-          @output = IO.popen(to_command).readlines
-          cachefile.parent.mkpath
-          debug "saving output to cache file: #{cachefile}".on_cyan
-          File.put_via_temp_file cachefile do
-            @output
-          end
-        end
+        cachefile = cache_file
+        cachefile.readlines
       end
     end
   end
