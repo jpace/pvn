@@ -1,21 +1,17 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'pvn_test'
-require 'pvn/svn/log/entry'
-require 'pvn/svn/log/logdata'
-require 'pvn/svn/log/tc_log'
+require 'svnx/log/entry'
+require 'svnx/log/xmllog'
+require 'svnx/log/logdata'
 require 'rexml/document'
-
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
 
 module PVN
   module SVN
     class TestLogEntry < PVN::TestCase
       include Loggable
+
       def assert_entry_equals entry, expdata
         assert_equal expdata[0], entry.revision
         assert_equal expdata[1], entry.author
@@ -29,21 +25,21 @@ module PVN
         end
       end
       
-      def test_entry_from_xml
+      def test_entries_from_xml
         expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
-        doc = REXML::Document.new LogData::TEST_LINES.join('')
-        info "doc: #{doc}"
-
-        entries = Array.new
-
-        # log/logentry
-        xmlentry = doc.elements[1].elements[3]
-
-        entry = Entry.create_from_xml_element xmlentry
+        # /log (remember, they're 1-indexed in the XML world. of course.)
+        xmllog = XMLLog.new LogData::TEST_LINES.join('')
+        info "xmllog: #{xmllog}".on_blue
         
-        assert_entry_equals entry, expdata
+        xmllog.xmlentries.each do |xmlentry|
+          info "xmlentry: #{xmlentry}"
+        end
+
+        # entry = Entry.create_from_xml_element xmllog.xmlentries[2]
+
+        assert_entry_equals xmllog.xmlentries[2], expdata
       end
     end
   end

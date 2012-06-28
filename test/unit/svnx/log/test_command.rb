@@ -2,9 +2,9 @@
 # -*- ruby -*-
 
 require 'pvn/tc'
-require 'pvn/svn/log/command'
+require 'svnx/log/command'
 require 'rexml/document'
-require 'pvn/svn/log/logdata'
+require 'svnx/log/logdata'
 
 module PVN
   class Environment

@@ -1,10 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'pvn_test'
-require 'pvn/svn/log/command'
+require 'svnx/log/command'
 
 Log::level = Log::DEBUG
 

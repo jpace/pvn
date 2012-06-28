@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'system/cachecmd'
 require 'system/command/line'
-require 'pvn/svn/revision/revision'
+# require 'pvn/svn/revision/revision'
 require 'pvn/svn/environment'
 
 module PVN
@@ -51,9 +51,9 @@ module PVN
         
         command = %w{ svn log }
 
-        @revision = Revision.new args
-        command.concat @revision.arguments
-        debug "command: #{command}".on_red
+        # @revision = Revision.new args
+        # command.concat @revision.arguments
+        # debug "command: #{command}".on_red
 
         @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
         info "@use_cache: #{@use_cache}".on_green

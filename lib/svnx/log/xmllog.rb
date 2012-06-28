@@ -1,10 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'rexml/document'
-require 'pvn/svn/log/xmlentry'
+require 'svnx/log/xmlentry'
 
 module PVN
   module SVN

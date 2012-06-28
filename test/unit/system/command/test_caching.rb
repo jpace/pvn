@@ -39,13 +39,15 @@ module PVN
       def test_cache_dir_defaults_to_executable
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
-        assert_equal '/tmp' + ($0).to_s, cl.cache_dir
+        info "$0: #{$0}".on_blue
+        info "cl.cache_dir: #{cl.cache_dir}".on_blue
+        assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s, cl.cache_dir
       end
 
       def test_cache_file_defaults_to_executable
         cl = CachingCommandLine.new [ "ls" ]
         cl << "/tmp"
-        assert_equal '/tmp' + ($0).to_s + '/ls-\/tmp', cl.cache_file.to_s
+        assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-\/tmp', cl.cache_file.to_s
       end
 
       def test_cache_dir_set_cachefile
@@ -56,7 +58,7 @@ module PVN
         assert !CACHE_DIR.exist?
 
         cachefile = cl.cache_file
-        assert_equal '/tmp/pvn/testing/ls-\/tmp', cachefile.to_s
+        assert_equal CACHE_DIR.to_s + '/ls-\/tmp', cachefile.to_s
       end
 
       def test_cache_dir_created_on_execute

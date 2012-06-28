@@ -1,11 +1,9 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'pvn_test'
-require 'pvn/svn/log/entry'
-require 'pvn/svn/log/logdata'
+require 'svnx/log/entry'
+require 'svnx/log/logdata'
 
 module PVN
   module SVN
