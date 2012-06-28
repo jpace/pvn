@@ -20,6 +20,10 @@ module PVN
         info "self: #{self}"
       end
 
+      def create_ls_tmp
+        CachingCommandLine.new [ "ls", "/tmp" ]
+      end
+
       def test_ctor_no_args
         cl = CachingCommandLine.new [ "ls" ]
         assert_equal "ls", cl.to_command
@@ -37,22 +41,19 @@ module PVN
       end
 
       def test_cache_dir_defaults_to_executable
-        cl = CachingCommandLine.new [ "ls" ]
-        cl << "/tmp"
+        cl = create_ls_tmp
         info "$0: #{$0}".on_blue
         info "cl.cache_dir: #{cl.cache_dir}".on_blue
         assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s, cl.cache_dir
       end
 
       def test_cache_file_defaults_to_executable
-        cl = CachingCommandLine.new [ "ls" ]
-        cl << "/tmp"
+        cl = create_ls_tmp
         assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-\/tmp', cl.cache_file.to_s
       end
 
       def test_cache_dir_set_cachefile
-        cl = CachingCommandLine.new [ "ls" ]
-        cl << "/tmp"
+        cl = create_ls_tmp
         def cl.cache_dir; CACHE_DIR.to_s; end
         assert_not_nil cl.cache_dir
         assert !CACHE_DIR.exist?
@@ -62,8 +63,7 @@ module PVN
       end
 
       def test_cache_dir_created_on_execute
-        cl = CachingCommandLine.new [ "ls" ]
-        cl << "/tmp"
+        cl = create_ls_tmp
         def cl.cache_dir; CACHE_DIR.to_s; end
 
         cachefile = cl.cache_file
