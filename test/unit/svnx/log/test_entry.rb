@@ -16,6 +16,8 @@ module PVN
       include Loggable
       
       def assert_entry_equals entry, expdata
+        raise "refactor to common class!"
+        
         assert_equal expdata[0], entry.revision
         assert_equal expdata[1], entry.author
         assert_equal expdata[2], entry.date
@@ -38,9 +40,9 @@ module PVN
         entries = Array.new
 
         # log/logentry
-        xmlentry = doc.elements[1].elements[3]
+        xmlentry = XMLEntry.new doc.elements[1].elements[3]
 
-        entry = Entry.create_from_xml_element xmlentry
+        entry = Entry.new :xmlentry => xmlentry
         
         assert_entry_equals entry, expdata
       end
