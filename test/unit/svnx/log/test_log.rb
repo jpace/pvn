@@ -3,7 +3,7 @@
 
 require 'pvn_test'
 require 'svnx/log/entry'
-require 'svnx/log/xmllog'
+require 'svnx/log/xml/xmllog'
 require 'svnx/log/logdata'
 require 'rexml/document'
 

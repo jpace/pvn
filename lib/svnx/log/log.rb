@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/xmlentry'
+require 'svnx/log/xml/xmlentry'
 
 module PVN
   module SVN

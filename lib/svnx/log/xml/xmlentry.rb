@@ -10,7 +10,7 @@ module PVN
 
       attr_reader :revision, :author, :date, :paths, :message
       
-      # this is log/logentry from "svn log -v (optional) --xml"
+      # this is log/logentry from "svn log --xml"
       def initialize xmlelement
 
         @revision = get_attribute xmlelement, 'revision'

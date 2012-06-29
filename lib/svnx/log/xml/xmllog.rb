@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'rexml/document'
-require 'svnx/log/xmlentry'
+require 'svnx/log/xml/xmlentry'
 
 module PVN
   module SVN
