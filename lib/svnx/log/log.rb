@@ -19,7 +19,7 @@ module PVN
       attr_reader :entries
       
       def initialize args = Hash.new
-        @entries = args[:entries]
+        @entries = Array.new
       end
     end
 

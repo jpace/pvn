@@ -25,7 +25,7 @@ module PVN
         end
       end
       
-      def test_entries_from_xml
+      def test_create_from_xml
         expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
@@ -40,6 +40,8 @@ module PVN
         # entry = Entry.create_from_xml_element xmllog.xmlentries[2]
 
         assert_entry_equals xmllog.xmlentries[2], expdata
+
+        # log = Log.new :xml => xmllog
       end
     end
   end

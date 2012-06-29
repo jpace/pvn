@@ -4,12 +4,12 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/tc'
-require 'pvn/svn/log/command'
+require 'svnx/log/command'
 require 'rexml/document'
 
 module PVN
   module SVN
-    class LogTestCase < PVN::PVNTestCase
+    class LogTestCase < PVN::TestCase
       include Loggable
 
       def setup
@@ -51,6 +51,19 @@ module PVN
         assert_equal expdata[:author], find_subelement_by_name(elmt, 'author')
         assert_equal expdata[:date], find_subelement_by_name(elmt, 'date')
         assert_equal expdata[:msg], find_subelement_by_name(elmt, 'msg')
+      end
+
+      def assert_entry_equals entry, expdata
+        assert_equal expdata[0], entry.revision
+        assert_equal expdata[1], entry.author
+        assert_equal expdata[2], entry.date
+        assert_equal expdata[3], entry.message
+        entry.paths.each_with_index do |path, idx|
+          info path.inspect.yellow
+          assert_equal expdata[4 + idx][:kind], path.kind
+          assert_equal expdata[4 + idx][:action], path.action
+          assert_equal expdata[4 + idx][:name], path.name
+        end
       end
 
       def assert_log_entries cmd
