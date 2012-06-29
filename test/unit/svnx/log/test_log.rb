@@ -5,7 +5,9 @@ require 'pvn_test'
 require 'svnx/log/entry'
 require 'svnx/log/xml/xmllog'
 require 'svnx/log/logdata'
+require 'svnx/log/log'
 require 'rexml/document'
+require 'svnx/log/tc'
 
 module PVN
   module SVN
@@ -29,19 +31,12 @@ module PVN
         expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
-        # /log (remember, they're 1-indexed in the XML world. of course.)
+        # /log
         xmllog = XMLLog.new LogData::TEST_LINES.join('')
-        info "xmllog: #{xmllog}".on_blue
-        
-        xmllog.xmlentries.each do |xmlentry|
-          info "xmlentry: #{xmlentry}"
-        end
 
-        # entry = Entry.create_from_xml_element xmllog.xmlentries[2]
+        log = LogEntries.new :xmllog => xmllog
 
-        assert_entry_equals xmllog.xmlentries[2], expdata
-
-        # log = Log.new :xml => xmllog
+        assert_entry_equals log.entries[2], expdata
       end
     end
   end

@@ -20,11 +20,21 @@ module PVN
       attr_reader :revision, :author, :date, :paths, :message
       
       def initialize args = Hash.new
-        @revision = args[:revision]
-        @author = args[:author]
-        @date = args[:date]
-        @paths = args[:paths]
-        @message = args[:message]
+        if xmlentry = args[:xmlentry]
+          @revision = xmlentry.revision
+          @author = xmlentry.author
+          @date = xmlentry.date
+          @message = xmlentry.message
+          @paths = xmlentry.paths
+        else
+          @revision = args[:revision]
+          @author = args[:author]
+          @date = args[:date]
+          @paths = args[:paths]
+          @message = args[:message]
+        end
+
+        # info "self: #{self.inspect}".red
       end
     end
 
