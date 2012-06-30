@@ -4,22 +4,20 @@
 require 'svnx/log/tc'
 require 'svnx/log/xml/xmllog'
 
-module PVN
-  module SVN
-    module Log
-      module XML
-        class LogTestCase < PVN::SVN::Log::TestCase
-          include Loggable
-          
-          def test_create_from_xml
-            expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
-            expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
+module SVNx
+  module Log
+    module XML
+      class LogTestCase < SVNx::Log::TestCase
+        include Loggable
+        
+        def test_create_from_xml
+          expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
+          expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
-            # /log (remember, they're 1-indexed in the XML world. of course.)
-            xmllog = XMLLog.new LogData::TEST_LINES.join('')
-            
-            assert_entry_equals xmllog.xmlentries[2], expdata
-          end
+          # /log (remember, they're 1-indexed in the XML world. of course.)
+          xmllog = XMLLog.new LogData::TEST_LINES.join('')
+          
+          assert_entry_equals xmllog.xmlentries[2], expdata
         end
       end
     end

@@ -4,6 +4,8 @@ require 'system/cachecmd'
 Log.level = Log::DEBUG
 Log.set_widths(-12, 4, -35)
 
+puts "being loaded!: #{$0}".red
+
 module PVN
   class FakeCachableCommand < CachableCommand
     attr_reader :executed
