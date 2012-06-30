@@ -12,7 +12,7 @@ module SVNx
       include Loggable
 
       def test_something
-        cmdline = LogCommandLine.new
+        cmdline = SVNx::LogCommandLine.new
         info "cmdline: #{cmdline}".blue
       end
     end

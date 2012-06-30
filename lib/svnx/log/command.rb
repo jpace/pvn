@@ -16,14 +16,14 @@ module SVNx
     attr_reader :revision
   end    
 
-  class LogCommandLine < PVN::System::CommandLine
+  class LogCommandLine < System::CommandLine
     def initialize args = Array.new
       cmdargs = %w{ svn log --xml }.concat args
       super cmdargs
     end
   end
 
-  class LogCommandLineCaching < PVN::System::CachingCommandLine
+  class LogCommandLineCaching < System::CachingCommandLine
     def initialize args = Array.new
       cmdargs = %w{ svn log --xml }.concat args
       super cmdargs
