@@ -1,4 +1,4 @@
-require 'pvn_test'
+require 'pvn/tc'
 require 'system/cachecmd'
 
 Log.level = Log::DEBUG

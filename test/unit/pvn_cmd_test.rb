@@ -1,4 +1,4 @@
-at_exit { puts "bye!".on_red }
+# at_exit { puts "bye!".on_red }
 
 require 'system/cachecmd'
 require 'pvn/tc'
