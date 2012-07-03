@@ -19,17 +19,26 @@ module PVN
       attr_reader :local
       
       def initialize args = Hash.new
+        info "args: #{args}"
+        
         svnurl = args[:svnurl]
         fname  = args[:filename] || args[:file] # legacy
         # $$$ todo: map svnurl to SVNElement, and fname to FSElement
 
         @svn   = args[:svn]   || (args[:file] && SVNElement.new(:filename => args[:file]))
         @local = args[:local] || (args[:file] && FSElement.new(args[:file]))
+
+        info "local: #{@local}"
       end
 
       def log logopts
-        cmd = SVNx::LogCommand.new logopts
-        # cmd.execute
+        cmdargs = [ @local ]
+        info "cmdargs: #{cmdargs}".green
+        cmd = SVNx::LogCommand.new :command_args => cmdargs
+        info "cmd: #{cmd}".red
+        xmllog = cmd.execute.join ''
+        info "xmllog: #{xmllog}"
+        SVNx::LogEntries.new :xmllog => SVNx::XMLLog.new(xmllog)
       end
 
       # def to_command subcmd, revcl, *args

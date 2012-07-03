@@ -12,8 +12,9 @@ module SVNx
       include Loggable
 
       def test_something
-        cmdline = SVNx::LogCommandLine.new
-        info "cmdline: #{cmdline}".blue
+        cmdline = SVNx::LogCommandLine.new [ '/Programs/wiquery/trunk' ]
+        cmdline.execute
+        assert_not_nil cmdline.output
       end
     end
   end

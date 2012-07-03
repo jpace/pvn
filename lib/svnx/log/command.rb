@@ -6,7 +6,6 @@ require 'riel'
 require 'system/cachecmd'
 require 'system/command/line'
 require 'system/command/caching'
-# require 'pvn/svn/revision/revision'
 require 'pvn/svn/environment'
 
 module SVNx
@@ -40,7 +39,7 @@ module SVNx
   class LogOptions
   end
   
-  class LogCommand < PVN::CachableCommand
+  class LogCommand # < PVN::CachableCommand
     include Loggable
 
     attr_reader :log
@@ -51,27 +50,29 @@ module SVNx
       
       command = %w{ svn log }
 
-      # @revision = Revision.new args
-      # command.concat @revision.arguments
-      # debug "command: #{command}".on_red
-
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
       info "@use_cache: #{@use_cache}".on_green
 
-      args[:command_args] = command
+      # args[:command_args] = command
 
-      super
+      @cmdargs = args[:command_args] || Array.new
+
+      @use_cache = false
+
+      # super
       
       @log = nil
     end
 
     def command_line
-      @use_cache ? LogCommandLineCaching.new : LogCommandLine.new
+      @use_cache ? LogCommandLineCaching.new(@cmdargs) : LogCommandLine.new(@cmdargs)
     end
     
     def execute
       cmdline = command_line
+      info "cmdline: #{cmdline}".cyan
       cmdline.execute
+      info "cmdline.output: #{cmdline.output}".cyan
       
       @output = cmdline.output
     end

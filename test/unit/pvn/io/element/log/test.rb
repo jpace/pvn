@@ -16,14 +16,13 @@ module PVN
       # include Loggable
       
       def test_no_options
-        dir = PVN::IOxxx::Element.new :filename => '.'
-        logoptions = [ '--xml', '.' ]
-
-        return if true
+        dir = PVN::IOxxx::Element.new :local => '/Programs/wiquery/trunk'
+        logoptions = Hash.new
 
         dirlog = dir.log logoptions
+        info "dirlog: #{dirlog}".yellow
         dirlog.entries.each do |entry|
-          info "entry: #{entry}"
+          info "entry: #{entry}".blue
         end
      end
     end

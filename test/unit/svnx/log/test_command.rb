@@ -64,7 +64,8 @@ module SVNx
       end
 
       def assert_log_entries cmd
-        info "cmd: #{cmd}"
+        info "cmd: #{cmd}".yellow
+        cmd.execute
         doc = REXML::Document.new cmd.output.join ''
 
         elements = doc.elements
