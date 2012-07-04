@@ -39,7 +39,7 @@ module PVN
         cmd = SVNx::LogCommand.new :cmdargs => cmdargs
         info "cmd: #{cmd}".red
         xmllog = cmd.execute.join ''
-        info "xmllog: #{xmllog}".cyan
+        # info "xmllog: #{xmllog}".cyan
         SVNx::Log::Entries.new :xmllog => SVNx::XMLLog.new(xmllog)
       end
 

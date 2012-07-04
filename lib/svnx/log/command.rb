@@ -40,15 +40,17 @@ module SVNx
 
   class LogCommandArgs
     attr_accessor :limit
+    attr_accessor :verbose
     attr_accessor :path
 
     def initialize args = Hash.new
       @limit = args[:limit]
       @path = args[:path]
+      @verbose = args[:verbose]
     end
 
     def to_a
-      [ @limit ? "--limit #{@limit}" : nil, @path ? @path : nil ].compact
+      [ @limit ? "--limit #{@limit}" : nil, @path ? @path : nil, @verbose ? '-v' : nil ].compact
     end
   end
   

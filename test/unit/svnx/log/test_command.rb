@@ -111,12 +111,6 @@ module SVNx
         # todo: fix this to mock creating the cache directory
         # assert_cache_dir_exists true
       end
-
-      def test_options_log_limit
-        cmdargs = LogCommandArgs.new :limit => 6
-        cmd = LogCommand.new :use_cache => true, :cmdargs => cmdargs
-        assert_equal 'svn log --xml --limit 6', cmd.command_line.to_command
-      end
     end
   end
 end
