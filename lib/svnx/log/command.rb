@@ -17,6 +17,7 @@ module SVNx
 
   class LogCommandLine < System::CommandLine
     def initialize args = Array.new
+      info "args: #{args}".cyan
       cmdargs = %w{ svn log --xml }.concat args
       super cmdargs
     end
@@ -24,6 +25,7 @@ module SVNx
 
   class LogCommandLineCaching < System::CachingCommandLine
     def initialize args = Array.new
+      info "args: #{args}".cyan
       cmdargs = %w{ svn log --xml }.concat args
       super cmdargs
     end
@@ -33,10 +35,21 @@ module SVNx
     end
   end
 
-  class LogCommandArgs
+  class LogOptions
   end
 
-  class LogOptions
+  class LogCommandArgs
+    attr_accessor :limit
+    attr_accessor :path
+
+    def initialize args = Hash.new
+      @limit = args[:limit]
+      @path = args[:path]
+    end
+
+    def to_a
+      [ @limit ? "--limit #{@limit}" : nil, @path ? @path : nil ].compact
+    end
   end
   
   class LogCommand # < PVN::CachableCommand
@@ -46,16 +59,12 @@ module SVNx
     attr_reader :output
     
     def initialize args = Hash.new
-      info "args: #{args.inspect}"
+      info "args: #{args.inspect}".blue
       
-      command = %w{ svn log }
-
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
       info "@use_cache: #{@use_cache}"
 
-      # args[:command_args] = command
-
-      @cmdargs = args[:command_args] || Array.new
+      @cmdargs = args[:cmdargs] ? args[:cmdargs].to_a : Array.new
 
       @use_cache = false
 

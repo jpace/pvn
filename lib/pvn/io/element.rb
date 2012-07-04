@@ -31,13 +31,15 @@ module PVN
         info "local: #{@local}"
       end
 
-      def log logopts
-        cmdargs = [ @local ]
+      def log cmdargs = SVNx::LogCommandArgs.new
         info "cmdargs: #{cmdargs}".green
-        cmd = SVNx::LogCommand.new :command_args => cmdargs
+
+        cmdargs.path = @local
+
+        cmd = SVNx::LogCommand.new :cmdargs => cmdargs
         info "cmd: #{cmd}".red
         xmllog = cmd.execute.join ''
-        # info "xmllog: #{xmllog}"
+        info "xmllog: #{xmllog}".cyan
         SVNx::Log::Entries.new :xmllog => SVNx::XMLLog.new(xmllog)
       end
 
@@ -60,7 +62,7 @@ module PVN
       #   [ @svnelement && @svnelement.line_count, @fselement && @fselement.line_count ]
       # end
 
-      def <=>(other)
+      def <=> other
         @svn <=> other.svn
       end
 
