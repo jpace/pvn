@@ -46,12 +46,12 @@ module SVNx
     attr_reader :output
     
     def initialize args = Hash.new
-      info "args: #{args.inspect}".on_green
+      info "args: #{args.inspect}"
       
       command = %w{ svn log }
 
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      info "@use_cache: #{@use_cache}".on_green
+      info "@use_cache: #{@use_cache}"
 
       # args[:command_args] = command
 
@@ -72,7 +72,7 @@ module SVNx
       cmdline = command_line
       info "cmdline: #{cmdline}".cyan
       cmdline.execute
-      info "cmdline.output: #{cmdline.output}".cyan
+      # info "cmdline.output: #{cmdline.output}".cyan
       
       @output = cmdline.output
     end

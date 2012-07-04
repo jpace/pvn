@@ -1,15 +1,4 @@
-require 'rubygems'
-require 'riel'
-
-require 'stringio'
-require 'test/unit'
-
-require 'pvn'
-
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
-
-puts Pathname.new(__FILE__).expand_path
+require 'tc'
 
 module PVN
   RESOURCE_DIR = Pathname.new(__FILE__).expand_path.parent.parent.parent + 'resources'
@@ -30,25 +19,25 @@ module PVN
       end
 
       def suite
-        # RIEL::Log.debug "self: #{self}".negative
+        RIEL::Log.debug "self: #{self}".negative
         @@cls = self
-        # RIEL::Log.debug "@@cls: #{@@cls}".negative
+        RIEL::Log.debug "@@cls: #{@@cls}".negative
 
         ste = super
-        # RIEL::Log.debug "ste: #{ste}".negative
+        RIEL::Log.debug "ste: #{ste}".negative
 
         def ste.run(*args)
-          # RIEL::Log.debug "self: #{self}".bold
-          # RIEL::Log.debug "@@cls: #{@@cls}".bold
+          RIEL::Log.debug "self: #{self}".bold
+          RIEL::Log.debug "@@cls: #{@@cls}".bold
 
           @@cls.setup
 
-          # RIEL::Log.debug "self: #{self}".bold
+          RIEL::Log.debug "self: #{self}".bold
 
           super
           
-          # RIEL::Log.debug "self: #{self}".negative
-          # RIEL::Log.debug "@@cls: #{@@cls}".negative
+          RIEL::Log.debug "self: #{self}".negative
+          RIEL::Log.debug "@@cls: #{@@cls}".negative
           @@cls.teardown
         end
         ste

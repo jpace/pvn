@@ -2,9 +2,6 @@ require 'pvn/tc'
 require 'pvn/revision'
 require 'pvn_cmd_test'
 
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
-
 module PVN
   class TestRevision < CommandTestCase
     include Loggable

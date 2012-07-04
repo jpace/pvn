@@ -4,9 +4,6 @@
 require 'svnx/log/tc'
 require 'svnx/log/entry'
 
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
-
 module SVNx
   module Log
     class EntryTestCase < SVNx::Log::TestCase

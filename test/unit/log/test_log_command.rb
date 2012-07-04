@@ -3,9 +3,6 @@ require 'pvn/log/logcmd'
 require 'pvn/log/logentry'
 require 'pvn_cmd_test'
 
-RIEL::Log.level = Log::DEBUG
-RIEL::Log.set_widths(-12, 4, -35)
-
 module PVN
   class TestLogCommand < PVN::CommandTestCase
     include Loggable

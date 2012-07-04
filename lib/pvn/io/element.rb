@@ -37,8 +37,8 @@ module PVN
         cmd = SVNx::LogCommand.new :command_args => cmdargs
         info "cmd: #{cmd}".red
         xmllog = cmd.execute.join ''
-        info "xmllog: #{xmllog}"
-        SVNx::LogEntries.new :xmllog => SVNx::XMLLog.new(xmllog)
+        # info "xmllog: #{xmllog}"
+        SVNx::Log::Entries.new :xmllog => SVNx::XMLLog.new(xmllog)
       end
 
       # def to_command subcmd, revcl, *args

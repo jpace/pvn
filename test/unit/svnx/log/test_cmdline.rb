@@ -4,8 +4,6 @@
 require 'svnx/log/tc'
 require 'svnx/log/command'
 
-Log::level = Log::DEBUG
-
 module SVNx
   module Log
     class CommandLineTestCase < SVNx::Log::TestCase

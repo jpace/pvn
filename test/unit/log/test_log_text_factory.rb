@@ -1,9 +1,6 @@
 require 'pvn/log/logfactory'
 require 'pvn/tc'
 
-RIEL::Log.level = Log::DEBUG
-RIEL::Log.set_widths(-12, 4, -35)
-
 module PVN
   module Log
     class TestTextFactory < PVN::TestCase
@@ -11,7 +8,7 @@ module PVN
 
       def test_log_line_regexp
         logoutput = read_testfile 'svnlog.r450.r470.txt'
-        info "logoutput: #{logoutput}"
+        # info "logoutput: #{logoutput}"
 
         logoutput.each_with_index do |line, lidx|
           ln = line.chomp
@@ -26,12 +23,12 @@ module PVN
       end
 
       def assert_entries_match expected, entry
-        info "expected: #{expected}".green
+        # info "expected: #{expected}".green
 
         expected.each do |field, expval|
-          info "field: #{field}; expval: #{expval}"
+          # info "field: #{field}; expval: #{expval}"
           actval = entry.send field
-          info "actval: #{actval}"
+          # info "actval: #{actval}"
 
           assert_equal expval, actval, "field: #{field} in #{entry.inspect}"
         end

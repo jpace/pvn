@@ -1,9 +1,6 @@
 require 'pvn/tc'
 require 'pvn/log/logcmd'
 
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
-
 module PVN
   class TestLogDoc < Test::Unit::TestCase
     include Loggable

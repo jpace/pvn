@@ -2,12 +2,9 @@
 # -*- ruby -*-
 
 require 'pvn/log/tc'
-require 'svnx/log/log'
+require 'svnx/log/entries'
 require 'svnx/log/xml/xmllog'
 require 'svnx/log/tc'
-
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
 
 module PVN
   module App

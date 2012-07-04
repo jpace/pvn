@@ -2,9 +2,9 @@ require 'pvn/tc'
 require 'system/cachecmd'
 
 Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
 
-puts "being loaded!: #{$0}".red
+Log::stack "being loaded!: #{$0}".red
+puts "pwd: #{Dir.pwd}".red
 
 module PVN
   class FakeCachableCommand < CachableCommand

@@ -17,7 +17,7 @@ module SVNx
 
       # log/logentry
       elements.each('log/logentry') do |entryelement|
-        info "entryelement: #{entryelement.class}".yellow
+        # info "entryelement: #{entryelement.class}".yellow
         @xmlentries << XMLEntry.new(entryelement)
       end
     end

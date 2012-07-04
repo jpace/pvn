@@ -29,7 +29,7 @@ module SVNx
 
       def remove_cache_dir
         pn = Pathname.new @cache_dir
-        info "pn: #{pn}".on_blue
+        info "pn: #{pn}".red
         pn.rmtree if pn.exist?
       end
 
