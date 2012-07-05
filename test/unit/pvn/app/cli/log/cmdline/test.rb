@@ -1,9 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/tc'
-require 'svnx/log/entries'
-require 'pvn/io/element'
+require 'pvn/tc'
 require 'pvn/app/cli/log/cmdline'
 
 Log.level = Log::DEBUG
@@ -11,7 +9,7 @@ Log.level = Log::DEBUG
 module PVN
   module App
     module Log
-      class CmdLineArgsTest < PVN::Log::TestCase
+      class CmdLineArgsTest < PVN::TestCase
         def assert_command_line_args explimit, args
           cmdline = PVN::App::Log::CmdLineArgs.new args
           info "cmdline: #{cmdline}".red

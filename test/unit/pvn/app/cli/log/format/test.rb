@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/tc'
+require 'pvn/tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
 require 'pvn/app/cli/log/format'
@@ -12,7 +12,7 @@ module PVN
   module App
     module CLI
       module Log
-        class FormatTestCase < PVN::Log::TestCase
+        class FormatTestCase < PVN::TestCase
           def test_default
             dir = PVN::IO::Element.new :local => '/Programs/wiquery/trunk'
             
