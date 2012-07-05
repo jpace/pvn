@@ -8,7 +8,7 @@ require 'svnx/log/command'
 require 'svnx/log/xml/xmllog'
 
 module PVN
-  module IOxxx
+  module IO
 
     # An element unites an svn element and a file/directory (at least one of
     # which should exist).

@@ -58,7 +58,7 @@ module PVN
     def read_testfile basename
       fname = testfile basename
       info "fname: #{fname}".on_red
-      IO.readlines fname
+      ::IO.readlines fname
     end
 
     # every testcase class must have a test method

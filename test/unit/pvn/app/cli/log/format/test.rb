@@ -14,7 +14,7 @@ module PVN
       module Log
         class FormatTestCase < PVN::Log::TestCase
           def test_default
-            dir = PVN::IOxxx::Element.new :local => '/Programs/wiquery/trunk'
+            dir = PVN::IO::Element.new :local => '/Programs/wiquery/trunk'
             
             dirlog = dir.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
 
