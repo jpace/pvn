@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'riel'
 require 'rake/testtask'
+require 'rubygems/package_task'
 require 'fileutils'
 
 require './lib/pvn'
@@ -35,3 +36,23 @@ end
 task :build_fixtures do
   raise "not implemented"
 end
+
+spec = Gem::Specification.new do |s| 
+  s.name = "pvn"
+  s.version = "0.0.1"
+  s.author = "Jeff Pace"
+  s.email = "jeugenepace@gmail.com"
+  s.homepage = "http://www.incava.org/projects/pvn"
+  s.platform = Gem::Platform::RUBY
+  s.summary = "What you wish Subversion had."
+  s.files = FileList["{bin,lib}/**/*"].to_a
+  s.require_path = "lib"
+  s.test_files = FileList["{test}/**/*test.rb"].to_a
+  s.has_rdoc = true
+  s.extra_rdoc_files = [ "README.rdoc" ]
+end
+ 
+Gem::PackageTask.new(spec) do |pkg| 
+  pkg.need_zip = true 
+  pkg.need_tar_gz = true 
+end 

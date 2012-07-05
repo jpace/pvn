@@ -4,6 +4,8 @@
 require 'rubygems'
 require 'riel'
 
+require 'pvn/io/element'
+require 'svnx/log/entries'
 require 'pvn/app/log/format'
 
 # the old ones:
