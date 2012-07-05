@@ -6,7 +6,7 @@ require 'riel'
 
 require 'pvn/io/element'
 require 'svnx/log/entries'
-require 'pvn/app/log/format'
+require 'pvn/app/cli/log/format'
 
 # the old ones:
 require 'pvn/log/logcmd'
