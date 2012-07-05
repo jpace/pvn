@@ -3,6 +3,10 @@
 
 require 'rubygems'
 require 'riel'
+
+require 'pvn/app/log/format'
+
+# the old ones:
 require 'pvn/log/logcmd'
 require 'pvn/diff/diffcmd'
 require 'pvn/pct/pctcmd'
@@ -10,12 +14,49 @@ require 'pvn/describe'
 require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
 
+
 RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
   class CLI
     include Loggable
+
+    def initialize io, args
+      while args.size > 0
+        arg = args.shift
+        debug "arg: #{arg}"
+
+        if arg == "--verbose"
+          RIEL::Log.level = RIEL::Log::DEBUG
+          next
+        end
+
+        if arg == "help" || arg == "--help" || arg == "-h"
+          return self.class.run_help args
+        end
+
+        if arg == "log"
+          elmt = PVN::IO::Element.new :local => args.size > 0 ? args.shift : '.'
+          log = elmt.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
+
+          fmt = PVN::App::Log::Format.new
+          log.entries.each do |entry|
+            fmtlines = fmt.format entry
+            
+            puts fmtlines
+            puts '-' * 55
+          end
+          
+          return true
+        end
+
+        $stderr.puts "ERROR: subcommand not valid: #{arg}"
+      end
+    end
+
+    # below is the old implementation. yes, I should have branched this.
+    # =======================================================
 
     def self.run_command_with_output cmd
       RIEL::Log.info "cmd: #{cmd}".on_black
