@@ -17,8 +17,7 @@ require 'pvn/describe'
 require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
 
-
-RIEL::Log.level = RIEL::Log::WARN
+RIEL::Log.level = RIEL::Log::DEBUG
 RIEL::Log.set_widths(-15, 5, -35)
 
 module PVN
@@ -43,12 +42,14 @@ module PVN
           clargs = PVN::App::Log::CmdLineArgs.new args
           info "clargs: #{clargs}"
 
-          elmt = PVN::IO::Element.new :local => args.size > 0 ? args.shift : '.'
-          log = elmt.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
+          elmt = PVN::IO::Element.new :local => clargs.path || '.'
+          info "elmt: #{elmt}".red
+          log = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
 
           fmt = PVN::App::Log::Format.new
-          log.entries.each do |entry|
-            fmtlines = fmt.format entry
+          nentries = log.entries.size
+          log.entries.each_with_index do |entry, idx|
+            fmtlines = fmt.format entry, idx, nentries
             
             puts fmtlines
             puts '-' * 55

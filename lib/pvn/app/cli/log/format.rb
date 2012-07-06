@@ -15,13 +15,43 @@ module PVN
       class Format
         include Loggable
 
-        REVISION_WIDTH = 10
-        NEG_REVISION_WIDTH = 5
-        POS_REVISION_WIDTH = 5
-        AUTHOR_WIDTH = 25
+        WIDTHS = { 
+          :revision => 10, 
+          :neg_revision => 5,
+          :pos_revision => 5,
+          :author => 25
+        }
 
-        def pad what, width
-          " " * (width - what.length)
+        COLORS = {
+          :revision => [ :bold ],
+          :neg_revision => [ :bold ],
+          :pos_revision => [ :bold ],
+          :author => [ :bold, :cyan ],
+          :date => [ :bold, :magenta ],
+
+          :added => [ :green ],
+          :modified => [ :yellow ],
+          :deleted => [ :red ],
+          :renamed => [ :magenta ],
+
+          :dir => [ :bold ],
+        }
+
+        def pad what, field
+          nspaces = [ WIDTHS[field] - what.length, 1 ].max
+          " " * nspaces
+        end
+
+        def colorize what, field
+          colors = COLORS[field]
+          colors.each do |col|
+            what = what.send col
+          end
+          what
+        end
+
+        def add_field value, field
+          colorize(value, field) + pad(value, field)
         end
         
         def format entry, idx, total
@@ -39,44 +69,41 @@ module PVN
           
           lines = Array.new
           
-          summary = entry.revision.yellow.dup
-          summary << pad(entry.revision, REVISION_WIDTH)
+          summary = add_field(entry.revision, :revision)
 
           negidx = (-1 - idx).to_s
           posidx = "+#{total - idx - 1}"
 
-          summary << negidx.bold
-          summary << pad(negidx, NEG_REVISION_WIDTH)
-          summary << posidx.bold
-          summary << pad(posidx, POS_REVISION_WIDTH)
+          summary << add_field(negidx, :neg_revision)
+          summary << add_field(posidx, :pos_revision)
           
-          summary << entry.author.cyan
-          summary << pad(entry.author, AUTHOR_WIDTH)
-          summary << entry.date.magenta
+          summary << add_field(entry.author, :author)
+          
+          summary << colorize(entry.date, :date)
 
           lines << summary
           lines << ""
           
-          lines << entry.message.bold.yellow.on_black
+          lines << entry.message.white.on_black
           lines << ""
 
           entry.paths.each do |path|
             pstr = "    "
             case path.action
             when 'M'
-              pstr << path.name.yellow
+              pstr << colorize(path.name, :modified)
             when 'A'
-              pstr << path.name.green
+              pstr << colorize(path.name, :added)
             when 'D'
-              pstr << path.name.red
+              pstr << colorize(path.name, :deleted)
             when 'R'
-              pstr << path.name.magenta
+              pstr << colorize(path.name, :renamed)
             else
               raise "wtf?: #{path.action}"
             end
 
             if path.kind == 'dir'
-              pstr = pstr.bold
+              pstr = colorize(pstr, :dir)
             end
 
             lines << pstr
