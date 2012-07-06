@@ -7,6 +7,7 @@ require 'riel'
 require 'pvn/io/element'
 require 'svnx/log/entries'
 require 'pvn/app/cli/log/format'
+require 'pvn/app/cli/log/cmdline'
 
 # the old ones:
 require 'pvn/log/logcmd'
@@ -39,6 +40,9 @@ module PVN
         end
 
         if arg == "log"
+          clargs = PVN::App::Log::CmdLineArgs.new args
+          info "clargs: #{clargs}"
+
           elmt = PVN::IO::Element.new :local => args.size > 0 ? args.shift : '.'
           log = elmt.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
 

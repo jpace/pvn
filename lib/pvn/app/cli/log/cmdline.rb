@@ -11,6 +11,7 @@ module PVN
         include Loggable
 
         attr_reader :limit
+        attr_reader :path
 
         def initialize args
           @limit = nil
@@ -20,6 +21,8 @@ module PVN
             case arg
             when "--limit", "-l"
               @limit = args.shift.to_i
+            else
+              @path = arg
             end
           end
         end

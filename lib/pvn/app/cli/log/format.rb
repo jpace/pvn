@@ -14,8 +14,17 @@ module PVN
       # a format for log entries
       class Format
         include Loggable
+
+        REVISION_WIDTH = 10
+        NEG_REVISION_WIDTH = 5
+        POS_REVISION_WIDTH = 5
+        AUTHOR_WIDTH = 25
+
+        def pad what, width
+          " " * (width - what.length)
+        end
         
-        def format entry
+        def format entry, idx, total
           if false
             info "entry.revision: #{entry.revision}"
             info "entry.author  : #{entry.author}"
@@ -31,11 +40,19 @@ module PVN
           lines = Array.new
           
           summary = entry.revision.yellow.dup
-          summary << (" " * (10 - entry.revision.length))
+          summary << pad(entry.revision, REVISION_WIDTH)
+
+          negidx = (-1 - idx).to_s
+          posidx = "+#{total - idx - 1}"
+
+          summary << negidx.bold
+          summary << pad(negidx, NEG_REVISION_WIDTH)
+          summary << posidx.bold
+          summary << pad(posidx, POS_REVISION_WIDTH)
+          
           summary << entry.author.cyan
-          summary << (" " * (25 - entry.author.length))
+          summary << pad(entry.author, AUTHOR_WIDTH)
           summary << entry.date.magenta
-          # summary << (" " * (40 - entry.date.length))
 
           lines << summary
           lines << ""

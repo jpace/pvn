@@ -19,16 +19,16 @@ module PVN
             dirlog = dir.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
 
             fmt = PVN::App::Log::Format.new
-            dirlog.entries.each do |entry|
-              fmtlines = fmt.format entry
+            dirlog.entries.each_with_index do |entry, idx|
+              fmtlines = fmt.format entry, idx, dirlog.entries.size
               
               puts fmtlines
               puts '-' * 55
             end
 
-            fmtlines = fmt.format dirlog.entries[0]
+            fmtlines = fmt.format dirlog.entries[0], 0, dirlog.entries.size
             explines = [
-                        "\e[33m1950\e[0m      \e[36mjpace\e[0m                    \e[35m2011-12-05T12:41:52.385786Z\e[0m",
+                        "\e[33m1950\e[0m      \e[1m-1\e[0m   \e[1m+4\e[0m   \e[36mjpace\e[0m                    \e[35m2011-12-05T12:41:52.385786Z\e[0m",
                         "",
                         "\e[40m\e[33m\e[1mTesting.\e[0m\e[0m\e[0m",
                         "",
