@@ -48,6 +48,9 @@ module PVN
 
           fmt = PVN::App::Log::Format.new
           nentries = log.entries.size
+
+          return if true
+          
           log.entries.each_with_index do |entry, idx|
             fmtlines = fmt.format entry, idx, nentries
             

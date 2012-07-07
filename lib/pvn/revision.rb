@@ -44,6 +44,7 @@ module PVN
       @revision = nil
 
       from, to = num.kind_of?(String) ? num.split(':') : num
+      info "from: #{from}; to: #{to}".blue
 
       @revision = convert_to_revision from
       if to
@@ -51,22 +52,26 @@ module PVN
       end
     end
 
+    def to_s
+      @revision
+    end
+
     def convert_to_revision arg
       if SVN_REVISION_WORDS.include? arg
-        @revision = arg
+        arg
       elsif neg = Integer.negative?(arg)
         get_negative_revision neg
       elsif arg.kind_of? Fixnum
-        @revision = arg
+        arg
       elsif md = DATE_REGEXP.match(arg)
         info "md: #{md.inspect}".on_red
-        @revision = md[0]
+        md[0]
       elsif md = %r{^\+(\d+)}.match(arg)
         arg = md[1].to_i
         debug "arg: #{arg}"
-        @revision = get_revision @fname, nil, arg
+        get_revision @fname, nil, arg
       else
-        @revision = arg.to_i
+        arg
       end
     end
 

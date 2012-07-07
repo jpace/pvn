@@ -10,18 +10,33 @@ module PVN
   module App
     module Log
       class CmdLineArgsTest < PVN::TestCase
-        def assert_command_line_args explimit, args
+        def assert_command_line_args exp, args
           cmdline = PVN::App::Log::CmdLineArgs.new args
           info "cmdline: #{cmdline}".red
-          assert_equal explimit, cmdline.limit
+          assert_equal exp[:limit], cmdline.limit
+          assert_equal exp[:revision], cmdline.revision.to_s
         end
 
         def test_default
-          assert_command_line_args nil, Array.new
+          expdata = Hash.new
+          expdata[:limit] = nil
+          expdata[:path] = '.'
+          assert_command_line_args expdata, Array.new
         end
 
         def test_limit
-          assert_command_line_args 15, %w{ --limit 15 }
+          expdata = Hash.new
+          expdata[:limit] = 15
+          expdata[:path] = '.'
+          assert_command_line_args expdata, %w{ --limit 15 }
+        end
+
+        def test_revision
+          expdata = Hash.new
+          expdata[:limit] = nil
+          expdata[:revision] = '500:600'
+          expdata[:path] = '.'
+          assert_command_line_args expdata, %w{ -r500:600 }
         end
       end
     end
