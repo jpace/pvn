@@ -40,8 +40,6 @@ module PVN
       debug "num        : #{num}".yellow
       @fname = args[:fname]
       debug "fname      : #{@fname}".yellow
-      @executor = args[:executor]
-      debug "@executor: #{@executor}"
       
       @revision = nil
 

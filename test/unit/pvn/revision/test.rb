@@ -1,10 +1,21 @@
 require 'pvn/tc'
 require 'pvn/revision'
-require 'pvn_cmd_test'
+require 'svnx/log/logdata'
 
 module PVN
-  class TestRevision < CommandTestCase
+  class TestRevision < PVN::TestCase
     include Loggable
+
+    def setup
+      @origdir = Pathname.pwd
+      Dir.chdir WIQUERY_DIRNAME
+      super
+    end
+
+    def teardown
+      Dir.chdir @origdir
+      super
+    end
 
     def assert_revision exp, val
       rev = Revision.new :value => val, :fname => "pom.xml"

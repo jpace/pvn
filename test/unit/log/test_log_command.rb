@@ -1,6 +1,7 @@
 require 'pvn/tc'
 require 'pvn/log/logcmd'
 require 'pvn/log/logentry'
+require 'pvn/revision'
 require 'pvn_cmd_test'
 
 module PVN
