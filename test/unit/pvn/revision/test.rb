@@ -23,10 +23,13 @@ module PVN
     end
     
     def test_integers_unconverted
-      assert_revision 4, 4
-      assert_revision 4, "4"
-      assert_revision 44, "44"
-      assert_revision 10234, 10234
+      assert_revision "4", 4
+      assert_revision "4", "4"
+      assert_revision "44", "44"
+    end
+    
+    def test_integers_unconverted_long_revision
+      assert_revision "10234", 10234
     end
     
     def test_negative_in_range

@@ -7,13 +7,6 @@ module SVNx
   class Entry
     include Loggable
 
-    class << self
-      def create_from_xml_element xmlelement
-        entry = XMLEntry.new xmlelement
-        new({ :revision => entry.revision, :author => entry.author, :date => entry.date, :message => entry.message, :paths => entry.paths })
-      end
-    end
-
     LOG_SUMMARY_RE = Regexp.new '^r(\d+) \| (\S+) \| (\S+) (\S+) (\S+) \((.*)\) \| (\d+) lines?$'
 
     attr_reader :revision, :author, :date, :paths, :message

@@ -1,26 +1,23 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/xml/xmlentry'
-require 'svnx/log/entry'
+require 'svnx/status/xml/xmlentry'
+require 'svnx/status/entry'
 
 module SVNx
-  module Log
+  module Status
     class Entries
       include Loggable
 
       attr_reader :entries
-      
+
       def initialize args = Hash.new
         @entries = Array.new
 
-        if xmllog = args[:xmllog]
-          # info "xmllog: #{xmllog}".yellow
-
-          xmllog.xmlentries.each do |xmlentry|
-            # info "xmlentry: #{xmlentry.revision}"
+        if xmlstatus = args[:xmlstatus]
+          xmlstatus.xmlentries.each do |xmlentry|
             @entries << Entry.new(:xmlentry => xmlentry)
-          end          
+          end
         end
       end
     end

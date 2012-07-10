@@ -8,6 +8,7 @@ require 'svnx/log/command'
 require 'svnx/log/entries'
 require 'svnx/log/xml/xmllog'
 require 'svnx/status/command'
+require 'svnx/status/entries'
 require 'pvn/io/fselement'
 
 module PVN
@@ -44,18 +45,20 @@ module PVN
         info "cmd: #{cmd}".red
         xmllog = cmd.execute.join ''
         # info "xmllog: #{xmllog}".cyan
-        SVNx::Log::Entries.new :xmllog => SVNx::XMLLog.new(xmllog)
+        SVNx::Log::Entries.new :xmllog => SVNx::Log::XMLEntries.new(xmllog)
       end
 
-      def changed?
+      # returns :added, :deleted, :changed 
+      def status
         cmdargs = SVNx::StatusCommandArgs.new :path => @local
         cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
         info "cmd: #{cmd}".red
-        cmd.execute
+        xml = cmd.execute.join ''
 
-        output = cmd.output
-        info "output: #{output}".red
+        info "xml: #{xml}".red
 
+        entries = SVNx::Status::Entries.new :xmllog => SVNx::XMLStatus.new(xmllog)
+        info "entries: #{entries}".bold
       end
 
       # def to_command subcmd, revcl, *args

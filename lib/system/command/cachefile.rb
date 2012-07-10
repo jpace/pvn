@@ -18,7 +18,7 @@ module System
 
     def readlines
       if @pn.exist?
-        debug "reading from cache file: #{self}".cyan
+        debug "reading from cache file: #{@pn}".cyan
         @pn.readlines
       else
         output = IO.popen(@command).readlines

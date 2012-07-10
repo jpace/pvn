@@ -40,7 +40,7 @@ module System
     def execute
       stack "@args: #{@args}".cyan
       cachefile = cache_file
-      cachefile.readlines
+      @output = cachefile.readlines
     end
   end
 end

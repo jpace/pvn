@@ -18,7 +18,7 @@ module SVNx
         }
         
         # /log
-        xmllog = XMLLog.new LogData::TEST_LINES.join('')
+        xmllog = SVNx::Log::XMLEntries.new LogData::TEST_LINES.join('')
 
         log = Entries.new :xmllog => xmllog
 

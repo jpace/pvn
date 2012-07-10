@@ -14,7 +14,7 @@ module PVN
           cmdline = PVN::App::Log::CmdLineArgs.new args
           info "cmdline: #{cmdline}".red
           assert_equal exp[:limit], cmdline.limit
-          assert_equal exp[:revision], cmdline.revision.to_s
+          assert_equal exp[:revision].to_s, cmdline.revision.to_s
         end
 
         def test_default

@@ -81,9 +81,14 @@ module PVN
             info "changed: #{changed}"
           elsif elmt.local.file?
             info "elmt.local: #{elmt.local}".cyan
-            
-            if elmt.changed?
+
+            status = elmt.status
+
+            case status
+            when :changed
               info "elmt: #{elmt}".magenta
+            else
+              info "elmt: #{elmt}".cyan
             end
           end
           

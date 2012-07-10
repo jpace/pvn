@@ -5,20 +5,22 @@ require 'rexml/document'
 require 'svnx/log/xml/xmlentry'
 
 module SVNx
-  class XMLLog < REXML::Document
-    include Loggable
-    
-    attr_reader :xmlentries
-    
-    def initialize lines
-      super
+  module Log
+    class XMLEntries < REXML::Document
+      include Loggable
+      
+      attr_reader :xmlentries
+      
+      def initialize lines
+        super
 
-      @xmlentries = Array.new
+        @xmlentries = Array.new
 
-      # log/logentry
-      elements.each('log/logentry') do |entryelement|
-        # info "entryelement: #{entryelement.class}".yellow
-        @xmlentries << XMLEntry.new(entryelement)
+        # log/logentry
+        elements.each('log/logentry') do |entryelement|
+          # info "entryelement: #{entryelement.class}".yellow
+          @xmlentries << XMLEntry.new(entryelement)
+        end
       end
     end
   end

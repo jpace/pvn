@@ -15,7 +15,7 @@ module SVNx
           expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
           # /log (remember, they're 1-indexed in the XML world. of course.)
-          xmllog = XMLLog.new LogData::TEST_LINES.join('')
+          xmllog = SVNx::Log::XMLEntries.new LogData::TEST_LINES.join('')
           
           assert_entry_equals xmllog.xmlentries[2], expdata
         end
