@@ -7,7 +7,8 @@ require 'riel'
 require 'pvn/io/element'
 require 'svnx/log/entries'
 require 'pvn/app/cli/log/format'
-require 'pvn/app/cli/log/cmdline'
+require 'pvn/app/cli/log/clargs'
+require 'pvn/app/cli/pct/clargs'
 
 # the old ones:
 require 'pvn/log/logcmd'
@@ -49,7 +50,7 @@ module PVN
           fmt = PVN::App::Log::Format.new
           nentries = log.entries.size
 
-          return if true
+          # return if true
           
           log.entries.each_with_index do |entry, idx|
             fmtlines = fmt.format entry, idx, nentries
@@ -59,6 +60,34 @@ module PVN
           end
           
           return true
+        end
+
+        if arg == "pct"
+          clargs = PVN::App::Pct::CmdLineArgs.new args
+          info "clargs: #{clargs}"
+
+          elmt = PVN::IO::Element.new :local => clargs.path || '.'
+          info "elmt: #{elmt}".red
+
+          if elmt.local.directory?
+            info "elmt.local.directory?: #{elmt.local.directory?}"
+            
+            changed = Array.new
+            elmt.local.find do |fd| 
+              Find.prune if fd.rootname.to_s == '.svn'
+              changed << fd if fd.file?
+            end
+
+            info "changed: #{changed}"
+          elsif elmt.local.file?
+            info "elmt.local: #{elmt.local}".cyan
+            
+            if elmt.changed?
+              info "elmt: #{elmt}".magenta
+            end
+          end
+          
+          return
         end
 
         $stderr.puts "ERROR: subcommand not valid: #{arg}"

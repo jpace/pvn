@@ -50,14 +50,13 @@ module SVNx
     end
 
     def to_a
-      [ @limit ? "--limit #{@limit}" : nil, @path ? @path : nil, @verbose ? '-v' : nil ].compact
+      [ @limit ? "--limit #{@limit}" : nil, @path, @verbose ? '-v' : nil ].compact
     end
   end
   
   class LogCommand # < PVN::CachableCommand
     include Loggable
 
-    attr_reader :log
     attr_reader :output
     
     def initialize args = Hash.new
@@ -68,11 +67,7 @@ module SVNx
 
       @cmdargs = args[:cmdargs] ? args[:cmdargs].to_a : Array.new
 
-      @use_cache = false
-
       # super
-      
-      @log = nil
     end
 
     def command_line
@@ -83,7 +78,7 @@ module SVNx
       cmdline = command_line
       info "cmdline: #{cmdline}".cyan
       cmdline.execute
-      # info "cmdline.output: #{cmdline.output}".cyan
+      info "cmdline.output: #{cmdline.output}".bold
       
       @output = cmdline.output
     end

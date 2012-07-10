@@ -7,6 +7,8 @@ require 'pvn/base/util'
 require 'svnx/log/command'
 require 'svnx/log/entries'
 require 'svnx/log/xml/xmllog'
+require 'svnx/status/command'
+require 'pvn/io/fselement'
 
 module PVN
   module IO
@@ -21,15 +23,15 @@ module PVN
       attr_reader :local
       
       def initialize args = Hash.new
-        info "args: #{args}"
+        info "args: #{args}".negative
         
         svnurl = args[:svnurl]
         fname  = args[:filename] || args[:file] # legacy
         # $$$ todo: map svnurl to SVNElement, and fname to FSElement
 
-        @svn   = args[:svn]   || (args[:file] && SVNElement.new(:filename => args[:file]))
-        @local = args[:local] || (args[:file] && FSElement.new(args[:file]))
-
+        @svn   = args[:svn] || (args[:file] && SVNElement.new(:filename => args[:file]))
+        @local = FSElement.new args[:local] || args[:file]
+        
         info "local: #{@local}"
       end
 
@@ -43,6 +45,17 @@ module PVN
         xmllog = cmd.execute.join ''
         # info "xmllog: #{xmllog}".cyan
         SVNx::Log::Entries.new :xmllog => SVNx::XMLLog.new(xmllog)
+      end
+
+      def changed?
+        cmdargs = SVNx::StatusCommandArgs.new :path => @local
+        cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
+        info "cmd: #{cmd}".red
+        cmd.execute
+
+        output = cmd.output
+        info "output: #{output}".red
+
       end
 
       # def to_command subcmd, revcl, *args
