@@ -14,9 +14,10 @@ module SVNx
       def initialize args = Hash.new
         @entries = Array.new
 
-        if xmlstatus = args[:xmlstatus]
-          xmlstatus.xmlentries.each do |xmlentry|
-            @entries << Entry.new(:xmlentry => xmlentry)
+        if xmlentries = args[:xml]
+          xmlentries.each do |xmlentry|
+            @entries << Entry.new(:xml => xmlentry)
+            info "@entries: #{@entries}".on_red
           end
         end
       end

@@ -73,19 +73,25 @@ module PVN
             info "elmt.local.directory?: #{elmt.local.directory?}"
             
             changed = Array.new
-            elmt.local.find do |fd| 
+            elmt.local.find do |fd|
+              info "fd: #{fd}; #{fd.class}"
               Find.prune if fd.rootname.to_s == '.svn'
-              changed << fd if fd.file?
+              if fd.file?
+                subelmt = PVN::IO::Element.new :local => fd.to_s
+                info "subelmt: #{subelmt}"
+                status = subelmt.status
+                info "status: #{status}".red
+              end
             end
 
-            info "changed: #{changed}"
+            # info "changed: #{changed}"
           elsif elmt.local.file?
             info "elmt.local: #{elmt.local}".cyan
 
             status = elmt.status
 
             case status
-            when :changed
+            when "modified"
               info "elmt: #{elmt}".magenta
             else
               info "elmt: #{elmt}".cyan
