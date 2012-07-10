@@ -61,7 +61,7 @@ module PVN
         entries = SVNx::Status::Entries.new :xml => SVNx::Status::XMLEntries.new(xml)
         info "entries: #{entries}".bold
 
-        entry = entries.entries[0]
+        entry = entries[0]
         info "entry: #{entry}"
         entry.status
       end

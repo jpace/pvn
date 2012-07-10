@@ -6,18 +6,15 @@ require 'svnx/status/entry'
 
 module SVNx
   module Status
-    class Entries
+    class Entries < Array
       include Loggable
 
-      attr_reader :entries
-
       def initialize args = Hash.new
-        @entries = Array.new
+        super()
 
         if xmlentries = args[:xml]
           xmlentries.each do |xmlentry|
-            @entries << Entry.new(:xml => xmlentry)
-            info "@entries: #{@entries}".on_red
+            self << Entry.new(:xml => xmlentry)
           end
         end
       end

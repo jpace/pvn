@@ -14,11 +14,14 @@ module SVNx
       def initialize xmlelement
         info "xmlelement: #{xmlelement}"
 
-        # can I xpath? /target/entry/wc-status/item?
-        target   = xmlelement.elements['target']
-        entry    = target.elements['entry']
-        wcstatus = entry.elements['wc-status']
-        @status  = wcstatus.attributes['item']
+        target = xmlelement.elements['target']
+        
+        if entry = target.elements['entry']
+          wcstatus = entry.elements['wc-status']
+          @status  = wcstatus.attributes['item']
+        else
+          @status = "unchanged"
+        end
       end
     end
   end
