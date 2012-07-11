@@ -16,13 +16,7 @@ module SVNx
         doc = REXML::Document.new LogData::TEST_LINES.join('')
         info "doc: #{doc}"
 
-        entries = Array.new
-
-        # log/logentry
-        xmlentry = XMLEntry.new doc.elements[1].elements[3]
-
-        entry = Entry.new :xmlentry => xmlentry
-        
+        entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
         assert_entry_equals entry, expdata
       end
     end

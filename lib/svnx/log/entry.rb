@@ -1,23 +1,22 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/xml/xmlentry'
-
 module SVNx
   module Log
     class Entry
       include Loggable
 
-      attr_reader :revision, :author, :date, :paths, :message
+      attr_reader :revision, :author, :date, :paths
       
       def initialize args = Hash.new
         # this is log/logentry from "svn log --xml"
         if xmlelement = args[:xmlelement]
-          @revision = get_attribute xmlelement, 'revision'
-          @author = get_element_text xmlelement, 'author'
-          @date = get_element_text xmlelement, 'date'
-          @message = get_element_text xmlelement, 'msg'
+          set_attr_var xmlelement, 'revision'
 
+          %w{ author date msg }.each do |field|
+            set_elmt_var xmlelement, field
+          end
+          
           @paths = Array.new
 
           xmlelement.elements.each('paths/path') do |pe|
@@ -27,12 +26,6 @@ module SVNx
 
             @paths << LogEntryPath.new(:kind => kind, :action => action, :name => name)
           end
-        elsif xmlentry = args[:xmlentry]
-          @revision = xmlentry.revision
-          @author = xmlentry.author
-          @date = xmlentry.date
-          @message = xmlentry.message
-          @paths = xmlentry.paths
         else
           @revision = args[:revision]
           @author = args[:author]
@@ -40,8 +33,10 @@ module SVNx
           @paths = args[:paths]
           @message = args[:message]
         end
+      end
 
-        # info "self: #{self.inspect}".red
+      def message
+        @msg
       end
 
       def get_attribute xmlelement, attrname
@@ -50,6 +45,18 @@ module SVNx
 
       def get_element_text xmlelement, elmtname
         xmlelement.elements[elmtname].text
+      end
+
+      def set_attr_var xmlelement, varname
+        set_var varname, get_attribute(xmlelement, varname)
+      end
+
+      def set_elmt_var xmlelement, varname
+        set_var varname, get_element_text(xmlelement, varname)
+      end
+
+      def set_var varname, value
+        instance_variable_set '@' + varname, value
       end
     end
 

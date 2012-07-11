@@ -71,8 +71,8 @@ module PVN
         # $$$ todo: this should be either @local if set, otherwise @svn (url)
         cmdargs.path = @local
         cmd = SVNx::LogCommand.new :cmdargs => cmdargs
-        xml = cmd.execute.join ''
-        SVNx::Log::Entries.new :xmlentries => SVNx::Log::XMLEntries.new(xml)
+        xmllines = cmd.execute.join ''
+        SVNx::Log::Entries.new :xmllines => xmllines
       end
 
       # returns :added, :deleted, "modified"
