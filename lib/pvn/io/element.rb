@@ -72,7 +72,7 @@ module PVN
         cmdargs.path = @local
         cmd = SVNx::LogCommand.new :cmdargs => cmdargs
         xml = cmd.execute.join ''
-        SVNx::Log::Entries.new SVNx::Log::XMLEntries.new(xml)
+        SVNx::Log::Entries.new :xmlentries => SVNx::Log::XMLEntries.new(xml)
       end
 
       # returns :added, :deleted, "modified"

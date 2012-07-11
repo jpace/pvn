@@ -6,17 +6,20 @@
 
 module SVNx
   module Info
-    class Entries
+    class Entries < Array
       include Loggable
 
-      attr_reader :entries
-      
       def initialize args = Hash.new
-        @entries = Array.new
+        if xmllines = args[:xmllines]
+          doc = REXML::Document.new xmllines
 
-        if xml = args[:xml]
+          # xxx
+          doc.elements.each('xxx') do |entryelement|
+            self << Entry.new(:xmlelement => entryelement)
+          end
+        elsif xml = args[:xml]
           xml.xmlentries.each do |xmlentry|
-            @entries << Entry.new(:xmlentry => xmlentry)
+            self << Entry.new(:xmlentry => xmlentry)
           end          
         end
       end

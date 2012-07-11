@@ -20,7 +20,7 @@ module SVNx
         # /log
         xmlentries = SVNx::Log::XMLEntries.new LogData::TEST_LINES.join('')
 
-        entries = Entries.new xmlentries
+        entries = Entries.new :xmlentries => xmlentries
 
         assert_entry_equals entries[2], expdata
       end
