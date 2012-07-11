@@ -7,6 +7,7 @@ require 'system/cachecmd'
 require 'system/command/line'
 require 'system/command/caching'
 require 'pvn/svn/environment'
+require 'svnx/command'
 
 module SVNx
   CACHE_DIR = "/tmp/cache_dir_for_log_command"
@@ -15,19 +16,15 @@ module SVNx
     attr_reader :revision
   end    
 
-  class LogCommandLine < System::CommandLine
+  class LogCommandLine < CommandLine
     def initialize args = Array.new
-      info "args: #{args}".cyan
-      cmdargs = %w{ svn log --xml }.concat args
-      super cmdargs
+      super "log", args
     end
   end
 
-  class LogCommandLineCaching < System::CachingCommandLine
+  class LogCommandLineCaching < CachingCommandLine
     def initialize args = Array.new
-      info "args: #{args}".cyan
-      cmdargs = %w{ svn log --xml }.concat args
-      super cmdargs
+      super "log", args
     end
 
     def cache_dir
@@ -38,15 +35,14 @@ module SVNx
   class LogOptions
   end
 
-  class LogCommandArgs
+  class LogCommandArgs < CommandArgs
     attr_accessor :limit
     attr_accessor :verbose
-    attr_accessor :path
 
     def initialize args = Hash.new
       @limit = args[:limit]
-      @path = args[:path]
       @verbose = args[:verbose]
+      super
     end
 
     def to_a
@@ -54,33 +50,14 @@ module SVNx
     end
   end
   
-  class LogCommand # < PVN::CachableCommand
-    include Loggable
-
-    attr_reader :output
-    
+  class LogCommand < Command    
     def initialize args = Hash.new
-      info "args: #{args.inspect}".blue
-      
       @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
-      info "@use_cache: #{@use_cache}"
-
-      @cmdargs = args[:cmdargs] ? args[:cmdargs].to_a : Array.new
-
-      # super
+      super
     end
 
     def command_line
       @use_cache ? LogCommandLineCaching.new(@cmdargs) : LogCommandLine.new(@cmdargs)
-    end
-    
-    def execute
-      cmdline = command_line
-      info "cmdline: #{cmdline}".cyan
-      cmdline.execute
-      info "cmdline.output: #{cmdline.output}".bold
-      
-      @output = cmdline.output
     end
   end
 end

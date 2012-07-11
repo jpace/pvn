@@ -72,10 +72,14 @@ module PVN
           summary = add_field(entry.revision, :revision)
 
           negidx = (-1 - idx).to_s
-          posidx = "+#{total - idx - 1}"
 
           summary << add_field(negidx, :neg_revision)
-          summary << add_field(posidx, :pos_revision)
+
+          if total
+            posidx = "+#{total - idx - 1}"
+          else
+            summary << pad("", :pos_revision)
+          end
           
           summary << add_field(entry.author, :author)
           

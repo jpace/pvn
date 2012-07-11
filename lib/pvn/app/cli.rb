@@ -28,7 +28,7 @@ module PVN
     def initialize io, args
       while args.size > 0
         arg = args.shift
-        debug "arg: #{arg}"
+        info "arg: #{arg}"
 
         if arg == "--verbose"
           RIEL::Log.level = RIEL::Log::DEBUG
@@ -41,19 +41,16 @@ module PVN
 
         if arg == "log"
           clargs = PVN::App::Log::CmdLineArgs.new args
-          info "clargs: #{clargs}"
-
-          elmt = PVN::IO::Element.new :local => clargs.path || '.'
-          info "elmt: #{elmt}".red
-          log = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
+          elmt   = PVN::IO::Element.new :local => clargs.path || '.'
+          log    = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
 
           fmt = PVN::App::Log::Format.new
-          nentries = log.entries.size
-
-          # return if true
+          
+          # this should be nil if the limit isn't set
+          totalentries = clargs.limit ? nil : log.entries.size
           
           log.entries.each_with_index do |entry, idx|
-            fmtlines = fmt.format entry, idx, nentries
+            fmtlines = fmt.format entry, idx, totalentries
             
             puts fmtlines
             puts '-' * 55
@@ -69,8 +66,13 @@ module PVN
           elmt = PVN::IO::Element.new :local => clargs.path || '.'
           info "elmt: #{elmt}".red
 
-          if elmt.local.directory?
-            info "elmt.local.directory?: #{elmt.local.directory?}"
+          stats = { :modified => 0, :added => 0, :deleted => 0 }
+
+          if elmt.directory?
+            info "elmt.directory?: #{elmt.directory?}"
+
+            # $$$ todo: recurse even when local has been removed (this is the
+            # awaited "pvn find").
             
             changed = Array.new
             elmt.local.find do |fd|
@@ -85,14 +87,19 @@ module PVN
             end
 
             # info "changed: #{changed}"
-          elsif elmt.local.file?
+          elsif elmt.file?
             info "elmt.local: #{elmt.local}".cyan
 
             status = elmt.status
+            info "status: #{status}"
 
             case status
+            when "added"
+              info "elmt: #{elmt}".green
             when "modified"
-              info "elmt: #{elmt}".magenta
+              info "elmt: #{elmt}".yellow
+            when "deleted"
+              info "elmt: #{elmt}".red
             else
               info "elmt: #{elmt}".cyan
             end

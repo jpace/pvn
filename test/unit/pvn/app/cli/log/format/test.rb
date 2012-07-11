@@ -26,9 +26,9 @@ module PVN
               puts '-' * 55
             end
 
-            fmtlines = fmt.format dirlog.entries[0], 0, dirlog.entries.size
+            fmtlines = fmt.format dirlog.entries[0], 0, nil
             explines = [
-                        "\e[1m1950\e[0m      \e[1m-1\e[0m   \e[1m+4\e[0m   \e[36m\e[1mjpace\e[0m\e[0m                    \e[35m\e[1m2011-12-05T12:41:52.385786Z\e[0m\e[0m",
+                        "\e[1m1950\e[0m      \e[1m-1\e[0m        \e[36m\e[1mjpace\e[0m\e[0m                    \e[35m\e[1m2011-12-05T12:41:52.385786Z\e[0m\e[0m",
                         "",
                         "\e[40m\e[37mTesting.\e[0m\e[0m",
                         "",

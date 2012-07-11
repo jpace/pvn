@@ -37,6 +37,30 @@ module PVN
         info "local: #{@local}"
       end
 
+      def exist?
+        @local && @local.exist?
+      end
+
+      def directory?
+        if exist?
+          @local.directory?
+        else
+          # look it up with svn info
+          false
+        end
+      end
+
+      def file?
+        if exist?
+          @local.file?
+        else
+          true
+        end
+      end
+
+      def svninfo
+      end
+
       def log cmdargs = SVNx::LogCommandArgs.new
         info "cmdargs: #{cmdargs}".green
 
