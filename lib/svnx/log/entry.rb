@@ -4,6 +4,7 @@
 require 'svnx/log/xml/xmlentry'
 
 module SVNx
+  # $$$ this should be in Log module
   class Entry
     include Loggable
 

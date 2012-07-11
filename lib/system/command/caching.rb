@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
 require 'system/command/line'
 require 'system/command/cachefile'
 

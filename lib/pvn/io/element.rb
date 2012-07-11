@@ -4,12 +4,18 @@
 require 'rubygems'
 require 'riel'
 require 'pvn/base/util'
+
 require 'svnx/log/command'
 require 'svnx/log/entries'
 require 'svnx/log/xml/xmllog'
+
 require 'svnx/status/command'
 require 'svnx/status/entries'
 require 'svnx/status/xml/xmlentries'
+
+require 'svnx/info/command'
+require 'svnx/info/entries'
+
 require 'pvn/io/fselement'
 
 module PVN
@@ -54,7 +60,7 @@ module PVN
         if exist?
           @local.file?
         else
-          true
+          raise "need this"
         end
       end
 
@@ -62,31 +68,20 @@ module PVN
       end
 
       def log cmdargs = SVNx::LogCommandArgs.new
-        info "cmdargs: #{cmdargs}".green
-
+        # $$$ todo: this should be either @local if set, otherwise @svn (url)
         cmdargs.path = @local
-
         cmd = SVNx::LogCommand.new :cmdargs => cmdargs
-        info "cmd: #{cmd}".red
-        xmllog = cmd.execute.join ''
-        # info "xmllog: #{xmllog}".cyan
-        SVNx::Log::Entries.new :xmllog => SVNx::Log::XMLEntries.new(xmllog)
+        xml = cmd.execute.join ''
+        SVNx::Log::Entries.new SVNx::Log::XMLEntries.new(xml)
       end
 
       # returns :added, :deleted, "modified"
       def status
         cmdargs = SVNx::StatusCommandArgs.new :path => @local
         cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
-        info "cmd: #{cmd}".red
         xml = cmd.execute.join ''
-
-        info "xml: #{xml}".red
-
         entries = SVNx::Status::Entries.new :xml => SVNx::Status::XMLEntries.new(xml)
-        info "entries: #{entries}".bold
-
         entry = entries[0]
-        info "entry: #{entry}"
         entry.status
       end
 
