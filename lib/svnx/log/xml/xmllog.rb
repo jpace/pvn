@@ -14,7 +14,6 @@ module SVNx
 
         # log/logentry
         doc.elements.each('log/logentry') do |entryelement|
-          # info "entryelement: #{entryelement.class}".yellow
           self << XMLEntry.new(entryelement)
         end
       end
