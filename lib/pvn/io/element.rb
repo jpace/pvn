@@ -7,7 +7,6 @@ require 'pvn/base/util'
 
 require 'svnx/log/command'
 require 'svnx/log/entries'
-require 'svnx/log/xml/xmllog'
 
 require 'svnx/status/command'
 require 'svnx/status/entries'

@@ -3,7 +3,6 @@
 
 require 'svnx/log/tc'
 require 'svnx/log/entries'
-require 'svnx/log/xml/xmllog'
 
 module SVNx
   module Log
@@ -17,9 +16,6 @@ module SVNx
           :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
         }
         
-        # /log
-        # xmlentries = SVNx::Log::XMLEntries.new LogData::TEST_LINES.join('')
-
         entries = Entries.new :xmllines => LogData::TEST_LINES.join('')
 
         assert_entry_equals entries[2], expdata

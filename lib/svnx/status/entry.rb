@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/xml/xmlentry'
+# require 'svnx/status/xml/xmlentry'
 
 module SVNx
   module Status
