@@ -10,7 +10,6 @@ require 'svnx/log/entries'
 
 require 'svnx/status/command'
 require 'svnx/status/entries'
-require 'svnx/status/xml/xmlentries'
 
 require 'svnx/info/command'
 require 'svnx/info/entries'

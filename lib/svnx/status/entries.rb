@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/status/xml/xmlentry'
 require 'svnx/status/entry'
 
 module SVNx
@@ -11,6 +10,8 @@ module SVNx
 
       def initialize args = Hash.new
         super()
+
+        raise "not implemented"
 
         if xmlentries = args[:xml]
           xmlentries.each do |xmlentry|

@@ -1,20 +1,31 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-# require 'svnx/status/xml/xmlentry'
+require 'svnx/entry'
 
 module SVNx
   module Status
-    class Entry
-      include Loggable
+    class Entry < SVNx::Entry
 
       attr_reader :status
+      attr_reader :path
       
       def initialize args = Hash.new
-        if xml = args[:xml]
-          @status = xml.status
+        if xmllines = args[:xmllines]
+          doc    = REXML::Document.new xmllines
+          stelmt = doc.elements['status']
+          tgt    = stelmt.elements['target']
+
+          set_attr_var tgt, 'path'
+          
+          if entry = tgt.elements['entry']
+            wcstatus = entry.elements['wc-status']
+            @status = wcstatus.attributes['item']
+          else
+            @status = "unchanged"
+          end
         else
-          @status = args[:status]
+          raise "must be initialized with xmllines"
         end
 
         info "self: #{self.inspect}".red

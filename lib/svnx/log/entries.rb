@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'svnx/log/entry'
+require 'rexml/document'
 
 module SVNx
   module Log

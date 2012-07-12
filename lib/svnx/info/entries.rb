@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-# require 'svnx/info/xml/xmlentry'
 # require 'svnx/info/entry'
 
 module SVNx
