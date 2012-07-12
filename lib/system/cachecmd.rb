@@ -27,7 +27,7 @@ module PVN
         info "cmd: #{cmd}".on_green
         run_cached_command cmd
       else
-        @output = ::IO.popen(cmd).readlines
+        @output = ::IO::popen(cmd).readlines
       end
     end
 
