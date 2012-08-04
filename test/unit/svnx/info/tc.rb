@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/tc'
-require 'rexml/document'
 
 module SVNx
   module Info
@@ -13,10 +12,9 @@ module SVNx
         info "entry: #{entry.inspect}"
         info "expdata: #{expdata.inspect}"
 
-        assert_equal expdata[:url], entry.url
-        assert_equal expdata[:path], entry.path
-        assert_equal expdata[:root], entry.root
-        assert_equal expdata[:kind], entry.kind
+        [ :url, :path, :root, :kind ].each do |field|
+          assert_equal expdata[field], entry.send(field)
+        end
       end
     end
   end

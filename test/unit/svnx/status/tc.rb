@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/tc'
-require 'rexml/document'
 
 module SVNx
   module Status
@@ -13,8 +12,9 @@ module SVNx
         info "entry: #{entry.inspect}"
         info "expdata: #{expdata.inspect}"
 
-        assert_equal expdata[:path], entry.path
-        assert_equal expdata[:status], entry.status
+        [ :path, :status ].each do |field|
+          assert_equal expdata[field], entry.send(field)
+        end
       end
     end
   end
