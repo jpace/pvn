@@ -55,7 +55,7 @@ module PVN
         debug "reading from cache file: #{cfile}".cyan
         @output = cfile.readlines
       else
-        @output = IO.popen(cmd).readlines
+        @output = ::IO::popen(cmd).readlines
         cfile.parent.mkpath
         stack "saving output to cache file: #{cfile}".cyan
         File.put_via_temp_file cfile do
