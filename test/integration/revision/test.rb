@@ -1,9 +1,10 @@
+require 'integration/tc'
 require 'pvn/tc'
 require 'pvn/revision'
 require 'svnx/log/logdata'
 
 module PVN
-  class TestRevision < PVN::TestCase
+  class TestRevision < PVN::IntegrationTestCase
     include Loggable
 
     def setup

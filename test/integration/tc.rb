@@ -6,8 +6,8 @@ require 'svnx/log/command'
 require 'rexml/document'
 require 'svnx/log/logdata'
 
-module SVNx
-  class TestCase < PVN::TestCase
+module PVN
+  class IntegrationTestCase < PVN::TestCase
     include Loggable
 
     def setup

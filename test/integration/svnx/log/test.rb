@@ -8,16 +8,13 @@ require 'svnx/log/entry'
 
 module SVNx
   module Log
-    class EntryTestCase < SVNx::TestCase
+    class EntryTestCase < PVN::IntegrationTestCase
       include Loggable
       
       def test_entry_from_command
-        lcargs = LogCommandArgs.new :limit => 1, :verbose => false, :use_cache => false
-        info "lcargs: #{lcargs}"
-
+        lcargs = LogCommandArgs.new :limit => 2, :verbose => false, :use_cache => false
         lc = LogCommand.new lcargs
-        info "lc: #{lc}"
-
+        
         lc.execute
         output = lc.output
         info "output: #{output}"
@@ -26,9 +23,8 @@ module SVNx
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
         doc = REXML::Document.new output.join('')
-        info "doc: #{doc}"
 
-        entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
+        entry = Entry.new :xmlelement => doc.elements[1].elements[2]
         assert_entry_equals entry, expdata
       end
     end
