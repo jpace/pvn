@@ -12,7 +12,7 @@ module PVN
   module App
     module CLI
       module Log
-        class FormatTestCase ###$$$ < PVN::TestCase
+        class FormatTestCase < PVN::TestCase
           def test_default
             dir = PVN::IO::Element.new :local => '/Programs/wiquery/trunk'
             

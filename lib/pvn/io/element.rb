@@ -68,7 +68,7 @@ module PVN
       def log cmdargs = SVNx::LogCommandArgs.new
         # $$$ todo: this should be either @local if set, otherwise @svn (url)
         cmdargs.path = @local
-        cmd = SVNx::LogCommand.new :cmdargs => cmdargs
+        cmd = SVNx::LogCommand.new cmdargs
         xmllines = cmd.execute.join ''
         SVNx::Log::Entries.new :xmllines => xmllines
       end
