@@ -14,7 +14,7 @@ module SVNx
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
         doc = REXML::Document.new test_lines.join('')
-        info "doc: #{doc}"
+        # info "doc: #{doc}"
 
         entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
         assert_log_entry_equals entry, expdata

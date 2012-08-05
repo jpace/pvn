@@ -7,11 +7,12 @@ module SVNx
   module Log
     class Entry < SVNx::Entry
 
-      attr_reader :revision, :author, :date, :paths
+      attr_reader :revision, :author, :date, :paths, :msg
       
       def initialize args = Hash.new
         # this is log/logentry from "svn log --xml"
         if xmlelement = args[:xmlelement]
+          # info "xmlelement: #{xmlelement}".yellow
           set_attr_var xmlelement, 'revision'
 
           %w{ author date msg }.each do |field|

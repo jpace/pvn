@@ -33,40 +33,44 @@ PvnTestTask.new('test:all') do |t|
   t.test_files = FileList['test/**/test*.rb']
 end
 
-def build_fixture dir, cmd
-end
+def build_fixture svndir, svncmd
+  origdir  = Pathname.new(Dir.pwd).expand_path
+  tgtdir   = origdir + 'test/resources'
+  outfname = svndir.sub(%r{^/}, '').gsub('/', '_') + '__' + svncmd.gsub(' ', '_')
+  outfile  = tgtdir + outfname
 
-task :build_fixtures do
-  origdir = Pathname.new(Dir.pwd).expand_path
-  puts "origdir: #{origdir}"
-  svndir = "/Programs/wiquery"
-  tgtdir = origdir + 'test/resources'
-  outfile = tgtdir + 'Programs_wiquery__svn_log_-l_15_--xml'
   Dir.chdir svndir
-  IO.popen("svn log -l 15 --xml") do |io|
+
+  puts "svndir : #{svndir}"
+  puts "svncmd : #{svncmd}"
+  puts "outfile: #{outfile}"
+
+  IO.popen(svncmd) do |io|
     lines = io.readlines
-    # puts lines
     File.open(outfile, "w") do |io|
       io.puts lines
     end
-    # /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml
   end
-  ## /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml
   Dir.chdir origdir.to_s
 end
 
+task :build_fixtures do
+  build_fixture '/Programs/wiquery', 'svn log -l 15 --xml'
+  build_fixture '/Programs/wiquery', 'svn log --xml'
+end
+
 spec = Gem::Specification.new do |s| 
-  s.name = "pvn"
-  s.version = "0.0.1"
-  s.author = "Jeff Pace"
-  s.email = "jeugenepace@gmail.com"
-  s.homepage = "http://www.incava.org/projects/pvn"
-  s.platform = Gem::Platform::RUBY
-  s.summary = "What you wish Subversion had."
-  s.files = FileList["{bin,lib}/**/*"].to_a
-  s.require_path = "lib"
-  s.test_files = FileList["{test}/**/*test.rb"].to_a
-  s.has_rdoc = true
+  s.name             = "pvn"
+  s.version          = "0.0.1"
+  s.author           = "Jeff Pace"
+  s.email            = "jeugenepace@gmail.com"
+  s.homepage         = "http://www.incava.org/projects/pvn"
+  s.platform         = Gem::Platform::RUBY
+  s.summary          = "What you wish Subversion had."
+  s.files            = FileList["{bin,lib}/**/*"].to_a
+  s.require_path     = "lib"
+  s.test_files       = FileList["{test}/**/*test.rb"].to_a
+  s.has_rdoc         = true
   s.extra_rdoc_files = [ "README.rdoc" ]
 end
  

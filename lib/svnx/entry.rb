@@ -14,7 +14,9 @@ module SVNx
     end
 
     def get_element_text xmlelement, elmtname
-      xmlelement.elements[elmtname].text
+      elmt = xmlelement.elements[elmtname]
+      # in my test svn repository, revision 1 doesn't have an author element:
+      (elmt && elmt.text) || ""
     end
 
     def set_attr_var xmlelement, varname

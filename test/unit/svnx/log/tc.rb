@@ -11,7 +11,11 @@ module SVNx
       include Loggable
 
       def test_lines
-        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_--xml")
+        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml")
+      end
+
+      def test_lines_no_limit
+        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_--xml")
       end
 
       def find_subelement_by_name elmt, name
