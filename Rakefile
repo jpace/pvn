@@ -33,9 +33,26 @@ PvnTestTask.new('test:all') do |t|
   t.test_files = FileList['test/**/test*.rb']
 end
 
+def build_fixture dir, cmd
+end
+
 task :build_fixtures do
-  ## /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_--xml
-  raise "not implemented"
+  origdir = Pathname.new(Dir.pwd).expand_path
+  puts "origdir: #{origdir}"
+  svndir = "/Programs/wiquery"
+  tgtdir = origdir + 'test/resources'
+  outfile = tgtdir + 'Programs_wiquery__svn_log_-l_15_--xml'
+  Dir.chdir svndir
+  IO.popen("svn log -l 15 --xml") do |io|
+    lines = io.readlines
+    # puts lines
+    File.open(outfile, "w") do |io|
+      io.puts lines
+    end
+    # /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml
+  end
+  ## /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml
+  Dir.chdir origdir.to_s
 end
 
 spec = Gem::Specification.new do |s| 
