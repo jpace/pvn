@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'system/cachecmd'
 require 'system/command/line'
 require 'system/command/caching'
 require 'pvn/svn/environment'
