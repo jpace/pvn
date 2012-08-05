@@ -4,7 +4,6 @@
 require 'tc'
 require 'svnx/log/command'
 require 'rexml/document'
-require 'svnx/log/logdata'
 
 module PVN
   module Log

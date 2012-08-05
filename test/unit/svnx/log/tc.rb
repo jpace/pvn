@@ -4,38 +4,14 @@
 require 'tc'
 require 'svnx/log/command'
 require 'rexml/document'
-require 'svnx/log/logdata'
 
 module SVNx
   module Log
     class TestCase < PVN::TestCase
       include Loggable
 
-      def setup
-        @cache_dir = PVN::Environment.instance.cache_dir
-        info "@cache_dir: #{@cache_dir}"
-        remove_cache_dir
-        
-        super
-
-        @origdir = Dir.pwd
-        Dir.chdir '/Programs/wiquery/trunk'
-      end
-
-      def teardown
-        remove_cache_dir        
-        super
-      end
-
-      def remove_cache_dir
-        pn = Pathname.new @cache_dir
-        info "pn: #{pn}".red
-        pn.rmtree if pn.exist?
-      end
-
-      def assert_cache_dir_exists expected
-        pn = Pathname.new @cache_dir
-        assert_equal expected, pn.exist?
+      def test_lines
+        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_--xml")
       end
 
       def find_subelement_by_name elmt, name

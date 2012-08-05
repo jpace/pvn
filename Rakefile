@@ -34,6 +34,7 @@ PvnTestTask.new('test:all') do |t|
 end
 
 task :build_fixtures do
+  ## /proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_--xml
   raise "not implemented"
 end
 

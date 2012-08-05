@@ -16,7 +16,7 @@ module SVNx
           :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
         }
         
-        entries = Entries.new :xmllines => LogData::TEST_LINES.join('')
+        entries = Entries.new :xmllines => test_lines.join('')
 
         assert_entry_equals entries[2], expdata
       end

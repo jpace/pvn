@@ -1,6 +1,5 @@
 require 'integration/tc'
 require 'pvn/revision'
-require 'svnx/log/logdata'
 
 module PVN
   class TestRevision < PVN::IntegrationTestCase
