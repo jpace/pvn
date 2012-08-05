@@ -17,7 +17,7 @@ module SVNx
         info "doc: #{doc}"
 
         entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
-        assert_entry_equals entry, expdata
+        assert_log_entry_equals entry, expdata
       end
     end
   end

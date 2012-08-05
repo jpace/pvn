@@ -63,6 +63,18 @@ module SVNx
         super
       end
 
+      # this is the older assertion for a log entry; assert_log_entry_equals
+      # should be used instead.
+
+      def assert_log_entry_brief elmt, expdata = Hash.new
+        assert_equal 'logentry', elmt.name
+
+        info "elmt: #{elmt}"
+        assert_equal expdata[:author], find_subelement_by_name(elmt, 'author')
+        assert_equal expdata[:date], find_subelement_by_name(elmt, 'date')
+        assert_equal expdata[:msg], find_subelement_by_name(elmt, 'msg')
+      end
+
       def assert_log_entries cmd
         info "cmd: #{cmd}".yellow
         cmd.execute
@@ -84,13 +96,13 @@ module SVNx
         expdata[:date] = '2011-12-05T12:41:52.385786Z'
         expdata[:msg] = 'Testing.'
 
-        assert_log_entry logentryelmts[1], expdata
+        assert_log_entry_brief logentryelmts[1], expdata
 
         expdata = Hash.new
         expdata[:author] = 'hielke.hoeve@gmail.com'
         expdata[:date] = '2011-09-28T14:32:43.601185Z'
         expdata[:msg] = 'rework of the js/css/string tokens for post rendering.'
-        assert_log_entry logentryelmts[17], expdata
+        assert_log_entry_brief logentryelmts[17], expdata
       end
 
       def test_xml_output

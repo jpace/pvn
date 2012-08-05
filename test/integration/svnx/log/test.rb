@@ -10,6 +10,19 @@ module SVNx
   module Log
     class EntryTestCase < PVN::IntegrationTestCase
       include Loggable
+
+      def assert_log_entry_equals entry, expdata
+        assert_equal expdata[0], entry.revision
+        assert_equal expdata[1], entry.author
+        assert_equal expdata[2], entry.date
+        assert_equal expdata[3], entry.message
+        entry.paths.each_with_index do |path, idx|
+          info path.inspect.yellow
+          assert_equal expdata[4 + idx][:kind], path.kind
+          assert_equal expdata[4 + idx][:action], path.action
+          assert_equal expdata[4 + idx][:name], path.name
+        end
+      end
       
       def test_entry_from_command
         lcargs = LogCommandArgs.new :limit => 2, :verbose => false, :use_cache => false
@@ -25,7 +38,7 @@ module SVNx
         doc = REXML::Document.new output.join('')
 
         entry = Entry.new :xmlelement => doc.elements[1].elements[2]
-        assert_entry_equals entry, expdata
+        assert_log_entry_equals entry, expdata
       end
     end
   end
