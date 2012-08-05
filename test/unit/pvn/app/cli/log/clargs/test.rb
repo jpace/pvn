@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/tc'
+require 'tc'
 require 'pvn/app/cli/log/clargs'
 
 Log.level = Log::DEBUG

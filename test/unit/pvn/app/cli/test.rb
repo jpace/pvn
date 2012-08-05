@@ -1,7 +1,7 @@
-require 'pvn/tc'
+require 'tc'
 require 'pvn/app/cli'
 
-class TestPVNCli < Test::Unit::TestCase
+class TestPVNCli < PVN::TestCase
   def setup
     PVN::CLI.execute @stdout_io = StringIO.new, Array.new
     @stdout_io.rewind

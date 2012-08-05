@@ -1,5 +1,4 @@
 require 'integration/tc'
-require 'pvn/tc'
 require 'pvn/revision'
 require 'svnx/log/logdata'
 

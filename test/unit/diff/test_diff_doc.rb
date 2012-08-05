@@ -1,4 +1,4 @@
-require 'pvn/tc'
+require 'tc'
 require 'pvn/diff/diffcmd'
 
 module PVN

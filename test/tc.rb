@@ -8,6 +8,8 @@ Log.set_widths(-12, 4, -35)
 
 module PVN
   class TestCase < Test::Unit::TestCase
+    include Loggable
+    
     def setup
     end
     

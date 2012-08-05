@@ -1,4 +1,4 @@
-require 'pvn/tc'
+require 'tc'
 require 'pvn/diff/diffcmd'
 
 module PVN
@@ -7,6 +7,7 @@ module PVN
 
     WIQUERY_URL = "file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk"
     TMP_DIR = "/proj/tmp"       # SSD here; /tmp is HDD
+    WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
 
     def setup
       info "setting up".blue

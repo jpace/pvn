@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/tc'
+require 'tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
 require 'pvn/app/cli/log/format'

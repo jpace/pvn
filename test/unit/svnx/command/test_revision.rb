@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/tc'
+require 'tc'
 require 'svnx/command/revision'
 
 module SVNx

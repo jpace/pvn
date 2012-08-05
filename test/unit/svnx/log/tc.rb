@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/tc'
+require 'tc'
 require 'svnx/log/command'
 require 'rexml/document'
 require 'svnx/log/logdata'
