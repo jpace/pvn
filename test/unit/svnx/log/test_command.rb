@@ -44,7 +44,7 @@ end
 
 module SVNx
   module Log
-    class CommandTestCase < SVNx::Log::TestCase
+    class CommandTestCase ###$$$ < SVNx::Log::TestCase
       include Loggable
 
       def setup

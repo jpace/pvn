@@ -6,7 +6,7 @@ require 'svnx/log/command'
 
 module SVNx
   module Log
-    class CommandArgsTestCase < SVNx::Log::TestCase
+    class CommandArgsTestCase ###$$$ < SVNx::Log::TestCase
 
       def test_options_log_limit
         cmdargs = LogCommandArgs.new :limit => 6

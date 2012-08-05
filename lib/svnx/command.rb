@@ -41,8 +41,9 @@ module SVNx
 
     attr_reader :output
     
-    def initialize args = Hash.new
-      @cmdargs = args[:cmdargs] ? args[:cmdargs].to_a : Array.new
+    def initialize args
+      # @cmdargs = args[:cmdargs] ? args[:cmdargs].to_a : Array.new
+      @args = args
     end
 
     def command_line

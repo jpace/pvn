@@ -15,7 +15,7 @@ class PvnTestTask < Rake::TestTask
     libs << "lib"
     libs << "test"
     libs << "test/unit"
-    libs << "test/integration"
+    # libs << "test/integration"
     warning = true
     verbose = true
   end

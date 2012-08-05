@@ -9,6 +9,9 @@ require 'svnx/log/logdata'
 module PVN
   module Log
     class TestCase < PVN::TestCase
+      def test_revision_absolute
+        # log = PVN::Log.new :
+      end
     end
   end
 end

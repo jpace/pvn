@@ -18,13 +18,13 @@ module SVNx
 
   class LogCommandLine < CommandLine
     def initialize args = Array.new
-      super "log", args
+      super "log", args.to_a
     end
   end
 
   class LogCommandLineCaching < CachingCommandLine
     def initialize args = Array.new
-      super "log", args
+      super "log", args.to_a
     end
 
     def cache_dir
@@ -36,12 +36,17 @@ module SVNx
   end
 
   class LogCommandArgs < CommandArgs
-    attr_accessor :limit
-    attr_accessor :verbose
+    include Loggable
+    
+    attr_reader :limit
+    attr_reader :verbose
+    attr_reader :use_cache
 
     def initialize args = Hash.new
       @limit = args[:limit]
       @verbose = args[:verbose]
+      @use_cache = args[:use_cache].nil? || args[:use_cache]
+      info "@use_cache: #{@use_cache}".cyan
       super
     end
 
@@ -51,13 +56,13 @@ module SVNx
   end
   
   class LogCommand < Command    
-    def initialize args = Hash.new
-      @use_cache = args[:use_cache].nil? ? true : args[:use_cache]
+    def initialize args
+      @use_cache = args.use_cache
       super
     end
 
     def command_line
-      @use_cache ? LogCommandLineCaching.new(@cmdargs) : LogCommandLine.new(@cmdargs)
+      @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
     end
   end
 end
