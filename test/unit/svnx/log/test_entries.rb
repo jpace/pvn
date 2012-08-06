@@ -36,28 +36,33 @@ module SVNx
       end
 
       def test_no_author_field
-        info ">>>>> self: #{self}".red
-
         entries = Entries.new :xmllines => test_lines_no_author.join('')
         nentries = entries.size
 
-        # first entry (revision 1) has no author ... wtf?
+        # revision 1 has no author ... wtf?
         assert_entry_fields_not_nil entries[0]
-
-        info "<<<<< self: #{self}".red
       end
 
       def test_empty_message_element
-        info ">>>>> self: #{self}".red
-
         entries = Entries.new :xmllines => test_lines_empty_message.join('')
         nentries = entries.size
 
-        # these are occasionally missing or blank, which REXML considers nil:
-        
         # empty message here:
         assert_entry_fields_not_nil entries[0]
+      end
 
+      def test_create_on_demand
+        info ">>>>> self: #{self}".red
+
+        xmllines = test_lines_no_limit.join('')
+
+        info "xmllines fetched."
+
+        entries = Entries.new :xmllines => xmllines
+
+        nentries = entries.size
+        assert_equal 1949, nentries
+        
         info "<<<<< self: #{self}".red
       end
     end
