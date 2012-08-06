@@ -18,6 +18,7 @@ module SVNx
 
           # log/logentry
           doc.elements.each('log/logentry') do |logentry|
+            # info "logentry: #{logentry}".red
             self << Entry.new(:xmlelement => logentry)
           end
         elsif xmlentries = args[:xmlentries]

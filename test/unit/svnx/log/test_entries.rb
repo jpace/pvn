@@ -35,17 +35,30 @@ module SVNx
         assert_log_entry_equals entries[2], expdata
       end
 
-      def test_create_from_long_xml
-        entries = Entries.new :xmllines => test_lines_no_limit.join('')
+      def test_no_author_field
+        info ">>>>> self: #{self}".red
+
+        entries = Entries.new :xmllines => test_lines_no_author.join('')
+        nentries = entries.size
+
+        # first entry (revision 1) has no author ... wtf?
+        assert_entry_fields_not_nil entries[0]
+
+        info "<<<<< self: #{self}".red
+      end
+
+      def test_empty_message_element
+        info ">>>>> self: #{self}".red
+
+        entries = Entries.new :xmllines => test_lines_empty_message.join('')
         nentries = entries.size
 
         # these are occasionally missing or blank, which REXML considers nil:
         
         # empty message here:
-        assert_entry_fields_not_nil entries[201]
+        assert_entry_fields_not_nil entries[0]
 
-        # first entry (revision 1) has no author ... wtf?
-        assert_entry_fields_not_nil entries[1948]
+        info "<<<<< self: #{self}".red
       end
     end
   end
