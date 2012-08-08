@@ -20,7 +20,7 @@ require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
 
 RIEL::Log.level = RIEL::Log::DEBUG
-RIEL::Log.set_widths(-15, 5, -35)
+RIEL::Log.set_widths(-25, 5, -35)
 
 module PVN
   class CLI
@@ -45,7 +45,7 @@ module PVN
           elmt   = PVN::IO::Element.new :local => clargs.path || '.'
           log    = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
 
-          fmt = PVN::App::Log::Format.new
+          fmt = PVN::Log::Format.new
           
           # this should be nil if the limit isn't set
           totalentries = clargs.limit ? nil : log.entries.size
