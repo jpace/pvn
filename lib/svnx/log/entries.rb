@@ -48,7 +48,7 @@ module SVNx
           @logelements = nil
         end
 
-        @entries.to_a.each(&blk)
+        @entries.keys.sort.collect { |idx| @entries[idx] }.each(&blk)
       end
     end
   end

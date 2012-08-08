@@ -4,7 +4,7 @@ require 'stringio'
 require 'test/unit'
 
 Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
+Log.set_widths(-35, 4, -35)
 
 module PVN
   class TestCase < Test::Unit::TestCase
