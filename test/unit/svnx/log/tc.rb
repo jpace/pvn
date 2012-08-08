@@ -4,26 +4,27 @@
 require 'tc'
 require 'svnx/log/command'
 require 'rexml/document'
+require 'resources'
 
 module SVNx
   module Log
     class TestCase < PVN::TestCase
       include Loggable
 
-      def test_lines
-        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-l_15_--xml")
+      def test_lines_limit_15
+        Resources.instance.test_lines '/Programs/wiquery', 'svn', 'log', '-l', '15', '--xml'
       end
 
       def test_lines_no_limit
-        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_--xml")
+        Resources.instance.test_lines '/Programs/wiquery', 'svn', 'log', '--xml'
       end
 
       def test_lines_no_author
-        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-r1_--xml")
+        Resources.instance.test_lines '/Programs/wiquery', 'svn', 'log', '-r1', '--xml'
       end
 
       def test_lines_empty_message
-        IO.readlines("/proj/org/incava/pvn/test/resources/Programs_wiquery__svn_log_-r1748_--xml")
+        Resources.instance.test_lines '/Programs/wiquery', 'svn', 'log', '-r1748', '--xml'
       end
 
       def find_subelement_by_name elmt, name

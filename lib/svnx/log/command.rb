@@ -56,6 +56,7 @@ module SVNx
   
   class LogCommand < Command    
     def initialize args
+      stack "args: #{args}".on_red
       @use_cache = args.use_cache
       super
     end

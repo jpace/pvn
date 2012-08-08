@@ -13,11 +13,6 @@ module SVNx
       include Loggable
 
       def assert_entry_fields_not_nil entry
-        debug "entry: #{entry}".bold
-        debug "entry.revision: #{entry.revision}".bold
-        debug "entry.author: #{entry.author}".bold
-        debug "entry.message: #{entry.message.inspect}".bold
-
         # these are occasionally missing or blank, which REXML considers nil:
         assert entry.message
         assert entry.author
@@ -30,7 +25,7 @@ module SVNx
           :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
         }
         
-        entries = Entries.new :xmllines => test_lines.join('')
+        entries = Entries.new :xmllines => test_lines_limit_15.join('')
 
         assert_log_entry_equals entries[2], expdata
       end
@@ -52,17 +47,34 @@ module SVNx
       end
 
       def test_create_on_demand
-        info ">>>>> self: #{self}".red
-
         xmllines = test_lines_no_limit.join('')
 
-        info "xmllines fetched."
+        info "xmllines #{xmllines.size} fetched."
+
+        assert_equal 324827, xmllines.size
 
         entries = Entries.new :xmllines => xmllines
 
         nentries = entries.size
         assert_equal 1949, nentries
+
+        # the power of Ruby ...
+
+        real_entries = entries.instance_eval '@entries'
+
+        info "real_entries: #{real_entries}"
+
+        assert_nil real_entries[16]
+        assert_nil real_entries[17]
+        assert_nil real_entries[18]
+
+        assert_entry_fields_not_nil entries[17]
         
+        info "real_entries: #{real_entries}"
+
+        assert_nil real_entries[16]
+        assert_nil real_entries[18]
+
         info "<<<<< self: #{self}".red
       end
     end

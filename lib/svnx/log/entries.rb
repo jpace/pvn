@@ -10,7 +10,7 @@ module SVNx
       include Loggable, Enumerable
 
       def initialize args = Hash.new
-        @entries = Array.new
+        @entries = Hash.new
 
         if xmllines = args[:xmllines]
           # this is preferred
@@ -23,7 +23,7 @@ module SVNx
           # this is legacy:
 
           xmlentries.each do |xmlentry|
-            @entries << Entry.new(:xmlentry => xmlentry)
+            @entries[@entries.size] = Entry.new(:xmlentry => xmlentry)
           end
         end
       end
@@ -48,7 +48,7 @@ module SVNx
           @logelements = nil
         end
 
-        @entries.each(&blk)
+        @entries.to_a.each(&blk)
       end
     end
   end

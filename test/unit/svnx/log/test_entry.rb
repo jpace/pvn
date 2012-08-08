@@ -13,7 +13,7 @@ module SVNx
         expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
         expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
 
-        doc = REXML::Document.new test_lines.join('')
+        doc = REXML::Document.new test_lines_limit_15.join('')
         # info "doc: #{doc}"
 
         entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
