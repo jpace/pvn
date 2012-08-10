@@ -44,8 +44,7 @@ module PVN
           clargs = PVN::App::Log::CmdLineArgs.new args
           elmt   = PVN::IO::Element.new :local => clargs.path || '.'
           log    = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
-
-          fmt = PVN::Log::Format.new
+          fmt    = PVN::Log::Format.new
           
           # this should be nil if the limit isn't set
           totalentries = clargs.limit ? nil : log.entries.size

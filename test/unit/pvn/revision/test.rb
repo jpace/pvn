@@ -12,9 +12,16 @@ Log.level = Log::DEBUG
 module PVN
   module Revisionxxx
     class TestCase < PVN::TestCase
-      def assert_revision_entry test_lines, exp_number, number
-        rev = PVN::Revisionxxx::Entry.new :xmllines => test_lines.join(''), :number => number
-        assert_equal exp_number, rev.number
+      def assert_revision_entry test_lines, exp_value, value
+        rev = PVN::Revisionxxx::Entry.new :xmllines => test_lines && test_lines.join(''), :value => value
+        assert_equal exp_value.to_s, rev.value
+      end
+
+      def test_normal
+        test_lines = nil
+        assert_revision_entry test_lines, 733, 733
+        assert_revision_entry test_lines, 1907, 1907
+        assert_revision_entry test_lines, 'HEAD', 'HEAD'
       end
 
       def test_default
@@ -34,10 +41,23 @@ module PVN
           info "logentry.revision: #{logentry.revision}"
         end
 
-        # rev = PVN::Revisionxxx::Entry.new logentries, 733
         assert_revision_entry test_lines, 733, 733
         assert_revision_entry test_lines, 1907, 1907
+        assert_revision_entry test_lines, 1907, 1907
       end
+
+      # def test_end
+      #   class File
+      #     def initialize args
+      #       rev = args[:revision]
+      #       reventry = Revision.new name, rev
+      #       @revision = reventry.number
+      #     end
+      #   end
+
+      #   dir = PVN::IO::File :name => "pom.xml", :revision => "-3"
+      #   assert_equal 190, dir.revision
+      # end
     end
   end
 end
