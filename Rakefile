@@ -60,6 +60,7 @@ task :build_fixtures do
   build_fixture '/Programs/wiquery', 'svn log -r1748 --xml'
   build_fixture '/Programs/wiquery', 'svn log -r1 --xml'
   build_fixture '/Programs/wiquery/trunk', 'svn log -l 15 -v --xml'
+  build_fixture '/Programs/wiquery/trunk', 'svn log --xml pom.xml'
 end
 
 spec = Gem::Specification.new do |s| 
