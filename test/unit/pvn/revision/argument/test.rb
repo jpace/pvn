@@ -2,12 +2,7 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'svnx/log/entries'
-require 'pvn/revision/entry'
-
-require 'resources'
-
-Log.level = Log::DEBUG
+require 'pvn/revision/argument'
 
 module PVN
   module Revisionxxx
@@ -58,11 +53,6 @@ module PVN
       def test_positive_string
         arg = assert_argument '1', '+1'
         assert_pos_neg arg, true, false
-      end
-
-      # todo
-      def xxxtest_double_arguments
-        # assert_??? '-1:-4', '-1:-4'
       end
     end
   end
