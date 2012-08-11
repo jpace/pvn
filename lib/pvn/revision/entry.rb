@@ -21,20 +21,30 @@ module PVN
       attr_reader :value
 
       def initialize args = Hash.new
-        val = args[:value]
-        info "val: #{val}"
+        arg = Argument.new args[:value]        
+        if arg.relative?
+          set_as_relative arg, args[:xmllines]
+        else
+          @value = arg.value
+        end
+      end
 
-        arg = Argument.new val
-        info "arg: #{arg}".blue
+      def set_as_relative arg, xmllines
+        raise "cannot determine relative revision without xmllines" unless xmllines
 
-        @value = arg.value
+        logentries = SVNx::Log::Entries.new :xmllines => xmllines
 
-        if xmllines = args[:xmllines]
-          logentries = SVNx::Log::Entries.new :xmllines => xmllines
-          logentries.each do |logentry|
-            info "logentry: #{logentry}".cyan
-          end
-          # @value = args[:value]
+        # logentries are in descending order, so the most recent one is index 0
+        info "logentries: #{logentries.size}".red
+
+        val = arg.value
+
+        if val > logentries.size
+          @value = nil
+        else
+          idx = arg.negative? ? -1 + val : logentries.size - val
+          logentry = logentries[idx]
+          @value = logentry.revision.to_i
         end
       end
     end

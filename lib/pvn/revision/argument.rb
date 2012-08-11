@@ -31,20 +31,20 @@ module PVN
         case val
         when Fixnum
           info "fixnum: #{val}"
-          @value = val.abs.to_s
+          @value = val.abs.to_i
           @negative = val < 0
         when String
           info "string: #{val}".cyan
           if SVN_REVISION_WORDS.include? val
-            @value = val
+            @value = val.to_s
           elsif md = NEGATIVE_NUM_RE.match(val)
-            @value = md[1].to_s
+            @value = md[1].to_i
             @negative = true
           elsif md = POSITIVE_NUM_RE.match(val)
-            @value = md[1].to_s
+            @value = md[1].to_i
             @positive = true
           else
-            @value = val.to_s
+            @value = val.to_i
           end
         when Date
           # $$$ this (and Time) will probably have to be converted to svn's format
@@ -52,6 +52,11 @@ module PVN
         when Time
           raise "time not yet handled"
         end
+      end
+
+      # the value is of the form "-N" or "+N"
+      def relative?
+        @negative || @positive
       end
 
       # the value is of the form "-N"

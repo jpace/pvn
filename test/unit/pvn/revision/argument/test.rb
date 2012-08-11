@@ -23,36 +23,47 @@ module PVN
         arg
       end
 
+      def assert_relative arg, exp_rel
+        assert_equal exp_rel, arg.relative?
+        arg
+      end
+
       def test_string_to_number
-        arg = assert_argument '733', '733'
+        arg = assert_argument 733, '733'
         assert_pos_neg arg, false, false
+        assert_relative arg, false
       end
 
       def test_fixnum_to_number
-        arg = assert_argument '733', 733
+        arg = assert_argument 733, 733
         assert_pos_neg arg, false, false
+        assert_relative arg, false
       end
 
       def test_svn_keywords
         %w{ HEAD BASE COMMITTED PREV }.each do |word|
           arg = assert_argument word, word
           assert_pos_neg arg, false, false
+          assert_relative arg, false
         end
       end
 
       def test_negative_fixnum
-        arg = assert_argument '1', -1
+        arg = assert_argument 1, -1
         assert_pos_neg arg, false, true
+        assert_relative arg, true
       end
 
       def test_negative_string
-        arg = assert_argument '1', '-1'
+        arg = assert_argument 1, '-1'
         assert_pos_neg arg, false, true
+        assert_relative arg, true
       end
 
       def test_positive_string
-        arg = assert_argument '1', '+1'
+        arg = assert_argument 1, '+1'
         assert_pos_neg arg, true, false
+        assert_relative arg, true
       end
     end
   end
