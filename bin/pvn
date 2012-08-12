@@ -4,7 +4,6 @@
 #  Copyright (c) 2011. All rights reserved.
 
 require 'rubygems'
-puts "__FILE__: #{__FILE__}"
 require File.expand_path(File.dirname(__FILE__) + "/../lib/pvn")
 require "pvn/app/cli"
 

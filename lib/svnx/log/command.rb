@@ -39,24 +39,31 @@ module SVNx
     
     attr_reader :limit
     attr_reader :verbose
+    attr_reader :revision
     attr_reader :use_cache
 
     def initialize args = Hash.new
       @limit = args[:limit]
       @verbose = args[:verbose]
       @use_cache = args[:use_cache].nil? || args[:use_cache]
+      @revision = args[:revision]
       info "@use_cache: #{@use_cache}".cyan
+      info "args: #{args}".on_magenta
+      info "@revision: #{@revision}".red
+
       super
     end
 
     def to_a
-      [ @limit ? "--limit #{@limit}" : nil, @path, @verbose ? '-v' : nil ].compact
+      info "@revision: #{@revision}".red
+      [ @limit && "--limit #{@limit}", @verbose && '-v', @revision && "-r#{@revision}", @path ].compact
     end
   end
   
-  class LogCommand < Command    
+  class LogCommand < Command
     def initialize args
       stack "args: #{args}".on_red
+      info "args.to_a: #{args.to_a}".on_red
       @use_cache = args.use_cache
       super
     end

@@ -19,7 +19,7 @@ require 'pvn/describe'
 require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
 
-RIEL::Log.level = RIEL::Log::DEBUG
+RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-25, 5, -35)
 
 module PVN
@@ -41,19 +41,31 @@ module PVN
         end
 
         if arg == "log"
-          clargs = PVN::App::Log::CmdLineArgs.new args
-          elmt   = PVN::IO::Element.new :local => clargs.path || '.'
-          log    = elmt.log SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true
-          fmt    = PVN::Log::Format.new
+          info "args: #{args}"
+
+          clargs  = PVN::App::Log::CmdLineArgs.new args
+          info "clargs: #{clargs}"
+          info "clargs.revision: #{clargs.revision}"
+
+          logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true, :revision => clargs.revision
+          info "logargs: #{logargs}"
+
+          elmt    = PVN::IO::Element.new :local => clargs.path || '.'
+          log     = elmt.log logargs
+          fmt     = PVN::Log::Format.new
           
-          # this should be nil if the limit isn't set
-          totalentries = clargs.limit ? nil : log.entries.size
+          # this dictates whether to show +N and/or -1:
+          totalentries = clargs.limit || clargs.revision ? nil : log.entries.size
+
+          info "totalentries: #{totalentries}".yellow.bold
           
           log.entries.each_with_index do |entry, idx|
             fmtlines = fmt.format entry, idx, totalentries
             
             puts fmtlines
             puts '-' * 55
+
+            # return if true
           end
           
           return true

@@ -4,10 +4,31 @@
 require 'svnx/log/entries'
 
 module PVN
+  class ColorFormatter
+    include Loggable
+
+
+    def pad what, field
+      nspaces = [ get_width(field) - what.length, 1 ].max
+      " " * nspaces
+    end
+
+    def colorize what, field
+      colors = get_colors field
+      colors.each do |col|
+        what = what.send col
+      end
+      what
+    end
+
+    def add_field value, field
+      colorize(value, field) + pad(value, field)
+    end
+  end
+
   module Log
     # a format for log entries
-    class Format
-      include Loggable
+    class Format < ColorFormatter
 
       WIDTHS = { 
         :revision => 10, 
@@ -31,21 +52,58 @@ module PVN
         :dir => [ :bold ],
       }
 
-      def pad what, field
-        nspaces = [ WIDTHS[field] - what.length, 1 ].max
-        " " * nspaces
+      PATH_ACTIONS = {
+        'M' => :modified,
+        'A' => :added,
+        'D' => :deleted,
+        'R' => :renamed
+      }
+
+      def get_width field
+        WIDTHS[field]
       end
 
-      def colorize what, field
-        colors = COLORS[field]
-        colors.each do |col|
-          what = what.send col
+      def get_colors field
+        COLORS[field]
+      end
+
+      def format_summary entry, idx, total
+        summary = add_field(entry.revision, :revision)
+        negidx  = (-1 - idx).to_s
+        summary << add_field(negidx, :neg_revision)
+
+        if total
+          posidx = "+#{total - idx - 1}"
+        else
+          summary << pad("", :pos_revision)
         end
-        what
+        
+        summary << add_field(entry.author, :author)        
+        summary << colorize(entry.date, :date)
+        summary
       end
 
-      def add_field value, field
-        colorize(value, field) + pad(value, field)
+      def format_message entry
+        entry.message.white.on_black
+      end
+
+      def format_paths entry
+        lines = Array.new
+        entry.paths.sort_by { |path| path.name }.each do |path|
+          pstr = "    "
+          if field = PATH_ACTIONS[path.action]
+            pstr << colorize(path.name, field)
+          else
+            raise "wtf?: #{path.action}"
+          end
+
+          if path.kind == 'dir'
+            pstr = colorize(pstr, :dir)
+          end
+
+          lines << pstr
+        end
+        lines
       end
       
       def format entry, idx, total
@@ -63,49 +121,13 @@ module PVN
         
         lines = Array.new
         
-        summary = add_field(entry.revision, :revision)
-
-        negidx = (-1 - idx).to_s
-
-        summary << add_field(negidx, :neg_revision)
-
-        if total
-          posidx = "+#{total - idx - 1}"
-        else
-          summary << pad("", :pos_revision)
-        end
-        
-        summary << add_field(entry.author, :author)
-        
-        summary << colorize(entry.date, :date)
-
-        lines << summary
+        lines << format_summary(entry, idx, total)
         lines << ""
         
-        lines << entry.message.white.on_black
+        lines << format_message(entry)
         lines << ""
 
-        entry.paths.each do |path|
-          pstr = "    "
-          case path.action
-          when 'M'
-            pstr << colorize(path.name, :modified)
-          when 'A'
-            pstr << colorize(path.name, :added)
-          when 'D'
-            pstr << colorize(path.name, :deleted)
-          when 'R'
-            pstr << colorize(path.name, :renamed)
-          else
-            raise "wtf?: #{path.action}"
-          end
-
-          if path.kind == 'dir'
-            pstr = colorize(pstr, :dir)
-          end
-
-          lines << pstr
-        end
+        lines.concat format_paths(entry)
         
         lines
       end
