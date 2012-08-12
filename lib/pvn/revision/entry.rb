@@ -14,18 +14,71 @@ module PVN
   module Revisionxxx
     DATE_REGEXP = Regexp.new('^\{(.*?)\}')
     SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
+    RELATIVE_REVISION_RE = Regexp.new '([\+\-])(\d+)$'
 
     class Entry
       include Loggable
 
       attr_reader :value
+      attr_reader :log_entry
+
+      class << self
+        alias_method :orig_new, :new
+
+        def new args = Hash.new
+          value = args[:value]
+          xmllines = args[:xmllines]
+          arg = nil
+
+          val = args[:value]
+          arg = case val
+                when Fixnum
+                  ::RIEL::Log.info "fixnum: #{val}"
+                  if val < 0
+                    RelativeArgument.orig_new val, true
+                    # return RelativeEntry.orig_new val, true, xmllines
+                  else
+                    args[:value] = val
+                    return FixnumEntry.orig_new val
+                  end
+                when String
+                  ::RIEL::Log.info "string: #{val}".cyan
+                  if SVN_REVISION_WORDS.include? val
+                    return StringEntry.orig_new val
+                  elsif md = RELATIVE_REVISION_RE.match(val)
+                    RelativeArgument.orig_new md[2].to_i, md[1] == '-'
+                  else
+                    args[:value] = val.to_i
+                    return FixnumEntry.orig_new val.to_i
+                  end
+                when Date
+                  # $$$ this (and Time) will probably have to be converted to svn's format
+                  raise "date not yet handled"
+                when Time
+                  raise "time not yet handled"
+                end
+          
+          ::RIEL::Log.info "arg: #{arg}".red
+
+          args[:arg] = arg
+
+          orig_new args
+        end
+      end
 
       def initialize args = Hash.new
-        arg = Argument.new args[:value]        
-        if arg.relative?
-          set_as_relative arg, args[:xmllines]
+        # info "args: #{args}".yellow
+        info "args[:value]: #{args[:value]}".yellow
+        info "args[:arg]: #{args[:arg]}".yellow
+
+        if arg = args[:arg]
+          if arg.relative?
+            set_as_relative arg, args[:xmllines]
+          else
+            @value = arg.value
+          end
         else
-          @value = arg.value
+          @value = args[:value]
         end
       end
 
@@ -43,9 +96,37 @@ module PVN
           @value = nil
         else
           idx = arg.negative? ? -1 + val : logentries.size - val
-          logentry = logentries[idx]
-          @value = logentry.revision.to_i
+          @log_entry = logentries[idx]
+          @value = @log_entry.revision.to_i
         end
+      end
+    end
+    
+    class FixnumEntry < Entry
+      def initialize value
+        args = Hash.new
+        args[:value] = value
+        super args
+      end
+    end
+
+    class StringEntry < Entry
+      def initialize value
+        args = Hash.new
+        args[:value] = value
+        super args
+      end
+    end
+
+    class RelativeEntry < FixnumEntry
+      def initialize value, is_negative, xmllines
+        args = Hash.new
+        args[:value] = value
+        args[:arg] = RelativeArgument.orig_new value, is_negative
+        args[:xmllines] = xmllines
+        super args
+        # @negative = is_negative
+        # @positive = !is_negative
       end
     end
   end

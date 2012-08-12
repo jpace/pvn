@@ -34,6 +34,18 @@ module PVN
         assert_revision_entry 412, 412
       end
 
+      def test_absolute_midrange_as_string
+        assert_revision_entry 733, '733'
+      end
+
+      def test_absolute_most_recent_as_string
+        assert_revision_entry 1907, '1907'
+      end
+
+      def test_absolute_least_recent_as_string
+        assert_revision_entry 412, '412'
+      end
+
       def test_svn_word
         assert_revision_entry 'HEAD', 'HEAD'
         %w{ HEAD BASE COMMITTED PREV }.each do |word|
@@ -42,18 +54,34 @@ module PVN
       end
 
       def test_negative_most_recent
-        assert_revision_entry 1907, '-1'
+        assert_revision_entry 1907, -1
       end
 
       def test_negative_second_most_recent
-        assert_revision_entry 1887, '-2'
+        assert_revision_entry 1887, -2
       end
 
       def test_negative_least_recent
-        assert_revision_entry 412, '-34'
+        assert_revision_entry 412, -34
       end
 
       def test_negative_too_far_back
+        assert_revision_entry nil, -35
+      end
+
+      def test_negative_most_recent_as_string
+        assert_revision_entry 1907, '-1'
+      end
+
+      def test_negative_second_most_recent_as_string
+        assert_revision_entry 1887, '-2'
+      end
+
+      def test_negative_least_recent_as_string
+        assert_revision_entry 412, '-34'
+      end
+
+      def test_negative_too_far_back_as_string
         assert_revision_entry nil, '-35'
       end
 

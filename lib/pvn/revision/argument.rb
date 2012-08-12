@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision/entry'
+# require 'pvn/revision/entry'
 
 module PVN
   # Returns the Nth revision from the given logging output.
@@ -12,12 +12,40 @@ module PVN
   module Revisionxxx
     DATE_REGEXP = Regexp.new('^\{(.*?)\}')
     SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
+    RELATIVE_REVISION_RE = Regexp.new '([\+\-])(\d+)$'
 
     class Argument
       include Loggable
 
-      NEGATIVE_NUM_RE = Regexp.new '\-(\d+)$'
-      POSITIVE_NUM_RE = Regexp.new '\+(\d+)$'
+      class << self
+        alias_method :orig_new, :new
+
+        def new val
+          case val
+          when Fixnum
+            ::RIEL::Log.info "fixnum: #{val}"
+            if val < 0
+              return RelativeArgument.orig_new val, true
+            else
+              return FixnumArgument.orig_new val
+            end
+          when String
+            ::RIEL::Log.info "string: #{val}".cyan
+            if SVN_REVISION_WORDS.include? val
+              return Argument.orig_new val.to_s
+            elsif md = RELATIVE_REVISION_RE.match(val)
+              return RelativeArgument.orig_new md[2].to_i, md[1] == '-'
+            else
+              return Argument.orig_new val.to_i
+            end
+          when Date
+            # $$$ this (and Time) will probably have to be converted to svn's format
+            raise "date not yet handled"
+          when Time
+            raise "time not yet handled"
+          end
+        end
+      end
       
       attr_reader :value
 
@@ -25,33 +53,8 @@ module PVN
         info "val: #{val}"
         info "val.class: #{val.class}"
 
-        @positive = false
-        @negative = false
-
-        case val
-        when Fixnum
-          info "fixnum: #{val}"
-          @value = val.abs.to_i
-          @negative = val < 0
-        when String
-          info "string: #{val}".cyan
-          if SVN_REVISION_WORDS.include? val
-            @value = val.to_s
-          elsif md = NEGATIVE_NUM_RE.match(val)
-            @value = md[1].to_i
-            @negative = true
-          elsif md = POSITIVE_NUM_RE.match(val)
-            @value = md[1].to_i
-            @positive = true
-          else
-            @value = val.to_i
-          end
-        when Date
-          # $$$ this (and Time) will probably have to be converted to svn's format
-          raise "date not yet handled"
-        when Time
-          raise "time not yet handled"
-        end
+        @positive = @negative = false
+        @value = val
       end
 
       # the value is of the form "-N" or "+N"
@@ -67,6 +70,20 @@ module PVN
       # positive means the value is of the form "+N", not simply N > 0
       def positive?
         @positive
+      end
+    end
+
+    class FixnumArgument < Argument
+      def initialize val
+        super
+      end
+    end
+
+    class RelativeArgument < Argument
+      def initialize val, is_negative
+        super val.abs
+        @negative = is_negative
+        @positive = !is_negative
       end
     end
   end
