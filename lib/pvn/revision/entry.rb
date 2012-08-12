@@ -35,8 +35,8 @@ module PVN
                 when Fixnum
                   ::RIEL::Log.info "fixnum: #{val}"
                   if val < 0
-                    RelativeArgument.orig_new val, true
-                    # return RelativeEntry.orig_new val, true, xmllines
+                    # RelativeArgument.orig_new val, true
+                    return RelativeEntry.orig_new val, true, xmllines
                   else
                     args[:value] = val
                     return FixnumEntry.orig_new val
