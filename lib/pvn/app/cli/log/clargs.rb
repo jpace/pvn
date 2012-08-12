@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision'
 require 'pvn/revision/entry'
 
 module PVN
@@ -29,13 +28,13 @@ module PVN
               @limit = args.shift.to_i
             when %r{-r(.*)}
               revval = Regexp.last_match[1]
-              if PVN::Revisionxxx::RELATIVE_REVISION_RE.match revval
+              if Revisionxxx::Entry::matches_relative? revval
                 revargs << revval
               else
                 @revision = revval
               end
             else
-              if PVN::Revisionxxx::RELATIVE_REVISION_RE.match(arg)
+              if Revisionxxx::Entry::matches_relative? arg
                 revargs << arg
               else
                 @path = arg

@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/entries'
+require 'svnx/log/entry'
 
 module PVN
   class ColorFormatter

@@ -51,6 +51,10 @@ module PVN::Revisionxxx
           raise "time not yet handled"
         end          
       end
+
+      def matches_relative? str
+        RELATIVE_REVISION_RE.match str
+      end
     end
 
     def initialize value
