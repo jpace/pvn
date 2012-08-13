@@ -101,26 +101,8 @@ module PVN
         assert_revision_entry nil, '+35'
       end
 
-      def xxxtest_default
-        # dir = PVN::IO::Element.new :local => '/Programs/wiquery/trunk'        
-        # dirlog = dir.log SVNx::LogCommandArgs.new(:limit => 5, :verbose => true)
-
-        test_lines = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "--xml", "pom.xml"
-
-        logentries = SVNx::Log::Entries.new :xmllines => test_lines.join('')
-
-        # assert_log_entry_equals logentries[2], expdata
-
-        info "logentries: #{logentries}"
-
-        logentries.each do |logentry|
-          info "logentry: #{logentry}"
-          info "logentry.revision: #{logentry.revision}"
-        end
-
-        assert_revision_entry 733, 733
-        assert_revision_entry 1907, 1907
-        # assert_revision_entry 1907, '-1'
+      def xxxtest_range_svn_word_to_number
+        assert_revision_entry 'BASE:1', 'BASE:1'
       end
 
       # def test_end
