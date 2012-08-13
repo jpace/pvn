@@ -41,21 +41,16 @@ module PVN
         end
 
         if arg == "log"
-          info "args: #{args}"
-
           clargs  = PVN::App::Log::CmdLineArgs.new args
-          info "clargs: #{clargs}"
-          info "clargs.revision: #{clargs.revision}"
-
-          logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => true, :revision => clargs.revision
-          info "logargs: #{logargs}"
-
+          logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
           elmt    = PVN::IO::Element.new :local => clargs.path || '.'
           log     = elmt.log logargs
           fmt     = PVN::Log::Format.new
+
+          nentries = log.entries.size
           
           # this dictates whether to show +N and/or -1:
-          totalentries = clargs.limit || clargs.revision ? nil : log.entries.size
+          totalentries = clargs.limit || clargs.revision ? nil : nentries
 
           info "totalentries: #{totalentries}".yellow.bold
           
@@ -63,7 +58,10 @@ module PVN
             fmtlines = fmt.format entry, idx, totalentries
             
             puts fmtlines
-            puts '-' * 55
+
+            if idx < nentries - 1
+              puts '-' * 55
+            end
 
             # return if true
           end
