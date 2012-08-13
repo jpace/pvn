@@ -53,6 +53,14 @@ module PVN::App::Log
       end
     end
 
+    def save_revision_value revval
+      if matches_relative? revval
+        @revargs << revval
+      else
+        @revision = revval
+      end
+    end
+
     def process_args args
       while !args.empty?
         arg = args.shift
@@ -61,13 +69,12 @@ module PVN::App::Log
           @limit = args.shift.to_i
         when "--verbose", "-v"
           @verbose = true
+        when "-c"
+          chgval = args.shift
+          raise "option '-c' requires an argument" unless chgval
+          save_revision_value chgval
         when %r{-r(.*)}
-          revval = Regexp.last_match[1]
-          if matches_relative? revval
-            @revargs << revval
-          else
-            @revision = revval
-          end
+          save_revision_value Regexp.last_match[1]
         else
           if matches_relative? arg
             @revargs << arg
