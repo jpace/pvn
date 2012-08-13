@@ -13,6 +13,7 @@ module PVN::App::Log
     attr_reader :path
     attr_reader :revision
     attr_reader :verbose
+    attr_reader :help
 
     def initialize args
       @limit    = nil
@@ -20,6 +21,7 @@ module PVN::App::Log
       @path     = '.'
       @revargs  = Array.new
       @verbose  = nil
+      @help     = nil
 
       # we have to process all arguments before resolving the revision,
       # since the revision needs the path.
@@ -65,6 +67,8 @@ module PVN::App::Log
       while !args.empty?
         arg = args.shift
         case arg
+        when "--help"
+          @help = true
         when "--limit", "-l"
           @limit = args.shift.to_i
         when "--verbose", "-v"

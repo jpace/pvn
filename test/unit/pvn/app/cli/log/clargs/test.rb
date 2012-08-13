@@ -46,6 +46,15 @@ module PVN
           expdata[:path] = '.'
           assert_command_line_args expdata, %w{ -r500:600 }
         end
+
+        def test_help
+          expdata = Hash.new
+          expdata[:limit] = nil
+          expdata[:revision] = nil
+          expdata[:path] = '.'
+          expdata[:help] = true
+          assert_command_line_args expdata, %w{ --help }
+        end          
       end
     end
   end
