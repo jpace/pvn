@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
 require 'system/cmdexec'
 require 'pvn/option/optionable'
 require 'pvn/option/revopt'

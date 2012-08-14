@@ -14,6 +14,7 @@ module PVN::App::Log
     attr_reader :revision
     attr_reader :verbose
     attr_reader :help
+    attr_reader :format
 
     def initialize args
       @limit    = nil
@@ -22,6 +23,7 @@ module PVN::App::Log
       @revargs  = Array.new
       @verbose  = nil
       @help     = nil
+      @format   = true
 
       # we have to process all arguments before resolving the revision,
       # since the revision needs the path.
@@ -60,12 +62,14 @@ module PVN::App::Log
         @revargs << revval
       else
         @revision = revval
+        info "@revision: #{@revision}".yellow
       end
     end
 
     def process_args args
       while !args.empty?
         arg = args.shift
+        info "arg: #{arg}".yellow
         case arg
         when "--help"
           @help = true
@@ -73,6 +77,10 @@ module PVN::App::Log
           @limit = args.shift.to_i
         when "--verbose", "-v"
           @verbose = true
+        when "--noformat", "-F"
+          @format = false
+        when "--format", "-f"
+          @format = true
         when "-c"
           chgval = args.shift
           raise "option '-c' requires an argument" unless chgval

@@ -1,9 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
-
 module System
   class CacheFile
     include Loggable

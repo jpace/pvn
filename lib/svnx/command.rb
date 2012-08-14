@@ -12,6 +12,7 @@ module SVNx
     def initialize subcmd, args = Array.new
       info "args: #{args}".cyan
       cmdargs = [ 'svn', subcmd, '--xml' ].concat args
+      info "cmdargs: #{cmdargs}"
       super cmdargs
     end
   end

@@ -7,7 +7,6 @@ module PVN
   class ColorFormatter
     include Loggable
 
-
     def pad what, field
       nspaces = [ get_width(field) - what.length, 1 ].max
       " " * nspaces
@@ -15,6 +14,7 @@ module PVN
 
     def colorize what, field
       colors = get_colors field
+      return what if colors.nil? || colors.empty?
       colors.each do |col|
         what = what.send col
       end
@@ -31,25 +31,25 @@ module PVN
     class Format < ColorFormatter
 
       WIDTHS = { 
-        :revision => 10, 
+        :revision     => 10, 
         :neg_revision => 5,
         :pos_revision => 5,
-        :author => 25
+        :author       => 25
       }
 
       COLORS = {
-        :revision => [ :bold ],
+        :revision     => [ :bold ],
         :neg_revision => [ :bold ],
         :pos_revision => [ :bold ],
-        :author => [ :bold, :cyan ],
-        :date => [ :bold, :magenta ],
+        :author       => [ :bold, :cyan ],
+        :date         => [ :bold, :magenta ],
 
-        :added => [ :green ],
-        :modified => [ :yellow ],
-        :deleted => [ :red ],
-        :renamed => [ :magenta ],
+        :added        => [ :green ],
+        :modified     => [ :yellow ],
+        :deleted      => [ :red ],
+        :renamed      => [ :magenta ],
 
-        :dir => [ :bold ],
+        :dir          => [ :bold ],
       }
 
       PATH_ACTIONS = {
@@ -59,12 +59,17 @@ module PVN
         'R' => :renamed
       }
 
+      def initialize options
+        @use_colors = options[:colors]
+        # should also turn this off if not on a terminal that supports colors ...
+      end
+
       def get_width field
         WIDTHS[field]
       end
 
       def get_colors field
-        COLORS[field]
+        @use_colors ? COLORS[field] : nil
       end
 
       def format_summary entry, idx, total
@@ -84,7 +89,8 @@ module PVN
       end
 
       def format_message entry
-        entry.message.white.on_black
+        msg = entry.message
+        @use_colors ? msg.white : msg
       end
 
       def format_paths entry

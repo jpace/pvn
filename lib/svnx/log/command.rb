@@ -47,9 +47,11 @@ module SVNx
       @verbose = args[:verbose]
       @use_cache = args[:use_cache].nil? || args[:use_cache]
       @revision = args[:revision]
-      info "@use_cache: #{@use_cache}".cyan
-      info "args: #{args}".on_magenta
-      info "@revision: #{@revision}".red
+      info "args      : #{args}"
+      info "@limit    : #{@limit}"
+      info "@verbose  : #{@verbose}"
+      info "@use_cache: #{@use_cache}"
+      info "@revision : #{@revision}"
 
       super
     end
@@ -69,7 +71,10 @@ module SVNx
     end
 
     def command_line
-      @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
+      info "@args: #{@args}"
+      cmdline = @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
+      info "cmdline: #{cmdline}"
+      cmdline
     end
   end
 end

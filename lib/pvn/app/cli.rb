@@ -8,8 +8,11 @@ require 'pvn/io/element'
 
 require 'svnx/log/entries'
 require 'pvn/log/format'
-require 'pvn/app/cli/log/clargs'
-require 'pvn/app/cli/pct/clargs'
+
+require 'pvn/app/cli/log/command'
+
+# not yet supported:
+# require 'pvn/app/cli/pct/command'
 
 # the old ones:
 require 'pvn/log/logcmd'
@@ -41,81 +44,13 @@ module PVN
         end
 
         if arg == "log"
-          clargs  = PVN::App::Log::CmdLineArgs.new args
-          logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
-          elmt    = PVN::IO::Element.new :local => clargs.path || '.'
-          log     = elmt.log logargs
-          fmt     = PVN::Log::Format.new
-
-          nentries = log.entries.size
-          
-          # this dictates whether to show +N and/or -1:
-          totalentries = clargs.limit || clargs.revision ? nil : nentries
-
-          info "totalentries: #{totalentries}".yellow.bold
-          
-          log.entries.each_with_index do |entry, idx|
-            fmtlines = fmt.format entry, idx, totalentries
-            
-            puts fmtlines
-
-            if idx < nentries - 1
-              puts '-' * 55
-            end
-
-            # return if true
-          end
-          
+          PVN::App::Log::Command.new args
           return true
         end
 
         if arg == "pct"
-          clargs = PVN::App::Pct::CmdLineArgs.new args
-          info "clargs: #{clargs}"
-
-          elmt = PVN::IO::Element.new :local => clargs.path || '.'
-          info "elmt: #{elmt}".red
-
-          stats = { :modified => 0, :added => 0, :deleted => 0 }
-
-          if elmt.directory?
-            info "elmt.directory?: #{elmt.directory?}"
-
-            # $$$ todo: recurse even when local has been removed (this is the
-            # awaited "pvn find").
-            
-            changed = Array.new
-            elmt.local.find do |fd|
-              info "fd: #{fd}; #{fd.class}"
-              Find.prune if fd.rootname.to_s == '.svn'
-              if fd.file?
-                subelmt = PVN::IO::Element.new :local => fd.to_s
-                info "subelmt: #{subelmt}"
-                status = subelmt.status
-                info "status: #{status}".red
-              end
-            end
-
-            # info "changed: #{changed}"
-          elsif elmt.file?
-            info "elmt.local: #{elmt.local}".cyan
-
-            status = elmt.status
-            info "status: #{status}"
-
-            case status
-            when "added"
-              info "elmt: #{elmt}".green
-            when "modified"
-              info "elmt: #{elmt}".yellow
-            when "deleted"
-              info "elmt: #{elmt}".red
-            else
-              info "elmt: #{elmt}".cyan
-            end
-          end
-          
-          return
+          raise "subcommand 'pct' is not yet supported"
+          return true
         end
 
         $stderr.puts "ERROR: subcommand not valid: #{arg}"

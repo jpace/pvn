@@ -26,6 +26,8 @@ module PVN::Revisionxxx
       def new args = Hash.new
         value = args[:value]
 
+        Log.info "value: #{value}"
+
         # these are lines from "svn log -v <file>"
         xmllines = args[:xmllines]
 
@@ -41,6 +43,8 @@ module PVN::Revisionxxx
             StringEntry.orig_new value
           elsif md = RELATIVE_REVISION_RE.match(value)
             RelativeEntry.orig_new md[0].to_i, xmllines
+          elsif DATE_REGEXP.match value
+            StringEntry.orig_new value
           else
             FixnumEntry.orig_new value.to_i
           end

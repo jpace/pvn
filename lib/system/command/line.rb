@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
 require 'system/command/arg'
 
 module System
@@ -21,7 +19,9 @@ module System
     end
 
     def execute
-      @output = ::IO.popen(to_command).readlines
+      cmd = to_command
+      info "cmd: #{cmd}"
+      @output = ::IO.popen(cmd).readlines
     end
 
     def to_command
