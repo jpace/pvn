@@ -9,7 +9,7 @@ require 'pvn/io/element'
 require 'svnx/log/entries'
 require 'pvn/log/format'
 
-require 'pvn/app/cli/log/command'
+require 'pvn/app/cli/subcommands/log/command'
 
 # not yet supported:
 # require 'pvn/app/cli/pct/command'

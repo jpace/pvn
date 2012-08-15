@@ -1,12 +1,12 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/app/cli/log/clargs'
+require 'pvn/app/cli/subcommands/log/clargs'
 require 'pvn/io/element'
 require 'pvn/log/format'
 require 'pvn/revision/entry'
 require 'svnx/log/entries'
-require 'pvn/app/cli/subcommand/doc'
+require 'pvn/app/cli/subcommands/base/doc'
 
 module PVN; module App; end; end
 
