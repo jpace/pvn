@@ -65,6 +65,7 @@ module PVN::IO
     def svninfo
     end
 
+    # returns log entries
     def log cmdargs = SVNx::LogCommandArgs.new
       # $$$ todo: this should be either @local if set, otherwise @svn (url)
       # cmdargs.path = @local

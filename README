@@ -31,5 +31,3 @@ Yes, pvn is smart enough not to need the -r tag, at least with relative revision
 That is what I consider the best feature so far, and it's not even implemented
 right now. (It was, and right now the entire app is being rewritten, so the
 future, present, and past tenses are all applicable.)
-
-

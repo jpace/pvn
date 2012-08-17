@@ -3,8 +3,8 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/option/set'
-require 'pvn/option/option'
+require 'synoption/set'
+require 'synoption/option'
 require 'pvn/cmddoc'
 
 module PVN

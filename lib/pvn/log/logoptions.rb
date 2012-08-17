@@ -1,10 +1,10 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/option/set'
-require 'pvn/option/option'
-require 'pvn/option/boolopt'
-require 'pvn/option/revreopt'
+require 'synoption/set'
+require 'synoption/option'
+require 'synoption/boolopt'
+require 'pvn/app/cli/subcommands/revision/revreopt'
 
 module PVN
   DEFAULT_LIMIT = 5

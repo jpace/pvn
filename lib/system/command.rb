@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'system/cmdexec'
-require 'pvn/option/optionable'
-require 'pvn/option/revopt'
+require 'synoption/optionable'
+require 'pvn/app/cli/subcommands/revision/revopt'
 
 module PVN
   class Command

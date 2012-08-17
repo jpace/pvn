@@ -3,7 +3,7 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/option/option'
+require 'synoption/option'
 
 module PVN
   # a boolean option maps to a single tag, not a tag and value. For example,

@@ -3,6 +3,7 @@
 
 require 'riel'
 require 'rubygems'
+require 'synoption/option'
 
 module PVN
   class RevisionOption < Option

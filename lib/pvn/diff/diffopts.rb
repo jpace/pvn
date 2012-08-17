@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/option/set'
-require 'pvn/option/revopt'
+require 'synoption/set'
+require 'pvn/app/cli/subcommands/revision/revopt'
 
 module PVN
   thisfile = Pathname.new __FILE__
