@@ -54,11 +54,13 @@ module PVN
     def match_option opt, args
       arg = args[0]
 
-      if opt.exact_match? arg
+      match_type = opt.match_type? arg
+      case match_type
+      when :exact
         [ :set, opt.takes_value? ? 1 : 0 ]
-      elsif opt.regexp_match? arg
+      when :regexp
         [ :set, 0 ]
-      elsif opt.negative_match? arg
+      when :negative
         [ :unset, 0 ]
       else
         nil

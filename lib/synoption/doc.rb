@@ -28,7 +28,7 @@ module PVN
 
     def to_doc_negate
       doc = nil
-      @option.options[:negate].each do |neg|
+      @option.negate.each do |neg|
         str = if neg.kind_of? Regexp
                 str = re_to_string neg
               else
@@ -64,15 +64,15 @@ module PVN
         io.puts to_doc_line lhs, descline, idx == 0 ? ":" : ""
       end
 
-      if defval = @option.options[:default]
+      if defval = @option.default
         io.puts to_doc_line "", "  default: #{defval}"
       end
 
-      if re = @option.options[:regexp]
+      if re = @option.regexp
         io.puts to_doc_line re_to_string(re), "same as above", ":"
       end
 
-      if @option.options[:negate]
+      if @option.negate
         lhs = to_doc_negate
         io.puts to_doc_line lhs, "", ""
       end

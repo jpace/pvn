@@ -3,17 +3,10 @@
 
 require 'rubygems'
 require 'riel'
-require 'synoption/doc'
 
 module PVN
   class OptionMatch
     include Loggable
-
-    attr_reader :option
-
-    def initialize option
-      @option = option
-    end
 
     def match? arg
       raise "not implemented"
@@ -21,30 +14,34 @@ module PVN
   end
 
   class OptionExactMatch < OptionMatch
+    def initialize tag, name
+      @tag = tag
+      @name = name
+    end
+
     def match? arg
-      arg == option.tag || arg == '--' + option.name.to_s
+      arg == @tag || arg == '--' + @name.to_s
     end
   end
 
   class OptionNegativeMatch < OptionMatch
-    def initialize option, negopt
-      super option
-      @negopt = negopt
+    def initialize *negopts
+      # in case this gets passed an array as an element:
+      @negopts = Array.new(negopts).flatten
     end
 
     def match? arg
-      arg && @negopt.detect { |x| arg.index(x) }
+      arg && @negopts.select { |x| arg.index x }.size > 0
     end
   end
 
   class OptionRegexpMatch < OptionMatch
-    def initialize option, regexp
-      super option
+    def initialize regexp
       @regexp = regexp
     end
 
     def match? arg
-      arg and @regexp.match arg
+      arg && @regexp.match(arg)
     end
   end
 end
