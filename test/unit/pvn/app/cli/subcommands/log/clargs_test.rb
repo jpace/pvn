@@ -11,7 +11,7 @@ module PVN
     module Log
       class CmdLineArgsTest < PVN::TestCase
         def assert_command_line_args exp, args
-          cmdline = PVN::App::Log::CmdLineArgs.new args
+          cmdline = PVN::App::Log::CmdLineArgs.new nil, args
           info "cmdline: #{cmdline}"
           assert_equal exp[:limit], cmdline.limit
           assert_equal exp[:revision].to_s, cmdline.revision.to_s

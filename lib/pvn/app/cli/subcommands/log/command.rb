@@ -7,8 +7,11 @@ require 'pvn/log/format'
 require 'pvn/revision/entry'
 require 'svnx/log/entries'
 require 'pvn/app/cli/subcommands/base/doc'
+require 'pvn/app/cli/subcommands/log/options'
 
 module PVN; module App; end; end
+
+Log.level = Log::DEBUG
 
 module PVN::App::Log
   class Command
@@ -17,7 +20,13 @@ module PVN::App::Log
     DEFAULT_LIMIT = 15
 
     def initialize args
-      clargs  = PVN::App::Log::CmdLineArgs.new args
+      RIEL::Log.level = Log::DEBUG
+
+      optset = PVN::App::CLI::Log::OptionSet.new 
+
+      info "optset: #{optset}"
+
+      clargs = PVN::App::Log::CmdLineArgs.new optset, args
       if clargs.help 
         show_help
         return

@@ -3,37 +3,31 @@
 
 require 'rubygems'
 require 'riel'
+require 'synoption/doc'
 
 module PVN
   class Option
     include Loggable
     
-    attr_accessor :name
-    attr_accessor :tag
-    attr_accessor :options
-    attr_accessor :description
+    attr_reader :name
+    attr_reader :tag
+    attr_reader :description
 
-    def initialize *args
-      if args.class == Hash
-        initialize_from_hash args
-      else
-        name, tag, description, options = *args
-        initialize_from_hash :name => name, :tag => tag, :description => description, :options => options
-      end
-    end
+    attr_reader :options
 
-    def takes_value?
-      true
-    end
+    attr_reader :setter
 
-    def initialize_from_hash args
-      @name = args[:name]
-      @tag = args[:tag]
-      @description = args[:description]
-      @options = args[:options]
-      @value = args[:value]
+    attr_reader :negate
+    attr_reader :as_svn_option
 
-      defval = @options[:default]
+    def initialize name, tag, description, options = Hash.new
+      @name = name
+      @tag = tag
+      @description = description
+
+      @options = options
+
+      defval = options[:default]
 
       # interpret the type and setter based on the default type
       if defval && defval.class == Fixnum  # no, we're not handling Bignum
@@ -44,6 +38,10 @@ module PVN
       if defval
         @value = defval
       end
+    end
+
+    def takes_value?
+      true
     end
 
     def has_svn_option?
@@ -69,12 +67,7 @@ module PVN
     end
 
     def exact_match? arg
-      info "arg: #{arg}".yellow
-      info "name: #{name}".yellow
-
-      m = arg == tag || arg == '--' + @name.to_s
-      info "m: #{m}".yellow
-      m
+      arg == tag || arg == '--' + @name.to_s
     end
 
     def negative_match? arg
@@ -121,74 +114,10 @@ module PVN
     def to_svn_revision_date date
       '{' + date.to_s + '}'
     end
-
-    def to_doc_tag
-      tagline = "#{tag} [--#{name}]"
-      if takes_value?
-        tagline << " ARG"
-      end
-      tagline
-    end
-
-    # returns an option regexp as a 'cleaner' string
-    def re_to_string re
-      re.source.gsub(%r{\\d\+?}, 'N').gsub(%r{[\^\?\$\\\(\)]}, '')
-    end
-
-    def to_doc_negate
-      doc = nil
-      options[:negate].each do |neg|
-        str = if neg.kind_of? Regexp
-                str = re_to_string neg
-              else
-                str = neg
-              end
-
-        if doc
-          doc << " [#{str}]"
-        else
-          doc = str
-        end
-      end
-      doc
-    end
-
-    #   -g [--use-merge-history] : use/display additional information from merge
-    # 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    # 0         1         2         3         4         5         6         
-
-    def to_doc_line lhs, rhs, sep = ""
-      fmt = "  %-24s %1s %s"
-      sprintf fmt, lhs, sep, rhs
-    end
       
     def to_doc io
-      opttag  = tag
-      optdesc = description
-      
-      RIEL::Log.debug "opttag: #{opttag}"
-      RIEL::Log.debug "optdesc: #{optdesc}"
-
-      # wrap optdesc?
-
-      description.each_with_index do |descline, idx|
-        lhs = idx == 0 ? to_doc_tag :  ""
-        io.puts to_doc_line lhs, descline, idx == 0 ? ":" : ""
-      end
-
-      if defval = options[:default]
-        io.puts to_doc_line "", "  default: #{defval}"
-      end
-
-      if re = options[:regexp]
-        io.puts to_doc_line re_to_string(re), "same as above", ":"
-      end
-
-      if options[:negate]
-        lhs = to_doc_negate
-        io.puts to_doc_line lhs, "", ""
-      end
+      doc = Doc.new self
+      doc.to_doc io
     end
-
   end
 end

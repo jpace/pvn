@@ -16,7 +16,7 @@ module PVN::App::Log
     attr_reader :help
     attr_reader :format
 
-    def initialize args
+    def initialize optset, args
       @limit    = nil
       @revision = nil
       @path     = '.'

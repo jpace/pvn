@@ -22,15 +22,15 @@ class PvnTestTask < Rake::TestTask
 end
 
 PvnTestTask.new do |t|
-  t.test_files = FileList['test/unit/**/test*.rb']
+  t.test_files = FileList['test/unit/**/*test*.rb']
 end
 
 PvnTestTask.new('test:integration') do |t|
-  t.test_files = FileList['test/integration/**/test*.rb']
+  t.test_files = FileList['test/integration/**/*test*.rb']
 end
 
 PvnTestTask.new('test:all') do |t|
-  t.test_files = FileList['test/**/test*.rb']
+  t.test_files = FileList['test/**/*test*.rb']
 end
 
 def build_fixture svndir, svncmd

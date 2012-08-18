@@ -1,16 +1,11 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
 require 'pvn/app/cli/subcommands/revision/revopt'
 
 module PVN
   # A revision that is also set by -N and +N.
   class RevisionRegexpOption < RevisionOption
-    attr_accessor :fromdate
-    attr_accessor :todate
-
     POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]?\d+$')
 
     REVISION_DESCRIPTION = [ "revision to apply.",
