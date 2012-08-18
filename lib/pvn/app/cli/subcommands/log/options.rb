@@ -25,7 +25,7 @@ module PVN::App::CLI::Log
 
   class FormatOption < PVN::BooleanOption
     def initialize optargs = Hash.new
-      super :format, '-f', "use the custom (colorized) format", :default => true, :negate => [ '-F', %r{^--no-?format} ], :as_svn_option => nil
+      super :format, '-f', "use the custom (colorized) format", :default => true, :negate => [ '-F', %r{^--no-?format} ], :as_cmdline_option => nil
     end
   end
 

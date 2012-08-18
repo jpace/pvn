@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'synoption/doc'
+require 'synoption/match'
 
 module PVN
   class Option
@@ -35,9 +36,11 @@ module PVN
         @setter = :next_argument_as_integer
       end
 
-      if defval
-        @value = defval
-      end
+      @value = defval
+
+      @exact_matcher = OptionExactMatch.new self
+      @negative_matcher = options[:negate] && OptionNegativeMatch.new(self, options[:negate])      
+      @regexp_matcher = options[:regexp] && OptionRegexpMatch.new(self, options[:regexp])
     end
 
     def takes_value?
@@ -47,8 +50,8 @@ module PVN
     def to_command_line
       return nil unless value
       
-      if @options.include? :as_svn_option
-        @options[:as_svn_option]
+      if @options.include? :as_cmdline_option
+        @options[:as_cmdline_option]
       else
         [ tag, value ]
       end
@@ -59,15 +62,15 @@ module PVN
     end
 
     def exact_match? arg
-      arg == tag || arg == '--' + @name.to_s
+      @exact_matcher.match? arg
     end
 
     def negative_match? arg
-      arg && @options && @options[:negate] && @options[:negate].detect { |x| arg.index(x) }
+      @negative_matcher and @negative_matcher.match? arg
     end
 
     def regexp_match? arg
-      @options[:regexp] && @options[:regexp].match(arg)
+      @regexp_matcher and @regexp_matcher.match? arg
     end
 
     def match_type? arg

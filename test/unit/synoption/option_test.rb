@@ -87,5 +87,26 @@ module PVN
         assert_regexp_match false, opt, val
       end
     end
+
+    def assert_to_command_line exp, opt
+      assert_equal exp, opt.to_command_line
+    end
+
+    def test_to_command_line
+      opt = Option.new :xyz, '-x', "the blah blah blah", :default => nil
+      assert_to_command_line nil, opt
+      opt.set_value 1
+      assert_to_command_line [ '-x', 1 ], opt
+
+      opt = Option.new :xyz, '-x', "the blah blah blah", :default => nil, :as_cmdline_option => '--xray'
+      assert_to_command_line nil, opt
+      opt.set_value 1
+      assert_to_command_line '--xray', opt
+
+      opt = Option.new :xyz, '-x', "the blah blah blah", :default => nil, :as_cmdline_option => nil
+      assert_to_command_line nil, opt
+      opt.set_value 1
+      assert_to_command_line nil, opt
+    end
   end
 end
