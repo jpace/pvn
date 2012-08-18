@@ -67,7 +67,8 @@ module PVN::App::Log
                           "As with other pvn subcommands, 'pvn log' accepts relative ",
                           "revisions."
                         ]
-      # doc.options.concat LogOptionSet.new.options
+      doc.options.concat PVN::App::CLI::Log::OptionSet.new.options
+
       doc.examples   << [ "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb." ]
       doc.examples   << [ "pvn log -l 25 foo.rb", "Prints 25 log entries for the file." ]
       doc.examples   << [ "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)." ]

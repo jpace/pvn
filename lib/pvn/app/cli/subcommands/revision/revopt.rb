@@ -23,6 +23,10 @@ module PVN
       @todate = nil
       super :revision, '-r', REVISION_DESCRIPTION, revargs
     end
+
+    def to_svn_revision_date date
+      '{' + date.to_s + '}'
+    end
     
     def value
       val = nil

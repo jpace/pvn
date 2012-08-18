@@ -18,7 +18,6 @@ module PVN
     attr_reader :setter
 
     attr_reader :negate
-    attr_reader :as_svn_option
 
     def initialize name, tag, description, options = Hash.new
       @name = name
@@ -29,10 +28,11 @@ module PVN
 
       defval = options[:default]
 
+      @setter = options[:setter]
+
       # interpret the type and setter based on the default type
-      if defval && defval.class == Fixnum  # no, we're not handling Bignum
-        @options[:setter] ||= :next_argument_as_integer
-        @options[:type]   ||= :integer
+      if @setter.nil? && defval && defval.class == Fixnum  # no, we're not handling Bignum
+        @setter = :next_argument_as_integer
       end
 
       if defval
@@ -42,10 +42,6 @@ module PVN
 
     def takes_value?
       true
-    end
-
-    def has_svn_option?
-      @options.include? :as_svn_option && @options[:as_svn_option]
     end
 
     def to_command_line
@@ -62,10 +58,6 @@ module PVN
       [ @name, @tag, @options ].join(", ")
     end
 
-    def match? arg
-      exact_match?(arg) || negative_match?(arg) || regexp_match?(arg)
-    end
-
     def exact_match? arg
       arg == tag || arg == '--' + @name.to_s
     end
@@ -76,6 +68,20 @@ module PVN
 
     def regexp_match? arg
       @options[:regexp] && @options[:regexp].match(arg)
+    end
+
+    def match_type? arg
+      return nil unless arg
+
+      if arg == tag || arg == '--' + @name.to_s
+        :exact
+      elsif @options[:negate] && @options[:negate].detect { |x| arg.index(x) }
+        :negate
+      elsif @options[:regexp] && @options[:regexp].match(arg)
+        :regexp
+      else
+        nil
+      end
     end
 
     def unset
@@ -94,11 +100,11 @@ module PVN
       debug "self: #{self}"
       debug "args: #{args}"
 
-      if setter = @options[:setter]
-        info "setter: #{setter}"
-        info "setter.to_proc: #{setter.to_proc}"
+      if @setter
+        info "setter: #{@setter}"
+        info "setter.to_proc: #{@setter.to_proc}"
         # setters are class methods:
-        setter_proc = setter.to_proc
+        setter_proc = @setter.to_proc
         @value = setter_proc.call cmdobj.class, optset, args
       else
         @value = true
@@ -109,10 +115,6 @@ module PVN
         optset.unset unsets
       end
       true
-    end
-
-    def to_svn_revision_date date
-      '{' + date.to_s + '}'
     end
       
     def to_doc io

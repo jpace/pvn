@@ -59,10 +59,6 @@ module PVN
       super && !@options.revision.head?
     end
 
-    def to_svn_revision_date date
-      '{' + date.to_s + '}'
-    end
-
     def entries
       @entries ||= begin
                      # of course this assumes that output is in plain text (non-XML)

@@ -34,7 +34,6 @@ module PVN
       opt = Option.new :limit, '-l', "the number of log entries", :default => 777, :negate => [ %r{^--no-?limit} ]
       sio = StringIO.new
       opt.to_doc sio
-      puts sio.string
       exp = String.new
       exp << "  -l [--limit] ARG         : the number of log entries\n"
       exp << "                               default: 777\n"
@@ -42,5 +41,51 @@ module PVN
       assert_equal exp, sio.string
     end
 
+    def assert_exact_match exp, opt, val
+      assert_equal exp, opt.exact_match?(val), "value: '" + val + "'"
+    end
+
+    def test_exact_match
+      opt = Option.new :limit, '-l', "the number of log entries", :default => 3
+      [ '-l', '--limit' ].each do |val|
+        assert_exact_match true, opt, val
+      end
+
+      [ '-L', '-x', '--lim', '--liMit' ].each do |val|
+        assert_exact_match false, opt, val
+      end
+    end
+
+    def assert_negative_match exp, opt, val
+      md = opt.negative_match? val
+      assert_equal exp, !!md, "value: '" + val + "'"
+    end
+
+    def test_negative_match
+      opt = Option.new :limit, '-l', "the number of log entries", :default => 777, :negate => [ '-L', %r{^--no-?limit} ]
+      [ '-L', '--no-limit', '--nolimit' ].each do |val|
+        assert_negative_match true, opt, val
+      end
+
+      [ '-l', '-x', '-nolimit', '  --nolimit' ].each do |val|
+        assert_negative_match false, opt, val
+      end
+    end
+
+    def assert_regexp_match exp, opt, val
+      md = opt.regexp_match? val
+      assert_equal exp, !!md, "value: '" + val + "'"
+    end
+
+    def test_regexp_match
+      opt = Option.new :revision, '-r', "the revision", :default => nil, :regexp => Regexp.new('^[\-\+]\d+$')
+      [ '-1', '-123', '+99', '+443' ].each do |val|
+        assert_regexp_match true, opt, val
+      end
+
+      [ '-x', '123', '+-x', 'word' ].each do |val|
+        assert_regexp_match false, opt, val
+      end
+    end
   end
 end

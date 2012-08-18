@@ -82,7 +82,7 @@ module PVN
             nargs = na[1]
             options_to_set << [ opt, cidx, type, @arguments[nargs] ]
             cidx += na[1].size
-            @arguments.slice!(0, nargs + 1)
+            @arguments.slice! 0, nargs + 1
             processed = true
             break
           end

@@ -57,9 +57,6 @@ module PVN
       opttag  = @option.tag
       optdesc = @option.description
       
-      RIEL::Log.debug "opttag: #{opttag}"
-      RIEL::Log.debug "optdesc: #{optdesc}"
-
       # wrap optdesc?
 
       @option.description.each_with_index do |descline, idx|
