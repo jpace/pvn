@@ -43,7 +43,7 @@ module PVN::App::Log
       ### $$$ todo: decide whether/how to support multiple paths.
 
       process_args args
-      process_revision
+      # process_revision
     end
 
     def matches_relative? str
@@ -80,62 +80,53 @@ module PVN::App::Log
       end
     end
 
-    def find_matching_option arg
-      @optset.options.each do |opt|
-        info "opt: #{opt}"
-        type, matcher = opt.match arg
-        info "matcher: #{matcher}".on_black
-        if type
-          return [ type, matcher, opt ]
-        end
-      end
-      nil
-    end
-    
     def process_args args
-      options = Array.new
+      info "args: #{args}"
+
+      options_processed = Array.new
       
       while !args.empty?
-        arg = args.shift
-        info "arg: #{arg}".yellow
-
-        type, matcher, opt = find_matching_option arg
-        info "opt: #{opt}"
-        info "opt: #{opt.inspect}"
-
-        if opt
-          val = nil
-          if type == :exact && opt.takes_value?
-            val = args.shift
-          elsif type == :regexp
-            val = arg
+        info "args: #{args}"
+        processed = false
+        @optset.options.each do |opt|
+          info "opt: #{opt}".green
+          if opt.process args
+            info "got processed!"
+            processed = true
+            varname = '@' + opt.name.to_s
+            info "varname: #{varname}"
+            info "opt.vaoue: #{opt.value}"
+            instance_variable_set varname, opt.value
+            options_processed << opt
           else
-            val = true
+            info "NOT processed"
           end
-          options << [ type, opt, val ]
-        else
-          @path = arg
         end
+
+        break unless processed
       end
 
-      info "path: #{@path}".magenta
+      info "args: #{args}".cyan
 
-      options.each do |type, opt, arg|
-        info "opt : #{opt.inspect}".magenta
-        info "type: #{type}"
-        info "arg : #{arg}"
+      info "@revision: #{@revision}".on_cyan
 
-        if type == :negative
-          opt.unset
-        else
-          opt.set_value arg
+      @path = args[0] || "."
+
+      info "@path: #{path}".yellow
+
+      options_processed.each do |opt|
+        info "opt: #{opt}".on_red
+        opt.post_process @optset, args
+
+        if opt.kind_of?(PVN::RevisionRegexpOption)
+          info "opt: #{opt}".on_blue
+          info "opt: #{opt.value}".on_blue
+          @revision = opt.value
         end
-
-        info "opt.value: #{opt.value}".green
       end
     end
-
-    def process_args args
+    
+    def process_args_old args
       while !args.empty?
         arg = args.shift
         info "arg: #{arg}".yellow
@@ -164,8 +155,6 @@ module PVN::App::Log
             @path = arg
           end
         end
-
-        # info "limit: #{@limit}".on_green
       end
     end
   end

@@ -89,30 +89,95 @@ module PVN
       assert_equal exp, opt.to_command_line
     end
 
+    def make_xyz_option options = Hash.new
+      BaseOption.new :xyz, '-x', "the blah blah blah", nil, options
+    end
+
     def test_to_command_line_no_cmdline_option
-      opt = BaseOption.new :xyz, '-x', "the blah blah blah", nil
+      opt = make_xyz_option
       assert_to_command_line nil, opt
       opt.set_value 1
       assert_to_command_line [ '-x', 1 ], opt
     end
 
     def test_to_command_line_cmdline_option_string
-      opt = BaseOption.new :xyz, '-x', "the blah blah blah", nil, :as_cmdline_option => '--xray'
+      opt = make_xyz_option :as_cmdline_option => '--xray'
       assert_to_command_line nil, opt
       opt.set_value 1
       assert_to_command_line '--xray', opt
     end
 
     def test_to_command_line_cmdline_option_nil
-      opt = BaseOption.new :xyz, '-x', "the blah blah blah", nil, :as_cmdline_option => nil
+      opt = make_xyz_option :as_cmdline_option => nil
       assert_to_command_line nil, opt
       opt.set_value 1
       assert_to_command_line nil, opt
     end
 
     def test_takes_value
-      opt = BaseOption.new :xyz, '-x', "the blah blah blah", nil
+      opt = make_xyz_option
       assert opt.takes_value?
+    end
+
+    def assert_process exp_process, exp_value, exp_remaining_args, opt, args
+      pr = opt.process args
+      assert_equal exp_process, pr
+      assert_equal exp_value, opt.value
+      assert_equal exp_remaining_args, args
+    end
+
+    def test_process_exact_no_match
+      opt = make_xyz_option
+      args = %w{ --baz foo }
+      assert_process false, nil, %w{ --baz foo }, opt, args
+    end
+
+    def test_process_exact_takes_argument
+      opt = make_xyz_option
+      args = %w{ --xyz foo }
+      assert_process true, 'foo', %w{ }, opt, args
+
+      opt = make_xyz_option
+      args = %w{ --xyz foo bar }
+      assert_process true, 'foo', %w{ bar }, opt, args
+    end
+
+    def test_process_exact_takes_missing_argument
+      opt = make_xyz_option
+      args = %w{ --xyz }
+      assert_raises(RuntimeError) do 
+        assert_process true, 'foo', %w{ }, opt, args
+      end
+    end
+
+    def test_process_negative
+      options = { :negate => [ '-X', %r{^--no-?xyz} ] }
+      %w{ -X --no-xyz --noxyz }.each do |arg|
+        opt = make_xyz_option options
+        args = [ arg ]
+        assert_process true, false, %w{ }, opt, args
+      end
+
+      %w{ -X --no-xyz --noxyz }.each do |arg|
+        opt = make_xyz_option options
+        args = [ arg, '--abc' ]
+        assert_process true, false, %w{ --abc }, opt, args
+      end
+    end
+
+    def test_process_regexp
+      options = { :regexp => Regexp.new('^[\-\+]\d+$') }
+      %w{ -1 +123 }.each do |arg|
+        opt = make_xyz_option options
+        args = [ arg ]
+        assert_process true, arg, %w{ }, opt, args
+      end
+
+      %w{ -1 +123 }.each do |arg|
+        opt = make_xyz_option options
+        args = [ arg, '--foo' ]
+        assert_process true, arg, %w{ --foo }, opt, args
+      end
     end
   end
 end

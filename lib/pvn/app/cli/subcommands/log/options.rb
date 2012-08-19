@@ -3,7 +3,7 @@
 
 require 'synoption/set'
 require 'synoption/option'
-require 'synoption/boolopt'
+require 'synoption/boolean_option'
 require 'pvn/app/cli/subcommands/revision/revreopt'
 
 module PVN; module App; module CLI; module Log; end; end; end; end
@@ -33,7 +33,7 @@ module PVN::App::CLI::Log
     end
   end
 
-  class HelpOption < PVN::Option
+  class HelpOption < PVN::BooleanOption
     def initialize args = Hash.new
       super :help, '-h', "display help", nil
     end

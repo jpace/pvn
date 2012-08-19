@@ -3,7 +3,7 @@
 
 require 'synoption/set'
 require 'synoption/option'
-require 'synoption/boolopt'
+require 'synoption/boolean_option'
 require 'pvn/app/cli/subcommands/revision/revreopt'
 
 module PVN

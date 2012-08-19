@@ -48,6 +48,8 @@ module PVN
       else
         @as_cmdline_option = nil
       end
+
+      @unsets = options[:unsets]
     end
 
     def takes_value?
@@ -119,6 +121,46 @@ module PVN
     def to_doc io
       doc = Doc.new self
       doc.to_doc io
+    end
+
+    def next_argument args
+      raise "ERROR: option #{name} expecting following argument" if args.empty?
+      args.shift
+    end
+
+    def process args
+      info "args: #{args}".yellow
+      if @matchers[:exact].match? args[0]
+        info "match"
+        args.shift
+        
+        val = takes_value? ? next_argument(args) : true
+        
+        set_value val
+        true
+      elsif @matchers[:negative] && @matchers[:negative].match?(args[0])
+        info "negative"
+        arg = args.shift
+        set_value false
+        true
+      elsif @matchers[:regexp] && (md = @matchers[:regexp].match?(args[0]))
+        info "md: #{md}".blue
+        arg = args.shift
+        set_value md[0]
+        true
+      else
+        false
+      end
+    end
+
+    def post_process option_set, unprocessed
+      info "option_set: #{option_set}"
+      info "unprocessed: #{unprocessed}"
+
+      if @unsets
+        info "unsets: #{@unsets}"
+        option_set.unset @unsets
+      end
     end
   end
 end
