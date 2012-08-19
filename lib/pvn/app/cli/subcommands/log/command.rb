@@ -3,7 +3,7 @@
 
 require 'pvn/app/cli/subcommands/log/clargs'
 require 'pvn/io/element'
-require 'pvn/log/formatter'
+require 'pvn/log/formatter/entries_formatter'
 require 'pvn/revision/entry'
 require 'svnx/log/entries'
 require 'pvn/app/cli/subcommands/base/doc'
@@ -30,13 +30,10 @@ module PVN::App::Log
         return
       end
       
-      logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
-      elmt    = PVN::IO::Element.new :local => clargs.path || '.'
-      log     = elmt.log logargs
-
-      fmt     = PVN::Log::Formatter.new clargs.format
-
-      nentries = log.entries.size
+      logargs   = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
+      elmt      = PVN::IO::Element.new :local => clargs.path || '.'
+      log       = elmt.log logargs
+      nentries  = log.entries.size
 
       # this should be refined to clargs.revision.head? && clargs.limit
       from_head = !clargs.revision

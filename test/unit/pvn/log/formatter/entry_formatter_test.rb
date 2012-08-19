@@ -4,7 +4,7 @@
 require 'tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
-require 'pvn/log/formatter'
+require 'pvn/log/formatter/entry_formatter'
 
 require 'resources'
 
@@ -13,7 +13,7 @@ Log.level = Log::DEBUG
 module PVN; module Log; end; end
 
 module PVN::Log
-  class FormatTestCase < PVN::TestCase
+  class EntryFormatTestCase < PVN::TestCase
     TEST_LINES = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "-l", "15", "-v", "--xml"
     ENTRIES = SVNx::Log::Entries.new :xmllines => TEST_LINES.join('')
 
@@ -22,7 +22,7 @@ module PVN::Log
       puts ef.format
     end
 
-    def assert_entry_format explines, entry, use_colors, idx, from_head, from_tail, total
+    def assert_format explines, entry, use_colors, idx, from_head, from_tail, total
       ef = EntryFormatter.new use_colors, entry, idx, from_head, from_tail, total
 
       fmtlines = ef.format
@@ -38,7 +38,7 @@ module PVN::Log
                   "",
                   "    \e[33m/trunk/buildNumber.properties\e[0m"
                  ]
-      assert_entry_format explines, entries[0], true, 0, true, false, 15
+      assert_format explines, entries[0], true, 0, true, false, 15
     end
 
     def test_colors_from_head_not_from_tail_index_4
@@ -50,7 +50,7 @@ module PVN::Log
                   "",
                   "    \e[33m/trunk/buildNumber.properties\e[0m"
                  ]
-      assert_entry_format explines, entries[0], true, 4, true, false, 15
+      assert_format explines, entries[0], true, 4, true, false, 15
     end
 
     def test_no_colors_from_head_from_tail_index_4
@@ -62,7 +62,7 @@ module PVN::Log
                   "",
                   "    /trunk/buildNumber.properties"
                  ]
-      assert_entry_format explines, entries[0], false, 4, true, true, 15
+      assert_format explines, entries[0], false, 4, true, true, 15
     end
 
     def test_colors_from_head_from_tail_index_4
@@ -74,7 +74,7 @@ module PVN::Log
                   "",
                   "    \e[33m/trunk/buildNumber.properties\e[0m"
                  ]
-      assert_entry_format explines, entries[0], true, 4, true, true, 15
+      assert_format explines, entries[0], true, 4, true, true, 15
     end
 
     def test_no_colors_from_head_not_from_tail_index_4
@@ -86,10 +86,7 @@ module PVN::Log
                   "",
                   "    /trunk/buildNumber.properties"
                  ]
-      assert_entry_format explines, entries[0], false, 4, true, false, 15
-    end
-
-    def test_another
+      assert_format explines, entries[0], false, 4, true, false, 15
     end
   end
 end
