@@ -67,7 +67,7 @@ module PVN::App::Log
       doc.examples   << [ "pvn log -l 25 foo.rb", "Prints 25 log entries for the file." ]
       doc.examples   << [ "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)." ]
       doc.examples   << [ "pvn log +3 foo.rb",    "Prints the 3rd log entry." ]
-      # doc.examples   << [ "pvn log -l 10 -F",     "Prints the latest 10 entries, unformatted." ]
+      doc.examples   << [ "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized." ]
       doc.examples   << [ "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change." ]
 
       doc.write $stdout

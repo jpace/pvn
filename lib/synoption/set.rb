@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'riel'
+require 'synoption/option'
 
 module PVN
   class OptionSet
@@ -25,11 +26,7 @@ module PVN
     end
 
     def has_option? name
-      option_for_name name
-    end
-
-    def option_for_name name
-      @options.detect { |opt| opt.name == name }
+      find_by_name name
     end
 
     def to_command_line
@@ -45,7 +42,7 @@ module PVN
 
     def set_options_by_keys args
       args.each do |key, val|
-        if opt = option_for_name(key)
+        if opt = find_by_name(key)
           opt.set_value val
         end
       end
@@ -55,6 +52,7 @@ module PVN
       arg = args[0]
 
       match_type = opt.match_type? arg
+      info "match_type: #{match_type}".cyan
       case match_type
       when :exact
         [ :set, opt.takes_value? ? 1 : 0 ]
@@ -110,7 +108,7 @@ module PVN
     end
     
     def unset key
-      opt = option_for_name key
+      opt = find_by_name key
       opt && opt.unset
     end
 

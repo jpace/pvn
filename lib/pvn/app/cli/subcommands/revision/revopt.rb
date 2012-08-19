@@ -21,7 +21,7 @@ module PVN
       revargs[:setter] = :revision_from_args
       @fromdate = nil
       @todate = nil
-      super :revision, '-r', REVISION_DESCRIPTION, revargs
+      super :revision, '-r', REVISION_DESCRIPTION, nil, revargs
     end
 
     def to_svn_revision_date date

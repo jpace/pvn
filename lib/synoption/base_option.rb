@@ -30,6 +30,7 @@ module PVN
 
       @matchers = Hash.new
       @matchers[:exact] = OptionExactMatch.new @tag, @name
+
       if @negate = options[:negate]
         @matchers[:negative] = OptionNegativeMatch.new(@negate)
       end
@@ -77,6 +78,18 @@ module PVN
 
     def regexp_match? arg
       @matchers[:regexp] and @matchers[:regexp].match? arg
+    end
+
+    def match arg
+      return nil unless arg
+      
+      @matchers.each do |type, matcher|
+        if matcher.match? arg
+          return [ type, matcher ]
+        end
+      end
+
+      nil
     end
 
     def match_type? arg

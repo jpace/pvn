@@ -7,6 +7,7 @@ module PVN
   # A revision that is also set by -N and +N.
   class RevisionRegexpOption < RevisionOption
     POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]?\d+$')
+    TAG_RE = Regexp.new('^-r(.*)$')
 
     REVISION_DESCRIPTION = [ "revision to apply.",
                              "ARG can be relative, of the form:",
@@ -16,8 +17,18 @@ module PVN
                            ]
     
     def initialize revargs = Hash.new
+      info "revargs: #{revargs}".on_blue
       revargs[:regexp] = POS_NEG_NUMERIC_RE
       super
-    end    
+    end
+
+    def set_value val
+      info "val: #{val}"
+      if md = TAG_RE.match(val)
+        super md[1]
+      else
+        super nil
+      end
+    end
   end
 end

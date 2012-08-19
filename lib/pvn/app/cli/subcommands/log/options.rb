@@ -15,6 +15,10 @@ module PVN::App::CLI::Log
     def initialize lmtargs = Hash.new
       super :limit, '-l', "the number of log entries", DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     end
+
+    def set_value val
+      super val.to_i
+    end
   end
 
   class VerboseOption < PVN::BooleanOption
@@ -29,9 +33,16 @@ module PVN::App::CLI::Log
     end
   end
 
+  class HelpOption < PVN::Option
+    def initialize args = Hash.new
+      super :help, '-h', "display help", nil
+    end
+  end
+
   class OptionSet < PVN::OptionSet
     attr_accessor :revision
     attr_reader :format
+    attr_reader :help
     
     def initialize
       super
@@ -40,6 +51,7 @@ module PVN::App::CLI::Log
       @revision = add PVN::RevisionRegexpOption.new(:unsets => :limit)
       @verbose  = add VerboseOption.new
       @format   = add FormatOption.new
+      @help     = add HelpOption.new
     end
   end
 end

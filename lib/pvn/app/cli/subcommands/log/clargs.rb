@@ -2,8 +2,16 @@
 # -*- ruby -*-
 
 require 'pvn/revision/entry'
+require 'svnx/log/command'
 
 module PVN; module App; end; end
+
+module PVN::App
+  class CmdLineArgs
+    include Loggable
+
+  end
+end
 
 module PVN::App::Log
   class CmdLineArgs
@@ -17,6 +25,10 @@ module PVN::App::Log
     attr_reader :format
 
     def initialize optset, args
+      info "optset: #{optset}"
+
+      @optset   = optset
+
       @limit    = nil
       @revision = nil
       @path     = '.'
@@ -39,6 +51,8 @@ module PVN::App::Log
     end
 
     def process_revision
+      info "@revargs: #{@revargs}"
+
       return nil if @revargs.empty?
 
       logforrev = SVNx::LogCommandLine.new @path
@@ -66,10 +80,66 @@ module PVN::App::Log
       end
     end
 
+    def find_matching_option arg
+      @optset.options.each do |opt|
+        info "opt: #{opt}"
+        type, matcher = opt.match arg
+        info "matcher: #{matcher}".on_black
+        if type
+          return [ type, matcher, opt ]
+        end
+      end
+      nil
+    end
+    
+    def process_args args
+      options = Array.new
+      
+      while !args.empty?
+        arg = args.shift
+        info "arg: #{arg}".yellow
+
+        type, matcher, opt = find_matching_option arg
+        info "opt: #{opt}"
+        info "opt: #{opt.inspect}"
+
+        if opt
+          val = nil
+          if type == :exact && opt.takes_value?
+            val = args.shift
+          elsif type == :regexp
+            val = arg
+          else
+            val = true
+          end
+          options << [ type, opt, val ]
+        else
+          @path = arg
+        end
+      end
+
+      info "path: #{@path}".magenta
+
+      options.each do |type, opt, arg|
+        info "opt : #{opt.inspect}".magenta
+        info "type: #{type}"
+        info "arg : #{arg}"
+
+        if type == :negative
+          opt.unset
+        else
+          opt.set_value arg
+        end
+
+        info "opt.value: #{opt.value}".green
+      end
+    end
+
     def process_args args
       while !args.empty?
         arg = args.shift
         info "arg: #{arg}".yellow
+
         case arg
         when "--help"
           @help = true
@@ -94,6 +164,8 @@ module PVN::App::Log
             @path = arg
           end
         end
+
+        # info "limit: #{@limit}".on_green
       end
     end
   end
