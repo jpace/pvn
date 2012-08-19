@@ -37,21 +37,19 @@ module PVN::App::Log
       fmt     = PVN::Log::Formatter.new clargs.format
 
       nentries = log.entries.size
+
+      # this should be refined to clargs.revision.head? && clargs.limit
+      from_head = !clargs.revision
+      from_tail = !clargs.limit
       
       # this dictates whether to show +N and/or -1:
       totalentries = clargs.limit || clargs.revision ? nil : nentries
 
       info "totalentries: #{totalentries}"
-      
-      log.entries.each_with_index do |entry, idx|
-        fmtlines = fmt.format_entry entry, idx, totalentries
-        
-        puts fmtlines
 
-        if idx < nentries - 1
-          puts '-' * 55
-        end
-      end
+      # use_color, entries, from_head, from_tail
+      ef = PVN::Log::EntriesFormatter.new clargs.format, log.entries, from_head, from_tail
+      puts ef.format
     end
 
     def show_help

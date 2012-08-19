@@ -8,12 +8,12 @@ module PVN
     include Loggable
 
     def pad what, field
-      nspaces = [ get_width(field) - what.length, 1 ].max
+      nspaces = [ width(field) - what.length, 1 ].max
       " " * nspaces
     end
 
     def colorize what, field
-      colors = get_colors field
+      colors = colors field
       return what if colors.nil? || colors.empty?
       colors.each do |col|
         what = what.send col
@@ -52,12 +52,7 @@ module PVN
         :dir          => [ :bold ],
       }
 
-      PATH_ACTIONS = {
-        'M' => :modified,
-        'A' => :added,
-        'D' => :deleted,
-        'R' => :renamed
-      }
+      attr_reader :use_colors
 
       def initialize use_colors
         @use_colors = use_colors
@@ -73,43 +68,57 @@ module PVN
         end
       end
 
-      def get_width field
+      def width field
         WIDTHS[field]
       end
 
-      def get_colors field
-        @use_colors ? COLORS[field] : nil
+      def colors field
+        use_colors ? COLORS[field] : nil
       end
 
       def format_entry entry, idx, total
-        ef = EntryFormatter.new @use_colors, entry, idx, total
+        ef = EntryFormatter.new use_colors, entry, idx, false, false, total
         ef.format
       end
     end
 
     class SummaryFormatter < Formatter
-      def initialize use_colors, entry, idx, total
+      attr_reader :entry
+      attr_reader :idx
+      attr_reader :from_head
+      attr_reader :from_tail
+      attr_reader :total
+
+      def initialize use_colors, entry, idx, from_head, from_tail, total
         super use_colors
         @entry = entry
         @idx = idx
+        @from_head = from_head
+        @from_tail = from_tail
         @total = total
       end
 
       def format
-        lines = add_field(@entry.revision, :revision)
-        negidx  = (-1 - @idx).to_s
-        lines << add_field(negidx, :neg_revision)
+        lines = add_field(entry.revision, :revision)
+        negidx  = (-1 - idx).to_s
 
-        info "@total: #{@total}".on_blue
+        if from_head
+          lines << add_field(negidx, :neg_revision)
+        else
+          lines << pad("", :neg_revision)
+        end
 
-        if @total
-          posidx = "+#{@total - @idx - 1}"
+        # info "@total: #{total}".on_blue
+
+        if from_tail
+          posidx = "+#{total - idx - 1}"
+          lines << add_field(posidx, :pos_revision)
         else
           lines << pad("", :pos_revision)
         end
         
-        lines << add_field(@entry.author, :author)
-        lines << colorize(@entry.date, :date)
+        lines << add_field(entry.author, :author)
+        lines << colorize(entry.date, :date)
         lines
       end
     end
@@ -121,11 +130,18 @@ module PVN
       end
 
       def format
-        @use_colors ? @msg.white : @msg
+        use_colors ? @msg.white : @msg
       end
     end
 
     class PathFormatter < Formatter
+      PATH_ACTIONS = {
+        'M' => :modified,
+        'A' => :added,
+        'D' => :deleted,
+        'R' => :renamed
+      }
+
       def initialize use_colors, paths
         super use_colors
         @paths = paths
@@ -152,10 +168,18 @@ module PVN
     end
 
     class EntryFormatter < Formatter
-      def initialize use_colors, entry, idx, total
+      attr_reader :entry
+      attr_reader :idx
+      attr_reader :from_head
+      attr_reader :from_tail
+      attr_reader :total
+
+      def initialize use_colors, entry, idx, from_head, from_tail, total
         super use_colors
         @entry = entry
         @idx = idx
+        @from_head = from_head
+        @from_tail = from_tail
         @total = total
       end
       
@@ -174,17 +198,41 @@ module PVN
         
         lines = Array.new
         
-        sf = SummaryFormatter.new @use_colors, @entry, @idx, @total
+        sf = SummaryFormatter.new use_colors, entry, idx, from_head, from_tail, total
         lines << sf.format
         lines << ""
         
-        mf = MessageFormatter.new @use_colors, @entry.message
+        mf = MessageFormatter.new use_colors, entry.message
         lines << mf.format
         lines << ""
 
-        pf = PathFormatter.new(@use_colors, @entry.paths)
+        pf = PathFormatter.new use_colors, entry.paths
         lines.concat pf.format
         
+        lines
+      end
+    end
+
+    class EntriesFormatter < Formatter
+      attr_reader :from_head
+      attr_reader :from_tail
+
+      def initialize use_color, entries, from_head, from_tail
+        super use_color
+        @entries = entries
+        @from_head = from_head
+        @from_tail = from_tail
+      end
+
+      def format
+        lines = Array.new
+        total = @entries.size
+        @entries.each_with_index do |entry, idx|
+          ef = EntryFormatter.new use_colors, entry, idx, from_head, from_tail, total
+          lines.concat ef.format
+        
+          lines << '-' * 55
+        end
         lines
       end
     end
