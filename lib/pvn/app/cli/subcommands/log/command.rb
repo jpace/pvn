@@ -3,15 +3,13 @@
 
 require 'pvn/app/cli/subcommands/log/clargs'
 require 'pvn/io/element'
-require 'pvn/log/format'
+require 'pvn/log/formatter'
 require 'pvn/revision/entry'
 require 'svnx/log/entries'
 require 'pvn/app/cli/subcommands/base/doc'
 require 'pvn/app/cli/subcommands/log/options'
 
 module PVN; module App; end; end
-
-Log.level = Log::DEBUG
 
 module PVN::App::Log
   class Command
@@ -35,7 +33,8 @@ module PVN::App::Log
       logargs = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
       elmt    = PVN::IO::Element.new :local => clargs.path || '.'
       log     = elmt.log logargs
-      fmt     = PVN::Log::Format.new :colors => clargs.format
+
+      fmt     = PVN::Log::Formatter.new clargs.format
 
       nentries = log.entries.size
       
@@ -45,7 +44,7 @@ module PVN::App::Log
       info "totalentries: #{totalentries}"
       
       log.entries.each_with_index do |entry, idx|
-        fmtlines = fmt.format entry, idx, totalentries
+        fmtlines = fmt.format_entry entry, idx, totalentries
         
         puts fmtlines
 

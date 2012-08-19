@@ -16,17 +16,17 @@ module PVN
     attr_reader :name
     attr_reader :tag
     attr_reader :description
-    attr_reader :negate
     attr_reader :default
+
+    attr_reader :negate
     attr_reader :regexp
 
-    def initialize name, tag, description, options = Hash.new
+    def initialize name, tag, description, default, options = Hash.new
       @name = name
       @tag = tag
       @description = description
 
-      @default = options[:default]
-      @value = @default
+      @value = @default = default
 
       @matchers = Hash.new
       @matchers[:exact] = OptionExactMatch.new @tag, @name

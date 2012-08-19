@@ -1,3 +1,6 @@
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
 require 'tc'
 require 'pvn/log/logcmd'
 

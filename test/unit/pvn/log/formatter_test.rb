@@ -4,7 +4,7 @@
 require 'tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
-require 'pvn/log/format'
+require 'pvn/log/formatter'
 
 require 'resources'
 
@@ -27,15 +27,18 @@ module PVN::Log
 
       info "entries: #{entries}"
 
-      fmt = Format.new :colors => true
-      entries.each_with_index do |entry, idx|
-        fmtlines = fmt.format entry, idx, entries.size
-        
-        puts fmtlines
-        puts '-' * 55
+      fmt = Formatter.new true
+
+      if false
+        entries.each_with_index do |entry, idx|
+          fmtlines = fmt.format_entry entry, idx, entries.size
+          
+          puts fmtlines
+          puts '-' * 55
+        end
       end
 
-      fmtlines = fmt.format entries[0], 0, nil
+      fmtlines = fmt.format_entry entries[0], 0, nil
       explines = [
                   "\e[1m1950\e[0m      \e[1m-1\e[0m        \e[36m\e[1mjpace\e[0m\e[0m                    \e[35m\e[1m2011-12-05T12:41:52.385786Z\e[0m\e[0m",
                   "",

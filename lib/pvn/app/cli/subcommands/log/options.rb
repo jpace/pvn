@@ -13,19 +13,19 @@ module PVN::App::CLI::Log
 
   class LimitOption < PVN::Option
     def initialize lmtargs = Hash.new
-      super :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
+      super :limit, '-l', "the number of log entries", DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     end
   end
 
   class VerboseOption < PVN::BooleanOption
     def initialize optargs = Hash.new
-      super :verbose, '-v', [ "include the files in the change" ], :default => false
+      super :verbose, '-v', [ "include the files in the change" ], false
     end
   end
 
   class FormatOption < PVN::BooleanOption
     def initialize optargs = Hash.new
-      super :format, '-f', "use the custom (colorized) format", :default => true, :negate => [ '-F', %r{^--no-?format} ], :as_cmdline_option => nil
+      super :format, '-f', "use the custom (colorized) format", true, :negate => [ '-F', %r{^--no-?format} ], :as_cmdline_option => nil
     end
   end
 

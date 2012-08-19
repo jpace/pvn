@@ -17,7 +17,7 @@ module PVN
       doc.examples   << [ "pvn describe -1 foo.rb", "Prints the summary for the most recent revision of foo.rb." ]
     end
     
-    # has_option :limit, '-l', "the number of log entries", :default => DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
+    # has_option :limit, '-l', "the number of log entries", DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     has_revision_option :multiple => true
 
     def initialize args = Hash.new

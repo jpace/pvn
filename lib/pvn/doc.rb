@@ -5,7 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'pvn/documenter'
 
-Log.level = Log::DEBUG
+# Log.level = Log::DEBUG
 
 module PVN
   module Doc

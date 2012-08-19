@@ -13,27 +13,15 @@ module PVN
 
     attr_reader :setter
 
-    def initialize name, tag, description, options = Hash.new
+    def initialize name, tag, description, default, options = Hash.new
       super
       
       @setter = options[:setter]
 
       # interpret the type and setter based on the default type
-      if @setter.nil? && default && default.class == Fixnum  # no, we're not handling Bignum
+      if @setter.nil? && default.class == Fixnum  # no, we're not handling Bignum
         @setter = :next_argument_as_integer
       end
-    end
-
-    def unset
-      @value = nil
-    end
-
-    def set_value val
-      @value = val
-    end
-
-    def value
-      @value
     end
 
     def set optset, cmdobj, args

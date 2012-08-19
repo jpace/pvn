@@ -49,7 +49,7 @@ module PVN
       
       # diffcmd is old/new option style (non-subclass of Option)
       diffcmd = PVNDIFF_CMD.exist? && PVNDIFF_CMD
-      @diffcmdopt = add Option.new :diffcmd, "--diff-cmd", "the program to run diff through", :default => diffcmd, :negate => [ %r{^--no-?diff-?cmd} ]
+      @diffcmdopt = add Option.new :diffcmd, "--diff-cmd", "the program to run diff through", diffcmd, :negate => [ %r{^--no-?diff-?cmd} ]
       @change     = add DiffChangeOption.new
       @revision   = add DiffRevisionOption.new
       @whitespace = add DiffWhitespaceOption.new
