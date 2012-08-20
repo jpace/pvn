@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/logcmd'
 require 'svnx/log/entries'
 
 module PVN::Revisionxxx

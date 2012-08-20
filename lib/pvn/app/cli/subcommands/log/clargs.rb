@@ -95,7 +95,7 @@ module PVN::App::Log
             processed = true
             varname = '@' + opt.name.to_s
             info "varname: #{varname}"
-            info "opt.vaoue: #{opt.value}"
+            info "opt.value: #{opt.value}"
             instance_variable_set varname, opt.value
             options_processed << opt
           else

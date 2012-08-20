@@ -35,6 +35,15 @@ module PVN::App::Log
       assert_command_line_args expdata, %w{ --limit 15 }
     end
 
+    def test_help
+      expdata = Hash.new
+      expdata[:limit] = nil
+      expdata[:revision] = nil
+      expdata[:path] = '.'
+      expdata[:help] = true
+      assert_command_line_args expdata, %w{ --help }
+    end          
+
     def test_revision_single
       expdata = Hash.new
       expdata[:limit] = nil
@@ -51,19 +60,26 @@ module PVN::App::Log
       assert_command_line_args expdata, %w{ -r500:600 /Programs/wiquery/trunk }
     end
 
-    def test_help
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = nil
-      expdata[:path] = '.'
-      expdata[:help] = true
-      assert_command_line_args expdata, %w{ --help }
-    end          
-
     def test_revision_relative
       expdata = Hash.new
       expdata[:limit] = nil
       expdata[:revision] = '1944'
+      expdata[:path] = '/Programs/wiquery/trunk'
+      assert_command_line_args expdata, %w{ -5 /Programs/wiquery/trunk }
+    end
+
+    def xxx_test_revisions_single
+      expdata = Hash.new
+      expdata[:limit] = nil
+      expdata[:revision] = [ '-r1', '-r3' ]
+      expdata[:path] = '/Programs/wiquery/trunk'
+      assert_command_line_args expdata, %w{ -r1 -r3 /Programs/wiquery/trunk }
+    end
+
+    def xxx_test_revisions_relative
+      expdata = Hash.new
+      expdata[:limit] = nil
+      expdata[:revision] = [ '1944', '1848' ]
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -5 /Programs/wiquery/trunk }
     end
