@@ -4,7 +4,7 @@
 require 'synoption/set'
 require 'synoption/option'
 require 'synoption/boolean_option'
-require 'pvn/app/cli/subcommands/revision/revreopt'
+require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
 
 module PVN; module App; module CLI; module Log; end; end; end; end
 

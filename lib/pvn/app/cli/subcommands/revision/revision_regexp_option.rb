@@ -1,13 +1,13 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/app/cli/subcommands/revision/revopt'
+require 'pvn/app/cli/subcommands/revision/revision_option'
 
 module PVN
   # A revision that is also set by -N and +N.
   class RevisionRegexpOption < PVN::RevisionOption
     POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]?\d+$')
-    TAG_RE = Regexp.new('^(?:([\-\+]\d+)|(-r(.*)))$')
+    TAG_RE = Regexp.new('^(?:([\-\+]\d+)|(-r(.+)))$')
 
     REVISION_DESCRIPTION = [ "revision to apply.",
                              "ARG can be relative, of the form:",
@@ -27,7 +27,14 @@ module PVN
       info "val: #{val}".blue
 
       md = TAG_RE.match val
-      super unless md[2]
+      info "md: #{md.inspect}"
+
+      if md[3]
+        info "md[3]: #{md[3]}".yellow
+        @value = md[3]
+      else
+        super
+      end
     end
   end
 end

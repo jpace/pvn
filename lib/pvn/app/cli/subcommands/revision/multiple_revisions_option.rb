@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/app/cli/subcommands/revision/revreopt'
+require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
 require 'pvn/revision/entry'
 require 'svnx/log/command'
 
@@ -16,7 +16,6 @@ module PVN
                              "Multiple revisions can be specified." ,
                            ]
     
-    # this should be if :several:
     def set_value val
       info "val: #{val.inspect}".on_black
       info "current: #{value}".on_blue
@@ -40,23 +39,13 @@ module PVN
         md = TAG_RE.match currval
 
         info "md: #{md.inspect}"
-        
-        if md[2]
-          @newvalues << currval
-          next
+
+        if md
+          convval = md[2] ? md[3] : relative_to_absolute(currval, unprocessed[0])
+          newvalues << convval
+        else
+          newvalues << currval
         end
-
-        logforrev = SVNx::LogCommandLine.new unprocessed[0]
-        logforrev.execute
-        xmllines = logforrev.output
-
-        info "currval: #{currval}".green
-        reventry = PVN::Revisionxxx::Entry.new :value => currval, :xmllines => xmllines.join('')
-        revval   = reventry.value.to_s
-
-        info "revval: #{revval}".green
-
-        newvalues << revval
       end
 
       info "newvalues: #{newvalues}".on_blue

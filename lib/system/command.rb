@@ -3,7 +3,7 @@
 
 require 'system/cmdexec'
 require 'synoption/optionable'
-require 'pvn/app/cli/subcommands/revision/revopt'
+require 'pvn/app/cli/subcommands/revision/revision_option'
 
 module PVN
   class Command

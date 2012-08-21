@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'pvn/app/cli/subcommands/revision/revreopt'
+require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
 
 Log.level = Log::DEBUG
 
@@ -54,12 +54,12 @@ module PVN
       assert_post_process '412', '-163', '/Programs/wiquery/trunk'
     end
 
-    def test_post_process_tagval_unconverted
-      assert_post_process '-r7', '-r7', '/Programs/wiquery/trunk'
+    def test_post_process_tagval
+      assert_post_process '7', '-r7', '/Programs/wiquery/trunk'
     end
 
-    def test_post_process_tagrange_unconverted
-      assert_post_process '-r7:177', '-r7:177', '/Programs/wiquery/trunk'
+    def test_post_process_tagrange
+      assert_post_process '7:177', '-r7:177', '/Programs/wiquery/trunk'
     end
   end
 end
