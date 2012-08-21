@@ -2,8 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
-require 'pvn/revision/entry'
-require 'svnx/log/command'
 
 module PVN
   # A revision option with multiple values.
@@ -17,8 +15,6 @@ module PVN
                            ]
     
     def set_value val
-      info "val: #{val.inspect}".on_black
-      info "current: #{value}".on_blue
       currval = value
       if currval
         super [ currval, val ].flatten
@@ -28,18 +24,11 @@ module PVN
     end
 
     def post_process optset, unprocessed
-      info "value: #{value}".blue
-
       newvalues = Array.new
       currvalues = value
 
       currvalues.each do |currval|
-        info "currval: #{currval}"
-        
         md = TAG_RE.match currval
-
-        info "md: #{md.inspect}"
-
         if md
           convval = md[2] ? md[3] : relative_to_absolute(currval, unprocessed[0])
           newvalues << convval
@@ -47,8 +36,6 @@ module PVN
           newvalues << currval
         end
       end
-
-      info "newvalues: #{newvalues}".on_blue
 
       @value = newvalues
     end

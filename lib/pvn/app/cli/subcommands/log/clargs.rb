@@ -89,9 +89,9 @@ module PVN::App::Log
         info "args: #{args}"
         processed = false
         @optset.options.each do |opt|
-          info "opt: #{opt}".green
+          info "opt: #{opt}"
           if opt.process args
-            info "got processed!"
+            info "processed!"
             processed = true
             varname = '@' + opt.name.to_s
             info "varname: #{varname}"
@@ -118,11 +118,13 @@ module PVN::App::Log
         info "opt: #{opt}".on_red
         opt.post_process @optset, args
 
-        if opt.kind_of?(PVN::RevisionRegexpOption)
-          info "opt: #{opt}".on_blue
-          info "opt: #{opt.value}".on_blue
-          @revision = opt.value
-        end
+        info "opt: #{opt.value}".on_blue
+        
+        varname = '@' + opt.name.to_s
+        info "varname: #{varname}"
+        info "opt.value: #{opt.value}"
+        
+        instance_variable_set varname, opt.value
       end
     end
     

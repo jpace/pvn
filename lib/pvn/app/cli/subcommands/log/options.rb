@@ -4,7 +4,7 @@
 require 'synoption/set'
 require 'synoption/option'
 require 'synoption/boolean_option'
-require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
+require 'pvn/app/cli/subcommands/revision/multiple_revisions_option'
 
 module PVN; module App; module CLI; module Log; end; end; end; end
 
@@ -48,7 +48,7 @@ module PVN::App::CLI::Log
       super
 
       add LimitOption.new
-      @revision = add PVN::RevisionRegexpOption.new(:unsets => :limit)
+      @revision = add PVN::MultipleRevisionsRegexpOption.new(:unsets => :limit)
       @verbose  = add VerboseOption.new
       @format   = add FormatOption.new
       @help     = add HelpOption.new

@@ -29,6 +29,9 @@ module PVN::Revisionxxx
 
         # these are lines from "svn log -v <file>"
         xmllines = args[:xmllines]
+        if xmllines.kind_of? Array
+          xmllines = xmllines.join ''
+        end
 
         case value
         when Fixnum

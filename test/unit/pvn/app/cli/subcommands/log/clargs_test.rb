@@ -17,7 +17,7 @@ module PVN::App::Log
 
       info "cmdline: #{cmdline}"
       assert_equal exp[:limit], cmdline.limit
-      assert_equal exp[:revision].to_s, cmdline.revision.to_s
+      assert_equal exp[:revision], cmdline.revision
       assert_equal exp[:path], cmdline.path
     end
 
@@ -47,7 +47,7 @@ module PVN::App::Log
     def test_revision_single
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = '500'
+      expdata[:revision] = [ '500' ]
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -r500 /Programs/wiquery/trunk }
     end
@@ -55,7 +55,7 @@ module PVN::App::Log
     def test_revision_multi
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = '500:600'
+      expdata[:revision] = [ '500:600' ]
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -r500:600 /Programs/wiquery/trunk }
     end
@@ -63,25 +63,25 @@ module PVN::App::Log
     def test_revision_relative
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = '1944'
+      expdata[:revision] = [ '1944' ]
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -5 /Programs/wiquery/trunk }
     end
 
-    def xxx_test_revisions_single
+    def test_revisions_single
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = [ '-r1', '-r3' ]
+      expdata[:revision] = [ '1', '3' ]
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -r1 -r3 /Programs/wiquery/trunk }
     end
 
-    def xxx_test_revisions_relative
+    def test_revisions_relative
       expdata = Hash.new
       expdata[:limit] = nil
       expdata[:revision] = [ '1944', '1848' ]
       expdata[:path] = '/Programs/wiquery/trunk'
-      assert_command_line_args expdata, %w{ -5 /Programs/wiquery/trunk }
+      assert_command_line_args expdata, %w{ -5 -10 /Programs/wiquery/trunk }
     end
   end
 end

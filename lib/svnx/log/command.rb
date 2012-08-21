@@ -58,7 +58,25 @@ module SVNx
 
     def to_a
       info "@revision: #{@revision}".red
-      [ @limit && "--limit #{@limit}", @verbose && '-v', @revision && "-r#{@revision}", @path ].compact
+      ary = Array.new
+      if @limit
+        ary << '--limit' << @limit
+      end
+      if @verbose
+        ary << '-v'
+      end
+
+      if @revision
+        @revision.each do |rev|
+          ary << "-r#{rev}"
+        end
+      end
+
+      if @path
+        ary << @path
+      end
+      
+      ary.compact
     end
   end
   

@@ -29,6 +29,8 @@ module PVN::App::Log
         show_help
         return
       end
+
+      info "revision: #{clargs.revision}".on_magenta
       
       logargs   = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
       elmt      = PVN::IO::Element.new :local => clargs.path || '.'

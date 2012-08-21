@@ -129,13 +129,11 @@ module PVN
     end
 
     def process args
-      info "args: #{args}".yellow
+      info "args: #{args}"
       if @matchers[:exact].match? args[0]
         info "match"
         args.shift
-        
         val = takes_value? ? next_argument(args) : true
-        
         set_value val
         true
       elsif @matchers[:negative] && @matchers[:negative].match?(args[0])
@@ -144,7 +142,7 @@ module PVN
         set_value false
         true
       elsif @matchers[:regexp] && (md = @matchers[:regexp].match?(args[0]))
-        info "md: #{md}".blue
+        info "md: #{md}".green
         arg = args.shift
         set_value md[0]
         true
