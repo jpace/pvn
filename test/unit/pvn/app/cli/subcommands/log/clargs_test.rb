@@ -47,7 +47,7 @@ module PVN::App::Log
     def test_revision_single
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = '-r500'
+      expdata[:revision] = '500'
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -r500 /Programs/wiquery/trunk }
     end
@@ -55,7 +55,7 @@ module PVN::App::Log
     def test_revision_multi
       expdata = Hash.new
       expdata[:limit] = nil
-      expdata[:revision] = '-r500:600'
+      expdata[:revision] = '500:600'
       expdata[:path] = '/Programs/wiquery/trunk'
       assert_command_line_args expdata, %w{ -r500:600 /Programs/wiquery/trunk }
     end
