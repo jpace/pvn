@@ -18,7 +18,7 @@ module PVN::App::Log
     DEFAULT_LIMIT = 15
 
     def initialize args
-      RIEL::Log.level = Log::DEBUG
+      # RIEL::Log.level = Log::DEBUG
 
       optset = PVN::App::CLI::Log::OptionSet.new 
 
@@ -39,7 +39,7 @@ module PVN::App::Log
 
       # this should be refined to clargs.revision.head? && clargs.limit
       from_head = !clargs.revision
-      from_tail = !clargs.limit
+      from_tail = !clargs.limit && !clargs.revision
       
       # this dictates whether to show +N and/or -1:
       totalentries = clargs.limit || clargs.revision ? nil : nentries

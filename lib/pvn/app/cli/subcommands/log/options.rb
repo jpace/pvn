@@ -17,7 +17,7 @@ module PVN::App::CLI::Log
     end
 
     def set_value val
-      super val.to_i
+      super val
     end
   end
 

@@ -1,30 +1,51 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
-require 'pvn/revision'
+module PVN; module App; end; end
 
-module PVN
-  module App
-    module Subcommand
-      class CmdLineArgs
-        include Loggable
+module PVN::App::Base
+  class CmdLineArgs
+    include Loggable
 
-        def initialize args
-          while !args.empty?
-            arg = args.shift
-            info "arg: #{arg}".cyan
-            case arg
-            when %r{-r(.*)}
-              md = Regexp.last_match
-              info "md: #{md}".on_yellow
-              @revision = Revision.new :value => md[1]
-            else
-              @path = arg
-            end
+    class << self
+      def has_option name
+        define_method name do
+          info "name: #{name}"
+          self.instance_eval do
+            meth = name
+            info "meth: #{meth}"
+            opt = @optset.send name
+            info "opt: #{opt}"
+            val = opt.value
+            info "val: #{val}"
+            val
           end
         end
+      end
+    end
+
+    def initialize optset, args
+      @optset = optset
+      process args
+    end
+
+    def process args
+      options_processed = Array.new
+      
+      while !args.empty?
+        processed = false
+        @optset.options.each do |opt|
+          if opt.process args
+            processed = true
+            options_processed << opt
+          end
+        end
+
+        break unless processed
+      end
+
+      options_processed.each do |opt|
+        opt.post_process @optset, args
       end
     end
   end

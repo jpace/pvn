@@ -55,10 +55,5 @@ module PVN::Log
     def colors field
       use_colors ? COLORS[field] : nil
     end
-
-    def format_entry entry, idx, total
-      ef = EntryFormatter.new use_colors, entry, idx, false, false, total
-      ef.format
-    end
   end
 end

@@ -32,7 +32,7 @@ module PVN::Log
         lines << pad("", :neg_revision)
       end
 
-      # info "@total: #{total}".on_blue
+      # info "@total: #{total}"
 
       if from_tail
         posidx = "+#{total - idx - 1}"
