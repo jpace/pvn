@@ -23,7 +23,7 @@ module PVN
       end
     end
 
-    def post_process optset, unprocessed
+    def resolve_value optset, unprocessed
       newvalues = Array.new
       currvalues = value
 

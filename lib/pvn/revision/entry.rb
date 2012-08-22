@@ -3,7 +3,7 @@
 
 require 'svnx/log/entries'
 
-module PVN::Revisionxxx
+module PVN::Revision
   DATE_REGEXP = Regexp.new '^\{(.*?)\}'
   SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
   RELATIVE_REVISION_RE = Regexp.new '^([\+\-])(\d+)$'
@@ -80,13 +80,15 @@ module PVN::Revisionxxx
 
       logentries = SVNx::Log::Entries.new :xmllines => xmllines
 
-      # logentries are in descending order, so the most recent one is index 0
-      info "logentries: #{logentries.size}"
+      nentries = logentries.size
 
-      if value.abs > logentries.size
-        super nil
+      # logentries are in descending order, so the most recent one is index 0
+      info "logentries: #{nentries}"
+
+      if value.abs > nentries
+        raise "ERROR: no entry for revision: #{value.abs}; number of entries: #{nentries}"
       else
-        idx = value < 0 ? -1 + value.abs : logentries.size - value
+        idx = value < 0 ? -1 + value.abs : nentries - value
         @log_entry = logentries[idx]
         super @log_entry.revision.to_i
       end

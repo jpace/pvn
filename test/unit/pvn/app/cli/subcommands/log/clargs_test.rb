@@ -23,7 +23,7 @@ module PVN::App::Log
 
     def test_default
       expdata = Hash.new
-      expdata[:limit] = nil
+      expdata[:limit] = 5
       expdata[:path] = '.'
       assert_command_line_args expdata, Array.new
     end
@@ -37,7 +37,7 @@ module PVN::App::Log
 
     def test_help
       expdata = Hash.new
-      expdata[:limit] = nil
+      expdata[:limit] = 5
       expdata[:revision] = nil
       expdata[:path] = '.'
       expdata[:help] = true

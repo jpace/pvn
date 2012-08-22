@@ -152,13 +152,18 @@ module PVN
     end
 
     def post_process option_set, unprocessed
-      info "option_set: #{option_set}"
-      info "unprocessed: #{unprocessed}"
+      info "option_set: #{option_set}".on_blue
+      info "unprocessed: #{unprocessed}".on_green
+
+      resolve_value option_set, unprocessed
 
       if @unsets
-        info "unsets: #{@unsets}"
+        info "unsets: #{@unsets}".on_magenta
         option_set.unset @unsets
       end
+    end
+
+    def resolve_value option_set, unprocessed
     end
   end
 end

@@ -8,9 +8,11 @@ Log.level = Log::DEBUG
 
 module PVN
   class MultipleRevisionsRegexpOptionTestCase < PVN::TestCase
-    def xxx_test_out_of_range
+    def test_out_of_range
       assert_raises(RuntimeError) do 
-        assert_relative_to_absolute '1944', '-164', '/Programs/wiquery/trunk'
+        ropt = PVN::MultipleRevisionsRegexpOption.new
+        ropt.process [ '-164' ]
+        ropt.post_process nil, [ '/Programs/wiquery/trunk' ]
       end
     end
 

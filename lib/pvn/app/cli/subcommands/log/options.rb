@@ -40,14 +40,16 @@ module PVN::App::CLI::Log
   end
 
   class OptionSet < PVN::OptionSet
-    attr_accessor :revision
+    attr_reader :revision
     attr_reader :format
     attr_reader :help
+    attr_reader :limit
+    attr_reader :verbose
     
     def initialize
       super
 
-      add LimitOption.new
+      @limit    = add LimitOption.new
       @revision = add PVN::MultipleRevisionsRegexpOption.new(:unsets => :limit)
       @verbose  = add VerboseOption.new
       @format   = add FormatOption.new

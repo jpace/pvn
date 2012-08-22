@@ -28,9 +28,11 @@ module PVN
       assert_tag_no_match '-x'
     end
 
-    def xxx_test_out_of_range
+    def test_out_of_range
       assert_raises(RuntimeError) do 
-        assert_relative_to_absolute '1944', '-164', '/Programs/wiquery/trunk'
+        ropt = PVN::RevisionRegexpOption.new
+        ropt.process [ '-164' ]
+        ropt.post_process nil, [ '/Programs/wiquery/trunk' ]
       end
     end
 
@@ -60,6 +62,10 @@ module PVN
 
     def test_post_process_tagrange
       assert_post_process '7:177', '-r7:177', '/Programs/wiquery/trunk'
+    end
+
+    def test_post_process_absolute_middling
+      assert_post_process '1887', '1887', '/Programs/wiquery/trunk'
     end
   end
 end

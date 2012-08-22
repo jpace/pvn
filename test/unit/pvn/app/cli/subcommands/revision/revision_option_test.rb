@@ -26,7 +26,7 @@ module PVN
       assert_relative_to_absolute '412', '-163', '/Programs/wiquery/trunk'
     end
 
-    def xxx_test_out_of_range
+    def test_out_of_range
       assert_raises(RuntimeError) do 
         assert_relative_to_absolute '1944', '-164', '/Programs/wiquery/trunk'
       end
@@ -38,6 +38,10 @@ module PVN
       ropt.post_process nil, [ path ]
       act = ropt.value
       assert_equal exp, act, "val: #{val}; path: #{path}"
+    end
+
+    def test_post_process_absolute_middling
+      assert_post_process '1887', '1887', '/Programs/wiquery/trunk'
     end
 
     def test_post_process_middling

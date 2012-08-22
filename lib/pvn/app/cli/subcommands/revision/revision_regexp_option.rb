@@ -6,7 +6,6 @@ require 'pvn/app/cli/subcommands/revision/revision_option'
 module PVN
   # A revision that is also set by -N and +N.
   class RevisionRegexpOption < PVN::RevisionOption
-    POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]?\d+$')
     TAG_RE = Regexp.new('^(?:([\-\+]\d+)|(-r(.+)))$')
 
     REVISION_DESCRIPTION = [ "revision to apply.",
@@ -22,19 +21,19 @@ module PVN
       super
     end
 
-    def post_process optset, unprocessed
+    def resolve_value optset, unprocessed
       val = value
       info "val: #{val}".blue
 
       md = TAG_RE.match val
       info "md: #{md.inspect}"
 
-      if md[3]
+      if md && md[3]
         info "md[3]: #{md[3]}".yellow
         @value = md[3]
-      else
-        super
       end
+      
+      super
     end
   end
 end

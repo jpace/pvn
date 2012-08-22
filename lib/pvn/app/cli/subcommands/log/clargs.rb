@@ -43,41 +43,26 @@ module PVN::App::Log
       ### $$$ todo: decide whether/how to support multiple paths.
 
       process_args args
-      # process_revision
     end
 
-    def matches_relative? str
-      PVN::Revisionxxx::Entry::matches_relative? str
+    def revision
+      @optset.revision.value
     end
 
-    def process_revision
-      info "@revargs: #{@revargs}"
-
-      return nil if @revargs.empty?
-
-      logforrev = SVNx::LogCommandLine.new @path
-      logforrev.execute
-      xmllines = logforrev.output
-
-      @revargs.each do |revarg|
-        reventry = PVN::Revisionxxx::Entry.new :value => revarg, :xmllines => xmllines.join('')
-        revval   = reventry.value.to_s
-
-        if @revision
-          @revision << ":" << revval
-        else
-          @revision = revval
-        end
-      end
+    def limit
+      @optset.limit.value
     end
 
-    def save_revision_value revval
-      if matches_relative? revval
-        @revargs << revval
-      else
-        @revision = revval
-        info "@revision: #{@revision}".yellow
-      end
+    def verbose
+      @optset.verbose.value
+    end
+
+    def help
+      @optset.help.value
+    end
+
+    def format
+      @optset.format.value
     end
 
     def process_args args
@@ -98,65 +83,31 @@ module PVN::App::Log
             info "opt.value: #{opt.value}"
             instance_variable_set varname, opt.value
             options_processed << opt
-          else
-            info "NOT processed"
           end
         end
 
         break unless processed
       end
 
-      info "args: #{args}".cyan
+      info "args: #{args}"
 
-      info "@revision: #{@revision}".on_cyan
+      info "@revision: #{@revision}"
 
       @path = args[0] || "."
 
-      info "@path: #{path}".yellow
+      info "@path: #{path}"
 
       options_processed.each do |opt|
-        info "opt: #{opt}".on_red
+        info "opt: #{opt}"
         opt.post_process @optset, args
 
-        info "opt: #{opt.value}".on_blue
+        info "opt: #{opt.value}"
         
         varname = '@' + opt.name.to_s
         info "varname: #{varname}"
         info "opt.value: #{opt.value}"
         
         instance_variable_set varname, opt.value
-      end
-    end
-    
-    def process_args_old args
-      while !args.empty?
-        arg = args.shift
-        info "arg: #{arg}".yellow
-
-        case arg
-        when "--help"
-          @help = true
-        when "--limit", "-l"
-          @limit = args.shift.to_i
-        when "--verbose", "-v"
-          @verbose = true
-        when "--noformat", "-F"
-          @format = false
-        when "--format", "-f"
-          @format = true
-        when "-c"
-          chgval = args.shift
-          raise "option '-c' requires an argument" unless chgval
-          save_revision_value chgval
-        when %r{-r(.*)}
-          save_revision_value Regexp.last_match[1]
-        else
-          if matches_relative? arg
-            @revargs << arg
-          else
-            @path = arg
-          end
-        end
       end
     end
   end

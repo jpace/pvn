@@ -18,6 +18,8 @@ module PVN
                              "    -N : N revisions from the HEAD,",
                              "         when -1 is the previous revision" ,
                            ]
+
+    POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]\d+$')
     
     def initialize revargs = Hash.new
       revargs[:setter] = :revision_from_args
@@ -52,17 +54,22 @@ module PVN
       value.nil? || value == 'HEAD'
     end
 
-    def post_process optset, unprocessed
+    def resolve_value optset, unprocessed
       val = value
-      @value = relative_to_absolute val, unprocessed[0]
+      info "val: #{val}".on_red
+      if POS_NEG_NUMERIC_RE.match val
+        @value = relative_to_absolute val, unprocessed[0]
+        info "@value: #{@value}".on_red
+      end
     end
 
     def relative_to_absolute rel, path
       logforrev = SVNx::LogCommandLine.new path
       logforrev.execute
+
       xmllines = logforrev.output
 
-      reventry = PVN::Revisionxxx::Entry.new :value => rel, :xmllines => xmllines
+      reventry = PVN::Revision::Entry.new :value => rel, :xmllines => xmllines
       revval   = reventry.value.to_s
       revval
     end
