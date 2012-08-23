@@ -70,12 +70,20 @@ spec = Gem::Specification.new do |s|
   s.email            = "jeugenepace@gmail.com"
   s.homepage         = "http://www.incava.org/projects/pvn"
   s.platform         = Gem::Platform::RUBY
-  s.summary          = "What you wish Subversion had."
+  s.summary          = "What Subversion should have."
   s.files            = FileList["{bin,lib}/**/*"].to_a
   s.require_path     = "lib"
   s.test_files       = FileList["{test}/**/*test.rb"].to_a
   s.has_rdoc         = true
   s.extra_rdoc_files = [ "README.rdoc" ]
+
+  s.test_files = FileList["{test}/**/*test.rb"].to_a
+  s.has_rdoc = false
+  s.extra_rdoc_files = ["README.markdown"]
+  s.add_dependency("riel", ">= 1.1.6")
+  s.bindir = 'bin'
+  s.executables = %w{ pvn }
+  s.default_executable = 'pvn'
 end
  
 Gem::PackageTask.new(spec) do |pkg| 

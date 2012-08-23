@@ -29,6 +29,10 @@ module PVN
     include Loggable
 
     def initialize io, args
+      if args.empty?
+        return self.class.run_help args
+      end
+      
       while args.size > 0
         arg = args.shift
         info "arg: #{arg}"
@@ -72,10 +76,10 @@ module PVN
     end
 
     SUBCOMMANDS = [ LogCommand,
-                    DiffCommand, 
-                    DescribeCommand, 
-                    PctCommand,
-                    WhereCommand,
+#                    DiffCommand, 
+#                    DescribeCommand, 
+#                    PctCommand,
+#                    WhereCommand,
 #                    UndeleteCommand,
                   ]
     
