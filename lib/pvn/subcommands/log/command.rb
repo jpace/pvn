@@ -8,12 +8,84 @@ require 'svnx/log/entries'
 require 'pvn/subcommands/base/doc'
 require 'pvn/subcommands/log/options'
 
-module PVN::Subcommands::Log
+module PVN::Subcommands::Base
   class Command
+    include Loggable
+
+    @@doc_for_class = Hash.new { |h, k| h[k] = PVN::Subcommands::Documentation.new }
+    
+    class << self
+      def getdoc
+        puts "self: #{self}"
+        @@doc_for_class[self]
+      end
+
+      def subcommands sc
+        getdoc.subcommands = sc
+      end
+
+      def description desc
+        getdoc.description = desc
+      end
+
+      def usage usg
+        getdoc.usage = usg
+      end
+
+      def summary smry
+        getdoc.summary = smry
+      end
+
+      def options opts
+        getdoc.options.concat opts
+      end
+
+      def optscls
+        optmodule = self.to_s.sub %r{::\w+$}, ''
+        optcls = optmodule + '::OptionSet'
+        optset = instance_eval optcls + '.new'
+        getdoc.options.concat optset.options
+      end
+
+      def example *ex
+        getdoc.examples << ex
+      end
+    end
+
+    def to_doc io
+      doc = self.class.getdoc
+      doc.write io
+    end
+  end
+end
+
+module PVN::Subcommands::Log
+  class Command < PVN::Subcommands::Base::Command
     include Loggable
 
     DEFAULT_LIMIT = 15
 
+    description "this is a description of log"
+    subcommands [ "log" ]
+    description "Print log messages for the given files."
+    usage       "[OPTIONS] FILE..."
+    summary     [ "Prints the log entries for the given files, with colorized",
+                  "output. Unlike 'svn log', which prints all log entries, ",
+                  "'pvn log' prints #{DEFAULT_LIMIT} entries by default.",
+                  "As with other pvn subcommands, 'pvn log' accepts relative ",
+                  "revisions."
+                ]
+
+    # options PVN::Subcommands::Log::OptionSet.new.options
+    optscls
+
+    example "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb."
+    example "pvn log -l 25 foo.rb", "Prints 25 log entries for the file."
+    example "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)."
+    example "pvn log +3 foo.rb",    "Prints the 3rd log entry."
+    example "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized."
+    example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
+    
     def initialize args
       # RIEL::Log.level = Log::DEBUG
 
@@ -21,12 +93,7 @@ module PVN::Subcommands::Log
       info "options: #{options}"
       options.process args
 
-      if options.help 
-        show_help
-        return
-      end
-
-      info "revision: #{options.revision}".on_magenta
+      return show_help if options.help 
 
       path      = options.paths[0] || "."
       logargs   = SVNx::LogCommandArgs.new :limit => options.limit, :verbose => options.verbose, :revision => options.revision, :path => path
@@ -41,35 +108,12 @@ module PVN::Subcommands::Log
       # this dictates whether to show +N and/or -1:
       totalentries = options.limit || options.revision ? nil : nentries
 
-      info "totalentries: #{totalentries}"
-
-      # use_color, entries, from_head, from_tail
       ef = PVN::Log::EntriesFormatter.new options.format, log.entries, from_head, from_tail
       puts ef.format
     end
 
     def show_help
-      puts "pvn log <options>"
-      doc = PVN::Subcommands::Documentation.new
-      doc.subcommands = [ "log" ]
-      doc.description = "Print log messages for the given files."
-      doc.usage       = "[OPTIONS] FILE..."
-      doc.summary     = [ "Prints the log entries for the given files, with colorized",
-                          "output. Unlike 'svn log', which prints all log entries, ",
-                          "'pvn log' prints #{DEFAULT_LIMIT} entries by default.",
-                          "As with other pvn subcommands, 'pvn log' accepts relative ",
-                          "revisions."
-                        ]
-      doc.options.concat PVN::Subcommands::Log::OptionSet.new.options
-
-      doc.examples   << [ "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb." ]
-      doc.examples   << [ "pvn log -l 25 foo.rb", "Prints 25 log entries for the file." ]
-      doc.examples   << [ "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)." ]
-      doc.examples   << [ "pvn log +3 foo.rb",    "Prints the 3rd log entry." ]
-      doc.examples   << [ "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized." ]
-      doc.examples   << [ "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change." ]
-
-      doc.write $stdout
+      to_doc $stdout
     end
   end
 end
