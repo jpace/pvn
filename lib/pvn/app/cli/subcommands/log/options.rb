@@ -39,72 +39,7 @@ module PVN::App::CLI::Log
     end
   end
 
-  class BaseOptionSet < PVN::OptionSet
-    @@options = Array.new
-
-    attr_reader :paths
-    
-    class << self
-      def has_option name, optcls, optargs = Hash.new
-        attr_reader name
-
-        @@options << { :name => name, :class => optcls, :args => optargs }
-
-        define_method name do
-          info "name: #{name}".red
-          self.instance_eval do
-            meth = name
-            info "meth: #{meth}".red
-            opt = instance_variable_get '@' + name.to_s
-            info "opt: #{opt}".red
-            val = opt.value
-            info "val: #{val}".red
-            val
-          end
-        end
-      end
-    end
-
-    def initialize
-      super
-
-      @@options.each do |option|
-        name = option[:name]
-        cls  = option[:class]
-        args = option[:args]
-        opt  = cls.new(*args)
-        info "opt    : #{opt}".on_black
-        add opt
-        instance_variable_set '@' + name.to_s, opt
-      end
-    end
-
-    def process args
-      options_processed = Array.new
-
-      @unprocessed = args
-      
-      while !@unprocessed.empty?
-        processed = false
-        options.each do |opt|
-          if opt.process @unprocessed
-            processed = true
-            options_processed << opt
-          end
-        end
-
-        break unless processed
-      end
-
-      options_processed.each do |opt|
-        opt.post_process self, @unprocessed
-      end
-
-      @paths = @unprocessed
-    end
-  end
-
-  class OptionSet < BaseOptionSet
+  class OptionSet < PVN::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
     has_option :format, FormatOption
     has_option :help, HelpOption
@@ -115,6 +50,10 @@ module PVN::App::CLI::Log
       info "optset: #{self}".on_green
       super
       self
+    end
+
+    def paths
+      unprocessed
     end
   end
 end

@@ -9,12 +9,54 @@ module PVN
   class OptionSet
     include Loggable
 
+    # maps from the option set class to the valid options for that class.
+    @@options_for_class = Hash.new { |h, k| h[k] = Array.new }
+
+    attr_reader :unprocessed
+    
+    class << self
+      def has_option name, optcls, optargs = Hash.new
+        attr_reader name
+
+        @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
+
+        options = @@options_for_class[self]
+
+        define_method name do
+          info "name: #{name}".red
+          self.instance_eval do
+            meth = name
+            info "meth: #{meth}".red
+            opt = instance_variable_get '@' + name.to_s
+            info "opt: #{opt}".red
+            val = opt.value
+            info "val: #{val}".red
+            val
+          end
+        end
+      end
+    end
+
     attr_reader :options
     attr_reader :arguments
     
     def initialize options = Array.new
       @options = options
       @arguments = Array.new
+
+      RIEL::Log.info "self.class: #{self.class}".on_magenta
+      opts = @@options_for_class[self.class]
+      RIEL::Log.info "opts: #{opts}".on_magenta
+
+      opts.each do |option|
+        name = option[:name]
+        cls  = option[:class]
+        args = option[:args]
+        opt  = cls.new(*args)
+        info "opt    : #{opt}".on_black
+        add opt
+        instance_variable_set '@' + name.to_s, opt
+      end
     end
 
     def inspect
@@ -111,13 +153,35 @@ module PVN
       opt && opt.unset
     end
 
-    def process obj, optargs, cmdargs
-      set_options_by_keys optargs
-      set_options_from_args obj, cmdargs
+    # def process obj, optargs, cmdargs
+    #   set_options_by_keys optargs
+    #   set_options_from_args obj, cmdargs
 
-      info "cmdargs: #{cmdargs}"
+    #   info "cmdargs: #{cmdargs}"
 
-      self
+    #   self
+    # end
+
+    def process args
+      options_processed = Array.new
+
+      @unprocessed = args
+      
+      while !@unprocessed.empty?
+        processed = false
+        options.each do |opt|
+          if opt.process @unprocessed
+            processed = true
+            options_processed << opt
+          end
+        end
+
+        break unless processed
+      end
+
+      options_processed.each do |opt|
+        opt.post_process self, @unprocessed
+      end
     end
 
     def << option
