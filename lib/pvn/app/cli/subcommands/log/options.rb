@@ -39,21 +39,71 @@ module PVN::App::CLI::Log
     end
   end
 
-  class OptionSet < PVN::OptionSet
-    attr_reader :revision
-    attr_reader :format
-    attr_reader :help
-    attr_reader :limit
-    attr_reader :verbose
+  class BaseOptionSet < PVN::OptionSet
+    @@options = Array.new
     
+    class << self
+      def has_option name, optcls, optargs = Hash.new
+        attr_reader name
+
+        @@options << { :name => name, :class => optcls, :args => optargs }
+
+        define_method name do
+          info "name: #{name}".red
+          self.instance_eval do
+            meth = name
+            info "meth: #{meth}".red
+            opt = instance_variable_get '@' + name.to_s
+            info "opt: #{opt}".red
+            val = opt.value
+            info "val: #{val}".red
+            val
+          end
+        end
+      end
+    end
+
     def initialize
       super
 
-      @limit    = add LimitOption.new
-      @revision = add PVN::MultipleRevisionsRegexpOption.new(:unsets => :limit)
-      @verbose  = add VerboseOption.new
-      @format   = add FormatOption.new
-      @help     = add HelpOption.new
+      @@options.each do |option|
+        name = option[:name]
+        cls  = option[:class]
+        args = option[:args]
+        opt  = cls.new(*args)
+        info "opt    : #{opt}".on_black
+        add opt
+        instance_variable_set '@' + name.to_s, opt
+      end
+    end
+  end
+
+  class CmdLineArgs < PVN::App::Base::CmdLineArgs
+    attr_reader :path
+
+    has_option :revision
+    has_option :limit
+    has_option :verbose
+    has_option :format
+    has_option :help
+
+    def initialize optset, args
+      super
+      @path = (unprocessed && unprocessed.shift) || "."
+    end
+  end
+
+  class OptionSet < BaseOptionSet
+    has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
+    has_option :format, FormatOption
+    has_option :help, HelpOption
+    has_option :limit, LimitOption
+    has_option :verbose, PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
+
+    def to_command_line_args args
+      info "optset: #{self}"
+      clargs = PVN::App::Log::CmdLineArgs.new self, args
+      clargs
     end
   end
 end

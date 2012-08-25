@@ -38,11 +38,13 @@ module PVN
       puts "doc: #{doc}".on_green
     end
 
-    def test_with_diffcmd
+    ### $$$ disabled:
+    def xtest_with_diffcmd
       assert_diff_command 'svn diff --diff-cmd /proj/org/incava/pvn/bin/pvndiff', %w{ }
     end
 
-    def test_no_diff_command
+    ### $$$ disabled:
+    def xtest_no_diff_command
       assert_diff_command 'svn diff', %w{ --no-diffcmd }
       assert_diff_command 'svn diff', %w{ --no-diff-cmd }
     end

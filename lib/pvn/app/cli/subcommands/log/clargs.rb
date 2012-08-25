@@ -17,7 +17,7 @@ module PVN::App::Log
 
     def initialize optset, args
       super
-      @path = args[0] || "."
+      @path = (unprocessed && unprocessed.shift) || "."
     end
   end
 end

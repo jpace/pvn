@@ -14,9 +14,7 @@ module PVN::App::Base
           self.instance_eval do
             meth = name
             info "meth: #{meth}"
-            opt = @optset.send name
-            info "opt: #{opt}"
-            val = opt.value
+            val = @optset.send name
             info "val: #{val}"
             val
           end
@@ -24,9 +22,12 @@ module PVN::App::Base
       end
     end
 
+    attr_reader :unprocessed
+
     def initialize optset, args
       @optset = optset
       process args
+      @unprocessed = args
     end
 
     def process args

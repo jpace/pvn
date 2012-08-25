@@ -21,10 +21,9 @@ module PVN::App::Log
       # RIEL::Log.level = Log::DEBUG
 
       optset = PVN::App::CLI::Log::OptionSet.new 
-
       info "optset: #{optset}"
+      clargs = optset.to_command_line_args args
 
-      clargs = PVN::App::Log::CmdLineArgs.new optset, args
       if clargs.help 
         show_help
         return
