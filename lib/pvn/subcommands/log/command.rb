@@ -5,12 +5,10 @@ require 'pvn/io/element'
 require 'pvn/log/formatter/entries_formatter'
 require 'pvn/revision/entry'
 require 'svnx/log/entries'
-require 'pvn/app/cli/subcommands/base/doc'
-require 'pvn/app/cli/subcommands/log/options'
+require 'pvn/subcommands/base/doc'
+require 'pvn/subcommands/log/options'
 
-module PVN; module App; end; end
-
-module PVN::App::Log
+module PVN::Subcommands::Log
   class Command
     include Loggable
 
@@ -19,7 +17,7 @@ module PVN::App::Log
     def initialize args
       # RIEL::Log.level = Log::DEBUG
 
-      options = PVN::App::CLI::Log::OptionSet.new 
+      options = PVN::Subcommands::Log::OptionSet.new 
       info "options: #{options}"
       options.process args
 

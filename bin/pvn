@@ -5,8 +5,8 @@
 
 require 'rubygems'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/pvn")
-require "pvn/app/cli"
+require "pvn/app"
 
-PVN::CLI.new STDOUT, ARGV
+PVN::App::Runner.new STDOUT, ARGV
 
-# PVN::CLI.execute(STDOUT, ARGV)
+# PVN::App.execute(STDOUT, ARGV)

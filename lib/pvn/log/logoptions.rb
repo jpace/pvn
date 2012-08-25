@@ -4,7 +4,7 @@
 require 'synoption/set'
 require 'synoption/option'
 require 'synoption/boolean_option'
-require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
+require 'pvn/subcommands/revision/revision_regexp_option'
 
 module PVN
   DEFAULT_LIMIT = 5

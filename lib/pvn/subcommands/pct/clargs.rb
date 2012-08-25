@@ -3,7 +3,7 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/app/cli/subcommand/clargs'
+require 'pvn/subcommand/base/clargs'
 
 module PVN
   module App

@@ -4,13 +4,12 @@
 require 'rubygems'
 require 'riel'
 
-module PVN; module App; module Subcommand; end; end; end
+module PVN; module Subcommands; module Base; end; end; end
 
 # this is the same as in pvn/cmddoc.rb
 
-module PVN::App::Subcommand
+module PVN::Subcommands::Base
   class Documentation
-    attr_accessor :subcommands
     attr_accessor :description
     attr_accessor :usage
     attr_accessor :summary
@@ -18,13 +17,27 @@ module PVN::App::Subcommand
     attr_reader :examples
     attr_reader :options
 
-    def initialize
+    def initialize(&blk)
       @subcommands = nil
       @description = nil
       @usage = nil
       @summary = nil
       @options = Array.new
       @examples = Array.new
+      if blk
+        blk.call
+      end
+    end
+
+    def subcommands args = nil
+      if args
+        @subcommands = args
+      end
+      @subcommands
+    end
+
+    def subcommands= args
+      @subcommands = args
     end
 
     def write io = $stdout

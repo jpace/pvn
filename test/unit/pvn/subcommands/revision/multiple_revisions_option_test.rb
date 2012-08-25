@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'pvn/app/cli/subcommands/revision/multiple_revisions_option'
+require 'pvn/subcommands/revision/multiple_revisions_option'
 
 Log.level = Log::DEBUG
 

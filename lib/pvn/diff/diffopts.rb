@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'synoption/set'
-require 'pvn/app/cli/subcommands/revision/revision_option'
+require 'pvn/subcommands/revision/revision_option'
 
 module PVN
   thisfile = Pathname.new __FILE__

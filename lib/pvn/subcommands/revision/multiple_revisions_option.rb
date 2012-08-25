@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/app/cli/subcommands/revision/revision_regexp_option'
+require 'pvn/subcommands/revision/revision_regexp_option'
 
 module PVN
   # A revision option with multiple values.

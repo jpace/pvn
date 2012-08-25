@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'pvn/app/cli/subcommands/log/options'
+require 'pvn/subcommands/log/options'
 
 Log.level = Log::DEBUG
 

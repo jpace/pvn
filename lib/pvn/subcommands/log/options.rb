@@ -4,11 +4,11 @@
 require 'synoption/set'
 require 'synoption/option'
 require 'synoption/boolean_option'
-require 'pvn/app/cli/subcommands/revision/multiple_revisions_option'
+require 'pvn/subcommands/revision/multiple_revisions_option'
 
-module PVN; module App; module CLI; module Log; end; end; end; end
+module PVN; module Subcommands; end; end
 
-module PVN::App::CLI::Log
+module PVN::Subcommands::Log
   DEFAULT_LIMIT = 5
 
   class LimitOption < PVN::Option

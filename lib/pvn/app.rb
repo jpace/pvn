@@ -8,10 +8,10 @@ require 'pvn/io/element'
 
 require 'svnx/log/entries'
 
-require 'pvn/app/cli/subcommands/log/command'
+require 'pvn/subcommands/log/command'
 
 # not yet supported:
-# require 'pvn/app/cli/pct/command'
+# require 'pvn/subcommands/pct/command'
 
 # the old ones:
 require 'pvn/log/logcmd'
@@ -24,8 +24,10 @@ require 'pvn/wherecmd'
 RIEL::Log.level = RIEL::Log::WARN
 RIEL::Log.set_widths(-25, 5, -35)
 
-module PVN
-  class CLI
+module PVN; module App; end; end
+
+module PVN::App
+  class Runner
     include Loggable
 
     def initialize io, args
@@ -47,7 +49,7 @@ module PVN
         end
 
         if arg == "log"
-          PVN::App::Log::Command.new args
+          PVN::Subcommands::Log::Command.new args
           return true
         end
 
@@ -75,7 +77,7 @@ module PVN
       true
     end
 
-    SUBCOMMANDS = [ LogCommand,
+    SUBCOMMANDS = [ PVN::Subcommands::Log::Command,
 #                    DiffCommand, 
 #                    DescribeCommand, 
 #                    PctCommand,

@@ -20,18 +20,11 @@ module PVN
 
         @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
 
-        options = @@options_for_class[self]
-
         define_method name do
-          info "name: #{name}".red
-          self.instance_eval do
+          instance_eval do
             meth = name
-            info "meth: #{meth}".red
-            opt = instance_variable_get '@' + name.to_s
-            info "opt: #{opt}".red
-            val = opt.value
-            info "val: #{val}".red
-            val
+            opt  = instance_variable_get '@' + name.to_s
+            opt.value
           end
         end
       end
@@ -44,16 +37,13 @@ module PVN
       @options = options
       @arguments = Array.new
 
-      RIEL::Log.info "self.class: #{self.class}".on_magenta
       opts = @@options_for_class[self.class]
-      RIEL::Log.info "opts: #{opts}".on_magenta
 
       opts.each do |option|
         name = option[:name]
         cls  = option[:class]
         args = option[:args]
         opt  = cls.new(*args)
-        info "opt    : #{opt}".on_black
         add opt
         instance_variable_set '@' + name.to_s, opt
       end
@@ -81,86 +71,10 @@ module PVN
       cmdline
     end
 
-    def set_options_by_keys args
-      args.each do |key, val|
-        if opt = find_by_name(key)
-          opt.set_value val
-        end
-      end
-    end
-
-    def match_option opt, args
-      arg = args[0]
-
-      match_type = opt.match_type? arg
-      info "match_type: #{match_type}".cyan
-      case match_type
-      when :exact
-        [ :set, opt.takes_value? ? 1 : 0 ]
-      when :regexp
-        [ :set, 0 ]
-      when :negative
-        [ :unset, 0 ]
-      else
-        nil
-      end
-    end    
-
-    def set_options_from_args cmdobj, cmdargs
-      @arguments = cmdargs.dup
-      allargs = cmdargs.dup
-      options_to_set = Array.new
-
-      info "@arguments: #{@arguments}"
-
-      processed = true
-      cidx = 0
-      while true
-        processed = false
-        @options.each do |opt|
-          if na = match_option(opt, @arguments)
-            type = na[0]
-            nargs = na[1]
-            options_to_set << [ opt, cidx, type, @arguments[nargs] ]
-            cidx += na[1].size
-            @arguments.slice! 0, nargs + 1
-            processed = true
-            break
-          end
-        end
-        break unless processed
-      end
-
-      info "@arguments: #{@arguments}"
-
-      options_to_set.each do |optentry|
-        info "optentry: #{optentry}"
-        opt  = optentry[0]
-        idx  = optentry[1]
-        type = optentry[2]
-        optargs = optentry[3]
-
-        if type == :set
-          opt.set self, cmdobj, [ optargs ]
-        elsif type == :unset
-          opt.unset
-        end
-      end
-    end
-    
     def unset key
       opt = find_by_name key
       opt && opt.unset
     end
-
-    # def process obj, optargs, cmdargs
-    #   set_options_by_keys optargs
-    #   set_options_from_args obj, cmdargs
-
-    #   info "cmdargs: #{cmdargs}"
-
-    #   self
-    # end
 
     def process args
       options_processed = Array.new
