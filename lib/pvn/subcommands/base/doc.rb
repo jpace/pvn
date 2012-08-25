@@ -8,7 +8,7 @@ module PVN; module Subcommands; module Base; end; end; end
 
 # this is the same as in pvn/cmddoc.rb
 
-module PVN::Subcommands::Base
+module PVN::Subcommands
   class Documentation
     attr_accessor :description
     attr_accessor :usage

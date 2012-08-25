@@ -50,7 +50,7 @@ module PVN::Subcommands::Log
 
     def show_help
       puts "pvn log <options>"
-      doc = PVN::App::Subcommand::Documentation.new
+      doc = PVN::Subcommands::Documentation.new
       doc.subcommands = [ "log" ]
       doc.description = "Print log messages for the given files."
       doc.usage       = "[OPTIONS] FILE..."
@@ -60,7 +60,7 @@ module PVN::Subcommands::Log
                           "As with other pvn subcommands, 'pvn log' accepts relative ",
                           "revisions."
                         ]
-      doc.options.concat PVN::App::CLI::Log::OptionSet.new.options
+      doc.options.concat PVN::Subcommands::Log::OptionSet.new.options
 
       doc.examples   << [ "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb." ]
       doc.examples   << [ "pvn log -l 25 foo.rb", "Prints 25 log entries for the file." ]
