@@ -41,6 +41,8 @@ module PVN::App::CLI::Log
 
   class BaseOptionSet < PVN::OptionSet
     @@options = Array.new
+
+    attr_reader :paths
     
     class << self
       def has_option name, optcls, optargs = Hash.new
@@ -76,20 +78,29 @@ module PVN::App::CLI::Log
         instance_variable_set '@' + name.to_s, opt
       end
     end
-  end
 
-  class CmdLineArgs < PVN::App::Base::CmdLineArgs
-    attr_reader :path
+    def process args
+      options_processed = Array.new
 
-    has_option :revision
-    has_option :limit
-    has_option :verbose
-    has_option :format
-    has_option :help
+      @unprocessed = args
+      
+      while !@unprocessed.empty?
+        processed = false
+        options.each do |opt|
+          if opt.process @unprocessed
+            processed = true
+            options_processed << opt
+          end
+        end
 
-    def initialize optset, args
-      super
-      @path = (unprocessed && unprocessed.shift) || "."
+        break unless processed
+      end
+
+      options_processed.each do |opt|
+        opt.post_process self, @unprocessed
+      end
+
+      @paths = @unprocessed
     end
   end
 
@@ -99,11 +110,11 @@ module PVN::App::CLI::Log
     has_option :help, HelpOption
     has_option :limit, LimitOption
     has_option :verbose, PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
-
-    def to_command_line_args args
-      info "optset: #{self}"
-      clargs = PVN::App::Log::CmdLineArgs.new self, args
-      clargs
+    
+    def process args
+      info "optset: #{self}".on_green
+      super
+      self
     end
   end
 end

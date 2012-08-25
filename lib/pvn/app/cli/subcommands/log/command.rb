@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/app/cli/subcommands/log/clargs'
 require 'pvn/io/element'
 require 'pvn/log/formatter/entries_formatter'
 require 'pvn/revision/entry'
@@ -20,33 +19,34 @@ module PVN::App::Log
     def initialize args
       # RIEL::Log.level = Log::DEBUG
 
-      optset = PVN::App::CLI::Log::OptionSet.new 
-      info "optset: #{optset}"
-      clargs = optset.to_command_line_args args
+      options = PVN::App::CLI::Log::OptionSet.new 
+      info "options: #{options}"
+      options.process args
 
-      if clargs.help 
+      if options.help 
         show_help
         return
       end
 
-      info "revision: #{clargs.revision}".on_magenta
-      
-      logargs   = SVNx::LogCommandArgs.new :limit => clargs.limit, :verbose => clargs.verbose, :revision => clargs.revision, :path => clargs.path
-      elmt      = PVN::IO::Element.new :local => clargs.path || '.'
+      info "revision: #{options.revision}".on_magenta
+
+      path      = options.paths[0] || "."
+      logargs   = SVNx::LogCommandArgs.new :limit => options.limit, :verbose => options.verbose, :revision => options.revision, :path => path
+      elmt      = PVN::IO::Element.new :local => path || '.'
       log       = elmt.log logargs
       nentries  = log.entries.size
 
-      # this should be refined to clargs.revision.head? && clargs.limit
-      from_head = !clargs.revision
-      from_tail = !clargs.limit && !clargs.revision
+      # this should be refined to options.revision.head? && options.limit
+      from_head = !options.revision
+      from_tail = !options.limit && !options.revision
       
       # this dictates whether to show +N and/or -1:
-      totalentries = clargs.limit || clargs.revision ? nil : nentries
+      totalentries = options.limit || options.revision ? nil : nentries
 
       info "totalentries: #{totalentries}"
 
       # use_color, entries, from_head, from_tail
-      ef = PVN::Log::EntriesFormatter.new clargs.format, log.entries, from_head, from_tail
+      ef = PVN::Log::EntriesFormatter.new options.format, log.entries, from_head, from_tail
       puts ef.format
     end
 
