@@ -14,9 +14,9 @@ module PVN::App::Log
       options = PVN::Subcommands::Log::OptionSet.new 
       options.process args
 
-      info "options: #{options}"
       assert_equal exp[:limit], options.limit
       assert_equal exp[:revision], options.revision
+      
       exppaths = exp[:path] ? [ exp[:path] ] : exp[:paths]
       assert_equal exppaths, options.paths
     end

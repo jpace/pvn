@@ -25,6 +25,12 @@ PvnTestTask.new do |t|
   t.test_files = FileList['test/unit/**/*test*.rb']
 end
 
+PvnTestTask.new('test:wtf') do |t|
+  testfiles = FileList['test/unit/**/command_test*.rb'] | FileList['test/unit/**/options_test*.rb']
+  t.test_files = testfiles
+  puts "t.test_files: #{testfiles.sort}"
+end
+
 PvnTestTask.new('test:integration') do |t|
   t.test_files = FileList['test/integration/**/*test*.rb']
 end

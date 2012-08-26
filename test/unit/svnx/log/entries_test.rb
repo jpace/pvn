@@ -58,24 +58,18 @@ module SVNx
         nentries = entries.size
         assert_equal 1949, nentries
 
-        # the power of Ruby ...
+        # the power of Ruby, effortlessly getting instance variables ...
 
         real_entries = entries.instance_eval '@entries'
-
-        info "real_entries: #{real_entries}"
 
         assert_nil real_entries[16]
         assert_nil real_entries[17]
         assert_nil real_entries[18]
 
         assert_entry_fields_not_nil entries[17]
-        
-        info "real_entries: #{real_entries}"
 
         assert_nil real_entries[16]
         assert_nil real_entries[18]
-
-        info "<<<<< self: #{self}".red
       end
     end
   end

@@ -31,9 +31,6 @@ module SVNx
     end
   end
 
-  class LogOptions
-  end
-
   class LogCommandArgs < CommandArgs
     include Loggable
     
@@ -52,12 +49,10 @@ module SVNx
       info "@verbose  : #{@verbose}"
       info "@use_cache: #{@use_cache}"
       info "@revision : #{@revision}"
-
       super
     end
 
     def to_a
-      info "@revision: #{@revision}".red
       ary = Array.new
       if @limit
         ary << '--limit' << @limit
@@ -82,8 +77,8 @@ module SVNx
   
   class LogCommand < Command
     def initialize args
-      stack "args: #{args}".on_red
-      info "args.to_a: #{args.to_a}".on_red
+      info "args: #{args}"
+      info "args.to_a: #{args.to_a}"
       @use_cache = args.use_cache
       super
     end

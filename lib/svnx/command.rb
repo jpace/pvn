@@ -10,7 +10,7 @@ require 'system/command/line'
 module SVNx
   class CommandLine < System::CommandLine
     def initialize subcmd, args = Array.new
-      info "args: #{args}".cyan
+      info "args: #{args}"
       cmdargs = [ 'svn', subcmd, '--xml' ].concat args
       info "cmdargs: #{cmdargs}"
       super cmdargs
@@ -19,7 +19,7 @@ module SVNx
 
   class CachingCommandLine < System::CachingCommandLine
     def initialize subcmd, args = Array.new
-      info "args: #{args}".cyan
+      info "args: #{args}"
       cmdargs = [ 'svn', subcmd, '--xml' ].concat args
       info "cmdargs: #{cmdargs}"
       super cmdargs

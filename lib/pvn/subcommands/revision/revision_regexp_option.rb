@@ -16,20 +16,20 @@ module PVN
                            ]
     
     def initialize revargs = Hash.new
-      info "revargs: #{revargs}".on_blue
+      # info "revargs: #{revargs}"
       revargs[:regexp] = TAG_RE
       super
     end
 
     def resolve_value optset, unprocessed
       val = value
-      info "val: #{val}".blue
+      # info "val: #{val}"
 
       md = TAG_RE.match val
-      info "md: #{md.inspect}"
+      # info "md: #{md.inspect}"
 
       if md && md[3]
-        info "md[3]: #{md[3]}".yellow
+        # info "md[3]: #{md[3]}"
         @value = md[3]
       end
       

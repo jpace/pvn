@@ -14,7 +14,6 @@ require 'pvn/subcommands/log/command'
 # require 'pvn/subcommands/pct/command'
 
 # the old ones:
-require 'pvn/log/logcmd'
 require 'pvn/diff/diffcmd'
 require 'pvn/pct/pctcmd'
 require 'pvn/describe'
@@ -32,33 +31,39 @@ module PVN::App
 
     def initialize io, args
       if args.empty?
-        return self.class.run_help args
+        run_help args
       end
       
       while args.size > 0
         arg = args.shift
         info "arg: #{arg}"
 
-        if arg == "--verbose"
+        case arg
+        when "--verbose"
           RIEL::Log.level = RIEL::Log::DEBUG
-          next
+        when "help", "--help", "-h"
+          run_help args
+        when "log"
+          run_command PVN::Subcommands::Log::Command, args
+        when "pct"
+          $stderr.puts "subcommand 'pct' is not yet supported"
+          exit(-1)
+        else
+          $stderr.puts "ERROR: subcommand not valid: #{arg}"
+          exit(-1)
         end
+      end
 
-        if arg == "help" || arg == "--help" || arg == "-h"
-          return self.class.run_help args
-        end
+      run_help args
+    end
 
-        if arg == "log"
-          PVN::Subcommands::Log::Command.new args
-          return true
-        end
-
-        if arg == "pct"
-          raise "subcommand 'pct' is not yet supported"
-          return true
-        end
-
-        $stderr.puts "ERROR: subcommand not valid: #{arg}"
+    def run_command cmdcls, args
+      begin
+        cmdcls.new args
+        exit(0)
+      rescue => e
+        $stderr.puts e
+        exit(-1)
       end
     end
 
@@ -85,11 +90,11 @@ module PVN::App
 #                    UndeleteCommand,
                   ]
     
-    def self.run_help args
+    def run_help args
       forwhat = args[0]
 
       cls = SUBCOMMANDS.find do |cls|
-        cls.doc.subcommands.include? forwhat
+        cls.getdoc.subcommands.include? forwhat
       end
 
       if cls
@@ -100,9 +105,10 @@ module PVN::App
         puts
         puts "PVN has the subcommands:"
         SUBCOMMANDS.each do |sc|
-          printf "   %-10s %s\n", sc.doc.subcommands[0], sc.doc.description
+          printf "   %-10s %s\n", sc.getdoc.subcommands[0], sc.getdoc.description
         end
       end
+      exit(0)
     end
     
     def self.execute stdout, args = Array.new

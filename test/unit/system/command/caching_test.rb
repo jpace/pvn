@@ -9,14 +9,12 @@ module System
 
     def setup
       super
-      info "self: #{self}"
       CACHE_DIR.rmtree if CACHE_DIR.exist?
     end
 
     def teardown
       CACHE_DIR.rmtree if CACHE_DIR.exist?
       super
-      info "self: #{self}"
     end
 
     def create_ls_tmp
@@ -41,8 +39,6 @@ module System
 
     def test_cache_dir_defaults_to_executable
       cl = create_ls_tmp
-      info "$0: #{$0}".on_blue
-      info "cl.cache_dir: #{cl.cache_dir}".on_blue
       assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s, cl.cache_dir
     end
 

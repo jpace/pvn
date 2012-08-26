@@ -20,8 +20,19 @@ module System
 
     def execute
       cmd = to_command
-      info "cmd: #{cmd}"
-      @output = ::IO.popen(cmd).readlines
+
+      IO.popen(cmd) do |io|
+        @output = io.readlines
+      end
+
+      if $? && $?.exitstatus != 0
+        info "cmd: #{cmd}".red
+        info "$?: #{$?.inspect}".red
+        info "$?.exitstatus: #{$? && $?.exitstatus}".red
+        raise "ERROR running command #{cmd}: #{$?}"
+      end
+
+      @output
     end
 
     def to_command

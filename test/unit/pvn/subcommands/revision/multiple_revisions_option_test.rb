@@ -19,7 +19,6 @@ module PVN
     def assert_post_process exp, vals, path
       ropt = PVN::MultipleRevisionsRegexpOption.new
       vals.each do |val|
-        info "val: #{val.inspect}; val.class: #{val.class}".red
         ropt.set_value val
       end
       ropt.post_process nil, [ path ]

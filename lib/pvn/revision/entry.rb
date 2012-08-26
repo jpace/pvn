@@ -25,8 +25,6 @@ module PVN::Revision
       def new args = Hash.new
         value = args[:value]
 
-        Log.info "value: #{value}"
-
         # these are lines from "svn log -v <file>"
         xmllines = args[:xmllines]
         if xmllines.kind_of? Array
@@ -83,7 +81,6 @@ module PVN::Revision
       nentries = logentries.size
 
       # logentries are in descending order, so the most recent one is index 0
-      info "logentries: #{nentries}"
 
       if value.abs > nentries
         raise "ERROR: no entry for revision: #{value.abs}; number of entries: #{nentries}"
