@@ -11,7 +11,7 @@ module PVN; module App; module Log; end; end; end
 module PVN::App::Log
   class OptionsTest < PVN::TestCase
     def assert_options exp, args
-      options = PVN::App::CLI::Log::OptionSet.new 
+      options = PVN::Subcommands::Log::OptionSet.new 
       options.process args
 
       info "options: #{options}"

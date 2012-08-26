@@ -64,25 +64,21 @@ task :build_fixtures do
 end
 
 spec = Gem::Specification.new do |s| 
-  s.name             = "pvn"
-  s.version          = "0.0.1"
-  s.author           = "Jeff Pace"
-  s.email            = "jeugenepace@gmail.com"
-  s.homepage         = "http://www.incava.org/projects/pvn"
-  s.platform         = Gem::Platform::RUBY
-  s.summary          = "What Subversion should have."
-  s.files            = FileList["{bin,lib}/**/*"].to_a
-  s.require_path     = "lib"
-  s.test_files       = FileList["{test}/**/*test.rb"].to_a
-  s.has_rdoc         = true
-  s.extra_rdoc_files = [ "README.rdoc" ]
-
-  s.test_files = FileList["{test}/**/*test.rb"].to_a
-  s.has_rdoc = false
-  s.extra_rdoc_files = ["README.markdown"]
+  s.name               = "pvn"
+  s.version            = "0.0.1"
+  s.author             = "Jeff Pace"
+  s.email              = "jeugenepace@gmail.com"
+  s.homepage           = "http://www.incava.org/projects/pvn"
+  s.platform           = Gem::Platform::RUBY
+  s.summary            = "What Subversion should have."
+  s.files              = FileList["{bin,lib}/**/*"].to_a
+  s.require_path       = "lib"
+  s.test_files         = FileList["{test}/**/*test.rb"].to_a
+  s.has_rdoc           = false
+  s.extra_rdoc_files   = ["README.markdown"]
   s.add_dependency("riel", ">= 1.1.6")
-  s.bindir = 'bin'
-  s.executables = %w{ pvn }
+  s.bindir             = 'bin'
+  s.executables        = %w{ pvn }
   s.default_executable = 'pvn'
 end
  

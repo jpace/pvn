@@ -3,21 +3,17 @@
 
 require 'synoption/set'
 require 'synoption/option'
+require 'synoption/fixnum_option'
 require 'synoption/boolean_option'
 require 'pvn/subcommands/revision/multiple_revisions_option'
-
-module PVN; module Subcommands; end; end
+require 'pvn/subcommands/base/options'
 
 module PVN::Subcommands::Log
   DEFAULT_LIMIT = 5
 
-  class LimitOption < PVN::Option
+  class LimitOption < PVN::FixnumOption
     def initialize lmtargs = Hash.new
       super :limit, '-l', "the number of log entries", DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
-    end
-
-    def set_value val
-      super val.to_i
     end
   end
 
@@ -33,25 +29,13 @@ module PVN::Subcommands::Log
     end
   end
 
-  class HelpOption < PVN::BooleanOption
-    def initialize args = Hash.new
-      super :help, '-h', "display help", nil
-    end
-  end
-
-  class OptionSet < PVN::OptionSet
+  class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
-    has_option :format, FormatOption
-    has_option :help, HelpOption
-    has_option :limit, LimitOption
-    has_option :verbose, PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
+    has_option :format,   FormatOption
+    has_option :help,     PVN::Subcommands::Base::HelpOption
+    has_option :limit,    LimitOption
+    has_option :verbose,  PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
     
-    def process args
-      info "optset: #{self}".on_green
-      super
-      self
-    end
-
     def paths
       unprocessed
     end

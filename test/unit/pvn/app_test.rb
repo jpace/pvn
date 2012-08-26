@@ -1,9 +1,9 @@
 require 'tc'
-require 'pvn/app/cli'
+require 'pvn/app'
 
 class TestPVNCli < PVN::TestCase
   def setup
-    PVN::CLI.execute @stdout_io = StringIO.new, Array.new
+    PVN::App::Runner.execute @stdout_io = StringIO.new, Array.new
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
@@ -14,7 +14,7 @@ class TestPVNCli < PVN::TestCase
   
   def xxx_test_help
     io = StringIO.new
-    PVN::CLI.execute io, %w{ --help }
+    PVN::App::Runner.execute io, %w{ --help }
     io.rewind
     io = io.read
     # assert_match(/To update this executable/, io)

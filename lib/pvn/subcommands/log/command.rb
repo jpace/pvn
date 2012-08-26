@@ -7,57 +7,7 @@ require 'pvn/revision/entry'
 require 'svnx/log/entries'
 require 'pvn/subcommands/base/doc'
 require 'pvn/subcommands/log/options'
-
-module PVN::Subcommands::Base
-  class Command
-    include Loggable
-
-    @@doc_for_class = Hash.new { |h, k| h[k] = PVN::Subcommands::Documentation.new }
-    
-    class << self
-      def getdoc
-        puts "self: #{self}"
-        @@doc_for_class[self]
-      end
-
-      def subcommands sc
-        getdoc.subcommands = sc
-      end
-
-      def description desc
-        getdoc.description = desc
-      end
-
-      def usage usg
-        getdoc.usage = usg
-      end
-
-      def summary smry
-        getdoc.summary = smry
-      end
-
-      def options opts
-        getdoc.options.concat opts
-      end
-
-      def optscls
-        optmodule = self.to_s.sub %r{::\w+$}, ''
-        optcls = optmodule + '::OptionSet'
-        optset = instance_eval optcls + '.new'
-        getdoc.options.concat optset.options
-      end
-
-      def example *ex
-        getdoc.examples << ex
-      end
-    end
-
-    def to_doc io
-      doc = self.class.getdoc
-      doc.write io
-    end
-  end
-end
+require 'pvn/subcommands/base/command'
 
 module PVN::Subcommands::Log
   class Command < PVN::Subcommands::Base::Command
@@ -76,7 +26,6 @@ module PVN::Subcommands::Log
                   "revisions."
                 ]
 
-    # options PVN::Subcommands::Log::OptionSet.new.options
     optscls
 
     example "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb."
@@ -87,10 +36,7 @@ module PVN::Subcommands::Log
     example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
     
     def initialize args
-      # RIEL::Log.level = Log::DEBUG
-
       options = PVN::Subcommands::Log::OptionSet.new 
-      info "options: #{options}"
       options.process args
 
       return show_help if options.help 
@@ -110,10 +56,6 @@ module PVN::Subcommands::Log
 
       ef = PVN::Log::EntriesFormatter.new options.format, log.entries, from_head, from_tail
       puts ef.format
-    end
-
-    def show_help
-      to_doc $stdout
     end
   end
 end
