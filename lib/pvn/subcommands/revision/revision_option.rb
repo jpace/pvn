@@ -22,7 +22,6 @@ module PVN
     POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]\d+$')
     
     def initialize revargs = Hash.new
-      revargs[:setter] = :revision_from_args
       @fromdate = nil
       @todate = nil
       super :revision, '-r', REVISION_DESCRIPTION, nil, revargs
@@ -56,10 +55,8 @@ module PVN
 
     def resolve_value optset, unprocessed
       val = value
-      info "val: #{val}".on_red
       if POS_NEG_NUMERIC_RE.match val
         @value = relative_to_absolute val, unprocessed[0]
-        info "@value: #{@value}".on_red
       end
     end
 

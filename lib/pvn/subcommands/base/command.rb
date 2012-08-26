@@ -52,9 +52,9 @@ module PVN::Subcommands::Base
       doc = self.class.getdoc
       doc.write io
     end
-  end
 
-  def show_help
-    to_doc $stdout
+    def show_help
+      to_doc $stdout
+    end
   end
 end

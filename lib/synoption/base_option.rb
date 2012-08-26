@@ -117,20 +117,16 @@ module PVN
     end
 
     def process args
-      info "args: #{args}"
       if @matchers[:exact].match? args[0]
-        info "match"
         args.shift
         val = takes_value? ? next_argument(args) : true
         set_value val
         true
       elsif @matchers[:negative] && @matchers[:negative].match?(args[0])
-        info "negative"
         arg = args.shift
         set_value false
         true
       elsif @matchers[:regexp] && (md = @matchers[:regexp].match?(args[0]))
-        info "md: #{md}".green
         arg = args.shift
         set_value md[0]
         true
@@ -140,13 +136,9 @@ module PVN
     end
 
     def post_process option_set, unprocessed
-      info "option_set: #{option_set}".on_blue
-      info "unprocessed: #{unprocessed}".on_green
-
       resolve_value option_set, unprocessed
 
       if @unsets
-        info "unsets: #{@unsets}".on_magenta
         option_set.unset @unsets
       end
     end

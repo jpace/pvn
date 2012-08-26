@@ -2,14 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/config'
-
-require 'pvn/subcmd/scexec'
-require 'pvn/subcmd/scdoc'
-require 'pvn/subcmd/scoptions'
-require 'pvn/subcmd/command'
-
 require 'pvn/svn/command/svncmd'
-
 require 'pvn/diff/diffopts'
 
 module PVN  
