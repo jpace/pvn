@@ -15,6 +15,10 @@ module SVNx
         if xmllines = args[:xmllines]
           # this is preferred
 
+          if xmllines.kind_of? Array
+            xmllines = xmllines.join ''
+          end
+
           doc = REXML::Document.new xmllines
 
           @logelements = doc.elements['log'].elements

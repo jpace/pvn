@@ -25,13 +25,13 @@ module SVNx
           :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
         }
         
-        entries = Entries.new :xmllines => test_lines_limit_15.join('')
+        entries = Entries.new :xmllines => test_lines_limit_15
 
         assert_log_entry_equals entries[2], expdata
       end
 
       def test_no_author_field
-        entries = Entries.new :xmllines => test_lines_no_author.join('')
+        entries = Entries.new :xmllines => test_lines_no_author
         nentries = entries.size
 
         # revision 1 has no author ... wtf?
@@ -39,7 +39,7 @@ module SVNx
       end
 
       def test_empty_message_element
-        entries = Entries.new :xmllines => test_lines_empty_message.join('')
+        entries = Entries.new :xmllines => test_lines_empty_message
         nentries = entries.size
 
         # empty message here:
@@ -47,7 +47,8 @@ module SVNx
       end
 
       def test_create_on_demand
-        xmllines = test_lines_no_limit.join('')
+        # although entries now supports xmllines as an Array, we need the size for the assertion:
+        xmllines = test_lines_no_limit.join ''
 
         info "xmllines #{xmllines.size} fetched."
 

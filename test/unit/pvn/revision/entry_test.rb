@@ -12,8 +12,7 @@ Log.level = Log::DEBUG
 module PVN::Revision
   class TestCase < PVN::TestCase
     def setup
-      lines = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "--xml", "pom.xml"
-      @xmllines = lines.join('')
+      @xmllines = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "--xml", "pom.xml"
     end
 
     def assert_revision_entry exp_value, value
