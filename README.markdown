@@ -35,3 +35,4 @@ Relative revision +0 is r1049, -1 is r1947, +1 is r1143, and so on.
 except that output is colorized, differing for the elements (file, directory) and
 the status of the element (added, deleted, changed). The logging output also
 shows the relative revision.
+
