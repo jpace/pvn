@@ -3,32 +3,30 @@
 
 require 'svnx/entry'
 
-module SVNx
-  module Status
-    class Entry < SVNx::Entry
+module SVNx; module Status; end; end
 
-      attr_reader :status
-      attr_reader :path
-      
-      def initialize args = Hash.new
-        if xmllines = args[:xmllines]
-          doc    = REXML::Document.new xmllines
-          stelmt = doc.elements['status']
-          tgt    = stelmt.elements['target']
+module SVNx::Status
+  class Entry < SVNx::Entry
 
-          set_attr_var tgt, 'path'
-          
-          if entry = tgt.elements['entry']
-            wcstatus = entry.elements['wc-status']
-            @status = wcstatus.attributes['item']
-          else
-            @status = "unchanged"
-          end
+    attr_reader :status
+    attr_reader :path
+    
+    def initialize args = Hash.new
+      if xmllines = args[:xmllines]
+        doc    = REXML::Document.new xmllines
+        stelmt = doc.elements['status']
+        tgt    = stelmt.elements['target']
+
+        set_attr_var tgt, 'path'
+        
+        if entry = tgt.elements['entry']
+          wcstatus = entry.elements['wc-status']
+          @status = wcstatus.attributes['item']
         else
-          raise "must be initialized with xmllines"
+          @status = "unchanged"
         end
-
-        info "self: #{self.inspect}".red
+      else
+        raise "must be initialized with xmllines"
       end
     end
   end

@@ -113,23 +113,24 @@ module PVN
       nil
     end
   end
+end
 
-  module Log
-    class Command < CachableCommand
-      def initialize args
-        command = %w{ svn log }
+module PVN::Log
+  class Command < CachableCommand
+    def initialize args
+      command = %w{ svn log }
 
-        # todo: handle revision conversion:
-        fromrev = args[:fromrev]
-        torev   = args[:torev]
+      # todo: handle revision conversion:
+      fromrev = args[:fromrev]
+      torev   = args[:torev]
 
-        if fromrev && torev
-          command << "-r" << "#{fromrev}:#{torev}"
-        elsif args[:fromdate] && args[:todate]
-          command << "-r" << "\{#{fromdate}\}:\{#{todate}\}"
-        end
-        debug "command: #{command}".on_red
+      if fromrev && torev
+        command << "-r" << "#{fromrev}:#{torev}"
+      elsif args[:fromdate] && args[:todate]
+        command << "-r" << "\{#{fromdate}\}:\{#{todate}\}"
       end
+      debug "command: #{command}".on_red
     end
   end
+end
 end

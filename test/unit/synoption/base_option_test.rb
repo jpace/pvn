@@ -53,7 +53,6 @@ module PVN
     end
 
     def assert_negative_match exp, opt, val
-      info "val: #{val}"
       md = opt.negative_match? val
       assert_equal exp, !!md, "value: '" + val + "'"
     end

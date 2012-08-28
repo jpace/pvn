@@ -3,53 +3,53 @@
 
 require 'svnx/entry'
 
-module SVNx
-  module Log
-    class Entry < SVNx::Entry
+module SVNx; module Log; end; end
 
-      attr_reader :revision, :author, :date, :paths, :msg
-      
-      def initialize args = Hash.new
-        # this is log/logentry from "svn log --xml"
-        if xmlelement = args[:xmlelement]
-          # info "xmlelement: #{xmlelement}".yellow
-          set_attr_var xmlelement, 'revision'
+module SVNx::Log
+  class Entry < SVNx::Entry
 
-          %w{ author date msg }.each do |field|
-            set_elmt_var xmlelement, field
-          end
-          
-          @paths = Array.new
+    attr_reader :revision, :author, :date, :paths, :msg
+    
+    def initialize args = Hash.new
+      # this is log/logentry from "svn log --xml"
+      if xmlelement = args[:xmlelement]
+        # info "xmlelement: #{xmlelement}".yellow
+        set_attr_var xmlelement, 'revision'
 
-          xmlelement.elements.each('paths/path') do |pe|
-            kind = get_attribute pe, 'kind'
-            action = get_attribute pe, 'action'
-            name = pe.text
-
-            @paths << LogEntryPath.new(:kind => kind, :action => action, :name => name)
-          end
-        else
-          @revision = args[:revision]
-          @author = args[:author]
-          @date = args[:date]
-          @paths = args[:paths]
-          @message = args[:message]
+        %w{ author date msg }.each do |field|
+          set_elmt_var xmlelement, field
         end
-      end
+        
+        @paths = Array.new
 
-      def message
-        @msg
+        xmlelement.elements.each('paths/path') do |pe|
+          kind = get_attribute pe, 'kind'
+          action = get_attribute pe, 'action'
+          name = pe.text
+
+          @paths << LogEntryPath.new(:kind => kind, :action => action, :name => name)
+        end
+      else
+        @revision = args[:revision]
+        @author = args[:author]
+        @date = args[:date]
+        @paths = args[:paths]
+        @message = args[:message]
       end
     end
 
-    class LogEntryPath
-      attr_reader :kind, :action, :name
-      
-      def initialize args = Hash.new
-        @kind = args[:kind]
-        @action = args[:action]
-        @name = args[:name]
-      end
+    def message
+      @msg
+    end
+  end
+
+  class LogEntryPath
+    attr_reader :kind, :action, :name
+    
+    def initialize args = Hash.new
+      @kind = args[:kind]
+      @action = args[:action]
+      @name = args[:name]
     end
   end
 end

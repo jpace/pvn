@@ -4,16 +4,14 @@
 require 'svnx/log/tc'
 require 'svnx/log/command'
 
-module SVNx
-  module Log
-    class CommandLineTestCase < SVNx::Log::TestCase
-      include Loggable
+module SVNx::Log
+  class CommandLineTestCase < SVNx::Log::TestCase
+    include Loggable
 
-      def test_something
-        cmdline = SVNx::LogCommandLine.new [ '/Programs/wiquery/trunk' ]
-        cmdline.execute
-        assert_not_nil cmdline.output
-      end
+    def test_something
+      cmdline = SVNx::LogCommandLine.new [ '/Programs/wiquery/trunk' ]
+      cmdline.execute
+      assert_not_nil cmdline.output
     end
   end
 end

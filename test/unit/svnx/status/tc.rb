@@ -3,15 +3,15 @@
 
 require 'tc'
 
-module SVNx
-  module Status
-    class TestCase < PVN::TestCase
-      include Loggable
+module SVNx; module Status; end; end
 
-      def assert_entry_equals entry, expdata
-        [ :path, :status ].each do |field|
-          assert_equal expdata[field], entry.send(field)
-        end
+module SVNx::Status
+  class TestCase < PVN::TestCase
+    include Loggable
+
+    def assert_entry_equals entry, expdata
+      [ :path, :status ].each do |field|
+        assert_equal expdata[field], entry.send(field)
       end
     end
   end

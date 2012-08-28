@@ -3,20 +3,18 @@
 
 require 'svnx/status/entry'
 
-module SVNx
-  module Status
-    class Entries < Array
-      include Loggable
+module SVNx::Status
+  class Entries < Array
+    include Loggable
 
-      def initialize args = Hash.new
-        super()
+    def initialize args = Hash.new
+      super()
 
-        raise "not implemented"
+      raise "not implemented"
 
-        if xmlentries = args[:xml]
-          xmlentries.each do |xmlentry|
-            self << Entry.new(:xml => xmlentry)
-          end
+      if xmlentries = args[:xml]
+        xmlentries.each do |xmlentry|
+          self << Entry.new(:xml => xmlentry)
         end
       end
     end
