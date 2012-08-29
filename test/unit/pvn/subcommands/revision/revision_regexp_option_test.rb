@@ -4,8 +4,6 @@
 require 'tc'
 require 'pvn/subcommands/revision/revision_regexp_option'
 
-Log.level = Log::DEBUG
-
 module PVN
   class RevisionRegexpOptionTest < PVN::TestCase
     def assert_tag_match str
@@ -36,7 +34,7 @@ module PVN
       end
     end
 
-    def assert_post_process exp, val, path
+    def assert_post_process exp, val, path = '/Programs/wiquery/trunk'
       ropt = PVN::RevisionRegexpOption.new
       ropt.set_value val
       ropt.post_process nil, [ path ]
@@ -45,27 +43,27 @@ module PVN
     end
 
     def test_post_process_middling
-      assert_post_process '1887', '-7', '/Programs/wiquery/trunk'
+      assert_post_process '1887', '-7'
     end
 
     def test_post_process_latest
-      assert_post_process '1950', '-1', '/Programs/wiquery/trunk'
+      assert_post_process '1950', '-1'
     end
 
     def test_post_process_oldest
-      assert_post_process '412', '-163', '/Programs/wiquery/trunk'
+      assert_post_process '412', '-163'
     end
 
     def test_post_process_tagval
-      assert_post_process '7', '-r7', '/Programs/wiquery/trunk'
+      assert_post_process '7', '-r7'
     end
 
     def test_post_process_tagrange
-      assert_post_process '7:177', '-r7:177', '/Programs/wiquery/trunk'
+      assert_post_process '7:177', '-r7:177'
     end
 
     def test_post_process_absolute_middling
-      assert_post_process '1887', '1887', '/Programs/wiquery/trunk'
+      assert_post_process '1887', '1887'
     end
   end
 end

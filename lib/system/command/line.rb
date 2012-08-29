@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'system/command/arg'
+require 'open3'
 
 module System
   class CommandLine
@@ -21,9 +22,11 @@ module System
     def execute
       cmd = to_command
 
+      # cmd << " 2>&1"
+
       # I want to use popen3, but the version that works (sets $?) is in 1.9.x,
       # not 1.8.x:
-      IO.popen(cmd) do |io|
+      IO.popen(cmd + " 2>&1") do |io|
         @output = io.readlines
       end
 
@@ -31,7 +34,7 @@ module System
         info "cmd: #{cmd}".red
         info "$?: #{$?.inspect}".red
         info "$?.exitstatus: #{$? && $?.exitstatus}".red
-        raise "ERROR running command #{cmd}: #{$?}"
+        raise "ERROR running command '#{cmd}': #{@output[-1]}"
       end
 
       @output

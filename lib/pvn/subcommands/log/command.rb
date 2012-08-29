@@ -40,7 +40,18 @@ module PVN::Subcommands::Log
       return show_help if options.help 
 
       path      = options.paths[0] || "."
-      logargs   = SVNx::LogCommandArgs.new :limit => options.limit, :verbose => options.verbose, :revision => options.revision, :path => path
+      cmdargs   = Hash.new
+      cmdargs[:path] = path
+      
+      [ :limit, :verbose, :revision ].each do |field|
+        cmdargs[field] = options.send field
+      end
+      
+      # we can't cache this, because we don't know if there has been an svn
+      # update since the previous run:
+      cmdargs[:use_cache] = false
+
+      logargs   = SVNx::LogCommandArgs.new cmdargs
       elmt      = PVN::IO::Element.new :local => path || '.'
       log       = elmt.log logargs
       nentries  = log.entries.size

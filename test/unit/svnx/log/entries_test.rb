@@ -4,9 +4,6 @@
 require 'svnx/log/tc'
 require 'svnx/log/entries'
 
-Log.level = Log::DEBUG
-Log.set_widths(-12, 4, -35)
-
 module SVNx::Log
   class EntriesTestCase < SVNx::Log::TestCase
     include Loggable
@@ -24,13 +21,13 @@ module SVNx::Log
         :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
       }
       
-      entries = Entries.new :xmllines => test_lines_limit_15
+      entries = Entries.new :xmllines => get_test_lines_limit_15
 
       assert_log_entry_equals entries[2], expdata
     end
 
     def test_no_author_field
-      entries = Entries.new :xmllines => test_lines_no_author
+      entries = Entries.new :xmllines => get_test_lines_no_author
       nentries = entries.size
 
       # revision 1 has no author ... wtf?
@@ -38,7 +35,7 @@ module SVNx::Log
     end
 
     def test_empty_message_element
-      entries = Entries.new :xmllines => test_lines_empty_message
+      entries = Entries.new :xmllines => get_test_lines_empty_message
       nentries = entries.size
 
       # empty message here:
@@ -47,10 +44,9 @@ module SVNx::Log
 
     def test_create_on_demand
       # although entries now supports xmllines as an Array, we need the size for the assertion:
-      xmllines = test_lines_no_limit.join ''
-
-      info "xmllines #{xmllines.size} fetched."
-
+      xmllines = get_test_lines_no_limit.join ''
+      
+      # quite a big file ...
       assert_equal 324827, xmllines.size
 
       entries = Entries.new :xmllines => xmllines
@@ -62,12 +58,14 @@ module SVNx::Log
 
       real_entries = entries.instance_eval '@entries'
 
+      # nothing processed yet ...
       assert_nil real_entries[16]
       assert_nil real_entries[17]
       assert_nil real_entries[18]
 
       assert_entry_fields_not_nil entries[17]
 
+      # and these still aren't processed:
       assert_nil real_entries[16]
       assert_nil real_entries[18]
     end

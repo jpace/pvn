@@ -39,7 +39,7 @@ module SVNx::Info
       xmllines = xml.collect { |line| line + "\n" }
       
       expdata = {
-        :url => 'file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk/wiquery-core/pom.xml',
+        :url  => 'file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk/wiquery-core/pom.xml',
         :kind => 'file',
         :path => 'wiquery-core/pom.xml',
         :root => 'file:///home/jpace/Programs/Subversion/Repositories/wiquery'

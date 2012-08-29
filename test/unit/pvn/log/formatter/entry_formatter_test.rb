@@ -8,8 +8,6 @@ require 'pvn/log/formatter/entry_formatter'
 
 require 'resources'
 
-Log.level = Log::DEBUG
-
 module PVN; module Log; end; end
 
 module PVN::Log

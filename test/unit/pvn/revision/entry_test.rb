@@ -7,8 +7,6 @@ require 'pvn/revision/entry'
 
 require 'resources'
 
-Log.level = Log::DEBUG
-
 module PVN::Revision
   class TestCase < PVN::TestCase
     def setup

@@ -20,9 +20,6 @@ require 'pvn/describe'
 require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
 
-RIEL::Log.level = RIEL::Log::WARN
-RIEL::Log.set_widths(-25, 5, -35)
-
 module PVN; module App; end; end
 
 module PVN::App
@@ -30,6 +27,9 @@ module PVN::App
     include Loggable
 
     def initialize io, args
+      RIEL::Log.level = RIEL::Log::WARN
+      RIEL::Log.set_widths(-25, 5, -35)
+
       if args.empty?
         run_help args
       end
@@ -62,6 +62,7 @@ module PVN::App
         cmdcls.new args
         exit(0)
       rescue => e
+        # puts e.backtrace
         $stderr.puts e
         exit(-1)
       end
