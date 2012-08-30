@@ -77,10 +77,9 @@ module SVNx
   
   class LogCommand < Command
     def initialize args
-      info "args: #{args}"
       info "args.to_a: #{args.to_a}"
       @use_cache = args.use_cache
-      info "@use_cache: #{@use_cache}".blue
+      info "@use_cache: #{@use_cache}"
       super
     end
 

@@ -29,7 +29,7 @@ module PVN::IO
     attr_reader :local
     
     def initialize args = Hash.new
-      info "args: #{args}".negative
+      info "args: #{args}"
       
       svnurl = args[:svnurl]
       fname  = args[:filename] || args[:file] # legacy
