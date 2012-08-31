@@ -61,10 +61,12 @@ module PVN
     end
 
     def relative_to_absolute rel, path
-      logforrev = SVNx::LogCommandLine.new path
-      logforrev.execute
-
-      xmllines = logforrev.output
+      limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
+      
+      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
+      
+      cmd = SVNx::LogCommand.new cmdargs
+      xmllines = cmd.execute
 
       reventry = PVN::Revision::Entry.new :value => rel, :xmllines => xmllines
       revval   = reventry.value.to_s

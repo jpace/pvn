@@ -17,12 +17,14 @@ module SVNx
 
   class LogCommandLine < CommandLine
     def initialize args = Array.new
+      info "args: #{args}"
       super "log", args.to_a
     end
   end
 
   class LogCommandLineCaching < CachingCommandLine
     def initialize args = Array.new
+      info "args: #{args}"
       super "log", args.to_a
     end
 
@@ -77,17 +79,12 @@ module SVNx
   
   class LogCommand < Command
     def initialize args
-      info "args.to_a: #{args.to_a}"
       @use_cache = args.use_cache
-      info "@use_cache: #{@use_cache}"
       super
     end
 
     def command_line
-      info "@args: #{@args}"
-      cmdline = @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
-      info "cmdline: #{cmdline}"
-      cmdline
+      @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
     end
   end
 end
