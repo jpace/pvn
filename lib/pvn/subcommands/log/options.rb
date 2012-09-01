@@ -29,11 +29,18 @@ module PVN::Subcommands::Log
     end
   end
 
+  class UserOption < PVN::Option
+    def initialize optargs = Hash.new
+      super :user, '-u', "show only changes for the given user", nil, :as_cmdline_option => nil
+    end
+  end
+
   class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
     has_option :format,   FormatOption
     has_option :help,     PVN::Subcommands::Base::HelpOption
     has_option :limit,    LimitOption
+    has_option :user,     UserOption
     has_option :verbose,  PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
     
     def paths

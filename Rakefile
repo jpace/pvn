@@ -65,12 +65,13 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
-  s.version            = "0.0.2"
+  s.version            = "0.0.3"
   s.author             = "Jeff Pace"
   s.email              = "jeugenepace@gmail.com"
   s.homepage           = "http://www.incava.org/projects/pvn"
   s.platform           = Gem::Platform::RUBY
   s.summary            = "What Subversion should have."
+  s.description        = "A set of extensions to the Subversion command line."
   s.files              = FileList["{bin,lib}/**/*"].to_a
   s.require_path       = "lib"
   s.test_files         = FileList["{test}/**/*test.rb"].to_a

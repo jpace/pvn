@@ -32,6 +32,7 @@ module PVN::Subcommands::Log
     example "pvn log +3 foo.rb",    "Prints the 3rd log entry."
     example "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized."
     example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
+    example "pvn log -u barney",    "Prints log entries only for user 'barney'."
     
     def initialize args
       options = PVN::Subcommands::Log::OptionSet.new 
@@ -46,24 +47,47 @@ module PVN::Subcommands::Log
       [ :limit, :verbose, :revision ].each do |field|
         cmdargs[field] = options.send field
       end
+
+      if options.user
+        cmdargs[:limit] = nil
+      end
       
       # we can't cache this, because we don't know if there has been an svn
       # update since the previous run:
       cmdargs[:use_cache] = false
 
-      logargs   = SVNx::LogCommandArgs.new cmdargs
-      elmt      = PVN::IO::Element.new :local => path || '.'
-      log       = elmt.log logargs
-      nentries  = log.entries.size
+      logargs = SVNx::LogCommandArgs.new cmdargs
+      elmt    = PVN::IO::Element.new :local => path || '.'
+      log     = elmt.log logargs
+      entries = log.entries
 
-      # this should be refined to options.revision.head? && options.limit
+      # this should be refined to options.revision.head?
       from_head = !options.revision
       from_tail = !options.limit && !options.revision
-      
-      # this dictates whether to show +N and/or -1:
-      totalentries = options.limit || options.revision ? nil : nentries
 
-      ef = PVN::Log::EntriesFormatter.new options.format, log.entries, from_head, from_tail
+      info "options: #{options}".red
+      info "options.user: #{options.user}".red
+
+      if options.user
+        info "entries: #{entries}".red
+
+        entries = entries.select { |entry| entry.author == options.user }
+
+        raise "ERROR: no matching log entries for '#{options.user}'"
+
+        info "entries: #{entries}".red
+
+        # don't show relative revisions, since we've got a slice out of the list:
+        from_head = nil
+        from_tail = nil
+
+        if options.limit
+          entries = entries[0 ... options.limit]
+          info "entries: #{entries}".red
+        end
+      end        
+      
+      ef = PVN::Log::EntriesFormatter.new options.format, entries, from_head, from_tail
       puts ef.format
     end
   end
