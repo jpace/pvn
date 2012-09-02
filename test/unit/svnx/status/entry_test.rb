@@ -30,10 +30,8 @@ module SVNx::Status
       xml << "</target>\n"
       xml << "</status>\n"
 
-      expdata = { :path => 'LICENSE', :status => 'deleted' }
-
       entry = Entry.new :xmllines => xml.join('')
-      assert_entry_equals entry, expdata
+      assert_status_entry_equals 'deleted', 'LICENSE', entry
     end
   end
 end

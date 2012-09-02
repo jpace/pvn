@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'tc'
+require 'resources'
 
 module SVNx; module Status; end; end
 
@@ -9,10 +10,22 @@ module SVNx::Status
   class TestCase < PVN::TestCase
     include Loggable
 
-    def assert_entry_equals entry, expdata
-      [ :path, :status ].each do |field|
-        assert_equal expdata[field], entry.send(field)
-      end
+    def get_test_lines(*args)
+      Resources.instance.test_lines '/Programs/wiquery/trunk', *args
+    end
+    
+    def get_test_lines_all
+      get_test_lines 'svn', 'status', '--xml'
+    end
+
+    def find_subelement_by_name elmt, name
+      subelmt = elmt.elements.detect { |el| el.name == name }
+      subelmt ? subelmt.get_text.to_s : nil
+    end
+
+    def assert_status_entry_equals exp_status, exp_path, entry
+      assert_equal exp_status, entry.status
+      assert_equal exp_path, entry.path
     end
   end
 end

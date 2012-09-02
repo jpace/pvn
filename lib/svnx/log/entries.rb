@@ -8,7 +8,10 @@ module SVNx::Log
   class Entries
     include Loggable, Enumerable
 
+    attr_reader :size
+
     def initialize args = Hash.new
+      # it's a hash, but indexed with integers.
       @entries = Hash.new
 
       if xmllines = args[:xmllines]
@@ -33,10 +36,6 @@ module SVNx::Log
 
     def [] idx
       @entries[idx] ||= Entry.new(:xmlelement => @logelements[idx + 1])
-    end
-
-    def size
-      @size
     end
 
     def each(&blk)

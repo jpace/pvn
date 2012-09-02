@@ -9,11 +9,9 @@ require 'pvn/subcommands/base/command'
 
 module PVN::Subcommands::Log
   class Command < PVN::Subcommands::Base::Command
-    include Loggable
 
     DEFAULT_LIMIT = 15
 
-    description "this is a description of log"
     subcommands [ "log" ]
     description "Print log messages for the given files."
     usage       "[OPTIONS] FILE..."

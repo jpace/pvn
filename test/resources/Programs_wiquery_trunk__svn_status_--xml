@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<status>
+<target
+   path=".">
+<entry
+   path="Orig.java">
+<wc-status
+   props="none"
+   item="added"
+   revision="0">
+</wc-status>
+</entry>
+<entry
+   path="LICENSE">
+<wc-status
+   props="none"
+   item="deleted"
+   revision="1950">
+<commit
+   revision="412">
+<author>lionel.armanet</author>
+<date>2010-09-17T21:23:25.763385Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="pom.xml">
+<wc-status
+   props="normal"
+   item="modified"
+   revision="1950">
+<commit
+   revision="1907">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-11-14T10:50:38.389281Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="wiquery-core/src/main/java/org/odlabs/wiquery/core/effects/EffectBehavior.java">
+<wc-status
+   props="normal"
+   item="modified"
+   revision="1950">
+<commit
+   revision="1714">
+<author>hielke.hoeve</author>
+<date>2011-09-22T20:38:30.837527Z</date>
+</commit>
+</wc-status>
+</entry>
+</target>
+</status>

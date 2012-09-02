@@ -11,10 +11,6 @@ require 'svnx/command'
 module SVNx
   CACHE_DIR = "/tmp/cache_dir_for_log_command"
 
-  class LogOptions
-    attr_reader :revision
-  end    
-
   class LogCommandLine < CommandLine
     def initialize args = Array.new
       info "args: #{args}"

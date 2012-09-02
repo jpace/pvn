@@ -9,13 +9,11 @@ require 'pvn/io/element'
 require 'svnx/log/entries'
 
 require 'pvn/subcommands/log/command'
-
-# not yet supported:
-# require 'pvn/subcommands/pct/command'
+require 'pvn/subcommands/pct/command'
 
 # the old ones:
 require 'pvn/diff/diffcmd'
-require 'pvn/pct/pctcmd'
+# require 'pvn/pct/pctcmd'
 require 'pvn/describe'
 require 'pvn/upp/uppcmd'
 require 'pvn/wherecmd'
@@ -46,8 +44,7 @@ module PVN::App
         when "log"
           run_command PVN::Subcommands::Log::Command, args
         when "pct"
-          $stderr.puts "subcommand 'pct' is not yet supported"
-          exit(-1)
+          run_command PVN::Subcommands::Pct::Command, args
         else
           $stderr.puts "ERROR: subcommand not valid: #{arg}"
           exit(-1)

@@ -50,5 +50,9 @@ module SVNx::Log
       @action = args[:action]
       @name = args[:name]
     end
+
+    def to_s
+      @name
+    end
   end
 end
