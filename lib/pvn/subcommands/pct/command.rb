@@ -6,6 +6,7 @@ require 'pvn/subcommands/base/doc'
 require 'pvn/subcommands/pct/options'
 require 'pvn/subcommands/base/command'
 require 'svnx/status/command'
+require 'svnx/cat/command'
 
 module PVN::Subcommands::Pct
   class Command < PVN::Subcommands::Base::Command
@@ -15,20 +16,26 @@ module PVN::Subcommands::Pct
     subcommands [ "pct" ]
     description "Compares revisions as a percentage of lines modified."
     usage       "[OPTIONS] FILE..."
-    summary     [ "Compares two revisions, showing output as the percentages",
-                  "of lines added, changed, and deleted from the first revision",
-                  "against the second revision.",
-                  "By default, the BASE revision is compared against the working copy."
-                ]
-
+    summary   [ "Compares to revisions, showing the changes in the size (length)",
+                "of files that have been modified in the latter revision, to",
+                "show the extent to which they have increased or decreased.",
+                "The columns are:",
+                " - length in svn repository",
+                " - length in local version",
+                " - difference",
+                " - percentage change",
+                " - file name",
+                "When more than one file is specified, the total is displayed",
+                "as the last line." ]
+    
     optscls
 
     example "pvn pct foo.rb",       "Prints the changes in foo.rb, working copy against BASE."
-    example "pvn pct -r114:121",    "Prints the changes for all files, revision 114 against 121."
-    example "pvn pct -rHEAD",       "Prints the changes, working copy against HEAD."
-    example "pvn pct -r117",        "Prints the changes between revision 117 and the previous revision."
-    example "pvn pct -7",           "Prints the changes between relative revision -7 and the previous revision."
-    example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4."
+    example "pvn pct -r114:121",    "Prints the changes for all files, revision 114 against 121. (not yet supported)"
+    example "pvn pct -rHEAD",       "Prints the changes, working copy against HEAD. (not yet supported)"
+    example "pvn pct -r117",        "Prints the changes between revision 117 and the previous revision. (not yet supported)"
+    example "pvn pct -7",           "Prints the changes between relative revision -7 and the previous revision. (not yet supported)"
+    example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4. (not yet supported)"
     
     def initialize args
       options = PVN::Subcommands::Pct::OptionSet.new 
@@ -67,19 +74,58 @@ module PVN::Subcommands::Pct
           info entry.paths
         end
       else
-        info "no revision"
-        info "options.paths: #{options.paths}"
-
-        if options.paths[0]
-          info "options.paths[0]: #{options.paths[0]}"
-
-          cmdargs = SVNx::StatusCommandArgs.new :path => '.'
-          cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
-          xml = cmd.execute.join ''
-          entries = SVNx::Status::Entries.new :xml => SVNx::Status::XMLEntries.new(xml)
-          
-        end
+        compare_local_to_base options
       end
+    end
+
+    def compare_local_to_base options
+      # do we support multiple paths?
+      path = options.paths[0] || '.'
+
+      if path
+        cmdargs = SVNx::StatusCommandArgs.new :path => path, :use_cache => false
+
+        total_local_count = 0
+        total_svn_count = 0
+
+        cmd = SVNx::StatusCommand.new cmdargs
+        xml = cmd.execute
+        entries = SVNx::Status::Entries.new :xmllines => xml
+        entries.each do |entry|
+          info "entry: #{entry}"
+          info "entry.path: #{entry.path}".cyan
+          info "entry.status: #{entry.status}".cyan
+
+          if entry.status == 'added'
+            # 100% added
+          elsif entry.status == 'modified'
+            catcmd = SVNx::CatCommand.new entry.path
+            info "catcmd: #{catcmd}"
+            
+            svn_count = catcmd.execute.size
+            info "svn_count: #{svn_count}"
+
+            local_count = Pathname.new(entry.path).readlines.size
+            info "local_count: #{local_count}"
+
+            total_svn_count += svn_count
+            total_local_count += local_count
+
+            print_diff svn_count, local_count, entry.path
+          elsif entry.status == 'deleted'
+            # 100% deleted
+          end
+        end
+
+        print_diff total_svn_count, total_local_count, 'total'
+      end
+    end
+
+    def print_diff svn_count, local_count, name
+      diff = local_count - svn_count
+      diffpct = 100.0 * diff / svn_count
+      
+      printf "%8d %8d %8d %8.1f%% %s\n", svn_count, local_count, diff, diffpct, name
     end
   end
 end

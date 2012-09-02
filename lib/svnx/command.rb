@@ -11,18 +11,29 @@ module SVNx
   class CommandLine < System::CommandLine
     def initialize subcmd, args = Array.new
       info "args: #{args}"
-      cmdargs = [ 'svn', subcmd, '--xml' ].concat args
+      cmdargs = [ 'svn', subcmd ]
+      cmdargs << '--xml' if uses_xml?
+      cmdargs.concat args
       info "cmdargs: #{cmdargs}"
       super cmdargs
+    end
+
+    def uses_xml?
+      true
     end
   end
 
   class CachingCommandLine < System::CachingCommandLine
     def initialize subcmd, args = Array.new
       info "args: #{args}"
-      cmdargs = [ 'svn', subcmd, '--xml' ].concat args
+      cmdargs << '--xml' if uses_xml?
+      cmdargs.concat args
       info "cmdargs: #{cmdargs}"
       super cmdargs
+    end
+
+    def uses_xml?
+      true
     end
   end
 

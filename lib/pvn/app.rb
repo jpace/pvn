@@ -59,7 +59,7 @@ module PVN::App
         cmdcls.new args
         exit(0)
       rescue => e
-        # puts e.backtrace
+        puts e.backtrace
         $stderr.puts e
         exit(-1)
       end
@@ -81,6 +81,7 @@ module PVN::App
     end
 
     SUBCOMMANDS = [ PVN::Subcommands::Log::Command,
+                    PVN::Subcommands::Pct::Command,
 #                    DiffCommand, 
 #                    DescribeCommand, 
 #                    PctCommand,

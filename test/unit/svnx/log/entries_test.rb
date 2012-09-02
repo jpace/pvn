@@ -13,19 +13,22 @@ module SVNx::Log
       assert entry.message
       assert entry.author
     end
-    
-    def test_create_from_xml
+
+    def assert_log_entry_1947 entry
       expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
       expdata << { :kind => 'file', 
         :action => 'M', 
         :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
       }
       
-      entries = Entries.new :xmllines => get_test_lines_limit_15
-
-      assert_log_entry_equals entries[2], expdata
+      assert_log_entry_equals entry, expdata
     end
-
+    
+    def test_create_from_xml
+      entries = Entries.new :xmllines => get_test_lines_limit_15
+      assert_log_entry_1947 entries[2]
+    end
+    
     def test_no_author_field
       entries = Entries.new :xmllines => get_test_lines_no_author
       nentries = entries.size
@@ -68,6 +71,18 @@ module SVNx::Log
       # and these still aren't processed:
       assert_nil real_entries[16]
       assert_nil real_entries[18]
+    end
+
+    def test_each
+      idx = 0
+
+      entries = Entries.new :xmllines => get_test_lines_limit_15
+      entries.each do |entry|
+        if idx == 2
+          assert_log_entry_1947 entry
+        end
+        idx += 1
+      end
     end
   end
 end
