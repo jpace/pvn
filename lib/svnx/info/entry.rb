@@ -20,7 +20,6 @@ module SVNx::Info
       set_elmt_var entry, 'url'
 
       repo = entry.elements['repository']
-      # set_elmt_var doc, 'info/entry/repository/root'
       set_elmt_var repo, 'root'
     end
 
