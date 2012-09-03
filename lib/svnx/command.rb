@@ -38,6 +38,8 @@ module SVNx
   end
 
   class CommandArgs
+    include Loggable
+    
     attr_accessor :path
 
     def initialize args = Hash.new

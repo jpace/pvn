@@ -9,6 +9,34 @@ module SVNx
   class Entry
     include Loggable
 
+    def initialize args = Hash.new
+      if xmllines = args[:xmllines]
+        if xmllines.kind_of? Array
+          xmllines = xmllines.join ''
+        end
+
+        doc = REXML::Document.new xmllines
+
+        set_from_xml doc
+      elsif elmt = args[:xmlelement]
+        info "elmt: #{elmt}"
+
+        set_from_element elmt
+      else
+        raise "must be initialized with xmllines or xmlelement"
+      end
+
+      info "self: #{self.inspect}"
+    end
+
+    def set_from_xml xmldoc
+      raise "must be implemented"
+    end
+
+    def set_from_element elmt
+      raise "must be implemented"
+    end
+
     def get_attribute xmlelement, attrname
       xmlelement.attributes[attrname]
     end

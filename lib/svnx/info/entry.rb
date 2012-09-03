@@ -11,24 +11,26 @@ module SVNx::Info
     attr_reader :root
     attr_reader :kind
     attr_reader :path
-    
-    def initialize args = Hash.new
-      if xmllines = args[:xmllines]
-        doc = REXML::Document.new xmllines
-        entry = doc.elements['info/entry']
 
-        set_attr_var entry, 'kind'
-        set_attr_var entry, 'path'
-        set_elmt_var entry, 'url'
-        
-        repo = entry.elements['repository']
-        # set_elmt_var doc, 'info/entry/repository/root'
-        set_elmt_var repo, 'root'
-      else
-        raise "must be initialized with xmllines"
-      end
+    def set_from_xml xmldoc
+      entry = xmldoc.elements['info/entry']
 
-      info "self: #{self.inspect}"
+      set_attr_var entry, 'kind'
+      set_attr_var entry, 'path'
+      set_elmt_var entry, 'url'
+
+      repo = entry.elements['repository']
+      # set_elmt_var doc, 'info/entry/repository/root'
+      set_elmt_var repo, 'root'
+    end
+
+    def set_from_element elmt
+      set_attr_var elmt, 'kind'
+      set_attr_var elmt, 'path'
+      set_elmt_var elmt, 'url'
+      
+      repo = elmt.elements['repository']
+      set_elmt_var repo, 'root'
     end
   end
 end

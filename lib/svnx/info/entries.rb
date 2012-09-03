@@ -1,27 +1,19 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-# require 'svnx/info/entry'
-
-module SVNx; module Info; end; end
+require 'svnx/info/entry'
+require 'svnx/entries'
 
 module SVNx::Info
-  class Entries < Array
+  class Entries < SVNx::Entries
     include Loggable
 
-    def initialize args = Hash.new
-      if xmllines = args[:xmllines]
-        doc = REXML::Document.new xmllines
+    def get_elements doc
+      doc.elements['info'].elements
+    end
 
-        # xxx
-        doc.elements.each('xxx') do |entryelement|
-          self << Entry.new(:xmlelement => entryelement)
-        end
-      elsif xml = args[:xml]
-        xml.xmlentries.each do |xmlentry|
-          self << Entry.new(:xmlentry => xmlentry)
-        end          
-      end
+    def create_entry xmlelement
+      Entry.new :xmlelement => xmlelement
     end
   end
 end

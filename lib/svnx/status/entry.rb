@@ -10,31 +10,28 @@ module SVNx::Status
 
     attr_reader :status
     attr_reader :path
-    
-    def initialize args = Hash.new
-      # this is status/target/entry from "svn status --xml <foo>"
-      if xmlelement = args[:xmlelement]
-        set_attr_var xmlelement, 'path'
-        if wcstatus = xmlelement.elements['wc-status']
-          @status = wcstatus.attributes['item']
-        else
-          @status = "unchanged"
-        end
-      elsif xmllines = args[:xmllines]
-        doc    = REXML::Document.new xmllines
-        stelmt = doc.elements['status']
-        tgt    = stelmt.elements['target']
 
-        set_attr_var tgt, 'path'
-        
-        if entry = tgt.elements['entry']
-          wcstatus = entry.elements['wc-status']
-          @status = wcstatus.attributes['item']
-        else
-          @status = "unchanged"
-        end
+    def set_from_xml xmldoc
+      stelmt = xmldoc.elements['status']
+      tgt    = stelmt.elements['target']
+
+      info "tgt: #{tgt}".yellow
+
+      set_attr_var tgt, 'path'      
+      if entry = tgt.elements['entry']
+        wcstatus = entry.elements['wc-status']
+        @status = wcstatus.attributes['item']
       else
-        raise "must be initialized with xmlelement or xmllines"
+        @status = "unchanged"
+      end
+    end
+
+    def set_from_element elmt
+      set_attr_var elmt, 'path'
+      if wcstatus = elmt.elements['wc-status']
+        @status = wcstatus.attributes['item']
+      else
+        @status = "unchanged"
       end
     end
   end

@@ -36,7 +36,7 @@ end
 def build_fixture svndir, svncmd
   origdir  = Pathname.new(Dir.pwd).expand_path
   tgtdir   = origdir + 'test/resources'
-  outfname = svndir.sub(%r{^/}, '').gsub('/', '_') + '__' + svncmd.gsub(' ', '_')
+  outfname = svndir.sub(%r{^/}, '').gsub('/', '_') + '__' + svncmd.gsub(' ', '_').gsub('/', '__')
   outfile  = tgtdir + outfname
 
   Dir.chdir svndir
@@ -62,6 +62,8 @@ task :build_fixtures do
   build_fixture '/Programs/wiquery/trunk', 'svn log -l 15 -v --xml'
   build_fixture '/Programs/wiquery/trunk', 'svn log --xml pom.xml'
   build_fixture '/Programs/wiquery/trunk', 'svn status --xml'
+  build_fixture '/Programs/wiquery/trunk', 'svn info --xml wiquery-core/pom.xml'
+  build_fixture '/Programs/wiquery/trunk', 'svn info --xml pom.xml Orig.java'
 end
 
 spec = Gem::Specification.new do |s| 

@@ -2,11 +2,12 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/subcommands/base/doc'
 require 'pvn/subcommands/pct/options'
 require 'pvn/subcommands/base/command'
+require 'svnx/info/command'
 require 'svnx/status/command'
 require 'svnx/cat/command'
+require 'set'
 
 module PVN::Subcommands::Pct
   class Command < PVN::Subcommands::Base::Command
@@ -25,8 +26,8 @@ module PVN::Subcommands::Pct
                 " - difference",
                 " - percentage change",
                 " - file name",
-                "When more than one file is specified, the total is displayed",
-                "as the last line." ]
+                "The total numbers are displayed as the last line.",
+                "Added and deleted files are not included." ]
     
     optscls
 
@@ -51,6 +52,8 @@ module PVN::Subcommands::Pct
       cmdargs[:path] = path
 
       if options.revision && !options.revision.empty?
+        return compare_by_revisions options
+
         raise "ERROR: revisions not yet supported by pct"
         
         cmdargs[:revision] = options.revision
@@ -78,52 +81,131 @@ module PVN::Subcommands::Pct
       end
     end
 
+    def compare_by_revisions options
+      # what was modified between the revisions?
+
+      cmdargs = Hash.new
+
+      path = options.paths[0] || "."
+      cmdargs[:path] = path
+
+      if options.revision && !options.revision.empty?
+        cmdargs[:revision] = options.revision
+
+        info "cmdargs[:revision]: #{cmdargs[:revision]}"
+        
+        # we can't cache this, because we don't know if there has been an svn
+        # update since the previous run:
+        cmdargs[:use_cache] = false
+        cmdargs[:limit] = nil
+        cmdargs[:verbose] = true
+
+        logargs = SVNx::LogCommandArgs.new cmdargs
+        elmt    = PVN::IO::Element.new :local => path || '.'
+        log     = elmt.log logargs
+        entries = log.entries
+
+        modified = Set.new
+
+        info "entries: #{entries}"
+        entries.each do |entry|
+          info "entry: #{entry}".on_blue
+          info entry.paths
+          entry.paths.each do |epath|
+            info "epath: #{epath}".green
+            info "epath.action: #{epath.action}".green
+            modified << epath.name if epath.action == 'M'
+          end
+        end
+
+        info "modified: #{modified.inspect}".yellow
+
+        fromrev = options.revision[0]
+        torev = options.revision[1]
+
+        info "fromrev: #{fromrev}; torev: #{torev}"
+
+        modified.each do |mod|
+          info "mod: #{mod}"
+
+          # svn elements are of the form:
+          # URL: (protocol:/...)(/path)
+          # Repository root: \1 of above
+
+          # and log entry paths are \2 above
+
+          # so here we go via info ...
+
+          cmdargs = SVNx::InfoCommandArgs.new :path => path
+          infcmd = SVNx::InfoCommand.new cmdargs
+          output = infcmd.execute
+          
+          info "infcmd: #{infcmd}"
+          info "output: #{output}"
+
+          infentries = SVNx::Info::Entries.new :xmllines => output
+          
+          from_count = get_line_count mod, fromrev
+          info "from_count: #{from_count}"
+
+          to_count = get_line_count mod, torev
+          info "to_count: #{to_count}"
+        end
+      end
+    end
+
+    def get_line_count path, revision
+      cmdargs = SVNx::CatCommandArgs.new :path => path, :revision => revision
+      catcmd = SVNx::CatCommand.new cmdargs
+      info "catcmd: #{catcmd}"
+      
+      count = catcmd.execute.size
+      info "count: #{count}"
+
+      count
+    end
+
+    def get_modified_local_files path
+      cmdargs = SVNx::StatusCommandArgs.new :path => path, :use_cache => false
+
+      cmd = SVNx::StatusCommand.new cmdargs
+      xml = cmd.execute
+      entries = SVNx::Status::Entries.new :xmllines => xml
+      entries.select do |entry|
+        entry.status == 'modified'
+      end
+    end
+
     def compare_local_to_base options
       # do we support multiple paths?
       path = options.paths[0] || '.'
 
-      if path
-        cmdargs = SVNx::StatusCommandArgs.new :path => path, :use_cache => false
+      total_local_count = 0
+      total_svn_count = 0
 
-        total_local_count = 0
-        total_svn_count = 0
-
-        cmd = SVNx::StatusCommand.new cmdargs
-        xml = cmd.execute
-        entries = SVNx::Status::Entries.new :xmllines => xml
-        entries.each do |entry|
-          info "entry: #{entry}"
-          info "entry.path: #{entry.path}".cyan
-          info "entry.status: #{entry.status}".cyan
-
-          if entry.status == 'added'
-            # 100% added
-          elsif entry.status == 'modified'
-            catcmd = SVNx::CatCommand.new entry.path
-            info "catcmd: #{catcmd}"
-            
-            svn_count = catcmd.execute.size
-            info "svn_count: #{svn_count}"
-
-            local_count = Pathname.new(entry.path).readlines.size
-            info "local_count: #{local_count}"
-
-            total_svn_count += svn_count
-            total_local_count += local_count
-
-            print_diff svn_count, local_count, entry.path
-          elsif entry.status == 'deleted'
-            # 100% deleted
-          end
-        end
-
-        print_diff total_svn_count, total_local_count, 'total'
+      entries = get_modified_local_files path
+      entries.each do |entry|
+        catcmd = SVNx::CatCommand.new entry.path
+        info "catcmd: #{catcmd}"
+          
+        svn_count = catcmd.execute.size
+        info "svn_count: #{svn_count}"
+        
+        local_count = Pathname.new(entry.path).readlines.size
+        info "local_count: #{local_count}"
+        
+        total_svn_count += svn_count
+        total_local_count += local_count
+        
+        print_diff svn_count, local_count, entry.path
       end
+
+      print_diff total_svn_count, total_local_count, 'total'
     end
 
     def print_diff svn_count, local_count, name
       diff = local_count - svn_count
-      diffpct = 100.0 * diff / svn_count
+      diffpct = diff == 0 ? 0 : 100.0 * diff / svn_count
       
       printf "%8d %8d %8d %8.1f%% %s\n", svn_count, local_count, diff, diffpct, name
     end
