@@ -62,6 +62,57 @@ module PVN::IO
       end
     end
 
+    def repo_root
+      cmdargs = SVNx::InfoCommandArgs.new :path => @local
+      infcmd = SVNx::InfoCommand.new cmdargs
+      output = infcmd.execute
+      
+      info "infcmd: #{infcmd}"
+      info "output: #{output}"
+      
+      infentries = SVNx::Info::Entries.new :xmllines => output
+      info "infentries: #{infentries}"
+      info "infentries.size: #{infentries.size}"
+      
+      rootentry = infentries[0]
+      info "rootentry: #{rootentry}".on_blue
+      info "root: #{rootentry.root}".on_blue
+      rootentry.root
+    end
+
+    # returns a set of entries modified
+    def find_modified revision
+      cmdargs = Hash.new
+
+      cmdargs[:path] = @local
+
+      info "cmdargs[:revision]: #{cmdargs[:revision]}"
+      
+      # we can't cache this, because we don't know if there has been an svn
+      # update since the previous run:
+      cmdargs[:use_cache] = false
+      cmdargs[:limit] = nil
+      cmdargs[:verbose] = true
+      cmdargs[:revision] = revision
+
+      logargs = SVNx::LogCommandArgs.new cmdargs
+      log     = log logargs
+      entries = log.entries
+
+      modified = Set.new
+
+      info "entries: #{entries}"
+      entries.each do |entry|
+        info "entry: #{entry}".on_blue
+        info entry.paths
+        entry.paths.each do |epath|
+          modified << epath if epath.action == 'M'
+        end
+      end
+
+      modified
+    end
+
     def svninfo
     end
 

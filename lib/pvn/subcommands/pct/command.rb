@@ -83,68 +83,28 @@ module PVN::Subcommands::Pct
     def compare_by_revisions options
       # what was modified between the revisions?
 
-      cmdargs = Hash.new
-
       path = options.paths[0] || "."
-      cmdargs[:path] = path
 
-      cmdargs[:revision] = options.revision
+      elmt = PVN::IO::Element.new :local => path || '.'
+      modified = elmt.find_modified options.revision
 
-      info "cmdargs[:revision]: #{cmdargs[:revision]}"
-      
-      # we can't cache this, because we don't know if there has been an svn
-      # update since the previous run:
-      cmdargs[:use_cache] = false
-      cmdargs[:limit] = nil
-      cmdargs[:verbose] = true
+      modnames = modified.collect { |m| m.name }
 
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      elmt    = PVN::IO::Element.new :local => path || '.'
-      log     = elmt.log logargs
-      entries = log.entries
-
-      modified = Set.new
-
-      info "entries: #{entries}"
-      entries.each do |entry|
-        info "entry: #{entry}".on_blue
-        info entry.paths
-        entry.paths.each do |epath|
-          info "epath: #{epath}".green
-          info "epath.action: #{epath.action}".green
-          modified << epath.name if epath.action == 'M'
-        end
-      end
-
-      info "modified: #{modified.inspect}".yellow
+      info "modnames: #{modnames.inspect}".yellow
 
       fromrev = options.revision[0]
       torev = options.revision[1]
 
       info "fromrev: #{fromrev}; torev: #{torev}"
 
-      # this is the repo root
-      cmdargs = SVNx::InfoCommandArgs.new :path => '.'
-      infcmd = SVNx::InfoCommand.new cmdargs
-      output = infcmd.execute
-      
-      info "infcmd: #{infcmd}"
-      info "output: #{output}"
-      
-      infentries = SVNx::Info::Entries.new :xmllines => output
-      info "infentries: #{infentries}"
-      info "infentries.size: #{infentries.size}"
-      
-      rootentry = infentries[0]
-      info "rootentry: #{rootentry}".on_blue
-      info "root: #{rootentry.root}".on_blue
-
       total = DiffCount.new
 
-      modified.each do |mod|
+      reporoot = elmt.repo_root
+
+      modnames.each do |mod|
         info "mod: #{mod}"
 
-        fullpath = rootentry.root + mod
+        fullpath = reporoot + mod
 
         # svn elements are of the form:
         # URL: (protocol:/...)(/path)
@@ -153,17 +113,6 @@ module PVN::Subcommands::Pct
         # and log entry paths are \2 above
 
         # so here we go via info ...
-
-        cmdargs = SVNx::InfoCommandArgs.new :path => fullpath
-        infcmd = SVNx::InfoCommand.new cmdargs
-        output = infcmd.execute
-        
-        info "infcmd: #{infcmd}"
-        info "output: #{output}"
-
-        infentries = SVNx::Info::Entries.new :xmllines => output
-        info "infentries: #{infentries}"
-        info "infentries.size: #{infentries.size}"
         
         from_count = get_line_count fullpath, fromrev
         info "from_count: #{from_count}".red
