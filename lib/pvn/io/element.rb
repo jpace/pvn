@@ -62,26 +62,21 @@ module PVN::IO
       end
     end
 
-    def repo_root
+    def get_info
       cmdargs = SVNx::InfoCommandArgs.new :path => @local
-      infcmd = SVNx::InfoCommand.new cmdargs
-      output = infcmd.execute
-      
-      info "infcmd: #{infcmd}"
-      info "output: #{output}"
+      infcmd  = SVNx::InfoCommand.new cmdargs
+      output  = infcmd.execute
       
       infentries = SVNx::Info::Entries.new :xmllines => output
-      info "infentries: #{infentries}"
-      info "infentries.size: #{infentries.size}"
-      
-      rootentry = infentries[0]
-      info "rootentry: #{rootentry}".on_blue
-      info "root: #{rootentry.root}".on_blue
-      rootentry.root
+      infentries[0]
     end
 
-    # returns a set of entries modified
-    def find_modified revision
+    def repo_root
+      get_info.root
+    end
+
+    # returns a set of entries modified over the given revision
+    def find_modified_entries revision
       cmdargs = Hash.new
 
       cmdargs[:path] = @local
@@ -96,8 +91,7 @@ module PVN::IO
       cmdargs[:revision] = revision
 
       logargs = SVNx::LogCommandArgs.new cmdargs
-      log     = log logargs
-      entries = log.entries
+      entries = log(logargs).entries
 
       modified = Set.new
 
@@ -113,7 +107,19 @@ module PVN::IO
       modified
     end
 
-    def svninfo
+    # returns a set of local files that are in modified status
+    def find_modified_files
+      cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
+
+      cmd = SVNx::StatusCommand.new cmdargs
+      xml = cmd.execute
+      entries = SVNx::Status::Entries.new :xmllines => xml
+
+      modified = Set.new
+      entries.each do |entry|
+        modified << entry if entry.status == 'modified'
+      end
+      modified
     end
 
     # returns log entries

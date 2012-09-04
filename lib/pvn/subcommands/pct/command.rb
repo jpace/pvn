@@ -86,7 +86,7 @@ module PVN::Subcommands::Pct
       path = options.paths[0] || "."
 
       elmt = PVN::IO::Element.new :local => path || '.'
-      modified = elmt.find_modified options.revision
+      modified = elmt.find_modified_entries options.revision
 
       modnames = modified.collect { |m| m.name }
 
@@ -95,7 +95,7 @@ module PVN::Subcommands::Pct
       fromrev = options.revision[0]
       torev = options.revision[1]
 
-      info "fromrev: #{fromrev}; torev: #{torev}"
+      info "fromrev: #{fromrev}; torev: #{torev}".on_green
 
       total = DiffCount.new
 
@@ -154,10 +154,12 @@ module PVN::Subcommands::Pct
       # do we support multiple paths?
       path = options.paths[0] || '.'
 
-      total = DiffCount.new
+      elmt = PVN::IO::Element.new :local => path || '.'
+      modified = elmt.find_modified_files
 
-      entries = get_modified_local_files path
-      entries.each do |entry|
+      total = DiffCount.new    
+
+      modified.each do |entry|
         catcmd = SVNx::CatCommand.new entry.path
         info "catcmd: #{catcmd}"
           
