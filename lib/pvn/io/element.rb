@@ -107,19 +107,22 @@ module PVN::IO
       modified
     end
 
-    # returns a set of local files that are in modified status
-    def find_modified_files
+    # returns a set of local files that are in the given status
+    def find_files_by_status status
       cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
 
       cmd = SVNx::StatusCommand.new cmdargs
       xml = cmd.execute
       entries = SVNx::Status::Entries.new :xmllines => xml
 
-      modified = Set.new
-      entries.each do |entry|
-        modified << entry if entry.status == 'modified'
+      entries.select do |entry|
+        entry.status == status
       end
-      modified
+    end
+
+    # returns a set of local files that are in modified status
+    def find_modified_files
+      find_files_by_status 'modified'
     end
 
     # returns log entries

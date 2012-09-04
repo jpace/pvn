@@ -13,8 +13,6 @@ module SVNx
     attr_reader :size
 
     def initialize args = Hash.new
-      info "args: #{args}".yellow
-      
       # it's a hash, but indexed with integers.
       @entries = Hash.new
 
@@ -28,11 +26,7 @@ module SVNx
         doc = REXML::Document.new xmllines
 
         @elements = get_elements doc
-        info "@elements: #{@elements}".yellow
-
         @size = @elements.size
-
-        info "@size: #{@size}".yellow
       elsif xmlentries = args[:xmlentries]
         raise "argument xmlentries is no longer supported"
       end

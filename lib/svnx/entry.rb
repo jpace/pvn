@@ -19,14 +19,10 @@ module SVNx
 
         set_from_xml doc
       elsif elmt = args[:xmlelement]
-        info "elmt: #{elmt}"
-
         set_from_element elmt
       else
         raise "must be initialized with xmllines or xmlelement"
       end
-
-      info "self: #{self.inspect}"
     end
 
     def set_from_xml xmldoc

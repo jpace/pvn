@@ -72,5 +72,8 @@ module PVN
       revval   = reventry.value.to_s
       revval
     end
+
+    def entry
+    end
   end
 end

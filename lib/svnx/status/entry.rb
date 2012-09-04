@@ -15,24 +15,22 @@ module SVNx::Status
       stelmt = xmldoc.elements['status']
       tgt    = stelmt.elements['target']
 
-      info "tgt: #{tgt}".yellow
-
       set_attr_var tgt, 'path'      
-      if entry = tgt.elements['entry']
-        wcstatus = entry.elements['wc-status']
-        @status = wcstatus.attributes['item']
-      else
-        @status = "unchanged"
-      end
+      @status = if entry = tgt.elements['entry']
+                  wcstatus = entry.elements['wc-status']
+                  wcstatus.attributes['item']
+                else
+                  "unchanged"
+                end
     end
 
     def set_from_element elmt
       set_attr_var elmt, 'path'
-      if wcstatus = elmt.elements['wc-status']
-        @status = wcstatus.attributes['item']
-      else
-        @status = "unchanged"
-      end
+      @status = if wcstatus = elmt.elements['wc-status']
+                  wcstatus.attributes['item']
+                else
+                  "unchanged"
+                end
     end
   end
 end

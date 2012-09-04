@@ -80,6 +80,23 @@ module PVN::Subcommands::Pct
       end
     end
 
+    ### $$$ this belongs in Revision
+    def get_from_to_revisions rev
+      if rev.kind_of? Array
+        if rev.size == 1
+          if md = Regexp.new('(.+):(.+)').match(rev[0])
+            return [ md[1], md[2] ]
+          else
+            return [ (rev[0].to_i - 1).to_s, rev[0] ]
+          end
+        else
+          return [ rev[0], rev[1] ]
+        end
+      else
+        info "rev: #{rev}".bold.white.on_red
+      end
+    end
+
     def compare_by_revisions options
       # what was modified between the revisions?
 
@@ -92,10 +109,15 @@ module PVN::Subcommands::Pct
 
       info "modnames: #{modnames.inspect}".yellow
 
-      fromrev = options.revision[0]
-      torev = options.revision[1]
+      rev = options.revision
 
-      info "fromrev: #{fromrev}; torev: #{torev}".on_green
+      info "rev: #{rev}; #{rev.class}".blue.on_yellow
+      info "rev: #{rev.inspect}; #{rev.class}".blue.on_yellow
+
+      fromrev, torev = get_from_to_revisions options.revision
+
+      info "fromrev: #{fromrev}; torev: #{torev}".black.on_green
+      info "fromrev: #{fromrev.class}; torev: #{torev.class}".black.on_green
 
       total = DiffCount.new
 
@@ -105,14 +127,6 @@ module PVN::Subcommands::Pct
         info "mod: #{mod}"
 
         fullpath = reporoot + mod
-
-        # svn elements are of the form:
-        # URL: (protocol:/...)(/path)
-        # Repository root: \1 of above
-
-        # and log entry paths are \2 above
-
-        # so here we go via info ...
         
         from_count = get_line_count fullpath, fromrev
         info "from_count: #{from_count}".red
@@ -137,17 +151,6 @@ module PVN::Subcommands::Pct
       info "count: #{count}"
 
       count
-    end
-
-    def get_modified_local_files path
-      cmdargs = SVNx::StatusCommandArgs.new :path => path, :use_cache => false
-
-      cmd = SVNx::StatusCommand.new cmdargs
-      xml = cmd.execute
-      entries = SVNx::Status::Entries.new :xmllines => xml
-      entries.select do |entry|
-        entry.status == 'modified'
-      end
     end
 
     def compare_local_to_base options

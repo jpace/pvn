@@ -21,8 +21,6 @@ module SVNx
     def initialize args = Hash.new
       @use_cache = args[:use_cache].nil? || args[:use_cache]
       @revision = args[:revision]
-      info "@use_cache: #{@use_cache}"
-      info "@revision : #{@revision}"
       super
     end
 

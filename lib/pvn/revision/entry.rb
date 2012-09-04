@@ -3,6 +3,9 @@
 
 require 'svnx/log/entries'
 
+# This is an abuse of all the element/entry nonsense in this code. This will
+# replace lib/pvn/revision.rb as PVN::Revision.                                                                            
+
 module PVN::Revision
   DATE_REGEXP = Regexp.new '^\{(.*?)\}'
   SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }

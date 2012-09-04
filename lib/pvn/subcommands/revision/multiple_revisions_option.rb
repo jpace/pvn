@@ -6,13 +6,7 @@ require 'pvn/subcommands/revision/revision_regexp_option'
 module PVN
   # A revision option with multiple values.
   class MultipleRevisionsRegexpOption < RevisionRegexpOption
-    REVISION_DESCRIPTION = [ "revision to apply.",
-                             "ARG can be relative, of the form:",
-                             "    +N : N revisions from the BASE",
-                             "    -N : N revisions from the HEAD,",
-                             "         when -1 is the previous revision" ,
-                             "Multiple revisions can be specified." ,
-                           ]
+    REVISION_DESCRIPTION = RevisionRegexpOption::REVISION_DESCRIPTION + [ "Multiple revisions can be specified." ]
     
     def set_value val
       currval = value
