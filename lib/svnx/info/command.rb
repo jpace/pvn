@@ -11,8 +11,22 @@ module SVNx
   end
 
   class InfoCommandArgs < CommandArgs
+    attr_reader :revision
+
+    def initialize args = Hash.new
+      @revision = args[:revision]
+      super
+    end
+
     def to_a
       ary = Array.new
+
+      if @revision
+        @revision.each do |rev|
+          ary << "-r#{rev}"
+        end
+      end
+
       if @path
         ary << @path
       end

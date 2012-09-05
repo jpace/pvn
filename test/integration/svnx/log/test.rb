@@ -24,8 +24,8 @@ module SVNx::Log
     end
     
     def test_entry_from_command
-      lcargs = LogCommandArgs.new :limit => 2, :verbose => false, :use_cache => false
-      lc = LogCommand.new lcargs
+      lcargs = SVNx::LogCommandArgs.new :limit => 2, :verbose => false, :use_cache => false
+      lc = SVNx::LogCommand.new lcargs
       
       lc.execute
       output = lc.output

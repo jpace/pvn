@@ -68,6 +68,8 @@ module PVN
     end
 
     def test_no_change
+      return "not implemented"
+
       goto_test_trunk
       run_svn_checkout
       cmd = DiffCommand.new :execute => true, :command_args => []

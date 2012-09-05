@@ -105,7 +105,7 @@ module PVN::Subcommands::Pct
       elmt = PVN::IO::Element.new :local => path || '.'
       modified = elmt.find_modified_entries options.revision
 
-      modnames = modified.collect { |m| m.name }
+      modnames = modified.collect { |m| m.name }.sort.uniq
 
       info "modnames: #{modnames.inspect}".yellow
 
@@ -124,10 +124,19 @@ module PVN::Subcommands::Pct
       reporoot = elmt.repo_root
 
       modnames.each do |mod|
-        info "mod: #{mod}"
+        info "mod: #{mod}".yellow
 
         fullpath = reporoot + mod
         
+        info "fullpath: #{fullpath}".cyan
+
+        elmt = PVN::IO::Element.new :path => fullpath
+        info "checking fromrev ... #{fromrev}".yellow
+        next unless elmt.has_revision? fromrev
+        info "checking torev ... #{torev}".yellow
+        next unless elmt.has_revision? torev
+        next if elmt.get_info.kind == 'dir'
+
         from_count = get_line_count fullpath, fromrev
         info "from_count: #{from_count}".red
 

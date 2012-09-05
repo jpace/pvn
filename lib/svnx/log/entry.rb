@@ -31,6 +31,10 @@ module SVNx::Log
     def message
       @msg
     end
+
+    def to_s
+      [ @revision, @author, @date, @msg, @paths ].collect { |x| x.to_s }.join " "
+    end
   end
 
   class LogEntryPath

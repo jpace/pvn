@@ -36,7 +36,8 @@ module PVN::IO
       # $$$ todo: map svnurl to SVNElement, and fname to FSElement
 
       @svn   = args[:svn] || (args[:file] && SVNElement.new(:filename => args[:file]))
-      @local = PVN::FSElement.new args[:local] || args[:file]
+      @local = args[:local] && PVN::FSElement.new(args[:local] || args[:file])
+      @path  = args[:path]
       
       info "local: #{@local}"
     end
@@ -62,8 +63,10 @@ module PVN::IO
       end
     end
 
-    def get_info
-      cmdargs = SVNx::InfoCommandArgs.new :path => @local
+    def get_info revision = nil
+      usepath = @local || @path
+      info "usepath: #{usepath}"
+      cmdargs = SVNx::InfoCommandArgs.new :path => usepath, :revision => revision
       infcmd  = SVNx::InfoCommand.new cmdargs
       output  = infcmd.execute
       
@@ -73,6 +76,20 @@ module PVN::IO
 
     def repo_root
       get_info.root
+    end
+
+    def has_revision? rev
+      usepath = @local || @path
+      info "usepath: #{usepath}"
+
+      # was there a revision then?
+      begin
+        svninfo = get_info rev
+        true
+      rescue => e
+        # skip it
+        false
+      end
     end
 
     # returns a set of entries modified over the given revision
@@ -95,7 +112,7 @@ module PVN::IO
 
       modified = Set.new
 
-      info "entries: #{entries}"
+      info "entries: #{entries.inspect}"
       entries.each do |entry|
         info "entry: #{entry}".on_blue
         info entry.paths
