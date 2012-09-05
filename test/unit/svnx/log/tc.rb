@@ -9,25 +9,21 @@ require 'resources'
 module SVNx::Log
   class TestCase < PVN::TestCase
     include Loggable
-
-    def get_test_lines(*args)
-      Resources.instance.test_lines '/Programs/wiquery', *args
-    end
     
     def get_test_lines_limit_15
-      get_test_lines 'svn', 'log', '-l', '15', '--xml'
+      Resources::WIQ_LOG_L_15.readlines
     end
 
     def get_test_lines_no_limit
-      get_test_lines 'svn', 'log', '--xml'
+      Resources::WIQ_LOG.readlines
     end
 
     def get_test_lines_no_author
-      get_test_lines 'svn', 'log', '-r1', '--xml'
+      Resources::WIQ_LOG_R1.readlines
     end
 
     def get_test_lines_empty_message
-      get_test_lines 'svn', 'log', '-r1748', '--xml'
+      Resources::WIQ_LOG_R1748.readlines
     end
 
     def find_subelement_by_name elmt, name

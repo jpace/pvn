@@ -5,9 +5,18 @@ require 'tc'
 require 'pvn/subcommands/revision/revision_option'
 
 module PVN
+  class MockRevisionOption < RevisionOption
+    def run_log_command limit, path
+      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
+      cmd = SVNx::LogCommand.new cmdargs
+      cmd.execute
+    end
+    
+  end
+
   class RevisionOptionTestCase < PVN::TestCase
     def assert_relative_to_absolute exp, val, path = '/Programs/wiquery/trunk'
-      ropt = PVN::RevisionOption.new
+      ropt = MockRevisionOption.new
       act = ropt.relative_to_absolute val, path
       assert_equal exp, act, "val: #{val}; path: #{val}"
     end

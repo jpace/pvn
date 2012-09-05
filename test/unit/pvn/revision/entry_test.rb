@@ -10,7 +10,7 @@ require 'resources'
 module PVN::Revision
   class TestCase < PVN::TestCase
     def setup
-      @xmllines = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "--xml", "pom.xml"
+      @xmllines = Resources::WIQTR_LOG_POM_XML.readlines
     end
 
     def assert_revision_entry exp_value, value

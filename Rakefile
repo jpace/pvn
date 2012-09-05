@@ -55,15 +55,33 @@ def build_fixture svndir, svncmd
 end
 
 task :build_fixtures do
-  build_fixture '/Programs/wiquery', 'svn log -l 15 --xml'
-  build_fixture '/Programs/wiquery', 'svn log --xml'
-  build_fixture '/Programs/wiquery', 'svn log -r1748 --xml'
-  build_fixture '/Programs/wiquery', 'svn log -r1 --xml'
-  build_fixture '/Programs/wiquery/trunk', 'svn log -l 15 -v --xml'
-  build_fixture '/Programs/wiquery/trunk', 'svn log --xml pom.xml'
-  build_fixture '/Programs/wiquery/trunk', 'svn status --xml'
-  build_fixture '/Programs/wiquery/trunk', 'svn info --xml wiquery-core/pom.xml'
-  build_fixture '/Programs/wiquery/trunk', 'svn info --xml pom.xml Orig.java'
+  wiq_cmds = Array.new
+  wiq_cmds << 'svn log --xml -l 15'
+  wiq_cmds << 'svn log --xml'
+  wiq_cmds << 'svn log --xml -r1748'
+  wiq_cmds << 'svn log --xml -r1'
+
+  wiq_cmds.each do |cmd|
+    build_fixture '/Programs/wiquery', cmd
+  end
+
+  wiq_trunk_cmds = Array.new
+  wiq_trunk_cmds << 'svn log --xml -l 15 -v'
+  wiq_trunk_cmds << 'svn log --xml pom.xml'
+
+  wiq_trunk_cmds << 'svn status --xml'
+  wiq_trunk_cmds << 'svn info --xml wiquery-core/pom.xml'
+  wiq_trunk_cmds << 'svn info --xml pom.xml Orig.java'
+  wiq_trunk_cmds.each do |cmd|
+    build_fixture '/Programs/wiquery/trunk', cmd
+  end
+
+  wiq_trunk_log_cmds = Array.new
+  # wiq_trunk_log_cmds << '-l 15 -v --xml'
+  # wiq_trunk_log_cmds << '--xml pom.xml'
+  wiq_trunk_log_cmds.each do |cmd|
+    build_fixture '/Programs/wiquery/trunk', "svn log --xml #{args}"
+  end
 end
 
 spec = Gem::Specification.new do |s| 

@@ -62,15 +62,17 @@ module PVN
 
     def relative_to_absolute rel, path
       limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
-      
-      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
-      
-      cmd = SVNx::LogCommand.new cmdargs
-      xmllines = cmd.execute
+      xmllines = run_log_command limit, path
 
       reventry = PVN::Revision::Entry.new :value => rel, :xmllines => xmllines
       revval   = reventry.value.to_s
       revval
+    end
+
+    def run_log_command limit, path
+      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
+      cmd = SVNx::LogCommand.new cmdargs
+      cmd.execute
     end
 
     def entry

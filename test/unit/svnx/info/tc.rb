@@ -10,16 +10,12 @@ module SVNx::Info
   class TestCase < PVN::TestCase
     include Loggable
 
-    def get_test_lines(*args)
-      Resources.instance.test_lines '/Programs/wiquery/trunk', 'svn', 'info', '--xml', *args
-    end
-    
     def get_test_lines_one_entry
-      get_test_lines 'wiquery-core/pom.xml'
+      Resources::WIQTR_INFO_WIQUERY_CORE_POM_XML.readlines
     end
 
     def get_test_lines_two_entries
-      get_test_lines 'pom.xml', 'Orig.java'
+      Resources::WIQTR_INFO_POM_XML_ORIG_JAVA.readlines
     end
 
     def assert_entry_equals entry, expdata

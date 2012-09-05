@@ -9,13 +9,9 @@ module SVNx; module Status; end; end
 module SVNx::Status
   class TestCase < PVN::TestCase
     include Loggable
-
-    def get_test_lines(*args)
-      Resources.instance.test_lines '/Programs/wiquery/trunk', *args
-    end
     
     def get_test_lines_all
-      get_test_lines 'svn', 'status', '--xml'
+      Resources::WIQ_TRUNK_STATUS.readlines
     end
 
     def find_subelement_by_name elmt, name

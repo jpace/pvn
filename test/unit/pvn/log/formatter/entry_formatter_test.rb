@@ -12,7 +12,7 @@ module PVN; module Log; end; end
 
 module PVN::Log
   class EntryFormatTestCase < PVN::TestCase
-    TEST_LINES = Resources.instance.test_lines '/Programs/wiquery/trunk', "svn", "log", "-l", "15", "-v", "--xml"
+    TEST_LINES = Resources::WIQTR_LOG_L_15_V.readlines
     ENTRIES = SVNx::Log::Entries.new :xmllines => TEST_LINES
 
     def show_all entries, from_head, from_tail
