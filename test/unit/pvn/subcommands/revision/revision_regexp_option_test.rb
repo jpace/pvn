@@ -3,9 +3,18 @@
 
 require 'tc'
 require 'pvn/subcommands/revision/revision_regexp_option'
+require 'pvn/subcommands/revision/tc'
 
 module PVN
-  class RevisionRegexpOptionTest < PVN::TestCase
+  class RevisionRegexpOptionTest < BaseRevisionOptionTestCase
+    def create_option
+      PVN::RevisionRegexpOption.new
+    end
+
+    def set_value opt, val
+      opt.set_value val
+    end
+
     def assert_tag_match str
       assert_match RevisionRegexpOption::TAG_RE, str
     end
@@ -32,14 +41,6 @@ module PVN
         ropt.process [ '-164' ]
         ropt.post_process nil, [ '/Programs/wiquery/trunk' ]
       end
-    end
-
-    def assert_post_process exp, val, path = '/Programs/wiquery/trunk'
-      ropt = PVN::RevisionRegexpOption.new
-      ropt.set_value val
-      ropt.post_process nil, [ path ]
-      act = ropt.value
-      assert_equal exp, act, "val: #{val}; path: #{path}"
     end
 
     def test_post_process_middling

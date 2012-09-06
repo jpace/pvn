@@ -1,6 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
+require 'rubygems'
+require 'riel'
 require 'singleton'
 
 class SvnResource
@@ -19,6 +21,24 @@ class SvnResource
 
   def readlines
     ::IO.readlines to_path
+  end
+
+  def generate
+    origdir  = Pathname.new(Dir.pwd).expand_path
+    tgtdir   = RES_DIR
+    svncmd   = @cmd.join(' ')
+    outfname = @dir.sub(%r{^/}, '').gsub('/', '_') + '__' + @cmd.join('_').gsub(' ', '_').gsub('/', '__')
+    outfile  = tgtdir + outfname
+
+    Dir.chdir @dir
+    
+    IO.popen(svncmd) do |io|
+      lines = io.readlines
+      File.open(outfile, "w") do |io|
+        io.puts lines
+      end
+    end
+    Dir.chdir origdir.to_s
   end
 end
 
@@ -51,5 +71,18 @@ class Resources
   WIQTR_LOG_POM_XML = WiqTrSvnResource.new 'log', 'pom.xml'
 
   def generate
+    puts "this: #{self.class.constants}"
+    self.class.constants.each do |con|
+      puts "con: #{con}"
+      res = self.class.const_get con
+      puts "res: #{res}"
+      res.generate
+    end
+  end
+end
+
+if __FILE__ == $0
+  if ARGV[0] == 'generate'
+    Resources.instance.generate
   end
 end

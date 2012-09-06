@@ -5,6 +5,7 @@ require 'rubygems/package_task'
 require 'fileutils'
 
 require './lib/pvn'
+require './test/unit/resources'
 
 Dir['tasks/**/*.rake'].each { |t| load t }
 
@@ -33,55 +34,8 @@ PvnTestTask.new('test:all') do |t|
   t.test_files = FileList['test/**/*test*.rb']
 end
 
-def build_fixture svndir, svncmd
-  origdir  = Pathname.new(Dir.pwd).expand_path
-  tgtdir   = origdir + 'test/resources'
-  outfname = svndir.sub(%r{^/}, '').gsub('/', '_') + '__' + svncmd.gsub(' ', '_').gsub('/', '__')
-  outfile  = tgtdir + outfname
-
-  Dir.chdir svndir
-
-  puts "svndir : #{svndir}"
-  puts "svncmd : #{svncmd}"
-  puts "outfile: #{outfile}"
-
-  IO.popen(svncmd) do |io|
-    lines = io.readlines
-    File.open(outfile, "w") do |io|
-      io.puts lines
-    end
-  end
-  Dir.chdir origdir.to_s
-end
-
 task :build_fixtures do
-  wiq_cmds = Array.new
-  wiq_cmds << 'svn log --xml -l 15'
-  wiq_cmds << 'svn log --xml'
-  wiq_cmds << 'svn log --xml -r1748'
-  wiq_cmds << 'svn log --xml -r1'
-
-  wiq_cmds.each do |cmd|
-    build_fixture '/Programs/wiquery', cmd
-  end
-
-  wiq_trunk_cmds = Array.new
-  wiq_trunk_cmds << 'svn log --xml -l 15 -v'
-  wiq_trunk_cmds << 'svn log --xml pom.xml'
-
-  wiq_trunk_cmds << 'svn status --xml'
-  wiq_trunk_cmds << 'svn info --xml wiquery-core/pom.xml'
-  wiq_trunk_cmds << 'svn info --xml pom.xml Orig.java'
-  wiq_trunk_cmds.each do |cmd|
-    build_fixture '/Programs/wiquery/trunk', cmd
-  end
-
-  wiq_trunk_log_cmds = Array.new
-  # wiq_trunk_log_cmds << '-l 15 -v --xml'
-  # wiq_trunk_log_cmds << '--xml pom.xml'
-  wiq_trunk_log_cmds.each do |cmd|
-    build_fixture '/Programs/wiquery/trunk', "svn log --xml #{args}"
-  end
+  Resources.instance.generate
 end
 
 spec = Gem::Specification.new do |s| 

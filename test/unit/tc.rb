@@ -3,6 +3,7 @@ require 'riel'
 require 'stringio'
 require 'test/unit'
 require 'tc'
+require 'resources'
 
 # require 'pvn'
 
