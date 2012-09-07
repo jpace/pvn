@@ -33,7 +33,7 @@ module PVN::Subcommands::Log
     example "pvn log -u barney",    "Prints log entries only for user 'barney', with the default limit."
     
     def initialize args
-      options = PVN::Subcommands::Log::OptionSet.new 
+      options = instance_eval self.class.optscls + '.new'
       options.process args
 
       return show_help if options.help 
@@ -63,11 +63,16 @@ module PVN::Subcommands::Log
       from_head = !options.revision
       from_tail = !options.limit && !options.revision
 
-      info "options: #{options}".red
-      info "options.user: #{options.user}".red
+      info { "options: #{options}" }
+      info { "options.user: #{options.user}" }
 
       if options.user
         entries = find_entries_for_user entries, options.user, options.limit
+        info { "entries: #{entries}" }
+
+        # don't show relative revisions, since we've got a slice out of the list:
+        from_head = nil
+        from_tail = nil
       end        
       
       ef = PVN::Log::EntriesFormatter.new options.format, entries, from_head, from_tail
@@ -75,17 +80,11 @@ module PVN::Subcommands::Log
     end
 
     def find_entries_for_user entries, user, limit
-      info "entries: #{entries}".red
-
       entries = entries.select { |entry| entry.author == user }
 
       raise "ERROR: no matching log entries for '#{user}'" if entries.empty?
 
-      info "entries: #{entries}".red
-
-      # don't show relative revisions, since we've got a slice out of the list:
-      from_head = nil
-      from_tail = nil
+      info { "entries: #{entries}" }
 
       limit ? entries[0 ... limit] : entries
     end

@@ -41,6 +41,7 @@ module PVN::Subcommands::Base
         optcls = optmodule + '::OptionSet'
         optset = instance_eval optcls + '.new'
         getdoc.options.concat optset.options
+        optcls
       end
 
       def example *ex
