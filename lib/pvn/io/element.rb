@@ -96,6 +96,15 @@ module PVN::IO
     def find_modified_entries revision
       cmdargs = Hash.new
 
+      svninfo = get_info
+      info "svninfo: #{svninfo}".red
+      info "svninfo.url: #{svninfo.url}".red
+      info "svninfo.root: #{svninfo.root}".red
+
+      filter = svninfo.url.dup
+      filter.slice! svninfo.root
+      info "filter: #{filter}"
+
       cmdargs[:path] = @local
 
       info "cmdargs[:revision]: #{cmdargs[:revision]}"
@@ -112,12 +121,15 @@ module PVN::IO
 
       modified = Set.new
 
-      info "entries: #{entries.inspect}"
+      # info "entries: #{entries}"
       entries.each do |entry|
-        info "entry: #{entry}".on_blue
-        info entry.paths
+        info "entry: #{entry.class}"
+        # info entry.paths
         entry.paths.each do |epath|
-          modified << epath if epath.action == 'M'
+          if epath.action == 'M' && epath.name.start_with?(filter)
+            info "epath: #{epath}".yellow
+            modified << epath
+          end
         end
       end
 

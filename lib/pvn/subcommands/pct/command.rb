@@ -102,6 +102,8 @@ module PVN::Subcommands::Pct
 
       path = options.paths[0] || "."
 
+      info "path: #{path}".black.on_cyan
+
       elmt = PVN::IO::Element.new :local => path || '.'
       modified = elmt.find_modified_entries options.revision
 
@@ -168,6 +170,7 @@ module PVN::Subcommands::Pct
 
       elmt = PVN::IO::Element.new :local => path || '.'
       modified = elmt.find_modified_files
+      info "modified: #{modified}".blue
 
       total = DiffCount.new    
 

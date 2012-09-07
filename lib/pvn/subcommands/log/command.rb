@@ -30,7 +30,7 @@ module PVN::Subcommands::Log
     example "pvn log +3 foo.rb",    "Prints the 3rd log entry."
     example "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized."
     example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
-    example "pvn log -u barney",    "Prints log entries only for user 'barney'."
+    example "pvn log -u barney",    "Prints log entries only for user 'barney', with the default limit."
     
     def initialize args
       options = PVN::Subcommands::Log::OptionSet.new 
@@ -67,26 +67,27 @@ module PVN::Subcommands::Log
       info "options.user: #{options.user}".red
 
       if options.user
-        info "entries: #{entries}".red
-
-        entries = entries.select { |entry| entry.author == options.user }
-
-        raise "ERROR: no matching log entries for '#{options.user}'"
-
-        info "entries: #{entries}".red
-
-        # don't show relative revisions, since we've got a slice out of the list:
-        from_head = nil
-        from_tail = nil
-
-        if options.limit
-          entries = entries[0 ... options.limit]
-          info "entries: #{entries}".red
-        end
+        entries = find_entries_for_user entries, options.user, options.limit
       end        
       
       ef = PVN::Log::EntriesFormatter.new options.format, entries, from_head, from_tail
       puts ef.format
+    end
+
+    def find_entries_for_user entries, user, limit
+      info "entries: #{entries}".red
+
+      entries = entries.select { |entry| entry.author == user }
+
+      raise "ERROR: no matching log entries for '#{user}'" if entries.empty?
+
+      info "entries: #{entries}".red
+
+      # don't show relative revisions, since we've got a slice out of the list:
+      from_head = nil
+      from_tail = nil
+
+      limit ? entries[0 ... limit] : entries
     end
   end
 end
