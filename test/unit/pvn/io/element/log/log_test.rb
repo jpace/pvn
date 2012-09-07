@@ -4,6 +4,7 @@
 require 'pvn/log/tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
+require 'resources'
 
 module PVN::IO::IOElement
   class LogTestCase ###$$$ < PVN::Log::TestCase
@@ -25,11 +26,11 @@ module PVN::IO::IOElement
     end
     
     def test_options_none
-      assert_log_command 163, '/Programs/wiquery/trunk'
+      assert_log_command 163, Resources::WIQTR_PATH
     end
     
     def test_option_limit
-      assert_log_command 15, '/Programs/wiquery/trunk', :limit => 15
+      assert_log_command 15, Resources::WIQTR_PATH, :limit => 15
     end
   end
 end

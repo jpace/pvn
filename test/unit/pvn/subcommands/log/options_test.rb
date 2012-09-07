@@ -3,6 +3,7 @@
 
 require 'tc'
 require 'pvn/subcommands/log/options'
+require 'resources'
 
 module PVN; module App; module Log; end; end; end
 
@@ -17,6 +18,14 @@ module PVN::App::Log
       
       exppaths = exp[:path] ? [ exp[:path] ] : exp[:paths]
       assert_equal exppaths, options.paths
+    end
+
+    def run_revision_test arg, *rev
+      expdata = Hash.new
+      expdata[:limit] = nil
+      expdata[:revision] = rev
+      expdata[:path] = Resources::WIQTR_PATH
+      assert_options expdata, [ arg, Resources::WIQTR_PATH ].flatten
     end
 
     def test_default
@@ -43,43 +52,15 @@ module PVN::App::Log
     end          
 
     def test_revision_single
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = [ '500' ]
-      expdata[:path] = '/Programs/wiquery/trunk'
-      assert_options expdata, %w{ -r500 /Programs/wiquery/trunk }
+      run_revision_test '-r500', '500' 
     end
 
     def test_revision_multi
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = [ '500:600' ]
-      expdata[:path] = '/Programs/wiquery/trunk'
-      assert_options expdata, %w{ -r500:600 /Programs/wiquery/trunk }
-    end
-
-    def test_revision_relative
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = [ '1944' ]
-      expdata[:path] = '/Programs/wiquery/trunk'
-      assert_options expdata, %w{ -5 /Programs/wiquery/trunk }
+      run_revision_test '-r500:600', '500:600'
     end
 
     def test_revisions_single
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = [ '1', '3' ]
-      expdata[:path] = '/Programs/wiquery/trunk'
-      assert_options expdata, %w{ -r1 -r3 /Programs/wiquery/trunk }
-    end
-
-    def test_revisions_relative
-      expdata = Hash.new
-      expdata[:limit] = nil
-      expdata[:revision] = [ '1944', '1848' ]
-      expdata[:path] = '/Programs/wiquery/trunk'
-      assert_options expdata, %w{ -5 -10 /Programs/wiquery/trunk }
+      run_revision_test %w{ -r1 -r3 }, '1', '3'
     end
   end
 end

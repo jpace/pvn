@@ -57,6 +57,8 @@ end
 class Resources
   include Singleton
 
+  WIQTR_PATH = '/Programs/wiquery/trunk'
+
   WIQ_TRUNK_STATUS = WiqTrSvnResource.new 'status'
 
   WIQ_LOG_L_15  = WiqSvnResource.new 'log', '-l', '15'

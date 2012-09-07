@@ -4,6 +4,7 @@
 require 'tc'
 require 'pvn/subcommands/revision/revision_option'
 require 'pvn/subcommands/revision/tc'
+require 'resources'
 
 module PVN
   class MockRevisionOption < RevisionOption
@@ -19,9 +20,9 @@ module PVN
       opt.set_value val
     end
 
-    def assert_relative_to_absolute exp, val, path = '/Programs/wiquery/trunk'
+    def assert_relative_to_absolute exp, val
       ropt = MockRevisionOption.new
-      act = ropt.relative_to_absolute val, path
+      act = ropt.relative_to_absolute val, Resources::WIQTR_PATH
       info "act: #{act}".cyan
       assert_equal exp, act, "val: #{val}; path: #{val}"
     end
