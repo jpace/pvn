@@ -70,6 +70,12 @@ class Resources
   WIQTR_LOG_L_15_V = WiqTrSvnResource.new 'log', '-l', '15', '-v'
   WIQTR_LOG_POM_XML = WiqTrSvnResource.new 'log', 'pom.xml'
 
+  WIQTR_LOG_LIMIT_164 = WiqTrSvnResource.new 'log', '--limit', '164'
+  WIQTR_LOG_LIMIT_1 = WiqTrSvnResource.new 'log', '--limit', '1'
+  WIQTR_LOG_LIMIT_7 = WiqTrSvnResource.new 'log', '--limit', '7'
+  WIQTR_LOG_LIMIT_163 = WiqTrSvnResource.new 'log', '--limit', '163'
+  WIQTR_LOG_LIMIT_5 = WiqTrSvnResource.new 'log', '--limit', '5'
+
   def generate
     puts "this: #{self.class.constants}"
     self.class.constants.each do |con|

@@ -2,26 +2,17 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'resources'
 require 'pvn/subcommands/revision/revision_option'
 require 'pvn/subcommands/revision/tc'
 
 module PVN
   class MockRevisionOption < RevisionOption
-    def run_log_command limit, path
-      info "limit: #{limit.class}".yellow
-      info "path : #{path}".yellow
-      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
-      cmd = SVNx::LogCommand.new cmdargs
-      cmd.execute
-      # lines = Resources::WIQTR_LOG_L_15_V.readlines
-      # puts "lines: #{lines}"
-    end
+    include MockBaseRevisionOption
   end
 
   class RevisionOptionTestCase < BaseRevisionOptionTestCase
     def create_option
-      PVN::RevisionOption.new
+      PVN::MockRevisionOption.new
     end
 
     def set_value opt, val
@@ -31,6 +22,7 @@ module PVN
     def assert_relative_to_absolute exp, val, path = '/Programs/wiquery/trunk'
       ropt = MockRevisionOption.new
       act = ropt.relative_to_absolute val, path
+      info "act: #{act}".cyan
       assert_equal exp, act, "val: #{val}; path: #{val}"
     end
 
@@ -47,7 +39,7 @@ module PVN
     end
 
     def test_out_of_range
-      assert_raises(RuntimeError) do 
+      assert_raises(PVN::Revision::RevisionError) do 
         assert_relative_to_absolute '1944', '-164'
       end
     end

@@ -18,6 +18,12 @@ module PVN::Revision
       assert_equal exp_value, rev.value
     end
 
+    def assert_revision_entry_raises value
+      assert_raises(PVN::Revision::RevisionError) do 
+        assert_revision_entry nil, value
+      end
+    end
+
     def test_absolute_midrange
       assert_revision_entry 733, 733
     end
@@ -62,9 +68,7 @@ module PVN::Revision
     end
 
     def test_negative_too_far_back
-      assert_raises(RuntimeError) do 
-        assert_revision_entry nil, -35
-      end
+      assert_revision_entry_raises -35
     end
 
     def test_negative_most_recent_as_string
@@ -80,9 +84,7 @@ module PVN::Revision
     end
 
     def test_negative_too_far_back_as_string
-      assert_raises(RuntimeError) do 
-        assert_revision_entry nil, '-35'
-      end
+      assert_revision_entry_raises '-35'
     end
 
     def test_positive_most_recent
@@ -98,9 +100,7 @@ module PVN::Revision
     end
 
     def test_positive_too_far_forward
-      assert_raises(RuntimeError) do 
-        assert_revision_entry nil, '+35'
-      end
+      assert_revision_entry_raises '+35'
     end
 
     def xxxtest_range_svn_word_to_number

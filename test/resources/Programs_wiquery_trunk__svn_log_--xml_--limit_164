@@ -1,0 +1,1086 @@
+<?xml version="1.0"?>
+<log>
+<logentry
+   revision="1950">
+<author>jpace</author>
+<date>2011-12-05T12:41:52.385786Z</date>
+<msg>Testing.</msg>
+</logentry>
+<logentry
+   revision="1947">
+<author>reiern70</author>
+<date>2011-11-14T12:24:45.757124Z</date>
+<msg>added a convenience method to set the range</msg>
+</logentry>
+<logentry
+   revision="1946">
+<author>reiern70</author>
+<date>2011-11-14T12:11:07.945796Z</date>
+<msg>fixed javadoc</msg>
+</logentry>
+<logentry
+   revision="1945">
+<author>reiern70</author>
+<date>2011-11-14T12:10:46.647098Z</date>
+<msg>added a convenience method to set the range</msg>
+</logentry>
+<logentry
+   revision="1944">
+<author>reiern70</author>
+<date>2011-11-14T12:10:12.107142Z</date>
+<msg>returning default value: it was always returning 0</msg>
+</logentry>
+<logentry
+   revision="1907">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-11-14T10:50:38.389281Z</date>
+<msg>back to dev</msg>
+</logentry>
+<logentry
+   revision="1887">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-11-14T09:36:39.518857Z</date>
+<msg>*wicket release 1.5.3 *removed unnecessary overrides</msg>
+</logentry>
+<logentry
+   revision="1850">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-10-31T12:51:38.739499Z</date>
+<msg>NPE fix for previous NPE fix
+</msg>
+</logentry>
+<logentry
+   revision="1849">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-10-28T14:24:25.439341Z</date>
+<msg>check for IRequestHandlerDelegate
+</msg>
+</logentry>
+<logentry
+   revision="1848">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-10-28T14:21:04.377326Z</date>
+<msg>NPE if check</msg>
+</logentry>
+<logentry
+   revision="1847">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-10-27T11:51:04.613886Z</date>
+<msg>back to development
+</msg>
+</logentry>
+<logentry
+   revision="1826">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-10-27T10:21:48.298420Z</date>
+<msg>upgrade to wicket 1.5.2
+</msg>
+</logentry>
+<logentry
+   revision="1749">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-29T16:04:13.944220Z</date>
+<msg>return to dev.</msg>
+</logentry>
+<logentry
+   revision="1747">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-29T16:00:06.827950Z</date>
+<msg>1.5.1</msg>
+</logentry>
+<logentry
+   revision="1723">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-29T14:58:06.092327Z</date>
+<msg>render ajax request jquery statements differently than page request jquery statements. also always use jquery ready() and load() instead of wickets version.</msg>
+</logentry>
+<logentry
+   revision="1722">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-29T07:57:38.086947Z</date>
+<msg>dont force the use of javascript ids.</msg>
+</logentry>
+<logentry
+   revision="1721">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-28T14:32:43.601185Z</date>
+<msg>rework of the js/css/string tokens for post rendering.</msg>
+</logentry>
+<logentry
+   revision="1720">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-27T13:04:26.361610Z</date>
+<msg>never start the if of a script tag with a number. the ever so logical html specification forbids it.</msg>
+</logentry>
+<logentry
+   revision="1717">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-26T13:18:08.288831Z</date>
+<msg>update wiquery.properties search. allow decoratingheaderresponse to be subclasses. (1.5.1-topicus1 fixes).</msg>
+</logentry>
+<logentry
+   revision="1716">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-09-26T07:26:27.872337Z</date>
+<msg>id assert not necessary</msg>
+</logentry>
+<logentry
+   revision="1714">
+<author>hielke.hoeve</author>
+<date>2011-09-22T20:38:30.837527Z</date>
+<msg>merge /branches/wicket-1.5 revs 722-1679 to trunk. make trunk wiquery 1.5.</msg>
+</logentry>
+<logentry
+   revision="1161">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-18T15:18:09.917512Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=195</msg>
+</logentry>
+<logentry
+   revision="1159">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-17T08:52:01.447973Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=187</msg>
+</logentry>
+<logentry
+   revision="1157">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-17T08:27:38.064832Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=134</msg>
+</logentry>
+<logentry
+   revision="1156">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-17T08:04:07.342164Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=195
+http://code.google.com/p/wiquery/issues/detail?id=196</msg>
+</logentry>
+<logentry
+   revision="1155">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-17T08:03:23.456739Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=196</msg>
+</logentry>
+<logentry
+   revision="1154">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-08-17T06:45:01.468282Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=199</msg>
+</logentry>
+<logentry
+   revision="1142">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-07-18T15:14:21.002681Z</date>
+<msg>add jsscope getter.</msg>
+</logentry>
+<logentry
+   revision="1140">
+<author>roche.jul@gmail.com</author>
+<date>2011-07-10T13:07:59.578284Z</date>
+<msg>Wiquery 1.2
+
+-&gt; add the "jquery-ui-1.8.12.css" file the base theme</msg>
+</logentry>
+<logentry
+   revision="1139">
+<author>roche.jul@gmail.com</author>
+<date>2011-07-10T12:12:01.773677Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix a little problem with Java 1.5: isEmpty on String is available only on Java 1.6. Replace with Strings.isEmpty (from Wicket)</msg>
+</logentry>
+<logentry
+   revision="1137">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-28T06:06:55.962111Z</date>
+<msg>make code more readable.</msg>
+</logentry>
+<logentry
+   revision="1136">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-28T06:05:16.911629Z</date>
+<msg>issue 198</msg>
+</logentry>
+<logentry
+   revision="1135">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-27T15:10:52.387125Z</date>
+<msg>create instances lazily.</msg>
+</logentry>
+<logentry
+   revision="1134">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-27T06:56:30.894918Z</date>
+<msg>move slf4j-log4j12 to scope test. let users decide the logging levels.</msg>
+</logentry>
+<logentry
+   revision="1108">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-22T14:13:27.823414Z</date>
+<msg>return to snapshot mode.</msg>
+</logentry>
+<logentry
+   revision="1106">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-22T14:12:12.888362Z</date>
+<msg>release 1.2.4, set all svn connections to https.</msg>
+</logentry>
+<logentry
+   revision="1087">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-06-22T13:37:36.077261Z</date>
+<msg>only yui compress when the js variant is set.</msg>
+</logentry>
+<logentry
+   revision="1014">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-16T14:47:37.256416Z</date>
+<msg>pass utf-8 encoding to plugins</msg>
+</logentry>
+<logentry
+   revision="1012">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-16T14:34:33.169013Z</date>
+<msg>put versions all the way up top so its easier to manage them.</msg>
+</logentry>
+<logentry
+   revision="1011">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-16T13:58:03.661943Z</date>
+<msg>revert to old YUI compressor version, the most reliable so far... Do keep the maven plugin activated.</msg>
+</logentry>
+<logentry
+   revision="1010">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-13T15:22:25.517810Z</date>
+<msg>update the YUICompressor to a more up to date version, a bit beta though. remove the special made resourcereferences as these only get us into trouble. users should set the compressor from now on.</msg>
+</logentry>
+<logentry
+   revision="1009">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-13T11:46:22.914479Z</date>
+<msg>we dont need the lib folder</msg>
+</logentry>
+<logentry
+   revision="1008">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-13T09:44:49.440004Z</date>
+<msg>yui minified.</msg>
+</logentry>
+<logentry
+   revision="1007">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-13T09:32:56.273191Z</date>
+<msg>copy yui compressor into our project as yui does not work as maven artifact... also let yui compress any js or css file which jquery group did not compress for us.</msg>
+</logentry>
+<logentry
+   revision="1006">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-13T07:30:14.587961Z</date>
+<msg>not needed as we only include 1 language.</msg>
+</logentry>
+<logentry
+   revision="1002">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-12T16:57:54.232412Z</date>
+<msg>updated jquery ui to 1.8.12.</msg>
+</logentry>
+<logentry
+   revision="933">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T14:43:05.946913Z</date>
+<msg>local build server seems to hate me</msg>
+</logentry>
+<logentry
+   revision="930">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T14:32:56.734695Z</date>
+<msg>check for value being NOT_ENTERED. http://code.google.com/p/wiquery/issues/detail?id=179</msg>
+</logentry>
+<logentry
+   revision="929">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T14:31:37.635729Z</date>
+<msg>slimmed version ranges down to allow older versions to be used.</msg>
+</logentry>
+<logentry
+   revision="926">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T14:04:18.743906Z</date>
+<msg>new versions of the plugins. also added a compressor which make our life easier.</msg>
+</logentry>
+<logentry
+   revision="924">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T13:20:36.216337Z</date>
+<msg>Added some extra code to check if the resources are actually on disk. Unfortunately there are 3 Locales translated by Java to old country codes so we have to keep copies of some resources files...</msg>
+</logentry>
+<logentry
+   revision="923">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-10T12:47:43.688131Z</date>
+<msg>sorted DatePickerLanguages by filename. this makes it easier to detect new or missing languages. also added more tests to make sure no exception can occur for the datepicker.</msg>
+</logentry>
+<logentry
+   revision="864">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-05-04T08:35:45.555243Z</date>
+<msg>exclude .java files from main artifact.</msg>
+</logentry>
+<logentry
+   revision="815">
+<author>roche.jul@gmail.com</author>
+<date>2011-04-21T18:16:40.914923Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix a bug on the dialog utilities: miss the button import !!</msg>
+</logentry>
+<logentry
+   revision="812">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-21T15:16:40.664212Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=178</msg>
+</logentry>
+<logentry
+   revision="767">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-13T13:59:07.002345Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=160</msg>
+</logentry>
+<logentry
+   revision="763">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-13T12:05:36.089915Z</date>
+<msg>provide an YUI compressor impl for all wicket resources.</msg>
+</logentry>
+<logentry
+   revision="758">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-12T14:30:52.483642Z</date>
+<msg>use wickets approach to find resources.</msg>
+</logentry>
+<logentry
+   revision="757">
+<author>reiern70</author>
+<date>2011-04-08T04:11:00.966628Z</date>
+<msg>additional fix for 
+
+http://code.google.com/p/wiquery/issues/detail?id=160
+</msg>
+</logentry>
+<logentry
+   revision="756">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-07T06:57:15.972094Z</date>
+<msg>jquery 1.5.2 and jquery ui 1.8.11.
+</msg>
+</logentry>
+<logentry
+   revision="754">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-06T14:36:59.277587Z</date>
+<msg>jquery 1.5.2 and jquery ui 1.8.11.
+</msg>
+</logentry>
+<logentry
+   revision="753">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-06T14:23:41.027498Z</date>
+<msg>a small tweak for Effect.java</msg>
+</logentry>
+<logentry
+   revision="751">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-04-06T14:18:07.683856Z</date>
+<msg>OSGI compatibility: http://code.google.com/p/wiquery/issues/detail?id=166 + wicket 1.4.17.</msg>
+</logentry>
+<logentry
+   revision="738">
+<author>roche.jul@gmail.com</author>
+<date>2011-03-31T20:52:47.408365Z</date>
+<msg>Wiquery 1.2 &amp; 1.5
+
+-&gt; fix issue 169</msg>
+</logentry>
+<logentry
+   revision="737">
+<author>roche.jul@gmail.com</author>
+<date>2011-03-31T20:40:49.480325Z</date>
+<msg>Wiquery 1.2 &amp; 1.5
+
+-&gt; fix issue 167</msg>
+</logentry>
+<logentry
+   revision="736">
+<author>roche.jul@gmail.com</author>
+<date>2011-03-26T20:38:59.639820Z</date>
+<msg>Wiquery 1.2 &amp; 1.5
+
+-&gt; fix unit test after the fix of the issue 164</msg>
+</logentry>
+<logentry
+   revision="735">
+<author>roche.jul@gmail.com</author>
+<date>2011-03-26T20:21:46.048468Z</date>
+<msg>Wiquery 1.2 &amp; 1.5
+
+-&gt; fix issue 164</msg>
+</logentry>
+<logentry
+   revision="733">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-03-16T13:24:57.416623Z</date>
+<msg>1.2.3 -&gt; 1.2-SNAPSHOT</msg>
+</logentry>
+<logentry
+   revision="725">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-03-16T13:14:49.513911Z</date>
+<msg>mark version 1.2.3</msg>
+</logentry>
+<logentry
+   revision="724">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-03-16T13:13:49.134110Z</date>
+<msg>upgrade jquery to 1.5.1 and jquery-ui to 1.8.10.</msg>
+</logentry>
+<logentry
+   revision="719">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-27T14:05:08.356926Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix issue 161</msg>
+</logentry>
+<logentry
+   revision="718">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-27T13:45:41.155505Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix issue 153</msg>
+</logentry>
+<logentry
+   revision="717">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-21T08:20:02.931140Z</date>
+<msg>same bug as issue http://code.google.com/p/wiquery/issues/detail?id=160</msg>
+</logentry>
+<logentry
+   revision="716">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-14T10:28:00.980966Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=160</msg>
+</logentry>
+<logentry
+   revision="715">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-08T20:22:52.407020Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix a bug on the dialog: miss the button import !!</msg>
+</logentry>
+<logentry
+   revision="714">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-08T20:09:52.669601Z</date>
+<msg>Wiquery 1.2
+
+-&gt; little enhancements</msg>
+</logentry>
+<logentry
+   revision="713">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-08T19:58:35.629590Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix issue 159</msg>
+</logentry>
+<logentry
+   revision="706">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-07T14:44:35.609143Z</date>
+<msg>undo ui 1.9. set to 1.8.9.</msg>
+</logentry>
+<logentry
+   revision="705">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-07T14:41:52.135889Z</date>
+<msg>undo ui 1.9. set to 1.8.9.</msg>
+</logentry>
+<logentry
+   revision="704">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-07T09:57:01.588732Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=157</msg>
+</logentry>
+<logentry
+   revision="703">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-02-07T09:50:12.640568Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=158</msg>
+</logentry>
+<logentry
+   revision="702">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-03T22:39:15.069984Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix issue 155
+-&gt; move to jQuery UI 1.8.9
+-&gt; new languages availables for the DatePicker</msg>
+</logentry>
+<logentry
+   revision="701">
+<author>roche.jul@gmail.com</author>
+<date>2011-02-02T21:55:51.031946Z</date>
+<msg>Wiquery 1.2
+
+-&gt; fix issue 155</msg>
+</logentry>
+<logentry
+   revision="675">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-27T20:06:50.048264Z</date>
+<msg>remove useless visitor, wicket already visits all components.</msg>
+</logentry>
+<logentry
+   revision="673">
+<author>roche.jul@gmail.com</author>
+<date>2011-01-24T22:29:06.568871Z</date>
+<msg>Wiquery 1.2
+
+-&gt; a fix for the issue 136. Try to make an unit test</msg>
+</logentry>
+<logentry
+   revision="671">
+<author>roche.jul@gmail.com</author>
+<date>2011-01-23T11:34:20.655057Z</date>
+<msg>Wiquery 1.2
+
+-&gt; return on snapshot mode</msg>
+</logentry>
+<logentry
+   revision="663">
+<author>roche.jul@gmail.com</author>
+<date>2011-01-23T11:17:06.758364Z</date>
+<msg>Wiquery 1.2
+
+-&gt; bug on the datepicker test case</msg>
+</logentry>
+<logentry
+   revision="661">
+<author>roche.jul@gmail.com</author>
+<date>2011-01-23T11:12:18.154633Z</date>
+<msg>Wiquery 1.2.1
+
+-&gt; release for the stylesheet bug</msg>
+</logentry>
+<logentry
+   revision="660">
+<author>roche.jul@gmail.com</author>
+<date>2011-01-23T11:10:45.038765Z</date>
+<msg>Wiquery 1.2
+
+-&gt; bug on the datepicker test case
+-&gt; bug on the jquery ui stylesheet link</msg>
+</logentry>
+<logentry
+   revision="659">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-22T08:53:10.263822Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=91</msg>
+</logentry>
+<logentry
+   revision="639">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-19T12:33:06.507778Z</date>
+<msg>upgrade dependencies</msg>
+</logentry>
+<logentry
+   revision="638">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-18T14:44:20.740926Z</date>
+<msg>jquery ui 1.8.8</msg>
+</logentry>
+<logentry
+   revision="636">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-12T09:57:03.725727Z</date>
+<msg>adjust test according to previous changes.</msg>
+</logentry>
+<logentry
+   revision="635">
+<author>hielke.hoeve@gmail.com</author>
+<date>2011-01-12T09:47:43.240907Z</date>
+<msg>dont use shared resources to serve a dynamic javascript. each of these resources will remain in the application resource poll indefinately.</msg>
+</logentry>
+<logentry
+   revision="633">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-23T09:47:58.757747Z</date>
+<msg>threadlocal allows for better resource management.</msg>
+</logentry>
+<logentry
+   revision="632">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-22T15:33:59.523704Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=147, complete patch applied.</msg>
+</logentry>
+<logentry
+   revision="631">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-22T15:33:06.822555Z</date>
+<msg>undo semi-patches, next commit applies complete patch</msg>
+</logentry>
+<logentry
+   revision="630">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-22T15:04:18.282282Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=147</msg>
+</logentry>
+<logentry
+   revision="629">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-22T14:32:54.880636Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=147</msg>
+</logentry>
+<logentry
+   revision="625">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-14T10:41:04.134937Z</date>
+<msg>beginning of a test method which checks if all resources have been rendered to the page. This will hopefully prevent upgrade mistakes.</msg>
+</logentry>
+<logentry
+   revision="609">
+<author>roche.jul@gmail.com</author>
+<date>2010-12-08T21:36:28.860938Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 144</msg>
+</logentry>
+<logentry
+   revision="608">
+<author>roche.jul@gmail.com</author>
+<date>2010-12-08T21:15:51.476216Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 125</msg>
+</logentry>
+<logentry
+   revision="607">
+<author>roche.jul@gmail.com</author>
+<date>2010-12-08T20:42:14.977830Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 143</msg>
+</logentry>
+<logentry
+   revision="605">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-12-02T08:43:58.674566Z</date>
+<msg>This is already handled by the core contributor</msg>
+</logentry>
+<logentry
+   revision="594">
+<author>roche.jul@gmail.com</author>
+<date>2010-11-28T18:31:21.752223Z</date>
+<msg>Wiquery 1.2
+
+-&gt; add the Animate class for the custom effect</msg>
+</logentry>
+<logentry
+   revision="569">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T09:36:44.803793Z</date>
+<msg>no longer needed</msg>
+</logentry>
+<logentry
+   revision="568">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T09:34:24.541958Z</date>
+<msg>no longer needed</msg>
+</logentry>
+<logentry
+   revision="567">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T09:32:46.685439Z</date>
+<msg>no longer needed</msg>
+</logentry>
+<logentry
+   revision="566">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T09:30:43.937098Z</date>
+<msg>no longer needed</msg>
+</logentry>
+<logentry
+   revision="565">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T08:52:43.201021Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=132, setup junit4 and prepare wiquerytester for rendering pages with html.</msg>
+</logentry>
+<logentry
+   revision="564">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-22T08:10:21.103135Z</date>
+<msg>no more dead code.</msg>
+</logentry>
+<logentry
+   revision="563">
+<author>roche.jul@gmail.com</author>
+<date>2010-11-21T20:50:37.777612Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 123: base for an external wiquery initializer</msg>
+</logentry>
+<logentry
+   revision="562">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-19T14:10:10.631731Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=132</msg>
+</logentry>
+<logentry
+   revision="561">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-19T14:01:25.559823Z</date>
+<msg>fix warnings</msg>
+</logentry>
+<logentry
+   revision="560">
+<author>roche.jul@gmail.com</author>
+<date>2010-11-18T23:23:52.453327Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 128: Fix unit tests</msg>
+</logentry>
+<logentry
+   revision="559">
+<author>roche.jul@gmail.com</author>
+<date>2010-11-17T22:56:57.786444Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 128: changes into the org.odlabs.wiquery.core.commons.compressed to fix an issue into the WiQueryMergedStyleSheetResourceReference</msg>
+</logentry>
+<logentry
+   revision="557">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-15T11:19:24.619834Z</date>
+<msg>wrong statement, also only use compressedresourcereference.</msg>
+</logentry>
+<logentry
+   revision="556">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-15T11:17:45.944806Z</date>
+<msg>finally fix the YUI for javascript, ripped the YUI code from yahoo as this did not work for javascripts, now we only depend on rhino.</msg>
+</logentry>
+<logentry
+   revision="555">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-15T09:48:09.161461Z</date>
+<msg>upgraded to 1.4.4.</msg>
+</logentry>
+<logentry
+   revision="553">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-15T08:30:58.009041Z</date>
+<msg>patch for issue 29.</msg>
+</logentry>
+<logentry
+   revision="552">
+<author>roche.jul@gmail.com</author>
+<date>2010-11-14T22:00:35.897119Z</date>
+<msg>Wiquery 1.2
+
+-&gt; issue 121</msg>
+</logentry>
+<logentry
+   revision="516">
+<author>roche.jul</author>
+<date>2010-11-13T16:19:06.208501Z</date>
+<msg>Wiquery 1.2
+
+-&gt; adding tests</msg>
+</logentry>
+<logentry
+   revision="515">
+<author>reiern70</author>
+<date>2010-11-12T21:52:48.101140Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=126</msg>
+</logentry>
+<logentry
+   revision="497">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-10T13:12:01.891056Z</date>
+<msg>fix on r470. the wrong variable was used, this breaks all ajax requests targets.</msg>
+</logentry>
+<logentry
+   revision="496">
+<author>roche.jul</author>
+<date>2010-11-07T12:05:38.113018Z</date>
+<msg>update jquery ui theme</msg>
+</logentry>
+<logentry
+   revision="492">
+<author>reiern70</author>
+<date>2010-11-05T22:24:00.122899Z</date>
+<msg>Added support for IComponentAssignedModels see issue:
+
+http://code.google.com/p/wiquery/issues/detail?id=29</msg>
+</logentry>
+<logentry
+   revision="491">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-05T16:51:52.558856Z</date>
+<msg>issue 118. moved some resources, still need to minify...</msg>
+</logentry>
+<logentry
+   revision="490">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-05T15:46:32.440576Z</date>
+<msg>issue 119</msg>
+</logentry>
+<logentry
+   revision="489">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-05T15:46:05.967264Z</date>
+<msg>issue 120.</msg>
+</logentry>
+<logentry
+   revision="472">
+<author>roche.jul</author>
+<date>2010-11-04T23:05:54.608443Z</date>
+<msg>Wiquery 1.1 &amp;&amp; WiQuery 1.0.3
+
+-&gt; version: 1.1</msg>
+</logentry>
+<logentry
+   revision="470">
+<author>roche.jul</author>
+<date>2010-11-04T22:53:03.283231Z</date>
+<msg>Wiquery 1.1 &amp;&amp; WiQuery 1.0.3
+
+-&gt; fix issue 94
+-&gt; little change for the ComponentTester: compliance with JDK 1.5</msg>
+</logentry>
+<logentry
+   revision="469">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-11-04T09:06:55.753752Z</date>
+<msg>setup of the tester suite. allows for more complex testpages. accordion contains a small example of a test panel.</msg>
+</logentry>
+<logentry
+   revision="468">
+<author>reiern70</author>
+<date>2010-11-02T21:12:05.042931Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=117</msg>
+</logentry>
+<logentry
+   revision="465">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-10-26T14:12:16.040323Z</date>
+<msg>force maven central 1 as default repo. this is way faster than the other 2 and contains most dependencies.</msg>
+</logentry>
+<logentry
+   revision="464">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-10-26T12:26:04.535145Z</date>
+<msg>fix issue 115 and update dependencies to latest.</msg>
+</logentry>
+<logentry
+   revision="463">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-10-19T12:14:45.149878Z</date>
+<msg>merged in autocomplete enhancements / fixes from /branches/issue-107.  also added the 'info' ui icon to the enum.
+issue-107</msg>
+</logentry>
+<logentry
+   revision="462">
+<author>reiern70</author>
+<date>2010-10-19T02:59:08.175076Z</date>
+<msg>See issue 
+
+http://code.google.com/p/wiquery/issues/detail?id=111
+</msg>
+</logentry>
+<logentry
+   revision="460">
+<author>roche.jul</author>
+<date>2010-10-18T20:57:07.667335Z</date>
+<msg>Wiquery 1.0.3 &amp;&amp; WiQuery 1.1
+
+-&gt; fix issue 102</msg>
+</logentry>
+<logentry
+   revision="459">
+<author>roche.jul</author>
+<date>2010-10-17T19:57:05.681937Z</date>
+<msg>Wiquery 1.1 &amp; 1.1 examples
+
+-&gt; add the following maven repository:
+
+                &lt;repository&gt; 
+                        &lt;id&gt;maven.atlassian.com&lt;/id&gt; 
+                        &lt;name&gt;maven.atlassian.com&lt;/name&gt; 
+                        &lt;url&gt;https://maven.atlassian.com/3rdparty&lt;/url&gt; 
+                &lt;/repository&gt; </msg>
+</logentry>
+<logentry
+   revision="458">
+<author>roche.jul</author>
+<date>2010-10-17T19:51:44.705368Z</date>
+<msg>Wiquery 1.0.3 &amp;&amp; WiQuery 1.1
+
+-&gt; migrate to jquery 1.4.3</msg>
+</logentry>
+<logentry
+   revision="457">
+<author>hielke.hoeve@gmail.com</author>
+<date>2010-10-15T07:14:28.018042Z</date>
+<msg>merged /branches/issue-67 r456 into trunk.</msg>
+</logentry>
+<logentry
+   revision="448">
+<author>reiern70</author>
+<date>2010-10-10T07:18:57.972949Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=29</msg>
+</logentry>
+<logentry
+   revision="447">
+<author>reiern70</author>
+<date>2010-10-10T07:05:39.161211Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=110</msg>
+</logentry>
+<logentry
+   revision="446">
+<author>reiern70</author>
+<date>2010-10-10T06:14:32.616219Z</date>
+<msg>got rid of 'unused imports' compilation warnings</msg>
+</logentry>
+<logentry
+   revision="443">
+<author>reiern70</author>
+<date>2010-10-06T04:14:45.291534Z</date>
+<msg>http://code.google.com/p/wiquery/issues/detail?id=109</msg>
+</logentry>
+<logentry
+   revision="442">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-10-01T10:20:57.366892Z</date>
+<msg>(re)added check for the IWiQuerySettings interface on Application</msg>
+</logentry>
+<logentry
+   revision="439">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-09-30T12:10:15.985862Z</date>
+<msg>update pom to 1.1-SNAPSHOT for issue-97, plus this makes sense, we don't want to accidentally deploy a 1.1-alpha again</msg>
+</logentry>
+<logentry
+   revision="438">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-09-30T09:34:01.696346Z</date>
+<msg>merged in fixes for issue-105 and issue-98 from /branches/issue-105</msg>
+</logentry>
+<logentry
+   revision="433">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-09-29T12:06:14.164037Z</date>
+<msg>removed newlines,
+fix for issue-106</msg>
+</logentry>
+<logentry
+   revision="432">
+<author>roche.jul</author>
+<date>2010-09-28T20:07:45.844136Z</date>
+<msg>Wiquery 1.1 &amp; 1.1 examples
+
+-&gt; issue 84</msg>
+</logentry>
+<logentry
+   revision="430">
+<author>richardjohnwilkinson@gmail.com</author>
+<date>2010-09-27T08:29:05.730911Z</date>
+<msg>dont check for disabled in wiquery components
+Issue-60</msg>
+</logentry>
+<logentry
+   revision="429">
+<author>roche.jul</author>
+<date>2010-09-26T15:09:39.464675Z</date>
+<msg>Wiquery 1.1 &amp; 1.1 examples
+
+-&gt; migrate jquery ui js and themes to 1.8.5</msg>
+</logentry>
+<logentry
+   revision="428">
+<author>reiern70</author>
+<date>2010-09-23T20:08:41.880769Z</date>
+<msg>See issue 
+
+http://code.google.com/p/wiquery/issues/detail?id=101</msg>
+</logentry>
+<logentry
+   revision="425">
+<author>roche.jul</author>
+<date>2010-09-21T21:03:45.875072Z</date>
+<msg>Wiquery 1.0.3 &amp;&amp; WiQuery 1.1
+
+-&gt; New option: you can specify the JavascriptResourceReference to use for the jQuery Core</msg>
+</logentry>
+<logentry
+   revision="424">
+<author>reiern70</author>
+<date>2010-09-21T20:06:39.686197Z</date>
+<msg>initial fix for issue http://code.google.com/p/wiquery/issues/detail?id=29 it is missing to solve issue mentioned by Richard.</msg>
+</logentry>
+<logentry
+   revision="421">
+<author>reiern70</author>
+<date>2010-09-20T22:42:55.085935Z</date>
+<msg>see http://code.google.com/p/wiquery/issues/detail?id=95</msg>
+</logentry>
+<logentry
+   revision="420">
+<author>roche.jul</author>
+<date>2010-09-20T21:56:35.047981Z</date>
+<msg>Wiquery 1.1
+-&gt; issue 65</msg>
+</logentry>
+<logentry
+   revision="419">
+<author>roche.jul</author>
+<date>2010-09-20T21:33:41.545312Z</date>
+<msg>Wiquery 1.1 &amp; 1.0.X
+-&gt; issue 15</msg>
+</logentry>
+<logentry
+   revision="418">
+<author>roche.jul</author>
+<date>2010-09-18T07:52:34.221864Z</date>
+<msg>Wiquery 1.1 &amp; 1.0.X
+-&gt; issue 99</msg>
+</logentry>
+<logentry
+   revision="415">
+<author>lionel.armanet</author>
+<date>2010-09-17T21:32:54.840784Z</date>
+<msg>Setting trunk branch as current development version (e.g. future release)</msg>
+</logentry>
+<logentry
+   revision="414">
+<author>lionel.armanet</author>
+<date>2010-09-17T21:28:15.557622Z</date>
+<msg>Setting trunk branch as current development version (e.g. future release)</msg>
+</logentry>
+<logentry
+   revision="413">
+<author>lionel.armanet</author>
+<date>2010-09-17T21:26:15.489243Z</date>
+<msg>Setting trunk branch as current development version (e.g. future release)</msg>
+</logentry>
+<logentry
+   revision="412">
+<author>lionel.armanet</author>
+<date>2010-09-17T21:23:25.763385Z</date>
+<msg>Setting trunk branch as current development version (e.g. future release)</msg>
+</logentry>
+</log>

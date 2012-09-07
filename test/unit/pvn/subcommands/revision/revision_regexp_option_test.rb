@@ -4,11 +4,16 @@
 require 'tc'
 require 'pvn/subcommands/revision/revision_regexp_option'
 require 'pvn/subcommands/revision/tc'
+require 'resources'
 
 module PVN
+  class MockRevisionRegexpOption < RevisionRegexpOption
+    include MockBaseRevisionOption
+  end
+
   class RevisionRegexpOptionTest < BaseRevisionOptionTestCase
     def create_option
-      PVN::RevisionRegexpOption.new
+      PVN::MockRevisionRegexpOption.new
     end
 
     def set_value opt, val
@@ -34,13 +39,9 @@ module PVN
       assert_tag_no_match '123'
       assert_tag_no_match '-x'
     end
-
+    
     def test_out_of_range
-      assert_raises(RuntimeError) do 
-        ropt = PVN::RevisionRegexpOption.new
-        ropt.process [ '-164' ]
-        ropt.post_process nil, [ '/Programs/wiquery/trunk' ]
-      end
+      assert_revision_option_raises '-164'
     end
 
     def test_post_process_middling

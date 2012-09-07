@@ -6,9 +6,13 @@ require 'pvn/subcommands/revision/multiple_revisions_option'
 require 'pvn/subcommands/revision/tc'
 
 module PVN
+  class MockMultipleRevisionsRegexpOption < MultipleRevisionsRegexpOption
+    include MockBaseRevisionOption
+  end
+
   class MultipleRevisionsRegexpOptionTestCase < BaseRevisionOptionTestCase
     def create_option
-      PVN::MultipleRevisionsRegexpOption.new
+      PVN::MockMultipleRevisionsRegexpOption.new
     end
 
     def set_value opt, vals
@@ -18,11 +22,7 @@ module PVN
     end
 
     def test_out_of_range
-      assert_raises(RuntimeError) do 
-        ropt = PVN::MultipleRevisionsRegexpOption.new
-        ropt.process [ '-164' ]
-        ropt.post_process nil, [ '/Programs/wiquery/trunk' ]
-      end
+      assert_revision_option_raises '-164'
     end
 
     def test_post_process_single_middling

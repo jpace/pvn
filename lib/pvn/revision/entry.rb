@@ -7,6 +7,9 @@ require 'svnx/log/entries'
 # replace lib/pvn/revision.rb as PVN::Revision.                                                                            
 
 module PVN::Revision
+  class RevisionError < RuntimeError
+  end
+
   DATE_REGEXP = Regexp.new '^\{(.*?)\}'
   SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
   RELATIVE_REVISION_RE = Regexp.new '^([\+\-])(\d+)$'
@@ -77,7 +80,9 @@ module PVN::Revision
 
   class RelativeEntry < FixnumEntry
     def initialize value, xmllines
-      raise "cannot determine relative revision without xmllines" unless xmllines
+      unless xmllines
+        raise RevisionError.new "cannot determine relative revision without xmllines"
+      end
 
       logentries = SVNx::Log::Entries.new :xmllines => xmllines
 
@@ -86,7 +91,7 @@ module PVN::Revision
       # logentries are in descending order, so the most recent one is index 0
 
       if value.abs > nentries
-        raise "ERROR: no entry for revision: #{value.abs}; number of entries: #{nentries}"
+        raise RevisionError.new "ERROR: no entry for revision: #{value.abs}; number of entries: #{nentries}"
       else
         idx = value < 0 ? -1 + value.abs : nentries - value
         @log_entry = logentries[idx]

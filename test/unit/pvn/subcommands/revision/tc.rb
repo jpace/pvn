@@ -2,8 +2,34 @@
 # -*- ruby -*-
 
 require 'tc'
+require 'resources'
 
 module PVN
+  module MockBaseRevisionOption
+    def run_log_command limit, path
+      info "limit: #{limit}; #{limit.class}".red
+      info "path : #{path}".red
+      if path == '/Programs/wiquery/trunk'
+        case limit
+        when 1
+          Resources::WIQTR_LOG_LIMIT_1.readlines
+        when 5
+          Resources::WIQTR_LOG_LIMIT_5.readlines
+        when 7
+          Resources::WIQTR_LOG_LIMIT_7.readlines
+        when 163
+          Resources::WIQTR_LOG_LIMIT_163.readlines
+        when 164
+          Resources::WIQTR_LOG_LIMIT_164.readlines
+        else
+          fail "limit not handled: #{limit}; #{path}"
+        end
+      else
+        fail "path not handled: #{path}"
+      end
+    end
+  end
+  
   class BaseRevisionOptionTestCase < PVN::TestCase
     def create_option
     end
@@ -23,5 +49,14 @@ module PVN
       act = ropt.value
       assert_equal exp, act, "args: #{args}; path: #{path}"
     end
+
+    def assert_revision_option_raises val
+      assert_raises(PVN::Revision::RevisionError) do 
+        opt = create_option
+        opt.process [ val ]
+        opt.post_process nil, [ '/Programs/wiquery/trunk' ]
+      end
+    end
+
   end
 end
