@@ -7,31 +7,10 @@ require 'pvn/subcommands/base/command'
 require 'svnx/info/command'
 require 'svnx/status/command'
 require 'svnx/cat/command'
+require 'pvn/subcommands/pct/diffcount'
 require 'set'
 
 module PVN::Subcommands::Pct
-  class DiffCount
-    attr_reader :from
-    attr_reader :to
-
-    def initialize from = 0, to = 0
-      @from = from
-      @to = to
-    end
-
-    def print name
-      diff = to - from
-      diffpct = diff == 0 ? 0 : 100.0 * diff / from
-      
-      printf "%8d %8d %8d %8.1f%% %s\n", from, to, diff, diffpct, name
-    end
-
-    def << diff
-      @from += diff.from
-      @to += diff.to
-    end
-  end
-
   class Command < PVN::Subcommands::Base::Command
 
     DEFAULT_LIMIT = 15
@@ -70,22 +49,46 @@ module PVN::Subcommands::Pct
         if options.help
           cmd = orig_new options
           cmd.show_help
+        elsif options.revision && !options.revision.empty?
+          CommandRepository.orig_new options
         else
-          orig_new options
+          CommandLocal.orig_new options
         end
       end
     end
-    
+  end
+
+  class CommandLocal < Command
     def initialize options
-      info "options: #{options}"
+      # do we support multiple paths?
+      path = options.paths[0] || '.'
 
-      if options.revision && !options.revision.empty?
-        compare_by_revisions options
-      else
-        compare_local_to_base options
+      elmt = PVN::IO::Element.new :local => path || '.'
+      modified = elmt.find_modified_files
+      info "modified: #{modified}".blue
+
+      total = PVN::DiffCount.new    
+
+      modified.each do |entry|
+        catcmd = SVNx::CatCommand.new entry.path
+        info "catcmd: #{catcmd}"
+          
+        svn_count = catcmd.execute.size
+        info "svn_count: #{svn_count}"
+        
+        local_count = Pathname.new(entry.path).readlines.size
+        info "local_count: #{local_count}"
+
+        dc = PVN::DiffCount.new svn_count, local_count
+        total << dc
+        dc.print entry.path
       end
-    end
 
+      total.print 'total'
+    end
+  end
+
+  class CommandRepository < Command
     ### $$$ this belongs in Revision
     def get_from_to_revisions rev
       if rev.kind_of? Array
@@ -103,101 +106,60 @@ module PVN::Subcommands::Pct
       end
     end
 
-    def compare_by_revisions options
+    def get_line_count path, revision
+      cmdargs = SVNx::CatCommandArgs.new :path => path, :revision => revision
+      catcmd = SVNx::CatCommand.new cmdargs
+      catcmd.execute.size
+    end
+    
+    def initialize options
       # what was modified between the revisions?
 
       path = options.paths[0] || "."
-
-      info "path: #{path}".black.on_cyan
+      info "path: #{path}"
 
       elmt = PVN::IO::Element.new :local => path || '.'
       modified = elmt.find_modified_entries options.revision
 
       modnames = modified.collect { |m| m.name }.sort.uniq
 
-      info "modnames: #{modnames.inspect}".yellow
-
-      rev = options.revision
-
-      info "rev: #{rev}; #{rev.class}".blue.on_yellow
-      info "rev: #{rev.inspect}; #{rev.class}".blue.on_yellow
-
       fromrev, torev = get_from_to_revisions options.revision
 
-      info "fromrev: #{fromrev}; torev: #{torev}".black.on_green
-      info "fromrev: #{fromrev.class}; torev: #{torev.class}".black.on_green
-
-      total = DiffCount.new
+      total = PVN::DiffCount.new
 
       reporoot = elmt.repo_root
 
+      direlmt = PVN::IO::Element.new :local => '.'
+      svninfo = direlmt.get_info
+
+      filter = svninfo.url.dup
+      filter.slice! svninfo.root
+      info "filter: #{filter}"
+      filterre = Regexp.new '^' + filter + '/'
+      
       modnames.each do |mod|
-        info "mod: #{mod}".yellow
-
         fullpath = reporoot + mod
-        
-        info "fullpath: #{fullpath}".cyan
-
         elmt = PVN::IO::Element.new :path => fullpath
-        info "checking fromrev ... #{fromrev}".yellow
+
         next unless elmt.has_revision? fromrev
-        info "checking torev ... #{torev}".yellow
         next unless elmt.has_revision? torev
         next if elmt.get_info.kind == 'dir'
 
         from_count = get_line_count fullpath, fromrev
-        info "from_count: #{from_count}".red
-
         to_count = get_line_count fullpath, torev
-        info "to_count: #{to_count}".red
 
-        dc = DiffCount.new from_count, to_count
+        dc = PVN::DiffCount.new from_count, to_count
         total << dc
+        mod.slice! filterre
         dc.print mod
       end
 
       total.print 'total'
     end
 
-    def get_line_count path, revision
-      cmdargs = SVNx::CatCommandArgs.new :path => path, :revision => revision
-      catcmd = SVNx::CatCommand.new cmdargs
-      info "catcmd: #{catcmd}"
-      
-      count = catcmd.execute.size
-      info "count: #{count}"
 
-      count
-    end
-
-    def compare_local_to_base options
-      # do we support multiple paths?
-      path = options.paths[0] || '.'
-
-      elmt = PVN::IO::Element.new :local => path || '.'
-      modified = elmt.find_modified_files
-      info "modified: #{modified}".blue
-
-      total = DiffCount.new    
-
-      modified.each do |entry|
-        catcmd = SVNx::CatCommand.new entry.path
-        info "catcmd: #{catcmd}"
-          
-        svn_count = catcmd.execute.size
-        info "svn_count: #{svn_count}"
-        
-        local_count = Pathname.new(entry.path).readlines.size
-        info "local_count: #{local_count}"
-
-        dc = DiffCount.new svn_count, local_count
-        total << dc
-        dc.print entry.path
-      end
-
-      total.print 'total'
-    end
   end
+
 end
 
 __END__
