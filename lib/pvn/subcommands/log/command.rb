@@ -33,7 +33,7 @@ module PVN::Subcommands::Log
     example "pvn log -u barney",    "Prints log entries only for user 'barney', with the default limit."
     
     def initialize args
-      options = instance_eval self.class.optscls + '.new'
+      options = PVN::Subcommands::Log::OptionSet.new
       options.process args
 
       return show_help if options.help 

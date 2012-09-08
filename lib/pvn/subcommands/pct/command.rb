@@ -59,19 +59,25 @@ module PVN::Subcommands::Pct
     example "pvn pct -r117",        "Prints the changes between revision 117 and the previous revision. (not yet supported)"
     example "pvn pct -7",           "Prints the changes between relative revision -7 and the previous revision. (not yet supported)"
     example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4. (not yet supported)"
+
+    class << self
+      alias_method :orig_new, :new
+
+      def new args
+        options = optset
+        options.process args
+
+        if options.help
+          cmd = orig_new options
+          cmd.show_help
+        else
+          orig_new options
+        end
+      end
+    end
     
-    def initialize args
-      options = PVN::Subcommands::Pct::OptionSet.new 
-      options.process args
-
-      return show_help if options.help 
-
+    def initialize options
       info "options: #{options}"
-
-      path    = options.paths[0] || "."
-      cmdargs = Hash.new
-
-      cmdargs[:path] = path
 
       if options.revision && !options.revision.empty?
         compare_by_revisions options
