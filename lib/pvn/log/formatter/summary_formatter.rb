@@ -32,8 +32,6 @@ module PVN::Log
         lines << pad("", :neg_revision)
       end
 
-      # info "@total: #{total}"
-
       if from_tail
         posidx = "+#{total - idx - 1}"
         lines << add_field(posidx, :pos_revision)

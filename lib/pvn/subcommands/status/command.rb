@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/subcommands/base/doc'
+require 'pvn/subcommands/base/command'
 require 'pvn/subcommands/status/options'
 require 'pvn/status/formatter/entries_formatter'
 
@@ -31,12 +31,9 @@ module PVN::Subcommands::Status
       path = options.paths[0] || '.'
 
       elmt = PVN::IO::Element.new :local => path || '.'
-      entries = elmt.find_files
-      info "entries: #{entries}".blue
+      entries = elmt.find_files_by_status
 
       entries = entries.sort_by { |n| n.path }
-
-      info "entries: #{entries.inspect}"
 
       fmtr = PVN::Status::EntriesFormatter.new options.format, entries
       puts fmtr.format

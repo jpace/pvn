@@ -65,7 +65,6 @@ module PVN::IO
 
     def get_info revision = nil
       usepath = @local || @path
-      info "usepath: #{usepath}"
       cmdargs = SVNx::InfoCommandArgs.new :path => usepath, :revision => revision
       infcmd  = SVNx::InfoCommand.new cmdargs
       output  = infcmd.execute
@@ -79,9 +78,6 @@ module PVN::IO
     end
 
     def has_revision? rev
-      usepath = @local || @path
-      info "usepath: #{usepath}"
-
       # was there a revision then?
       begin
         svninfo = get_info rev
@@ -97,17 +93,11 @@ module PVN::IO
       cmdargs = Hash.new
 
       svninfo = get_info
-      info "svninfo: #{svninfo}".red
-      info "svninfo.url: #{svninfo.url}".red
-      info "svninfo.root: #{svninfo.root}".red
 
       filter = svninfo.url.dup
       filter.slice! svninfo.root
-      info "filter: #{filter}"
 
       cmdargs[:path] = @local
-
-      info "cmdargs[:revision]: #{cmdargs[:revision]}"
       
       # we can't cache this, because we don't know if there has been an svn
       # update since the previous run:
@@ -121,13 +111,9 @@ module PVN::IO
 
       modified = Set.new
 
-      # info "entries: #{entries}"
       entries.each do |entry|
-        info "entry: #{entry.class}"
-        # info entry.paths
         entry.paths.each do |epath|
           if epath.action == 'M' && epath.name.start_with?(filter)
-            info "epath: #{epath}".yellow
             modified << epath
           end
         end
@@ -138,20 +124,21 @@ module PVN::IO
 
     # returns a set of local files that are in the given status
     def find_files
-      cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
-
-      cmd = SVNx::StatusCommand.new cmdargs
-      xml = cmd.execute
-      SVNx::Status::Entries.new :xmllines => xml
     end
 
     # returns a set of local files that are in the given status
-    def find_files_by_status status
-      entries = find_files
-
-      entries.select do |entry|
-        entry.status == status
+    def find_files_by_status status = nil
+      cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
+      cmd = SVNx::StatusCommand.new cmdargs
+      xml = cmd.execute
+      entries = SVNx::Status::Entries.new :xmllines => xml
+      
+      if status
+        entries.select! do |entry|
+          entry.status == status
+        end
       end
+      entries
     end
 
     # returns a set of local files that are in modified status
@@ -177,21 +164,6 @@ module PVN::IO
       entry.status
     end
 
-    # def to_command subcmd, revcl, *args
-    #   cmd = "svn #{subcmd}"
-    #   info "cmd: #{cmd}".on_blue
-    #   info "args: #{args}".on_blue
-    #   args = args.flatten
-
-    #   # revcl is [ -r, 3484 ]
-    #   if revcl
-    #     cmd << " " << revcl.join(" ")
-    #   end
-    #   cmd << " " << Util::quote_list(args)
-    #   info "cmd: #{cmd}".on_blue
-    #   cmd
-    # end
-    
     # def line_counts
     #   [ @svnelement && @svnelement.line_count, @fselement && @fselement.line_count ]
     # end

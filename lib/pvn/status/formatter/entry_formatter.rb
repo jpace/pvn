@@ -16,9 +16,7 @@ module PVN::Status
     
     def format
       lines = Array.new
-
-      lines << entry.inspect
-      
+      lines << "    " + colorize(entry.path, @entry.status.to_sym)
       lines
     end
   end

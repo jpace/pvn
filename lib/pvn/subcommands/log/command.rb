@@ -3,7 +3,6 @@
 
 require 'pvn/io/element'
 require 'pvn/log/formatter/entries_formatter'
-require 'pvn/subcommands/base/doc'
 require 'pvn/subcommands/log/options'
 require 'pvn/subcommands/base/command'
 
