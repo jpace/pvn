@@ -40,19 +40,19 @@ module PVN::Subcommands::Pct
     example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4. (not yet supported)"
 
     class << self
-      alias_method :orig_new, :new
+      alias_method :init, :new
 
       def new args
         options = optset
         options.process args
 
         if options.help
-          cmd = orig_new options
+          cmd = init
           cmd.show_help
         elsif options.revision && !options.revision.empty?
-          CommandRepository.orig_new options
+          CommandRepository.init options
         else
-          CommandLocal.orig_new options
+          CommandLocal.init options
         end
       end
     end

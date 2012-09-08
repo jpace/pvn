@@ -50,6 +50,20 @@ module PVN::Subcommands::Base
       def example *ex
         getdoc.examples << ex
       end
+
+      alias_method :init, :new
+
+      def newddd args
+        options = optset
+        options.process args
+
+        if options.help
+          cmd = init options
+          cmd.show_help
+        else
+          init options
+        end
+      end
     end
 
     def to_doc io
