@@ -4,6 +4,7 @@
 require 'synoption/set'
 require 'synoption/option'
 require 'synoption/boolean_option'
+require 'synoption/fixnum_option'
 
 module PVN; module Subcommands; end; end
 

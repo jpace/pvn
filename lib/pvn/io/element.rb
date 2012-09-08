@@ -137,12 +137,17 @@ module PVN::IO
     end
 
     # returns a set of local files that are in the given status
-    def find_files_by_status status
+    def find_files
       cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
 
       cmd = SVNx::StatusCommand.new cmdargs
       xml = cmd.execute
-      entries = SVNx::Status::Entries.new :xmllines => xml
+      SVNx::Status::Entries.new :xmllines => xml
+    end
+
+    # returns a set of local files that are in the given status
+    def find_files_by_status status
+      entries = find_files
 
       entries.select do |entry|
         entry.status == status

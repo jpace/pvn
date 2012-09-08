@@ -10,6 +10,7 @@ require 'svnx/log/entries'
 
 require 'pvn/subcommands/log/command'
 require 'pvn/subcommands/pct/command'
+require 'pvn/subcommands/status/command'
 
 # the old ones:
 require 'pvn/diff/diffcmd'
@@ -45,6 +46,8 @@ module PVN::App
           run_command PVN::Subcommands::Log::Command, args
         when "pct"
           run_command PVN::Subcommands::Pct::Command, args
+        when "status"
+          run_command PVN::Subcommands::Status::Command, args
         else
           $stderr.puts "ERROR: subcommand not valid: #{arg}"
           exit(-1)

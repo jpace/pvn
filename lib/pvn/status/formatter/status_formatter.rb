@@ -1,13 +1,13 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/entry'
+require 'svnx/status/entry'
 require 'pvn/base/color_formatter'
 
 module PVN; module Log; end; end
 
-module PVN::Log
-  # a format for log entries
+module PVN::Status
+  # a format for status entries
   class Formatter < PVN::ColorFormatter
 
     WIDTHS = { 
@@ -35,8 +35,8 @@ module PVN::Log
     attr_reader :use_colors
 
     def initialize use_colors
-      @use_colors = use_colors
       # should also turn this off if not on a terminal that supports colors ...
+      @use_colors = use_colors
     end
 
     def width field
