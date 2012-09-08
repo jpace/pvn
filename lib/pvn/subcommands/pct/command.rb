@@ -40,21 +40,19 @@ module PVN::Subcommands::Pct
     example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4. (not yet supported)"
 
     class << self
-      alias_method :init, :new
+      # base command aliases new to init, so we're aliasing init to init2
+      alias_method :init2, :init
 
-      def new args
-        options = optset
-        options.process args
-
-        if options.help
-          cmd = init
-          cmd.show_help
-        elsif options.revision && !options.revision.empty?
-          CommandRepository.init options
+      def init options
+        if options.revision && !options.revision.empty?
+          CommandRepository.init2 options
         else
-          CommandLocal.init options
+          CommandLocal.init2 options
         end
       end
+    end
+
+    def initialize options = nil
     end
   end
 
@@ -67,7 +65,9 @@ module PVN::Subcommands::Pct
       modified = elmt.find_modified_files
       info "modified: #{modified}".blue
 
-      total = PVN::DiffCount.new    
+      total = PVN::DiffCount.new
+
+      modified = modified.sort_by { |n| n.path }
 
       modified.each do |entry|
         catcmd = SVNx::CatCommand.new entry.path

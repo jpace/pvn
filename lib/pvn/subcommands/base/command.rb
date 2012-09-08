@@ -52,13 +52,14 @@ module PVN::Subcommands::Base
       end
 
       alias_method :init, :new
+      alias_method :new_for_help, :new
 
-      def newddd args
+      def new args
         options = optset
         options.process args
 
         if options.help
-          cmd = init options
+          cmd = new_for_help nil
           cmd.show_help
         else
           init options

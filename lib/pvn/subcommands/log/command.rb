@@ -32,14 +32,11 @@ module PVN::Subcommands::Log
     example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
     example "pvn log -u barney",    "Prints log entries only for user 'barney', with the default limit."
     
-    def initialize args
-      options = PVN::Subcommands::Log::OptionSet.new
-      options.process args
+    def initialize options = nil
+      return unless options
 
-      return show_help if options.help 
-
-      path      = options.paths[0] || "."
-      cmdargs   = Hash.new
+      path = options.paths[0] || "."
+      cmdargs = Hash.new
       cmdargs[:path] = path
       
       [ :limit, :verbose, :revision ].each do |field|
