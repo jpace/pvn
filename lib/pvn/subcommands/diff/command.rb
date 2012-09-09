@@ -70,20 +70,6 @@ module PVN::Subcommands::Diff
       rev ? "revision #{rev}" : "working copy"
     end
 
-    def show_header entry, fromrev = nil, torev = nil
-      fromstr = to_revision_string fromrev
-      tostr = to_revision_string torev
-
-      puts "Index: #{entry.path}"
-      puts "==================================================================="
-      puts "--- #{entry.path}\t(#{fromstr})"
-      puts "+++ #{entry.path}\t(#{tostr})"
-    end
-
-    def show_diff_summary fromstart, fromend, tostart, toend
-      puts "@@ -#{fromstart},#{fromend} +#{tostart},#{toend} @@"
-    end
-
     def read_working_copy entry
       pn = Pathname.new entry.path
       pn.readlines
@@ -122,7 +108,6 @@ module PVN::Subcommands::Diff
     end
 
     def show_as_added entry
-      lines = read_working_copy entry
       Tempfile.open('pvn') do |from|
         # from is an empty file
         from.close
@@ -138,18 +123,19 @@ module PVN::Subcommands::Diff
       svninfo = elmt.get_info
       lines = elmt.cat_remote
 
-      show_header entry, svninfo.revision, nil
-
-      show_diff_summary 1, lines.size, 0, 0
-
-      lines.each do |line|
-        puts "-#{line}"
+      Tempfile.open('pvn') do |from|
+        from.puts lines
+        from.close
+        Tempfile.open('pvn') do |to|
+          # to is an empty file
+          to.close
+          run_diff_command entry, svninfo.revision, nil, from.path, to.path
+        end
       end
     end
-
+    
     def show_as_modified entry
-      # only doing working copy to remote now
-      
+      # only doing working copy to remote now      
       elmt = PVN::IO::Element.new :local => entry.path
 
       svninfo = elmt.get_info
@@ -159,11 +145,16 @@ module PVN::Subcommands::Diff
       torev = nil               # AKA working copy
 
       wclines = read_working_copy entry
-      
-      show_header entry, fromrev, torev
 
-      # write files to /tmp, then 
-      # IO.popen("diff -u ...")
+      Tempfile.open('pvn') do |from|
+        from.puts remotelines
+        from.close
+        Tempfile.open('pvn') do |to|
+          to.puts wclines
+          to.close
+          run_diff_command entry, fromrev, torev, from.path, to.path
+        end
+      end
     end
   end
 end
