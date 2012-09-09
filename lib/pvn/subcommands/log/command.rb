@@ -34,7 +34,32 @@ module PVN::Subcommands::Log
     def initialize options = nil
       return unless options
 
-      path = options.paths[0] || "."
+      paths = options.paths
+
+      paths = %w{ . } if paths.empty?
+
+      info "paths: #{paths}"
+
+      allentries = Array.new
+
+      paths.each do |path|
+        allentries.concat find_entries_for_path path, options
+      end
+
+      # we can show relative revisions for a single path, without filtering by
+      # user, or by limit or revision.
+
+      show_relative = !options.user && paths.size == 1 && !options.revision
+      
+      # this should be refined to options.revision.head?
+      from_head = show_relative
+      from_tail = show_relative && !options.limit
+
+      ef = PVN::Log::EntriesFormatter.new options.color, allentries, from_head, from_tail
+      puts ef.format
+    end
+
+    def find_entries_for_path path, options
       cmdargs = Hash.new
       cmdargs[:path] = path
       
@@ -55,10 +80,6 @@ module PVN::Subcommands::Log
       log     = elmt.log logargs
       entries = log.entries
 
-      # this should be refined to options.revision.head?
-      from_head = !options.revision
-      from_tail = !options.limit && !options.revision
-
       info { "options: #{options}" }
       info { "options.user: #{options.user}" }
 
@@ -69,10 +90,9 @@ module PVN::Subcommands::Log
         # don't show relative revisions, since we've got a slice out of the list:
         from_head = nil
         from_tail = nil
-      end        
-      
-      ef = PVN::Log::EntriesFormatter.new options.color, entries, from_head, from_tail
-      puts ef.format
+      end
+
+      entries
     end
 
     def find_entries_for_user entries, user, limit
