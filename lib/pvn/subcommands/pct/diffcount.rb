@@ -5,13 +5,15 @@ module PVN
   class DiffCount
     attr_reader :from
     attr_reader :to
+    attr_reader :name
 
-    def initialize from = 0, to = 0
+    def initialize from = 0, to = 0, name = nil
       @from = from
       @to = to
+      @name = name
     end
 
-    def print name
+    def print name = @name
       diff = to - from
       diffpct = diff == 0 ? 0 : 100.0 * diff / from
       

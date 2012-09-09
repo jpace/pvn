@@ -54,37 +54,53 @@ module PVN::Subcommands::Pct
 
     def initialize options = nil
     end
+
+    def show_diff_counts options
+      paths = options.paths
+      paths = %w{ . } if paths.empty?
+
+      info "paths: #{paths}"
+
+      total = PVN::DiffCount.new 0, 0, 'total'
+
+      paths.each do |path|
+        diff_counts = get_diff_counts path, options
+        
+        diff_counts.each do |dc|
+          total << dc
+          dc.print
+        end
+      end
+
+      total.print
+    end
   end
 
   class CommandLocal < Command
     def initialize options
-      # do we support multiple paths?
-      path = options.paths[0] || '.'
+      show_diff_counts options
+    end
 
-      elmt = PVN::IO::Element.new :local => path || '.'
+    def get_diff_counts path, options
+      elmt = PVN::IO::Element.new :local => path
       modified = elmt.find_modified_files
-      info "modified: #{modified}".blue
 
       total = PVN::DiffCount.new
 
       modified = modified.sort_by { |n| n.path }
 
-      modified.each do |entry|
-        catcmd = SVNx::CatCommand.new entry.path
-        info "catcmd: #{catcmd}"
-          
-        svn_count = catcmd.execute.size
-        info "svn_count: #{svn_count}"
-        
-        local_count = Pathname.new(entry.path).readlines.size
-        info "local_count: #{local_count}"
+      diff_counts = Array.new
 
-        dc = PVN::DiffCount.new svn_count, local_count
-        total << dc
-        dc.print entry.path
+      modified.each do |entry|
+        catcmd      = SVNx::CatCommand.new entry.path
+        svn_count   = catcmd.execute.size
+        local_count = Pathname.new(entry.path).readlines.size
+        
+        dc = PVN::DiffCount.new svn_count, local_count, entry.path
+        diff_counts << dc
       end
 
-      total.print 'total'
+      diff_counts
     end
   end
 
@@ -113,19 +129,20 @@ module PVN::Subcommands::Pct
     end
     
     def initialize options
-      # what was modified between the revisions?
+      show_diff_counts options
+    end
 
-      path = options.paths[0] || "."
-      info "path: #{path}"
+    def get_diff_counts path, options
+      diff_counts = Array.new
 
-      elmt = PVN::IO::Element.new :local => path || '.'
-      modified = elmt.find_modified_entries options.revision
+      revision = options.revision
+      
+      elmt = PVN::IO::Element.new :local => path
+      modified = elmt.find_modified_entries revision
 
       modnames = modified.collect { |m| m.name }.sort.uniq
 
-      fromrev, torev = get_from_to_revisions options.revision
-
-      total = PVN::DiffCount.new
+      fromrev, torev = get_from_to_revisions revision
 
       reporoot = elmt.repo_root
 
@@ -148,63 +165,15 @@ module PVN::Subcommands::Pct
         from_count = get_line_count fullpath, fromrev
         to_count = get_line_count fullpath, torev
 
-        dc = PVN::DiffCount.new from_count, to_count
-        total << dc
-        mod.slice! filterre
-        dc.print mod
+        name = mod.dup
+        name.slice! filterre
+
+        dc = PVN::DiffCount.new from_count, to_count, name
+        diff_counts << dc
       end
 
-      total.print 'total'
-    end
-
-
-  end
-
-end
-
-__END__
-
-      elmt = PVN::IO::Element.new :local => clargs.path || '.'
-      info "elmt: #{elmt}".red
-
-      stats = { :modified => 0, :added => 0, :deleted => 0 }
-
-      if elmt.directory?
-        info "elmt.directory?: #{elmt.directory?}"
-
-        # $$$ todo: recurse even when local has been removed (this is the
-        # awaited "pvn find").
-        
-        changed = Array.new
-        elmt.local.find do |fd|
-          info "fd: #{fd}; #{fd.class}"
-          Find.prune if fd.rootname.to_s == '.svn'
-          if fd.file?
-            subelmt = PVN::IO::Element.new :local => fd.to_s
-            info "subelmt: #{subelmt}"
-            status = subelmt.status
-            info "status: #{status}".red
-          end
-        end
-
-        # info "changed: #{changed}"
-      elsif elmt.file?
-        info "elmt.local: #{elmt.local}".cyan
-
-        status = elmt.status
-        info "status: #{status}"
-
-        case status
-        when "added"
-          info "elmt: #{elmt}".green
-        when "modified"
-          info "elmt: #{elmt}".yellow
-        when "deleted"
-          info "elmt: #{elmt}".red
-        else
-          info "elmt: #{elmt}".cyan
-        end
-      end
+      diff_counts
     end
   end
+
 end
