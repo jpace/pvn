@@ -8,6 +8,7 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'pvn/subcommands/base/command'
+require 'tempfile'
 
 module PVN::Subcommands::Diff
   class Command < PVN::Subcommands::Base::Command
@@ -88,16 +89,46 @@ module PVN::Subcommands::Diff
       pn.readlines
     end
 
+    def write_to_temp entry, lines
+      Tempfile.open('pvn') do |to|
+        topath = to.path
+        info "topath: #{topath}"
+        to.puts lines
+        to.close
+        cmd = "diff -u"
+        label = " -L '#{entry.path} (revision 0)'"
+        2.times do
+          cmd << label
+        end
+        cmd << " #{frpath}"
+        cmd << " #{entry.path}"
+        IO.popen(cmd) do |io|
+          puts io.readlines
+        end
+      end
+    end
+
+    def run_diff_command entry, fromrev, torev, frompath, topath
+      cmd = "diff -u"
+      [ fromrev, torev ].each do |rev|
+        revstr = to_revision_string rev
+        cmd << " -L '#{entry.path} (revision #{rev})'"
+      end
+      cmd << " #{frompath}"
+      cmd << " #{topath}"
+      IO.popen(cmd) do |io|
+        puts io.readlines
+      end
+    end
+
     def show_as_added entry
-      # need to look up the revision
-
-      show_header entry, 0, 0
       lines = read_working_copy entry
+      Tempfile.open('pvn') do |from|
+        # from is an empty file
+        from.close
 
-      show_diff_summary 0, 0, 1, lines.size
-
-      lines.each do |line|
-        puts "+#{line}"
+        # I think this is always revision 0
+        run_diff_command entry, 0, 0, from.path, entry.path
       end
     end
 
