@@ -16,7 +16,11 @@ module PVN::Status
     
     def format
       lines = Array.new
-      lines << "    " + colorize(entry.path, @entry.status.to_sym)
+      lines << if use_colors
+                 "    " + colorize(entry.path, entry.status.to_sym)
+               else
+                 "#{entry.status[0 .. 0].upcase}   #{entry.path}"
+               end
       lines
     end
   end

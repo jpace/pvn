@@ -7,6 +7,7 @@ require 'synoption/fixnum_option'
 require 'synoption/boolean_option'
 require 'pvn/subcommands/revision/multiple_revisions_option'
 require 'pvn/subcommands/base/options'
+require 'pvn/subcommands/base/color_option'
 
 module PVN::Subcommands::Log
   DEFAULT_LIMIT = 5
@@ -23,12 +24,6 @@ module PVN::Subcommands::Log
     end
   end
 
-  class FormatOption < PVN::BooleanOption
-    def initialize optargs = Hash.new
-      super :format, '-f', "use the custom (colorized) format", true, :negate => [ '-F', %r{^--no-?format} ], :as_cmdline_option => nil
-    end
-  end
-
   class UserOption < PVN::Option
     def initialize optargs = Hash.new
       super :user, '-u', "show only changes for the given user", nil, :as_cmdline_option => nil
@@ -37,7 +32,7 @@ module PVN::Subcommands::Log
 
   class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
-    has_option :format,   FormatOption
+    has_option :color,    PVN::Subcommands::Base::ColorOption
     has_option :help,     PVN::Subcommands::Base::HelpOption
     has_option :limit,    LimitOption
     has_option :user,     UserOption

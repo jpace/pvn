@@ -134,11 +134,12 @@ module PVN::IO
       entries = SVNx::Status::Entries.new :xmllines => xml
       
       if status
-        entries.select! do |entry|
+        entries.select do |entry|
           entry.status == status
         end
+      else
+        entries
       end
-      entries
     end
 
     # returns a set of local files that are in modified status

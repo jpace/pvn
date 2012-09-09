@@ -23,13 +23,13 @@ module PVN::Subcommands::Log
 
     optscls
 
-    example "pvn log foo.rb",       "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb."
-    example "pvn log -l 25 foo.rb", "Prints 25 log entries for the file."
-    example "pvn log -3 foo.rb",    "Prints the log entry for revision (HEAD - 3)."
-    example "pvn log +3 foo.rb",    "Prints the 3rd log entry."
-    example "pvn log -l 10 -F",     "Prints the latest 10 entries, uncolorized."
-    example "pvn log -r 122 -v",    "Prints log entry for revision 122, with the files in that change."
-    example "pvn log -u barney",    "Prints log entries only for user 'barney', with the default limit."
+    example "pvn log foo.rb",           "Prints the latest #{DEFAULT_LIMIT} log entries for foo.rb."
+    example "pvn log -l 25 foo.rb",     "Prints 25 log entries for the file."
+    example "pvn log -3 foo.rb",        "Prints the log entry for revision (HEAD - 3)."
+    example "pvn log +3 foo.rb",        "Prints the 3rd log entry."
+    example "pvn log -l 10 --no-color", "Prints the latest 10 entries, uncolorized."
+    example "pvn log -r 122 -v",        "Prints log entry for revision 122, with the files in that change."
+    example "pvn log -u barney",        "Prints log entries only for user 'barney', with the default limit."
     
     def initialize options = nil
       return unless options
@@ -71,7 +71,7 @@ module PVN::Subcommands::Log
         from_tail = nil
       end        
       
-      ef = PVN::Log::EntriesFormatter.new options.format, entries, from_head, from_tail
+      ef = PVN::Log::EntriesFormatter.new options.color, entries, from_head, from_tail
       puts ef.format
     end
 

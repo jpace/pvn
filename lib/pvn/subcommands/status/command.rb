@@ -22,7 +22,7 @@ module PVN::Subcommands::Status
 
     example "pvn status foo.rb",      "Prints the status of foo.rb."
     example "pvn status",             "Prints the status for locally changed files."
-    example "pvn status --no-format", "Prints the status, uncolorized, for locally changed files."
+    example "pvn status --no-color",  "Prints the status, uncolorized, for locally changed files."
     
     def initialize options = nil
       return unless options
@@ -35,7 +35,7 @@ module PVN::Subcommands::Status
 
       entries = entries.sort_by { |n| n.path }
 
-      fmtr = PVN::Status::EntriesFormatter.new options.format, entries
+      fmtr = PVN::Status::EntriesFormatter.new options.color, entries
       puts fmtr.format
     end
   end
