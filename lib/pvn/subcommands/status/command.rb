@@ -27,15 +27,22 @@ module PVN::Subcommands::Status
     def initialize options = nil
       return unless options
 
-      # do we support multiple paths?
-      path = options.paths[0] || '.'
+      paths = options.paths
 
-      elmt = PVN::IO::Element.new :local => path || '.'
-      entries = elmt.find_files_by_status
+      paths = %w{ . } if paths.empty?
 
-      entries = entries.sort_by { |n| n.path }
+      allentries = Array.new
 
-      fmtr = PVN::Status::EntriesFormatter.new options.color, entries
+      # we sort only the sub-entries, so the order in which paths were specified is preserved
+
+      paths.each do |path|
+        elmt = PVN::IO::Element.new :local => path
+        entries = elmt.find_files_by_status
+
+        allentries.concat entries.sort_by { |n| n.path }
+      end
+
+      fmtr = PVN::Status::EntriesFormatter.new options.color, allentries
       puts fmtr.format
     end
   end
