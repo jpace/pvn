@@ -22,7 +22,7 @@ module SVNx::Info
       info "entry: #{entry.inspect}"
       info "expdata: #{expdata.inspect}"
 
-      [ :url, :path, :root, :kind ].each do |field|
+      [ :url, :path, :root, :kind, :revision ].each do |field|
         assert_equal expdata[field], entry.send(field)
       end
     end

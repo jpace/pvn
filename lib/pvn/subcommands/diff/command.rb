@@ -58,7 +58,7 @@ module PVN::Subcommands::Diff
         when 'modified'
           puts entry.path
         when 'deleted'
-          puts entry.path
+          show_as_deleted entry
         when 'added'
           show_as_added entry
         end
@@ -78,6 +78,25 @@ module PVN::Subcommands::Diff
 
     def show_as_added entry
       # need to look up the revision
+
+      show_header entry, 0, 0
+      pn = Pathname.new entry.path
+      lines = pn.readlines
+
+      show_diff_summary 0, 0, 1, lines.size
+
+      lines.each do |line|
+        puts "+#{line}"
+      end
+    end
+
+    def show_as_deleted entry
+      # need to look up the revision
+
+      elmt = PVN::IO::Element.new :local => entry.path
+
+      svninfo = elmt.get_info
+      info "svninfo: #{svninfo.inspect}"
 
       show_header entry, 'dunno', 'hmmm'
       pn = Pathname.new entry.path

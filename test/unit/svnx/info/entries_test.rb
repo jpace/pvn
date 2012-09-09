@@ -15,8 +15,8 @@ module SVNx::Info
 
       exproot = 'file:///home/jpace/Programs/Subversion/Repositories/wiquery'
 
-      assert_entry_equals entries[0], :path => 'pom.xml',   :kind => 'file', :url => exproot + '/trunk/pom.xml',   :root => exproot
-      assert_entry_equals entries[1], :path => 'Orig.java', :kind => 'file', :url => exproot + '/trunk/Orig.java', :root => exproot
+      assert_entry_equals entries[0], :path => 'pom.xml',   :kind => 'file', :url => exproot + '/trunk/pom.xml',   :root => exproot, :revision => '1950'
+      assert_entry_equals entries[1], :path => 'Orig.java', :kind => 'file', :url => exproot + '/trunk/Orig.java', :root => exproot, :revision => '0'
     end
   end
 end

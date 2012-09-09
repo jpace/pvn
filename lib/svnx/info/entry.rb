@@ -11,12 +11,14 @@ module SVNx::Info
     attr_reader :root
     attr_reader :kind
     attr_reader :path
+    attr_reader :revision
 
     def set_from_xml xmldoc
       entry = xmldoc.elements['info/entry']
 
       set_attr_var entry, 'kind'
       set_attr_var entry, 'path'
+      set_attr_var entry, 'revision'
       set_elmt_var entry, 'url'
 
       repo = entry.elements['repository']
@@ -26,6 +28,7 @@ module SVNx::Info
     def set_from_element elmt
       set_attr_var elmt, 'kind'
       set_attr_var elmt, 'path'
+      set_attr_var elmt, 'revision'
       set_elmt_var elmt, 'url'
       
       repo = elmt.elements['repository']
