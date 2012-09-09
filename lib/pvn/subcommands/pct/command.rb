@@ -33,11 +33,11 @@ module PVN::Subcommands::Pct
     optscls
 
     example "pvn pct foo.rb",       "Prints the changes in foo.rb, working copy against BASE."
-    example "pvn pct -r114:121",    "Prints the changes for all files, revision 114 against 121. (not yet supported)"
+    example "pvn pct -r114:121",    "Prints the changes for all files, revision 114 against 121."
     example "pvn pct -rHEAD",       "Prints the changes, working copy against HEAD. (not yet supported)"
-    example "pvn pct -r117",        "Prints the changes between revision 117 and the previous revision. (not yet supported)"
-    example "pvn pct -7",           "Prints the changes between relative revision -7 and the previous revision. (not yet supported)"
-    example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4. (not yet supported)"
+    example "pvn pct -r117",        "Prints the changes between revision 117 and the previous revision."
+    example "pvn pct -7",           "Prints the changes between relative revision -7 and the previous revision."
+    example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4."
 
     class << self
       # base command aliases new to init, so we're aliasing init to init2
