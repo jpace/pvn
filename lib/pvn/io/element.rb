@@ -14,6 +14,8 @@ require 'svnx/status/entries'
 require 'svnx/info/command'
 require 'svnx/info/entries'
 
+require 'svnx/cat/command'
+
 require 'pvn/io/fselement'
 
 module PVN; module IO; end; end
@@ -120,6 +122,13 @@ module PVN::IO
       end
 
       modified
+    end
+
+    def cat_remote rev = nil
+      raise "revision not yet supported: #{rev}" if rev
+      catargs = SVNx::CatCommandArgs.new :path => @local, :use_cache => false
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
     end
 
     # returns a set of local files that are in the given status

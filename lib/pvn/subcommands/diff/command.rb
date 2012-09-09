@@ -56,7 +56,7 @@ module PVN::Subcommands::Diff
         info "entry: #{entry.inspect}".on_blue
         case entry.status
         when 'modified'
-          puts entry.path
+          show_as_modified entry
         when 'deleted'
           show_as_deleted entry
         when 'added'
@@ -65,23 +65,34 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def show_header entry, fromrev, torev
+    def to_revision_string rev
+      rev ? "revision #{rev}" : "working copy"
+    end
+
+    def show_header entry, fromrev = nil, torev = nil
+      fromstr = to_revision_string fromrev
+      tostr = to_revision_string torev
+
       puts "Index: #{entry.path}"
       puts "==================================================================="
-      puts "--- #{entry.path}\t(revision #{fromrev})"
-      puts "+++ #{entry.path}\t(revision #{torev})"
+      puts "--- #{entry.path}\t(#{fromstr})"
+      puts "+++ #{entry.path}\t(#{tostr})"
     end
 
     def show_diff_summary fromstart, fromend, tostart, toend
       puts "@@ -#{fromstart},#{fromend} +#{tostart},#{toend} @@"
     end
 
+    def read_working_copy entry
+      pn = Pathname.new entry.path
+      pn.readlines
+    end
+
     def show_as_added entry
       # need to look up the revision
 
       show_header entry, 0, 0
-      pn = Pathname.new entry.path
-      lines = pn.readlines
+      lines = read_working_copy entry
 
       show_diff_summary 0, 0, 1, lines.size
 
@@ -91,22 +102,37 @@ module PVN::Subcommands::Diff
     end
 
     def show_as_deleted entry
-      # need to look up the revision
-
       elmt = PVN::IO::Element.new :local => entry.path
 
       svninfo = elmt.get_info
-      info "svninfo: #{svninfo.inspect}"
+      lines = elmt.cat_remote
 
-      show_header entry, 'dunno', 'hmmm'
-      pn = Pathname.new entry.path
-      lines = pn.readlines
+      show_header entry, svninfo.revision, nil
 
-      show_diff_summary 0, 0, 1, lines.size
+      show_diff_summary 1, lines.size, 0, 0
 
       lines.each do |line|
-        puts "+#{line}"
+        puts "-#{line}"
       end
+    end
+
+    def show_as_modified entry
+      # only doing working copy to remote now
+      
+      elmt = PVN::IO::Element.new :local => entry.path
+
+      svninfo = elmt.get_info
+      remotelines = elmt.cat_remote
+
+      fromrev = svninfo.revision
+      torev = nil               # AKA working copy
+
+      wclines = read_working_copy entry
+      
+      show_header entry, fromrev, torev
+
+      # write files to /tmp, then 
+      # IO.popen("diff -u ...")
     end
   end
 end
