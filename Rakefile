@@ -40,7 +40,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
-  s.version            = "0.0.5"
+  s.version            = "0.0.6"
   s.author             = "Jeff Pace"
   s.email              = "jeugenepace@gmail.com"
   s.homepage           = "http://www.incava.org/projects/pvn"
@@ -54,7 +54,7 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files   = ["README.markdown"]
   s.add_dependency("riel", ">= 1.1.6")
   s.bindir             = 'bin'
-  s.executables        = %w{ pvn }
+  s.executables        = %w{ pvn pvndiff }
   s.default_executable = 'pvn'
 end
  

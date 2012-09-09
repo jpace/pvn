@@ -5,6 +5,8 @@ require 'svnx/command'
 
 module SVNx
   class CatCommandLine < CommandLine
+    # this can be either an Array (for which to_a returns itself), or
+    # a CommandArgs, which also has to_a.
     def initialize args = Array.new
       super "cat", args.to_a
     end

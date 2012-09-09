@@ -4,7 +4,6 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/pct/options'
 require 'pvn/subcommands/base/command'
-require 'svnx/info/command'
 require 'svnx/status/command'
 require 'svnx/cat/command'
 require 'pvn/subcommands/pct/diffcount'
@@ -92,6 +91,7 @@ module PVN::Subcommands::Pct
       diff_counts = Array.new
 
       modified.each do |entry|
+        info "entry.path: #{entry.path}".yellow
         catcmd      = SVNx::CatCommand.new entry.path
         svn_count   = catcmd.execute.size
         local_count = Pathname.new(entry.path).readlines.size
@@ -123,6 +123,7 @@ module PVN::Subcommands::Pct
     end
 
     def get_line_count path, revision
+      info "path: #{path}".yellow
       cmdargs = SVNx::CatCommandArgs.new :path => path, :revision => revision
       catcmd = SVNx::CatCommand.new cmdargs
       catcmd.execute.size
