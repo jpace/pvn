@@ -47,6 +47,10 @@ module PVN::Subcommands::Diff
 
       @whitespace = options.whitespace
       @revision = options.revision
+      @change = options.change
+      info "change: #{@change}".on_red
+
+      # both revision and change should not be set
 
       paths.each do |path|
         elmt = PVN::IO::Element.new :local => path

@@ -3,6 +3,7 @@
 
 require 'synoption/boolean_option'
 require 'pvn/subcommands/revision/multiple_revisions_option'
+require 'pvn/subcommands/revision/base_option'
 require 'pvn/subcommands/base/options'
 
 module PVN::Subcommands::Diff
@@ -12,17 +13,16 @@ module PVN::Subcommands::Diff
     end
   end
 
+  class ChangeOption < PVN::BaseRevisionOption
+    def initialize optargs = Hash.new
+      super :change, '-c', 'use the given revision against the previous one', nil
+    end
+  end
+
   class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :revision,   PVN::MultipleRevisionsRegexpOption
+    has_option :change,     ChangeOption
     has_option :whitespace, WhitespaceOption
     has_option :help,       PVN::Subcommands::Base::HelpOption
-
-    def name
-      'diff'
-    end
-    
-    def paths
-      unprocessed
-    end
   end
 end

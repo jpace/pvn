@@ -16,6 +16,10 @@ module PVN::Subcommands::Base
   end
 
   class OptionSet < PVN::OptionSet
+    def name
+      self.class.to_s.split('::')[-2].downcase
+    end
+
     def paths
       unprocessed
     end
