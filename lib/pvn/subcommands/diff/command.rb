@@ -24,6 +24,9 @@ module PVN::Subcommands::Diff
     example "pvn diff foo.rb", "Compares foo.rb against the last updated version."
     example "pvn diff -3 StringExt.java", "Compares StringExt.java at change (HEAD - 3), using a Java-specific program such as DiffJ."
     example "pvn diff -r +4 -w", "Compares the 4th revision against the working copy, ignoring whitespace."
+    example "pvn diff -c 1948", "Compares revision 1948 against 1947."
+    example "pvn diff -c -8", "Compares revision (HEAD - 8) against (HEAD - 9)."
+    example "pvn diff -c +7", "Compares revision (BASE + 7) against (BASE + 6)."
 
     attr_reader :whitespace
     attr_reader :revision
