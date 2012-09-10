@@ -8,9 +8,7 @@ require 'pvn/subcommands/base/options'
 module PVN::Subcommands::Diff
   class WhitespaceOption < PVN::BooleanOption
     def initialize optargs = Hash.new
-      super :whitespace, '-W', 'ignore all whitespace', false
-      
-      # %w{ -x -w -x -b -x --ignore-eol-style }
+      super :whitespace, '-w', 'ignore all whitespace', false
     end
   end
 
@@ -18,6 +16,10 @@ module PVN::Subcommands::Diff
     has_option :revision,   PVN::MultipleRevisionsRegexpOption
     has_option :whitespace, WhitespaceOption
     has_option :help,       PVN::Subcommands::Base::HelpOption
+
+    def name
+      'diff'
+    end
     
     def paths
       unprocessed

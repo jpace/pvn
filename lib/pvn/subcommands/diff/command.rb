@@ -1,10 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-# require 'pvn/config'
-# require 'pvn/svn/command/svncmd'
-# require 'pvn/diff/diffopts'
-
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'pvn/subcommands/base/command'
@@ -28,6 +24,9 @@ module PVN::Subcommands::Diff
     example "pvn diff foo.rb", "Compares foo.rb against the last updated version."
     example "pvn diff -3 StringExt.java", "Compares StringExt.java at change (HEAD - 3), using a Java-specific program such as DiffJ."
     example "pvn diff -r +4 -w", "Compares the 4th revision against the working copy, ignoring whitespace."
+
+    attr_reader :whitespace
+    attr_reader :revision
     
     def initialize options = nil
       return unless options
@@ -45,6 +44,9 @@ module PVN::Subcommands::Diff
       allentries = Array.new
 
       # we sort only the sub-entries, so the order in which paths were specified is preserved
+
+      @whitespace = options.whitespace
+      @revision = options.revision
 
       paths.each do |path|
         elmt = PVN::IO::Element.new :local => path
@@ -95,7 +97,13 @@ module PVN::Subcommands::Diff
     end
 
     def run_diff_command entry, fromrev, torev, frompath, topath
+      info "whitespace: #{whitespace}"
+      
       cmd = "diff -u"
+      if whitespace
+        cmd << " -x -b -x -w -x --ignore-eol-style"
+      end
+
       [ fromrev, torev ].each do |rev|
         revstr = to_revision_string rev
         cmd << " -L '#{entry.path} (revision #{rev})'"

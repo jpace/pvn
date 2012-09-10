@@ -37,6 +37,10 @@ module PVN::Subcommands::Log
     has_option :limit,    LimitOption
     has_option :user,     UserOption
     has_option :verbose,  PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
+
+    def name
+      'log'
+    end
     
     def paths
       unprocessed

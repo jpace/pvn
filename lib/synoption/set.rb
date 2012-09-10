@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'synoption/option'
+require 'synoption/exception'
 
 module PVN
   class OptionSet
@@ -80,9 +81,18 @@ module PVN
       options_processed = Array.new
 
       @unprocessed = args
+
+      aborted = false
       
       while !@unprocessed.empty?
+        if @unprocessed[0] == '--'
+          @unprocessed.delete_at 0
+          aborted = true
+          break
+        end
+
         processed = false
+
         options.each do |opt|
           if opt.process @unprocessed
             processed = true
@@ -93,6 +103,22 @@ module PVN
         break unless processed
       end
 
+      unless aborted
+        check_for_valid_options 
+      end
+
+      post_process_all options_processed
+    end
+
+    def check_for_valid_options 
+      @unprocessed.each do |opt|
+        if opt.start_with? '-'
+          raise OptionException.new "error: option: #{opt} invalid for #{name}"
+        end
+      end
+    end
+
+    def post_process_all options_processed
       options_processed.each do |opt|
         opt.post_process self, @unprocessed
       end

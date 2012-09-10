@@ -8,6 +8,10 @@ module PVN::Subcommands::Status
   class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :color,    PVN::Subcommands::Base::ColorOption
     has_option :help,     PVN::Subcommands::Base::HelpOption
+
+    def name
+      'status'
+    end
     
     def paths
       unprocessed

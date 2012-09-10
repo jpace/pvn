@@ -8,6 +8,10 @@ module PVN::Subcommands::Pct
   class OptionSet < PVN::Subcommands::Base::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption
     has_option :help,     PVN::Subcommands::Base::HelpOption
+
+    def name
+      'pct'
+    end
     
     def paths
       unprocessed
