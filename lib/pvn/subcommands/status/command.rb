@@ -24,9 +24,7 @@ module PVN::Subcommands::Status
     example "pvn status",             "Prints the status for locally changed files."
     example "pvn status --no-color",  "Prints the status, uncolorized, for locally changed files."
     
-    def initialize options = nil
-      return unless options
-
+    def init options
       paths = options.paths
 
       paths = %w{ . } if paths.empty?

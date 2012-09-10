@@ -31,9 +31,7 @@ module PVN::Subcommands::Log
     example "pvn log -r 122 -v",        "Prints log entry for revision 122, with the files in that change."
     example "pvn log -u barney",        "Prints log entries only for user 'barney', with the default limit."
     
-    def initialize options = nil
-      return unless options
-
+    def init options
       paths = options.paths
 
       paths = %w{ . } if paths.empty?
