@@ -4,7 +4,6 @@
 require 'tc'
 require 'synoption/set'
 require 'synoption/base_option'
-require 'stringio'
 
 module PVN
   class SetTestCase < Test::Unit::TestCase
