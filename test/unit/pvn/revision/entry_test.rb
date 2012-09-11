@@ -106,18 +106,5 @@ module PVN::Revision
     def xxxtest_range_svn_word_to_number
       assert_revision_entry 'BASE:1', 'BASE:1'
     end
-
-    # def test_end
-    #   class File
-    #     def initialize args
-    #       rev = args[:revision]
-    #       reventry = Revision.new name, rev
-    #       @revision = reventry.number
-    #     end
-    #   end
-
-    #   dir = PVN::IO::File :name => "pom.xml", :revision => "-3"
-    #   assert_equal 190, dir.revision
-    # end
   end
 end

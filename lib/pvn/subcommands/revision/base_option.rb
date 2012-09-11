@@ -16,15 +16,13 @@ module PVN
                              "         when -1 is the previous revision" ,
                            ]
     
-    POS_NEG_NUMERIC_RE = Regexp.new('^[\-\+]\d+$')
-    
     def head?
       value.nil? || value == 'HEAD'
     end
 
     def resolve_value optset, unprocessed
       val = value
-      if POS_NEG_NUMERIC_RE.match val
+      if PVN::Revision::RELATIVE_REVISION_RE.match val
         @value = relative_to_absolute val, unprocessed[0]
       end
     end
