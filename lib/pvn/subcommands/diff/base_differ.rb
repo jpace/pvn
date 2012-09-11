@@ -6,6 +6,8 @@ require 'pvn/subcommands/diff/options'
 require 'pvn/subcommands/base/command'
 require 'tempfile'
 
+$io = $stdout
+
 module PVN::Subcommands::Diff
   class BaseDiffer
     include Loggable
@@ -49,12 +51,14 @@ module PVN::Subcommands::Diff
 
       [ fromrev, torev ].each do |rev|
         revstr = to_revision_string rev
-        cmd << " -L '#{entry.path} (revision #{rev})'"
+        cmd << " -L '#{entry.path}\t(#{revstr})'"
       end
       cmd << " #{frompath}"
       cmd << " #{topath}"
+      $io.puts "Index: #{entry.path}"
+      $io.puts "==================================================================="
       IO.popen(cmd) do |io|
-        puts io.readlines
+        $io.puts io.readlines
       end
     end
   end

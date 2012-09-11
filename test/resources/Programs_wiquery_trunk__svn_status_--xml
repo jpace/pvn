@@ -3,7 +3,7 @@
 <target
    path=".">
 <entry
-   path="Orig.java">
+   path="AddedFile.txt">
 <wc-status
    props="none"
    item="added"

@@ -29,7 +29,7 @@ module SVNx::Log
       
       lc.execute
       output = lc.output
-      info "output: #{output}"
+      # info "output: #{output}"
       
       expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
       expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }

@@ -35,7 +35,7 @@ module PVN
 
     def xtest_documentation
       doc = DiffCommand.to_doc
-      puts "doc: #{doc}".on_green
+      # puts "doc: #{doc}".on_green
     end
 
     ### $$$ disabled:
@@ -52,7 +52,7 @@ module PVN
     def test_none
       # write ~/.pvn/config.rb and load it ...
       doc = DiffCommand.to_doc
-      puts "doc: #{doc}".on_green
+      # puts "doc: #{doc}".on_green
     end
 
     def assert_no_output cmd
@@ -60,11 +60,11 @@ module PVN
     end
 
     def run_svn_update
-      puts "run_svn_update".on_red
+      # puts "run_svn_update".on_red
     end
 
     def run_svn_checkout
-      puts "run_svn_checkout".on_red
+      # puts "run_svn_checkout".on_red
     end
 
     def test_no_change

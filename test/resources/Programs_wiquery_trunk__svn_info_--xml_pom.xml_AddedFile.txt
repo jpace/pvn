@@ -23,9 +23,9 @@
 </entry>
 <entry
    kind="file"
-   path="Orig.java"
+   path="AddedFile.txt"
    revision="0">
-<url>file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk/Orig.java</url>
+<url>file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk/AddedFile.txt</url>
 <repository>
 <root>file:///home/jpace/Programs/Subversion/Repositories/wiquery</root>
 </repository>

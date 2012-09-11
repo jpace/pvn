@@ -23,11 +23,14 @@ module PVN::Subcommands::Diff
       @whitespace = options.whitespace
 
       paths.each do |path|
+        info "path: #{path}".red
         elmt = PVN::IO::Element.new :local => path
         entries = elmt.find_files_by_status
         
         allentries.concat entries.sort_by { |n| n.path }
       end
+
+      info "allentries: #{allentries}"
 
       allentries.each do |entry|
         info "entry: #{entry.inspect}".on_blue
