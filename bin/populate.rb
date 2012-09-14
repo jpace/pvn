@@ -62,8 +62,6 @@ class Script
   end
 end
 
-
-
 class Populator
   include Loggable
 
@@ -101,6 +99,21 @@ class Populator
   #   delete zipfile
   #   create zipfile
   #   modify zipfile
+
+  USERS = [ 
+           'Bart',
+           'Jim', 
+           'Taggart',
+           'Hedley Lamarr', 
+           'Lili Von Shtupp', 
+           'Governor William J. Lepetomane',
+           'Lyle',
+           'Mongo',
+           'Buddy Bizarre',
+           'Miss Stein'
+          ]
+
+  DOMAIN = 'rockridge.com'
 
   DUMPFILE = '/tmp/pvntestbed.dump'
 
@@ -146,9 +159,8 @@ class Populator
 
     run_command 'svn', 'co', 'file://' + FROMREPO, TMPDIR
     Dir.chdir dir
-
-    
-
+  
+    # ln -s deleted FileToDelete.txt
   end
 
   def modify_dates
@@ -179,79 +191,3 @@ class Populator
 end
 
 Populator.new
-
-
-__END__
-
-
-pvntestbed
-
-    multiple users
-        svn add --username 'Mongo' --password 'xxx' File.txt
-
-    files in added, deleted, modified state
-
-    file types
-        binaryfiles
-            zip
-            gzip
-            tar
-            tar.gz
-            bz2
-            tar.bz2
-            jar
-            class (java)
-            
-        textfiles
-            rb
-            rake
-            java
-            txt
-            class (php)
-            pl
-            pm
-
-$fromrepo = /Programs/Subversion/Repositories/pvntestbed.from
-
-svnadmin create $fromrepo
-chgrp lusers -R $fromrepo
-
-
-users = Bart, Jim, Taggart, Hedley Lamarr, Lili Von Shtupp, Governor William J.
-Lepetomane, Lyle, Mongo, Buddy Bizarre, Miss Stein
-
-[ some at @domain.com ]
-
-
-
-binaryfiles.each do
-end
-
-textfiles.each do
-end
-
-
-
-
-
-
-
-
-
-
-$dumpfile = /tmp/pvntestbed.dump
-
-
-svnadmin dump $fromrepo > $dumpfile
-
-modify dates in $dumpfile ...
-start with 2011-12-10, increment randomly
-
-$torepo = /Programs/Subversion/Repositories/pvntestbed
-
-
-
-
-svnadmin create $torepo
-svnadmin load $torepo < $dumpfile
-
