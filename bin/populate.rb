@@ -6,14 +6,6 @@ require 'riel'
 
 Log.level = Log::DEBUG
 
-class BinaryFile
-  # binary files can contain other binaries
-end
-
-
-class TextFile
-end
-
 # for diff (diffj, xmldiff):
 #    multiple revisions of those file types (.java, .xml)
 
@@ -32,39 +24,10 @@ class Change
 end
 
 
-class Script
-  def initialize 
-    # Change.new('Taggart', 'Listen, dummy ...',
-    #            :add => dir0/OldTest.0.java,
-    #            )
-    
-    # Change.new('Mongo', 'Mongo like candy',
-    #            :add => dir1/dira/IUtil.0.java,
-    #            :mod => dir1/dira/StringExt.1.java,
-    #            :del => dir0/OldTest.java,
-    #            )
-    
-    # Change.new('Lyle', 'How about some more beans, Mr. Taggart?',
-    #            :mod => dir1/dira/StringExt.2.java,
-    #            )
-    
-    # Change.new('Jim', 'The big fella is taking a liking to you.',
-    #            :del => dir1/dira/StringExt.2.java,
-    #            )
-
-    # tgz = BinaryFile.new(:outfile => dir1/dir2/TarBall.tar.gz,
-    #                      :infiles => [ dir1/dir2/alpha.0.png, dir1/dir2/bravo.1.jpg ])
-
-    # bf2 = BinaryFile.new(:outfile => dir0/BZipper.bz2, :infiles => [ tgz, dir1/dir2/StringExt.1.java ])
-
-    # Change.new('Mongo', 'Added binaries', [ tgz, bf2 ])
-  end
-end
-
 module SVN
   FROMREPO = '/Programs/Subversion/Repositories/pvntestbed.from'
   TOREPO = '/Programs/Subversion/Repositories/pvntestbed.to'
-  CHECKOUT_DIR = '/Programs/pvn/pvntestbed.from'
+  CHECKOUT_DIR = '/Programs/pvn'
   DUMPFILE = '/tmp/pvntestbed.dump'
 
   COMPRESSED_FILES = %w{ zip gzip tar tar.gz bz2 tar.bz2 jar }
@@ -131,7 +94,7 @@ module SVN
     def checkout
       remove CHECKOUT_DIR
 
-      run_command 'svn', 'co', 'file://' + @dir, CHECKOUT_DIR
+      run_command 'svn', 'co', 'file://' + @dir, CHECKOUT_DIR + '/' + Pathname.new(@dir).basename
     end
   end
 end
@@ -266,5 +229,3 @@ ARGV.each do |arg|
     raise "invalid argument: #{arg}"
   end
 end
-
-# SVN::Populator.new
