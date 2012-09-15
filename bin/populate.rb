@@ -246,15 +246,24 @@ module SVN
   end
 end
 
+repo = nil
+
 ARGV.each do |arg|
-  if arg == "from"
-    fromrepo = SVN::Repository.new SVN::FROMREPO
-    fromrepo.create
-    fromrepo.checkout
-    fromrepo.dump
-  elsif arg == "to"
-    torepo = SVN::Repository.new SVN::TOREPO
-    torepo.create
+  case arg
+  when "from"
+    repo = SVN::Repository.new SVN::FROMREPO
+  when "to"
+    repo = SVN::Repository.new SVN::TOREPO
+  when "create"
+    repo.create
+  when "dump"
+    repo.dump
+  when "checkout"
+    repo.checkout
+  when "load"
+    repo.load
+  else
+    raise "invalid argument: #{arg}"
   end
 end
 
