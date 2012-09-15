@@ -4,8 +4,7 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'tempfile'
-require 'pvn/subcommands/diff/local_differ'
-require 'pvn/subcommands/diff/base_differ'
+require 'pvn/subcommands/diff/differ'
 
 module PVN::Subcommands::Diff
   # this will replace RevisionEntry
@@ -40,7 +39,7 @@ module PVN::Subcommands::Diff
     end
   end
 
-  class RepositoryDiffer < BaseDiffer
+  class RepositoryDiffer < Differ
     include Loggable
 
     attr_reader :whitespace

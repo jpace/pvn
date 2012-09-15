@@ -3,7 +3,8 @@
 
 require 'pvn/subcommands/pct/options'
 require 'pvn/subcommands/base/command'
-require 'pvn/subcommands/pct/differ'
+require 'pvn/subcommands/pct/local_differ'
+require 'pvn/subcommands/pct/repository_differ'
 
 module PVN::Subcommands::Pct
   class Command < PVN::Subcommands::Base::Command

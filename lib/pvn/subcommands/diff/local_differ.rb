@@ -4,10 +4,10 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'tempfile'
-require 'pvn/subcommands/diff/base_differ'
+require 'pvn/subcommands/diff/differ'
 
 module PVN::Subcommands::Diff
-  class LocalDiffer < BaseDiffer
+  class LocalDiffer < Differ
     def initialize options
       super
       
