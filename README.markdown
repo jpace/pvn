@@ -10,7 +10,7 @@ everything svn does, but better. Maybe some day that will happen.
 SUMMARY
 -------
 
-    svn [ options ] file ...
+    pvn [ options ] file ...
 
 FEATURES
 --------
@@ -31,7 +31,7 @@ Thus for the following list of revisions for a path:
 
 Relative revision +0 is r1049, -1 is r1947, +1 is r1143, and so on.
 
-**Colorized logging**. The "log" subcommand works in pvn as it does with svn,
+**Colorized logging**. The *log* subcommand works in pvn as it does with svn,
 except that output is colorized, differing for the elements (file, directory) and
 the status of the element (added, deleted, changed). The logging output also
 shows the relative revision.
@@ -39,4 +39,5 @@ shows the relative revision.
 **Sorted names**. Pvn differs from Subversion in that for all subcommands, file names
 are printed in sorted order, improving legibility.
 
+**Caching**. Output from some commands is cached, for speed.
 
