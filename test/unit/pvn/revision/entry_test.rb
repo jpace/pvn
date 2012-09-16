@@ -68,7 +68,7 @@ module PVN::Revision
     end
 
     def test_negative_too_far_back
-      assert_revision_entry_raises -35
+      assert_revision_entry_raises(-35)
     end
 
     def test_negative_most_recent_as_string

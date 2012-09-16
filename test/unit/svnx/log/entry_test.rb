@@ -9,13 +9,9 @@ module SVNx::Log
     include Loggable
     
     def test_entry_from_xml
-      expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
-      expdata << { :kind => 'file', :action => 'M', :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java' }
-
-      doc = REXML::Document.new get_test_lines_limit_15.join('')
-
-      entry = Entry.new :xmlelement => doc.elements[1].elements[3]        
-      assert_log_entry_equals entry, expdata
+      doc = REXML::Document.new Resources::PT_LOG_L_15.readlines.join('')
+      entry = Entry.new :xmlelement => doc.elements[1].elements[4]
+      assert_log_entry_16 entry
     end
   end
 end

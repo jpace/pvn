@@ -10,22 +10,6 @@ module SVNx::Log
   class TestCase < PVN::TestCase
     include Loggable
     
-    def get_test_lines_limit_15
-      Resources::WIQ_LOG_L_15.readlines
-    end
-
-    def get_test_lines_no_limit
-      Resources::WIQ_LOG.readlines
-    end
-
-    def get_test_lines_no_author
-      Resources::WIQ_LOG_R1.readlines
-    end
-
-    def get_test_lines_empty_message
-      Resources::WIQ_LOG_R1748.readlines
-    end
-
     def find_subelement_by_name elmt, name
       subelmt = elmt.elements.detect { |el| el.name == name }
       subelmt ? subelmt.get_text.to_s : nil
@@ -41,6 +25,25 @@ module SVNx::Log
         assert_equal expdata[4 + idx][:action], path.action
         assert_equal expdata[4 + idx][:name], path.name
       end
+    end
+
+    # this is from Resources::PT_LOG_*
+    def assert_log_entry_16 entry
+      expdata = '16', 'Buddy Bizarre', '2012-09-16T14:07:30.329525Z', 'CUT! What in the hell do you think you\'re doing here? This is a closed set.'
+      expdata << { :kind => 'dir', 
+        :action => 'A', 
+        :name => '/src/java'
+      }
+      expdata << { :kind => 'file', 
+        :action => 'A', 
+        :name => '/src/java/Alpha.java'
+      }
+      expdata << { :kind => 'file', 
+        :action => 'A', 
+        :name => '/src/java/Bravo.java'
+      }
+      
+      assert_log_entry_equals entry, expdata
     end
   end
 end

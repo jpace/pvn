@@ -54,6 +54,12 @@ class WiqTrSvnResource < SvnResource
   end
 end
 
+class PtSvnResource < SvnResource
+  def initialize cmd, *args
+    super '/Programs/pvn/pvntestbed.from', cmd, args
+  end
+end
+
 class Resources
   include Singleton
 
@@ -61,10 +67,10 @@ class Resources
   
   WIQ_TRUNK_STATUS = WiqTrSvnResource.new 'status'
 
-  WIQ_LOG_L_15  = WiqSvnResource.new 'log', '-l', '15'
-  WIQ_LOG       = WiqSvnResource.new 'log'  
+  # WIQ_LOG_L_15  = WiqSvnResource.new 'log', '-l', '15'
+  # WIQ_LOG       = WiqSvnResource.new 'log'  
   WIQ_LOG_R1    = WiqSvnResource.new 'log', '-r1'
-  WIQ_LOG_R1748 = WiqSvnResource.new 'log', '-r1748'
+  # WIQ_LOG_R1748 = WiqSvnResource.new 'log', '-r1748'
 
   WIQTR_INFO_WIQUERY_CORE_POM_XML = WiqTrSvnResource.new 'info', 'wiquery-core/pom.xml'
   WIQTR_INFO_POM_XML_ADDED_FILE_TXT = WiqTrSvnResource.new 'info', 'pom.xml', 'AddedFile.txt'
@@ -78,13 +84,21 @@ class Resources
   WIQTR_LOG_LIMIT_163 = WiqTrSvnResource.new 'log', '--limit', '163'
   WIQTR_LOG_LIMIT_5 = WiqTrSvnResource.new 'log', '--limit', '5'
 
+  PT_PATH = '/Programs/pvn/pvntestbed'
+  
+  PT_STATUS   = PtSvnResource.new 'status'
+  PT_LOG_L_15 = PtSvnResource.new 'log', '-l', '15'
+  PT_LOG      = PtSvnResource.new 'log'  
+  PT_LOG_R1   = PtSvnResource.new 'log', '-r1'
+  PT_LOG_R19  = PtSvnResource.new 'log', '-r19' # empty message
+
   def generate
     puts "this: #{self.class.constants}"
     self.class.constants.each do |con|
       puts "con: #{con}"
       res = self.class.const_get con
       puts "res: #{res}"
-      next if res == WIQTR_PATH
+      next unless res.respond_to? :generate
       res.generate
     end
   end

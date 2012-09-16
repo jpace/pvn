@@ -23,14 +23,33 @@ module SVNx::Log
       
       assert_log_entry_equals entry, expdata
     end
+
+    def assert_log_entry_16 entry
+      expdata = '16', 'Buddy Bizarre', '2012-09-16T14:07:30.329525Z', 'CUT! What in the hell do you think you\'re doing here? This is a closed set.'
+      expdata << { :kind => 'dir', 
+        :action => 'A', 
+        :name => '/src/java'
+      }
+      expdata << { :kind => 'file', 
+        :action => 'A', 
+        :name => '/src/java/Alpha.java'
+      }
+      expdata << { :kind => 'file', 
+        :action => 'A', 
+        :name => '/src/java/Bravo.java'
+      }
+      
+      assert_log_entry_equals entry, expdata
+    end
     
     def test_create_from_xml
-      entries = Entries.new :xmllines => get_test_lines_limit_15
-      assert_log_entry_1947 entries[2]
+      entries = Entries.new :xmllines => Resources::PT_LOG_L_15.readlines
+      assert_log_entry_16 entries[3]
     end
     
     def test_no_author_field
-      entries = Entries.new :xmllines => get_test_lines_no_author
+      # I can't generate this in my environment, so we'll use the WIQ repo
+      entries = Entries.new :xmllines => Resources::WIQ_LOG_R1.readlines
       nentries = entries.size
 
       # revision 1 has no author ... wtf?
@@ -38,24 +57,23 @@ module SVNx::Log
     end
 
     def test_empty_message_element
-      entries = Entries.new :xmllines => get_test_lines_empty_message
+      entries = Entries.new :xmllines => Resources::PT_LOG_R19.readlines
       nentries = entries.size
-
+      
       # empty message here:
       assert_entry_fields_not_nil entries[0]
     end
 
     def test_create_on_demand
       # although entries now supports xmllines as an Array, we need the size for the assertion:
-      xmllines = get_test_lines_no_limit.join ''
+      xmllines = Resources::PT_LOG.readlines
       
-      # quite a big file ...
-      assert_equal 324827, xmllines.size
+      assert_equal 125, xmllines.size
 
       entries = Entries.new :xmllines => xmllines
 
       nentries = entries.size
-      assert_equal 1949, nentries
+      assert_equal 19, nentries
 
       # the power of Ruby, effortlessly getting instance variables ...
 
@@ -76,10 +94,10 @@ module SVNx::Log
     def test_each
       idx = 0
 
-      entries = Entries.new :xmllines => get_test_lines_limit_15
+      entries = Entries.new :xmllines => Resources::PT_LOG_L_15.readlines
       entries.each do |entry|
-        if idx == 2
-          assert_log_entry_1947 entry
+        if idx == 3
+          assert_log_entry_16 entry
         end
         idx += 1
       end
