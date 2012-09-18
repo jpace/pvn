@@ -1,6 +1,24 @@
 <?xml version="1.0"?>
 <log>
 <logentry
+   revision="22">
+<author>Lyle</author>
+<date>2012-09-18T11:32:19.542597Z</date>
+<msg>Don't pay no attention to that alky. He can't hold a gun, much less shoot it.</msg>
+</logentry>
+<logentry
+   revision="21">
+<author>Governor William J. Le Petomane</author>
+<date>2012-09-18T11:30:10.106200Z</date>
+<msg>We've gotta protect our phoney baloney jobs, gentlemen!</msg>
+</logentry>
+<logentry
+   revision="20">
+<author>Howard Johnson</author>
+<date>2012-09-18T11:28:08.481016Z</date>
+<msg>Y'know, Nietzsche says: "Out of chaos comes order."</msg>
+</logentry>
+<logentry
    revision="19">
 <author>Lili von Shtupp</author>
 <date>2012-09-16T14:24:07.913759Z</date>

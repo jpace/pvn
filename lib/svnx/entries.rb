@@ -38,8 +38,16 @@ module SVNx
     def create_entry xmlelement
     end
 
+    # this doesn't handle negative indices
     def [] idx
-      @entries[idx] ||= create_entry(@elements[idx + 1])
+      if entry = @entries[idx]
+        return entry
+      end
+      if idx < 0 && idx >= size
+        raise "error: index #{idx} is not in range(0 .. #{size})"
+      end
+
+      @entries[idx] = create_entry(@elements[idx + 1])
     end
 
     def each(&blk)

@@ -92,6 +92,11 @@ class Resources
   PT_LOG_R1   = PtSvnResource.new 'log', '-r1'
   PT_LOG_R19  = PtSvnResource.new 'log', '-r19' # empty message
 
+  PT_LOG_SECONDFILE_TXT = PtSvnResource.new 'log', 'SecondFile.txt'
+  PT_LOG_R13_22_SECONDFILE_TXT = PtSvnResource.new 'log', '-r13:22', 'SecondFile.txt'
+
+  PT_LOG_R19_5 = PtSvnResource.new 'log', '-r19:5'
+
   def generate
     puts "this: #{self.class.constants}"
     self.class.constants.each do |con|

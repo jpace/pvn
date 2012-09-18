@@ -43,7 +43,10 @@ module SVNx::Log
     end
     
     def test_create_from_xml
-      entries = Entries.new :xmllines => Resources::PT_LOG_L_15.readlines
+      # entries = Entries.new :xmllines => Resources::PT_LOG_L_15.readlines this
+      # is the equivalent of being at revision 19 (when this was written) and
+      # doing "svn log -r19:5"
+      entries = Entries.new :xmllines => Resources::PT_LOG_R19_5.readlines
       assert_log_entry_16 entries[3]
     end
     
@@ -66,35 +69,35 @@ module SVNx::Log
 
     def test_create_on_demand
       # although entries now supports xmllines as an Array, we need the size for the assertion:
-      xmllines = Resources::PT_LOG.readlines
+      xmllines = Resources::PT_LOG_R19_5.readlines
       
-      assert_equal 125, xmllines.size
+      assert_equal 101, xmllines.size
 
       entries = Entries.new :xmllines => xmllines
 
       nentries = entries.size
-      assert_equal 19, nentries
+      assert_equal 15, nentries
 
       # the power of Ruby, effortlessly getting instance variables ...
 
       real_entries = entries.instance_eval '@entries'
 
       # nothing processed yet ...
-      assert_nil real_entries[16]
-      assert_nil real_entries[17]
-      assert_nil real_entries[18]
+      assert_nil real_entries[12]
+      assert_nil real_entries[13]
+      assert_nil real_entries[14]
 
-      assert_entry_fields_not_nil entries[17]
+      assert_entry_fields_not_nil entries[13]
 
       # and these still aren't processed:
-      assert_nil real_entries[16]
-      assert_nil real_entries[18]
+      assert_nil real_entries[12]
+      assert_nil real_entries[14]
     end
 
     def test_each
       idx = 0
 
-      entries = Entries.new :xmllines => Resources::PT_LOG_L_15.readlines
+      entries = Entries.new :xmllines => Resources::PT_LOG_R19_5.readlines
       entries.each do |entry|
         if idx == 3
           assert_log_entry_16 entry

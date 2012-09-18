@@ -10,7 +10,10 @@ require 'resources'
 module PVN::Revision
   class TestCase < PVN::TestCase
     def setup
-      @xmllines = Resources::WIQTR_LOG_POM_XML.readlines
+      # if we do this, regenerating the resource files won't bump the revisions
+      # around:
+      # Resources::PT_LOG_R13_22_SECONDFILE_TXT.readlines
+      @xmllines = Resources::PT_LOG_SECONDFILE_TXT.readlines
     end
 
     def assert_revision_entry exp_value, value
@@ -25,27 +28,27 @@ module PVN::Revision
     end
 
     def test_absolute_midrange
-      assert_revision_entry 733, 733
+      assert_revision_entry 19, 19
     end
 
     def test_absolute_most_recent
-      assert_revision_entry 1907, 1907
+      assert_revision_entry 22, 22
     end
 
     def test_absolute_least_recent
-      assert_revision_entry 412, 412
+      assert_revision_entry 13, 13
     end
 
     def test_absolute_midrange_as_string
-      assert_revision_entry 733, '733'
+      assert_revision_entry 19, '19'
     end
 
     def test_absolute_most_recent_as_string
-      assert_revision_entry 1907, '1907'
+      assert_revision_entry 22, '22'
     end
 
     def test_absolute_least_recent_as_string
-      assert_revision_entry 412, '412'
+      assert_revision_entry 13, '13'
     end
 
     def test_svn_word
@@ -56,51 +59,51 @@ module PVN::Revision
     end
 
     def test_negative_most_recent
-      assert_revision_entry 1907, -1
+      assert_revision_entry 22, -1
     end
 
     def test_negative_second_most_recent
-      assert_revision_entry 1887, -2
+      assert_revision_entry 20, -2
     end
 
     def test_negative_least_recent
-      assert_revision_entry 412, -34
+      assert_revision_entry 13, -5
     end
 
     def test_negative_too_far_back
-      assert_revision_entry_raises(-35)
+      assert_revision_entry_raises(-6)
     end
 
     def test_negative_most_recent_as_string
-      assert_revision_entry 1907, '-1'
+      assert_revision_entry 22, '-1'
     end
 
     def test_negative_second_most_recent_as_string
-      assert_revision_entry 1887, '-2'
+      assert_revision_entry 20, '-2'
     end
 
     def test_negative_least_recent_as_string
-      assert_revision_entry 412, '-34'
+      assert_revision_entry 13, '-5'
     end
 
     def test_negative_too_far_back_as_string
-      assert_revision_entry_raises '-35'
+      assert_revision_entry_raises '-6'
     end
 
     def test_positive_most_recent
-      assert_revision_entry 1907, '+34'
+      assert_revision_entry 22, '+5'
     end
 
     def test_positive_second_most_recent
-      assert_revision_entry 1887, '+33'
+      assert_revision_entry 20, '+4'
     end
 
     def test_positive_least_recent
-      assert_revision_entry 412, '+1'
+      assert_revision_entry 13, '+1'
     end
 
     def test_positive_too_far_forward
-      assert_revision_entry_raises '+35'
+      assert_revision_entry_raises '+6'
     end
 
     def xxxtest_range_svn_word_to_number
