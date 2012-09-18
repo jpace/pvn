@@ -78,11 +78,11 @@ class Resources
   WIQTR_LOG_L_15_V = WiqTrSvnResource.new 'log', '-l', '15', '-v'
   WIQTR_LOG_POM_XML = WiqTrSvnResource.new 'log', 'pom.xml'
 
-  WIQTR_LOG_LIMIT_164 = WiqTrSvnResource.new 'log', '--limit', '164'
   WIQTR_LOG_LIMIT_1 = WiqTrSvnResource.new 'log', '--limit', '1'
+  WIQTR_LOG_LIMIT_5 = WiqTrSvnResource.new 'log', '--limit', '5'
   WIQTR_LOG_LIMIT_7 = WiqTrSvnResource.new 'log', '--limit', '7'
   WIQTR_LOG_LIMIT_163 = WiqTrSvnResource.new 'log', '--limit', '163'
-  WIQTR_LOG_LIMIT_5 = WiqTrSvnResource.new 'log', '--limit', '5'
+  WIQTR_LOG_LIMIT_164 = WiqTrSvnResource.new 'log', '--limit', '164'
 
   PT_PATH = '/Programs/pvn/pvntestbed'
   
@@ -96,6 +96,14 @@ class Resources
   PT_LOG_R22_13_SECONDFILE_TXT = PtSvnResource.new 'log', '-r22:13', 'SecondFile.txt'
 
   PT_LOG_R19_5 = PtSvnResource.new 'log', '-r19:5'
+
+  # these are the equivalent of limits of 1, 5, 7, and 19, starting at revision 19
+
+  # PT_LOG_R19_19 == PT_LOG_R19
+
+  PT_LOG_R19_15 = PtSvnResource.new 'log', '-r19:15'
+  PT_LOG_R19_13 = PtSvnResource.new 'log', '-r19:13'
+  PT_LOG_R19_1  = PtSvnResource.new 'log', '-r19:1'
 
   def generate
     puts "this: #{self.class.constants}"

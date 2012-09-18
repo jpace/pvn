@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<log>
+<logentry
+   revision="19">
+<author>Lili von Shtupp</author>
+<date>2012-09-16T14:24:07.913759Z</date>
+<msg></msg>
+</logentry>
+<logentry
+   revision="18">
+<author>Lili von Shtupp</author>
+<date>2012-09-16T14:09:45.398182Z</date>
+<msg>Willkommen, Bienvenue, Welcome, C'mon in.</msg>
+</logentry>
+<logentry
+   revision="17">
+<author>Hedley Lamarr</author>
+<date>2012-09-16T14:07:53.963478Z</date>
+<msg>Here, sir, play with this.</msg>
+</logentry>
+<logentry
+   revision="16">
+<author>Buddy Bizarre</author>
+<date>2012-09-16T14:07:30.329525Z</date>
+<msg>CUT! What in the hell do you think you're doing here? This is a closed set.</msg>
+</logentry>
+<logentry
+   revision="15">
+<author>Mongo</author>
+<date>2012-09-16T14:02:05.414042Z</date>
+<msg>Mongo only pawn in the game of life.</msg>
+</logentry>
+</log>
