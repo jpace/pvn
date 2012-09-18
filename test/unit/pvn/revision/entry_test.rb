@@ -10,10 +10,10 @@ require 'resources'
 module PVN::Revision
   class TestCase < PVN::TestCase
     def setup
-      # if we do this, regenerating the resource files won't bump the revisions
-      # around:
-      # Resources::PT_LOG_R13_22_SECONDFILE_TXT.readlines
-      @xmllines = Resources::PT_LOG_SECONDFILE_TXT.readlines
+      # This is the equivalent of "log" at revision 22, when this file was added
+      # at revision 13. Using this instead of just "log" when regenerating the
+      # resource files keeps the revisions from bouncing around.
+      @xmllines = Resources::PT_LOG_R22_13_SECONDFILE_TXT.readlines
     end
 
     def assert_revision_entry exp_value, value

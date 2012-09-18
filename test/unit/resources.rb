@@ -86,14 +86,14 @@ class Resources
 
   PT_PATH = '/Programs/pvn/pvntestbed'
   
-  PT_STATUS   = PtSvnResource.new 'status'
-  PT_LOG_L_15 = PtSvnResource.new 'log', '-l', '15'
-  PT_LOG      = PtSvnResource.new 'log'  
-  PT_LOG_R1   = PtSvnResource.new 'log', '-r1'
+  # PT_STATUS   = PtSvnResource.new 'status'
+  # PT_LOG_L_15 = PtSvnResource.new 'log', '-l', '15'
+  # PT_LOG      = PtSvnResource.new 'log'  
+  # PT_LOG_R1   = PtSvnResource.new 'log', '-r1'
   PT_LOG_R19  = PtSvnResource.new 'log', '-r19' # empty message
 
-  PT_LOG_SECONDFILE_TXT = PtSvnResource.new 'log', 'SecondFile.txt'
-  PT_LOG_R13_22_SECONDFILE_TXT = PtSvnResource.new 'log', '-r13:22', 'SecondFile.txt'
+  # PT_LOG_SECONDFILE_TXT = PtSvnResource.new 'log', 'SecondFile.txt'
+  PT_LOG_R22_13_SECONDFILE_TXT = PtSvnResource.new 'log', '-r22:13', 'SecondFile.txt'
 
   PT_LOG_R19_5 = PtSvnResource.new 'log', '-r19:5'
 
