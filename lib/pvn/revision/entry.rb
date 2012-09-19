@@ -83,9 +83,8 @@ module PVN::Revision
       unless xmllines
         raise RevisionError.new "cannot determine relative revision without xmllines"
       end
-
+      
       logentries = SVNx::Log::Entries.new :xmllines => xmllines
-
       nentries = logentries.size
 
       # logentries are in descending order, so the most recent one is index 0
