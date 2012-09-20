@@ -9,23 +9,7 @@ module PVN
     def run_log_command limit, path
       info "limit: #{limit}; #{limit.class}".red
       info "path : #{path}".red
-      if path == Resources::WIQTR_PATH
-        case limit
-        when 1
-          Resources::WIQTR_LOG_LIMIT_1.readlines
-        when 5
-          Resources::WIQTR_LOG_LIMIT_5.readlines
-        when 7
-          Resources::WIQTR_LOG_LIMIT_7.readlines
-        when 163
-          Resources::WIQTR_LOG_LIMIT_163.readlines
-        when 164
-          info "164"
-          Resources::WIQTR_LOG_LIMIT_164.readlines
-        else
-          fail "limit not handled: #{limit}; #{path}"
-        end
-      elsif path == Resources::PT_PATH
+      if path == Resources::PT_PATH
         info "limit: #{limit}".green
         case limit
         when 1

@@ -26,11 +26,11 @@ module PVN::IO::IOElement
     end
     
     def test_options_none
-      assert_log_command 163, Resources::WIQTR_PATH
+      assert_log_command 163, Resources::PT_PATH
     end
     
     def test_option_limit
-      assert_log_command 15, Resources::WIQTR_PATH, :limit => 15
+      assert_log_command 15, Resources::PT_PATH, :limit => 15
     end
   end
 end

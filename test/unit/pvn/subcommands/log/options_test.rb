@@ -24,8 +24,8 @@ module PVN::App::Log
       expdata = Hash.new
       expdata[:limit] = nil
       expdata[:revision] = rev
-      expdata[:path] = Resources::WIQTR_PATH
-      assert_options expdata, [ arg, Resources::WIQTR_PATH ].flatten
+      expdata[:path] = Resources::PT_PATH
+      assert_options expdata, [ arg, Resources::PT_PATH ].flatten
     end
 
     def test_default
