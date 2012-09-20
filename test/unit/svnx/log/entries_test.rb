@@ -14,16 +14,6 @@ module SVNx::Log
       assert entry.author
     end
 
-    def assert_log_entry_1947 entry
-      expdata = '1947', 'reiern70', '2011-11-14T12:24:45.757124Z', 'added a convenience method to set the range'
-      expdata << { :kind => 'file', 
-        :action => 'M', 
-        :name => '/trunk/wiquery-jquery-ui/src/test/java/org/odlabs/wiquery/ui/slider/SliderTestCase.java'
-      }
-      
-      assert_log_entry_equals entry, expdata
-    end
-
     def assert_log_entry_16 entry
       expdata = '16', 'Buddy Bizarre', '2012-09-16T14:07:30.329525Z', 'CUT! What in the hell do you think you\'re doing here? This is a closed set.'
       expdata << { :kind => 'dir', 

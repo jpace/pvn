@@ -63,26 +63,12 @@ end
 class Resources
   include Singleton
 
-  WIQTR_PATH = '/Programs/wiquery/trunk'
-  
   WIQ_TRUNK_STATUS = WiqTrSvnResource.new 'status'
 
-  # WIQ_LOG_L_15  = WiqSvnResource.new 'log', '-l', '15'
-  # WIQ_LOG       = WiqSvnResource.new 'log'  
   WIQ_LOG_R1    = WiqSvnResource.new 'log', '-r1'
-  # WIQ_LOG_R1748 = WiqSvnResource.new 'log', '-r1748'
 
   WIQTR_INFO_WIQUERY_CORE_POM_XML = WiqTrSvnResource.new 'info', 'wiquery-core/pom.xml'
   WIQTR_INFO_POM_XML_ADDED_FILE_TXT = WiqTrSvnResource.new 'info', 'pom.xml', 'AddedFile.txt'
-
-  WIQTR_LOG_L_15_V = WiqTrSvnResource.new 'log', '-l', '15', '-v'
-  WIQTR_LOG_POM_XML = WiqTrSvnResource.new 'log', 'pom.xml'
-
-  WIQTR_LOG_LIMIT_1 = WiqTrSvnResource.new 'log', '--limit', '1'
-  WIQTR_LOG_LIMIT_5 = WiqTrSvnResource.new 'log', '--limit', '5'
-  WIQTR_LOG_LIMIT_7 = WiqTrSvnResource.new 'log', '--limit', '7'
-  WIQTR_LOG_LIMIT_163 = WiqTrSvnResource.new 'log', '--limit', '163'
-  WIQTR_LOG_LIMIT_164 = WiqTrSvnResource.new 'log', '--limit', '164'
 
   PT_PATH = '/Programs/pvn/pvntestbed'
   

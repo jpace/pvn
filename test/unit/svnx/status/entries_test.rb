@@ -8,7 +8,7 @@ module SVNx::Status
   class EntriesTestCase < SVNx::Status::TestCase
     
     def test_create_from_xml
-      entries = Entries.new :xmllines => get_test_lines_all
+      entries = Entries.new :xmllines => Resources::WIQ_TRUNK_STATUS.readlines
 
       assert_equal 4, entries.size
       assert_status_entry_equals 'added',   'AddedFile.txt', entries[0]

@@ -10,10 +10,6 @@ module SVNx::Status
   class TestCase < PVN::TestCase
     include Loggable
     
-    def get_test_lines_all
-      Resources::WIQ_TRUNK_STATUS.readlines
-    end
-
     def find_subelement_by_name elmt, name
       subelmt = elmt.elements.detect { |el| el.name == name }
       subelmt ? subelmt.get_text.to_s : nil
