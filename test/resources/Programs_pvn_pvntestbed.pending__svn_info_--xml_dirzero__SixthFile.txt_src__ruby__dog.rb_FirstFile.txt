@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<info>
+<entry
+   kind="file"
+   path="dirzero/SixthFile.txt"
+   revision="22">
+<url>file:///Programs/Subversion/Repositories/pvntestbed.from/dirzero/SixthFile.txt</url>
+<repository>
+<root>file:///Programs/Subversion/Repositories/pvntestbed.from</root>
+<uuid>5db1df74-4b47-433d-94f9-36f8fb1c6fd4</uuid>
+</repository>
+<wc-info>
+<schedule>delete</schedule>
+<depth>infinity</depth>
+<text-updated>2012-09-20T00:20:27.820355Z</text-updated>
+<checksum>6f9ca4eac04966649b00af111af0f9fb</checksum>
+</wc-info>
+<commit
+   revision="9">
+<author>Buddy Bizarre</author>
+<date>2012-09-16T13:38:01.073277Z</date>
+</commit>
+</entry>
+<entry
+   kind="file"
+   path="src/ruby/dog.rb"
+   revision="0">
+<url>file:///Programs/Subversion/Repositories/pvntestbed.from/src/ruby/dog.rb</url>
+<repository>
+<root>file:///Programs/Subversion/Repositories/pvntestbed.from</root>
+</repository>
+<wc-info>
+<schedule>add</schedule>
+<depth>infinity</depth>
+</wc-info>
+</entry>
+<entry
+   kind="file"
+   path="FirstFile.txt"
+   revision="22">
+<url>file:///Programs/Subversion/Repositories/pvntestbed.from/FirstFile.txt</url>
+<repository>
+<root>file:///Programs/Subversion/Repositories/pvntestbed.from</root>
+<uuid>5db1df74-4b47-433d-94f9-36f8fb1c6fd4</uuid>
+</repository>
+<wc-info>
+<schedule>normal</schedule>
+<depth>infinity</depth>
+<text-updated>2012-09-20T00:20:27.820355Z</text-updated>
+<checksum>04a26fa6d6b14747191a4dc862d865ff</checksum>
+</wc-info>
+<commit
+   revision="13">
+<author>Jim</author>
+<date>2012-09-16T13:51:55.741762Z</date>
+</commit>
+</entry>
+</info>

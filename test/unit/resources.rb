@@ -60,10 +60,14 @@ class PtSvnResource < SvnResource
   end
 end
 
+class PtPendingSvnResource < SvnResource
+  def initialize cmd, *args
+    super '/Programs/pvn/pvntestbed.pending', cmd, args
+  end
+end
+
 class Resources
   include Singleton
-
-  WIQ_TRUNK_STATUS = WiqTrSvnResource.new 'status'
 
   WIQ_LOG_R1    = WiqSvnResource.new 'log', '-r1'
 
@@ -72,13 +76,7 @@ class Resources
 
   PT_PATH = '/Programs/pvn/pvntestbed'
   
-  # PT_STATUS   = PtSvnResource.new 'status'
-  # PT_LOG_L_15 = PtSvnResource.new 'log', '-l', '15'
-  # PT_LOG      = PtSvnResource.new 'log'  
-  # PT_LOG_R1   = PtSvnResource.new 'log', '-r1'
   PT_LOG_R19  = PtSvnResource.new 'log', '-r19' # empty message
-
-  # PT_LOG_SECONDFILE_TXT = PtSvnResource.new 'log', 'SecondFile.txt'
   PT_LOG_R22_13_SECONDFILE_TXT = PtSvnResource.new 'log', '-r22:13', 'SecondFile.txt'
 
   PT_LOG_R19_5 = PtSvnResource.new 'log', '-r19:5'
@@ -92,6 +90,10 @@ class Resources
   PT_LOG_R19_1  = PtSvnResource.new 'log', '-r19:1'
 
   PT_LOG_R19_1_V = PtSvnResource.new 'log', '-r19:1', '-v'
+
+  PTP_STATUS = PtPendingSvnResource.new 'status'
+  PTP_STATUS_DOG_RB = PtPendingSvnResource.new 'status', 'src/ruby/dog.rb'
+  PTP_INFO_SIXTH_TXT_DOG_RB_FIRST_TXT = PtPendingSvnResource.new 'info', 'dirzero/SixthFile.txt', 'src/ruby/dog.rb', 'FirstFile.txt'
 
   def generate
     puts "this: #{self.class.constants}"

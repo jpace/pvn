@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<status>
+<target
+   path=".">
+<entry
+   path="FirstFile.txt">
+<wc-status
+   props="none"
+   item="modified"
+   revision="22">
+<commit
+   revision="13">
+<author>Jim</author>
+<date>2012-09-16T13:51:55.741762Z</date>
+</commit>
+</wc-status>
+</entry>
+<entry
+   path="src/java/Charlie.java">
+<wc-status
+   props="none"
+   item="unversioned">
+</wc-status>
+</entry>
+<entry
+   path="src/ruby/dog.rb">
+<wc-status
+   props="none"
+   item="added"
+   revision="0">
+</wc-status>
+</entry>
+<entry
+   path="SeventhFile.txt">
+<wc-status
+   props="none"
+   item="added"
+   revision="0">
+</wc-status>
+</entry>
+<entry
+   path="dirzero/SixthFile.txt">
+<wc-status
+   props="none"
+   item="deleted"
+   revision="22">
+<commit
+   revision="9">
+<author>Buddy Bizarre</author>
+<date>2012-09-16T13:38:01.073277Z</date>
+</commit>
+</wc-status>
+</entry>
+</target>
+</status>
