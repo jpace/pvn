@@ -20,7 +20,9 @@ module PVN::Log
       puts ef.format
     end
 
-    def assert_format explines, entry, use_colors, idx, from_head, from_tail, total
+    def assert_format explines, use_colors, idx, from_head, from_tail
+      total = 15
+      entry = ENTRIES[idx]
       ef = EntryFormatter.new use_colors, entry, idx, from_head, from_tail, total
 
       fmtlines = ef.format
@@ -39,7 +41,7 @@ module PVN::Log
                   "",
                   "    \e[33m/SecondFile.txt\e[0m"
                  ]
-      assert_format explines, entries[0], true, 0, true, false, 15
+      assert_format explines, true, 0, true, false
     end
 
     def test_colors_from_head_not_from_tail_index_3
@@ -53,7 +55,7 @@ module PVN::Log
                   "    \e[32m/src/java/Alpha.java\e[0m",
                   "    \e[32m/src/java/Bravo.java\e[0m"
                  ]
-      assert_format explines, entries[3], true, 3, true, false, 15
+      assert_format explines, true, 3, true, false
     end
 
     def test_no_colors_from_head_from_tail_index_3
@@ -67,7 +69,7 @@ module PVN::Log
                   "    /src/java/Alpha.java",
                   "    /src/java/Bravo.java"
                  ]
-      assert_format explines, entries[3], false, 3, true, true, 15
+      assert_format explines, false, 3, true, true
     end
 
     def test_colors_from_head_from_tail_index_3
@@ -81,7 +83,7 @@ module PVN::Log
                   "    \e[32m/src/java/Alpha.java\e[0m",
                   "    \e[32m/src/java/Bravo.java\e[0m"
                  ]
-      assert_format explines, entries[3], true, 3, true, true, 15
+      assert_format explines, true, 3, true, true
     end
 
     def test_no_colors_from_head_not_from_tail_index_3
@@ -95,7 +97,7 @@ module PVN::Log
                   "    /src/java/Alpha.java",
                   "    /src/java/Bravo.java"
                  ]
-      assert_format explines, entries[3], false, 3, true, false, 15
+      assert_format explines, false, 3, true, false
     end
   end
 end
