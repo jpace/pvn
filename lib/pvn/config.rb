@@ -59,7 +59,20 @@ module PVN
   end
 end
 
-
 if __FILE__ == $0
   cfg = PVN::Configuration.read
+end
+
+__END__
+# this is an example:
+PVN::Configuration.config do |config|
+  config.diff do |diff|
+    diff.java = '/home/jpace/Programs/diffj-1.2.1/bin/diffj --context -L "{0}" -L "{1}" "{2}" "{3}"'
+    diff.xmlorig  = "xmldiff --someopt=true --from-file '{0}' --to-file '{1}'"
+  end
+  
+  config.log do |log|
+    log.limit = 25
+    log.format = '#{revision.red}\t#{user.bold}\t#{time} #{date}\n#{list(comment, :green)}#{cr(files)}#{list(files, :bold, :cyan)}\n'
+  end
 end
