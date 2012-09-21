@@ -69,10 +69,7 @@ end
 class Resources
   include Singleton
 
-  WIQ_LOG_R1    = WiqSvnResource.new 'log', '-r1'
-
-  WIQTR_INFO_WIQUERY_CORE_POM_XML = WiqTrSvnResource.new 'info', 'wiquery-core/pom.xml'
-  WIQTR_INFO_POM_XML_ADDED_FILE_TXT = WiqTrSvnResource.new 'info', 'pom.xml', 'AddedFile.txt'
+  WIQ_LOG_R1 = WiqSvnResource.new 'log', '-r1'
 
   PT_PATH = '/Programs/pvn/pvntestbed'
   
@@ -94,6 +91,7 @@ class Resources
   PTP_STATUS = PtPendingSvnResource.new 'status'
   PTP_STATUS_DOG_RB = PtPendingSvnResource.new 'status', 'src/ruby/dog.rb'
   PTP_INFO_SIXTH_TXT_DOG_RB_FIRST_TXT = PtPendingSvnResource.new 'info', 'dirzero/SixthFile.txt', 'src/ruby/dog.rb', 'FirstFile.txt'
+  PTP_INFO_SIXTH_TXT = PtPendingSvnResource.new 'info', 'dirzero/SixthFile.txt'
 
   def generate
     puts "this: #{self.class.constants}"

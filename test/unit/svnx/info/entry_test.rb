@@ -7,19 +7,18 @@ require 'svnx/info/entry'
 module SVNx::Info
   class EntryTestCase < SVNx::Info::TestCase
     include Loggable
+    
+    EXPROOT = 'file:///Programs/Subversion/Repositories/pvntestbed.from'
+
+    def assert_info_entry_equals entry, path, kind, revision
+      assert_entry_equals entry, :path => path, :kind => 'file', :url => EXPROOT + '/' + path, :root => EXPROOT, :revision => revision
+    end
+
     def test_entry_from_xml
-      xmllines = Resources::WIQTR_INFO_WIQUERY_CORE_POM_XML.readlines
-      
-      expdata = {
-        :url  => 'file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk/wiquery-core/pom.xml',
-        :kind => 'file',
-        :path => 'wiquery-core/pom.xml',
-        :root => 'file:///home/jpace/Programs/Subversion/Repositories/wiquery',
-        :revision => '1950'
-      }
+      xmllines = Resources::PTP_INFO_SIXTH_TXT.readlines
 
       entry = Entry.new :xmllines => xmllines
-      assert_entry_equals entry, expdata
+      assert_info_entry_equals entry, 'dirzero/SixthFile.txt', 'file', '22'
     end
   end
 end
