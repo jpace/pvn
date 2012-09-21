@@ -1,16 +1,16 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'tc'
+require 'integration/tc'
 require 'pvn/subcommands/log/command'
 
 module PVN; module App; module Log; end; end; end
 
 module PVN::App::Log
-  class CommandTest < PVN::TestCase
+  class CommandTest < PVN::IntegrationTestCase
     
     def test_path
-      PVN::Subcommands::Log::Command.new %w{ /Programs/wiquery/trunk/pom.xml }
+      PVN::Subcommands::Log::Command.new [ PT_DIRNAME ]
     end
     
     def test_invalid_path

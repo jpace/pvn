@@ -1,13 +1,11 @@
-require 'tc'
+require 'integration/tc'
 require 'pvn/diff/diffcmd'
 
 module PVN
-  class TestDiff < PVN::TestCase
+  class TestDiff < PVN::IntegrationTestCase
     include Loggable
 
-    WIQUERY_URL = "file:///home/jpace/Programs/Subversion/Repositories/wiquery/trunk"
     TMP_DIR = "/proj/tmp"       # SSD here; /tmp is HDD
-    WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
 
     def setup
       info "setting up".blue
@@ -25,7 +23,7 @@ module PVN
     end
 
     def goto_test_trunk
-      Dir.chdir WIQUERY_DIRNAME
+      Dir.chdir PT_DIRNAME
     end
 
     def assert_diff_command exp, cmdargs = nil
