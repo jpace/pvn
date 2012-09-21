@@ -69,8 +69,6 @@ end
 class Resources
   include Singleton
 
-  WIQ_LOG_R1 = WiqSvnResource.new 'log', '-r1'
-
   PT_PATH = '/Programs/pvn/pvntestbed'
   
   PT_LOG_R19  = PtSvnResource.new 'log', '-r19' # empty message

@@ -22,8 +22,6 @@ module PVN::Subcommands::Diff
       else
         @from, @to = from.split(':')
       end
-      info "@from: #{@from}"
-      info "@to: #{@to}"
     end
 
     def to_s
@@ -49,8 +47,6 @@ module PVN::Subcommands::Diff
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
-      info "paths: #{paths}"
-
       allentries = Array.new
 
       # we sort only the sub-entries, so the order in which paths were specified is preserved
@@ -58,9 +54,6 @@ module PVN::Subcommands::Diff
       @whitespace = options.whitespace
       rev = options.revision
       change = options.change
-      info "change: #{change}"
-      info "rev: #{rev}"
-      info "rev: #{rev.class}"
 
       if change
         @revision = Revision.new(change.to_i - 1, change.to_i)
@@ -77,23 +70,17 @@ module PVN::Subcommands::Diff
         end
       end
 
-      info "revision: #{@revision}; #{@revision.class}".on_blue
-
       # maps from pathnames to { :first, :last } revision updated.
       paths_to_revisions = Hash.new
 
       paths.each do |path|
         logentries = get_log_entries path, @revision
         logentries.each do |logentry|
-          info "logentry: #{logentry}".yellow
-          info "logentry.revision: #{logentry.revision}".yellow
-          info "logentry.paths: #{logentry.paths}".yellow
 
           # should add the revision to this, so we know which is the first
           # version to compare against the last:
 
           logentry.paths.each do |lp|
-            info "lp: #{lp.inspect}".cyan
             allentries << { :path => lp, :revision => logentry.revision }
             rec = paths_to_revisions[lp.name]
             if rec
@@ -106,15 +93,7 @@ module PVN::Subcommands::Diff
         end
       end
 
-      paths_to_revisions.sort.each do |name, revisions|
-        puts "name: #{name}"
-        puts "revisions: #{revisions}"
-      end
-
-      info "allentries: #{allentries}"
-
       allentries.each do |entry|
-        info "entry: #{entry.inspect}".on_blue
         next if true
         case entry.status
         when 'modified'

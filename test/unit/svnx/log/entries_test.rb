@@ -40,15 +40,6 @@ module SVNx::Log
       assert_log_entry_16 entries[3]
     end
     
-    def test_no_author_field
-      # I can't generate this in my environment, so we'll use the WIQ repo
-      entries = Entries.new :xmllines => Resources::WIQ_LOG_R1.readlines
-      nentries = entries.size
-
-      # revision 1 has no author ... wtf?
-      assert_entry_fields_not_nil entries[0]
-    end
-
     def test_empty_message_element
       entries = Entries.new :xmllines => Resources::PT_LOG_R19.readlines
       nentries = entries.size

@@ -9,7 +9,7 @@ module PVN
   class IntegrationTestCase < PVN::TestCase
     include Loggable
 
-    WIQUERY_DIRNAME = '/Programs/wiquery/trunk'
+    PT_DIRNAME = '/Programs/pvn/pvntestbed.from'
 
     def setup
       @cache_dir = PVN::Environment.instance.cache_dir
@@ -19,7 +19,7 @@ module PVN
       super
 
       @origdir = Dir.pwd
-      Dir.chdir WIQUERY_DIRNAME
+      Dir.chdir PT_DIRNAME
     end
 
     def teardown

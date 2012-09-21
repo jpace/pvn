@@ -1,4 +1,5 @@
 require 'tc'
+require 'resources'
 
 module PVN
   RESOURCE_DIR = Pathname.new(__FILE__).expand_path.parent.parent.parent + 'resources'
@@ -7,7 +8,7 @@ module PVN
   class TestCase < Test::Unit::TestCase
     include Loggable
 
-    WIQUERY_DIRNAME = "/Programs/wiquery/trunk"
+    PT_DIRNAME = '/Programs/pvn/pvntestbed.from'
 
     class << self
       def setup
