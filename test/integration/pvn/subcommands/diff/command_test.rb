@@ -164,7 +164,27 @@ module PVN::Subcommands::Diff
     def test_revision_to_revision_multiple_changes
       explines = Array.new
 
-      # assert_diff_command %w{ -r1:4 }, explines
+      explines << "Index: FirstFile.txt"
+      explines << "==================================================================="
+      explines << "--- FirstFile.txt	(revision 1)"
+      explines << "+++ FirstFile.txt	(revision 4)"
+      explines << "@@ -1 +1,3 @@"
+      explines << " This is the first line of the first file in the testbed."
+      explines << "+This is the second line of the first file."
+      explines << "+Third line here."
+      explines << "Index: SecondFile.txt"
+      explines << "==================================================================="
+      explines << "--- SecondFile.txt	(revision 0)"
+      explines << "+++ SecondFile.txt	(revision 4)"
+      explines << "@@ -0,0 +1,3 @@"
+      explines << "+line one of file two."
+      explines << "+# file two, line two"
+      explines << "+line three"
+      explines << "Index: ThirdFile.tar.gz"
+      explines << "==================================================================="
+      explines << "Binary files ThirdFile.tar.gz	(revision 0) and ThirdFile.tar.gz	(revision 4) differ"
+
+      assert_diff_command %w{ -r1:4 }, explines
     end
   end
 end

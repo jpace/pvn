@@ -123,14 +123,14 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def show_as_modified elmt, path
-      fromlines = cat elmt, @revision.from - 1
-      tolines = cat elmt, @revision.to
+    def show_as_modified elmt, path, fromrev, torev
+      fromlines = cat elmt, fromrev
+      tolines = cat elmt, torev
       run_diff path, fromlines, @revision.from - 1, tolines, @revision.to
     end
 
     def show_as_added elmt, path
-      tolines = elmt.cat_remote @revision.to
+      tolines = cat elmt, @revision.to
       run_diff path, nil, 0, tolines, @revision.to
     end
 
@@ -141,31 +141,28 @@ module PVN::Subcommands::Diff
     
     def diff_entry name, paths
       info "name: #{name}".blue
-      info "paths: #{paths.inspect}".yellow
 
       revisions = paths.keys.sort
-      info "revisions: #{revisions}".green
 
       firstrev = revisions[0]
-      lastrev = revisions[-1]
-
-      info "firstrev: #{firstrev}"
-      info "lastrev: #{lastrev}"
       
-      if firstrev == lastrev
-        record = paths[firstrev]
-        svnpath = record[1].url + name
-        elmt = PVN::IO::Element.new :svn => svnpath
-        action = record[0].action
-        displaypath = name[1 .. -1]
+      record = paths[firstrev]
+      svnpath = record[1].url + name
+      elmt = PVN::IO::Element.new :svn => svnpath
+      action = record[0].action
+      displaypath = name[1 .. -1]
 
-        case action
-        when 'A'
-          show_as_added elmt, displaypath
-        when 'D'
-          show_as_deleted elmt, displaypath
-        when 'M'
-          show_as_modified elmt, displaypath
+      case action
+      when 'A'
+        show_as_added elmt, displaypath
+      when 'D'
+        show_as_deleted elmt, displaypath
+      when 'M'
+        lastrev = revisions[-1]
+        if firstrev == lastrev
+          show_as_modified elmt, displaypath, @revision.from - 1, @revision.to
+        else
+          show_as_modified elmt, displaypath, firstrev.to_i - 1, lastrev
         end
       end
     end
