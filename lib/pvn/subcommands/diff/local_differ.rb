@@ -98,15 +98,7 @@ module PVN::Subcommands::Diff
 
       wclines = read_working_copy entry
 
-      Tempfile.open('pvn') do |from|
-        from.puts remotelines
-        from.close
-        Tempfile.open('pvn') do |to|
-          to.puts wclines
-          to.close
-          run_diff_command entry.path, fromrev, torev, from.path, to.path
-        end
-      end
+      run_diff entry.path, remotelines, fromrev, wclines, torev
     end
   end
 end

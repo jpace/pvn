@@ -105,24 +105,6 @@ module PVN::Subcommands::Diff
       cmd.execute
     end
 
-    def run_diff displaypath, fromlines, fromrev, tolines, torev
-      Tempfile.open('pvn') do |from|
-        if fromlines
-          from.puts fromlines
-        end
-        from.close
-
-        Tempfile.open('pvn') do |to|
-          if tolines
-            to.puts tolines
-          end
-          to.close
-          
-          run_diff_command displaypath, fromrev, torev, from.path, to.path
-        end
-      end
-    end
-
     def show_as_modified elmt, path, fromrev, torev
       fromlines = cat elmt, fromrev
       tolines = cat elmt, torev
