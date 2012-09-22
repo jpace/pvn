@@ -99,7 +99,7 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def show_as_added elmt
+    def show_as_added elmt, path
       remotelines = elmt.cat_remote @revision.to
       info "remotelines: #{remotelines}"
 
@@ -112,8 +112,13 @@ module PVN::Subcommands::Diff
         # from is an empty file
         from.close
 
-        # I think this is always revision 0
-        run_diff_command path, 0, @revision.to, from.path, path
+        Tempfile.open('pvn') do |to|
+          to.puts remotelines
+          to.close
+          
+          # I think this is always revision 0
+          run_diff_command path, 0, @revision.to, from.path, to.path
+        end
       end
     end
     
@@ -144,13 +149,15 @@ module PVN::Subcommands::Diff
         action = record[0].action
         info "action: #{action}"
 
+        displaypath = name[1 .. -1]
+
         case action
         when 'A'
-          show_as_added elmt
+          show_as_added elmt, displaypath
         when 'D'
-          show_as_deleted
+          show_as_deleted elmt, displaypath
         when 'M'
-          show_as_modified
+          show_as_modified elmt, displaypath
         end
       end
     end

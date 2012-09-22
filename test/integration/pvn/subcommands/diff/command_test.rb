@@ -32,8 +32,8 @@ module PVN::Subcommands::Diff
       info "dc: #{dc}".yellow
       
       strio.close
-      # puts strio.string
-
+      puts strio.string
+      
       actlines = strio.string.split("\n")
 
       assert_arrays_equal explines, actlines
@@ -83,10 +83,37 @@ module PVN::Subcommands::Diff
       assert_diff_command %w{ }, explines
     end
 
-    def xxxtest_revision_to_revision
+    def test_revision_to_revision_adds
       explines = Array.new
 
-      assert_diff_command %w{ -r15:20 }, explines
+      explines << "Index: src/java/Alpha.java"
+      explines << "==================================================================="
+      explines << "--- src/java/Alpha.java	(revision 0)"
+      explines << "+++ src/java/Alpha.java	(revision 16)"
+      explines << "@@ -0,0 +1,6 @@"
+      explines << "+package org.incava.pvntest;"
+      explines << "+"
+      explines << "+public class Alpha {"
+      explines << "+    public Alpha() {"
+      explines << "+    }"
+      explines << "+}"
+      explines << "Index: src/java/Bravo.java"
+      explines << "==================================================================="
+      explines << "--- src/java/Bravo.java	(revision 0)"
+      explines << "+++ src/java/Bravo.java	(revision 16)"
+      explines << "@@ -0,0 +1,10 @@"
+      explines << "+/**"
+      explines << "+ * This describes this interface."
+      explines << "+ */"
+      explines << "+interface Bravo "
+      explines << "+{"
+      explines << "+	/**"
+      explines << "+	 * This describes this method."
+      explines << "+	 */"
+      explines << "+	public int size();"
+      explines << "+}"
+
+      assert_diff_command %w{ -r15:16 }, explines
     end
   end
 end
