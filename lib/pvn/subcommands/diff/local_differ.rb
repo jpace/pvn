@@ -65,7 +65,7 @@ module PVN::Subcommands::Diff
         from.close
 
         # I think this is always revision 0
-        run_diff_command entry, 0, 0, from.path, entry.path
+        run_diff_command entry.path, 0, 0, from.path, entry.path
       end
     end
 
@@ -81,7 +81,7 @@ module PVN::Subcommands::Diff
         Tempfile.open('pvn') do |to|
           # to is an empty file
           to.close
-          run_diff_command entry, svninfo.revision, nil, from.path, to.path
+          run_diff_command entry.path, svninfo.revision, nil, from.path, to.path
         end
       end
     end
@@ -104,7 +104,7 @@ module PVN::Subcommands::Diff
         Tempfile.open('pvn') do |to|
           to.puts wclines
           to.close
-          run_diff_command entry, fromrev, torev, from.path, to.path
+          run_diff_command entry.path, fromrev, torev, from.path, to.path
         end
       end
     end

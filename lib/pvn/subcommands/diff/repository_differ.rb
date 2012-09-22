@@ -47,13 +47,13 @@ module PVN::Subcommands::Diff
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
-      allentries = Array.new
-
       # we sort only the sub-entries, so the order in which paths were specified is preserved
 
       @whitespace = options.whitespace
       rev = options.revision
+      info "rev: #{rev}".cyan
       change = options.change
+      info "change: #{change}".cyan
 
       ### $$$ add handling revision against head:
       ### $$$ pvn diff -r 143
@@ -74,38 +74,89 @@ module PVN::Subcommands::Diff
         end
       end
 
+      info "@revision: #{@revision}"
+
       # maps from pathnames to { :first, :last } revision updated.
       paths_to_revisions = Hash.new
 
+      # maps by log path to log entries
+      logpaths = Hash.new { |h, k| h[k] = Hash.new }
+
       paths.each do |path|
+        info "path: #{path}"
+        pathelmt = PVN::IO::Element.new :local => path
+        pathinfo = pathelmt.get_info
+        info "pathinfo: #{pathinfo.inspect}".on_black
+
         logentries = get_log_entries path, @revision
         logentries.each do |logentry|
-
-          # should add the revision to this, so we know which is the first
-          # version to compare against the last:
-
           logentry.paths.each do |lp|
-            allentries << { :path => lp, :revision => logentry.revision }
+            next if lp.kind != 'file'
+
+            logpaths[lp.name][logentry.revision] = lp
+            info "lp: #{lp}; #{lp.class}".yellow
+            info "logentry.revision: #{logentry.revision}".yellow
             rec = paths_to_revisions[lp.name]
+            info "rec: #{rec}".green
             if rec
               rec[:last] = logentry.revision
             else
               rec = { :first => logentry.revision, :action => lp.action }
             end
+            info "rec: #{rec}".green
             paths_to_revisions[lp.name] = rec
           end 
         end
       end
 
-      allentries.each do |entry|
-        next if true
-        case entry.status
-        when 'modified'
-          show_as_modified entry
-        when 'deleted'
-          show_as_deleted entry
-        when 'added'
-          show_as_added entry
+      logpaths.sort.each do |name, paths|
+        diff_entry name, paths
+      end
+    end
+
+    def show_as_added path
+      elmt = PVN::IO::Element.new :local => path
+
+      # svninfo = elmt.get_info
+      remotelines = elmt.cat_remote
+      info "remotelines: #{remotelines}"
+
+      fromrev = svninfo.revision
+      torev = nil               # AKA working copy
+
+      Tempfile.open('pvn') do |from|
+        # from is an empty file
+        from.close
+
+        # I think this is always revision 0
+        run_diff_command path, 0, @revision.to, from.path, path
+      end
+    end
+    
+    def diff_entry name, paths
+      info "name: #{name}".blue
+      info "paths: #{paths.inspect}".yellow
+
+      revisions = paths.keys.sort
+      info "revisions: #{revisions}".green
+
+      firstrev = revisions[0]
+      lastrev = revisions[-1]
+
+      info "firstrev: #{firstrev}"
+      info "lastrev: #{lastrev}"
+      
+      if firstrev == lastrev
+        action = paths[firstrev].action
+        info "action: #{action}"
+
+        case action
+        when 'A'
+          show_as_added paths[firstrev].name
+        when 'D'
+          show_as_deleted
+        when 'M'
+          show_as_modified
         end
       end
     end

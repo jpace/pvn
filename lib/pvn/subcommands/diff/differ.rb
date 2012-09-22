@@ -41,7 +41,7 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def run_diff_command entry, fromrev, torev, frompath, topath
+    def run_diff_command displaypath, fromrev, torev, frompath, topath
       info "whitespace: #{whitespace}"
       
       cmd = "diff -u"
@@ -51,11 +51,11 @@ module PVN::Subcommands::Diff
 
       [ fromrev, torev ].each do |rev|
         revstr = to_revision_string rev
-        cmd << " -L '#{entry.path}\t(#{revstr})'"
+        cmd << " -L '#{displaypath}\t(#{revstr})'"
       end
       cmd << " #{frompath}"
       cmd << " #{topath}"
-      $io.puts "Index: #{entry.path}"
+      $io.puts "Index: #{displaypath}"
       $io.puts "==================================================================="
       IO.popen(cmd) do |io|
         $io.puts io.readlines
