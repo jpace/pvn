@@ -12,7 +12,7 @@ module PVN
     PT_DIRNAME = '/Programs/pvn/pvntestbed.from'
 
     def setup
-      @cache_dir = ENV['PVN_CACHE_DIR'] || '/tmp/pvncache'
+      @cache_dir = ENV['PVN_CACHE_DIR'] || '/tmp/pvncache.testing'
       info "@cache_dir: #{@cache_dir}"
       remove_cache_dir
       
