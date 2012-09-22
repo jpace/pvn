@@ -76,9 +76,6 @@ module PVN::Subcommands::Diff
 
       info "@revision: #{@revision}"
 
-      # maps from pathnames to { :first, :last } revision updated.
-      paths_to_revisions = Hash.new
-
       # maps by log path to log entries
       logpaths = Hash.new { |h, k| h[k] = Hash.new }
 
@@ -92,19 +89,7 @@ module PVN::Subcommands::Diff
         logentries.each do |logentry|
           logentry.paths.each do |lp|
             next if lp.kind != 'file'
-
-            logpaths[lp.name][logentry.revision] = lp
-            info "lp: #{lp}; #{lp.class}".yellow
-            info "logentry.revision: #{logentry.revision}".yellow
-            rec = paths_to_revisions[lp.name]
-            info "rec: #{rec}".green
-            if rec
-              rec[:last] = logentry.revision
-            else
-              rec = { :first => logentry.revision, :action => lp.action }
-            end
-            info "rec: #{rec}".green
-            paths_to_revisions[lp.name] = rec
+            logpaths[lp.name][logentry.revision] = [ lp, pathinfo ]
           end 
         end
       end
@@ -114,12 +99,11 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def show_as_added path
-      elmt = PVN::IO::Element.new :local => path
-
-      # svninfo = elmt.get_info
-      remotelines = elmt.cat_remote
+    def show_as_added elmt
+      remotelines = elmt.cat_remote @revision.to
       info "remotelines: #{remotelines}"
+
+      svninfo = elmt.get_info
 
       fromrev = svninfo.revision
       torev = nil               # AKA working copy
@@ -147,12 +131,22 @@ module PVN::Subcommands::Diff
       info "lastrev: #{lastrev}"
       
       if firstrev == lastrev
-        action = paths[firstrev].action
+        record = paths[firstrev]
+        info "record[0]: #{record[0]}".cyan
+        info "record[1]: #{record[1]}".cyan
+
+        svnpath = record[1].url + name
+        info "svnpath: #{svnpath}"
+
+        elmt = PVN::IO::Element.new :svn => svnpath
+        info "elmt: #{elmt}".green
+
+        action = record[0].action
         info "action: #{action}"
 
         case action
         when 'A'
-          show_as_added paths[firstrev].name
+          show_as_added elmt
         when 'D'
           show_as_deleted
         when 'M'

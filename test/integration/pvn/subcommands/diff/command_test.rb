@@ -42,7 +42,7 @@ module PVN::Subcommands::Diff
       Dir.chdir orig_dir
     end
     
-    def xxxtest_local_to_head
+    def test_local_to_head
       explines = Array.new
 
       explines << "Index: FirstFile.txt"
@@ -83,7 +83,7 @@ module PVN::Subcommands::Diff
       assert_diff_command %w{ }, explines
     end
 
-    def xtest_revision_to_revision
+    def xxxtest_revision_to_revision
       explines = Array.new
 
       assert_diff_command %w{ -r15:20 }, explines

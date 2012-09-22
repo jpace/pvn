@@ -126,7 +126,9 @@ module PVN::IO
 
     def cat_remote rev = nil
       raise "revision not yet supported: #{rev}" if rev
-      catargs = SVNx::CatCommandArgs.new :path => @local, :use_cache => false
+      path = @local || @svn
+      info "path: #{path}".blue
+      catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => false
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
     end
