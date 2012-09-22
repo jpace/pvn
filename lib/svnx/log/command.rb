@@ -5,11 +5,12 @@ require 'rubygems'
 require 'riel'
 require 'system/command/line'
 require 'system/command/caching'
-require 'pvn/svn/environment'
 require 'svnx/command'
 
 module SVNx
-  CACHE_DIR = "/tmp/cache_dir_for_log_command"
+  DEFAULT_CACHE_DIR = '/tmp/svnx'
+
+  TMP_DIR_ENV_VARNAME = 'SVNX_TMP_DIR'
 
   class LogCommandLine < CommandLine
     def initialize args = Array.new
@@ -25,7 +26,7 @@ module SVNx
     end
 
     def cache_dir
-      PVN::Environment.instance.cache_dir
+      ENV[TMP_DIR_ENV_VARNAME] || DEFAULT_CACHE_DIR
     end
   end
 

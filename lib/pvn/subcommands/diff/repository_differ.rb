@@ -55,18 +55,22 @@ module PVN::Subcommands::Diff
       rev = options.revision
       change = options.change
 
+      ### $$$ add handling revision against head:
+      ### $$$ pvn diff -r 143
+      ### $$$ pvn diff -r143:HEAD
+
       if change
-        @revision = Revision.new(change.to_i - 1, change.to_i)
-      elsif rev.kind_of?(Array)
+        @revision = Revision.new change.to_i - 1, change.to_i
+      elsif rev.kind_of? Array
         if rev.size == 2
           # this is some contorting, since -rx:y does not mean comparing the files
           # in changelist x; it means all the entries from x+1 through y, inclusive.
 
           ### $$$ this doesn't handle dates:
-          @revision = Revision.new(rev[0].to_i + 1, rev[0].to_i)
+          @revision = Revision.new rev[0].to_i + 1, rev[0].to_i
         else
           from, to = rev[0].split(':')
-          @revision = Revision.new(from.to_i + 1, to)
+          @revision = Revision.new from.to_i + 1, to
         end
       end
 
