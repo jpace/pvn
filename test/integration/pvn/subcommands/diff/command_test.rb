@@ -115,5 +115,11 @@ module PVN::Subcommands::Diff
 
       assert_diff_command %w{ -r15:16 }, explines
     end
+
+    def xxxtest_revision_to_revision_one_add_one_delete
+      explines = Array.new
+
+      assert_diff_command %w{ -r6:7 }, explines
+    end
   end
 end

@@ -106,7 +106,6 @@ module PVN::Subcommands::Diff
       svninfo = elmt.get_info
 
       fromrev = svninfo.revision
-      torev = nil               # AKA working copy
 
       Tempfile.open('pvn') do |from|
         # from is an empty file
@@ -118,6 +117,34 @@ module PVN::Subcommands::Diff
           
           # I think this is always revision 0
           run_diff_command path, 0, @revision.to, from.path, to.path
+        end
+      end
+    end
+
+    def show_as_deleted elmt, path
+      info "elmt: #{elmt}".magenta
+
+      # this has to be of the form:
+      # svn cat 'svnurl@rev'
+      
+      remotelines = elmt.cat_remote @revision.from.to_s
+      info "remotelines: #{remotelines}"
+
+      svninfo = elmt.get_info
+
+      fromrev = svninfo.revision
+
+      Tempfile.open('pvn') do |from|
+        from.puts remotelines
+        from.close
+          
+        Tempfile.open('pvn') do |to|
+          # to is an empty file
+          to.close
+
+          # deleted are @rev.from, @rev.to
+          
+          run_diff_command path, @revision.from, @revision.to, from.path, to.path
         end
       end
     end

@@ -127,6 +127,7 @@ module PVN::IO
     def cat_remote rev = nil
       path = @local || @svn
       info "path: #{path}".blue
+      info "rev: #{rev}; #{rev.class}".blue
       catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => false, :revision => rev
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
