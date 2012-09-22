@@ -99,54 +99,44 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def show_as_added elmt, path
-      remotelines = elmt.cat_remote @revision.to
-      info "remotelines: #{remotelines}"
+    def cat elmt, rev
+      catargs = SVNx::CatCommandArgs.new :path => elmt.svn + '@' + rev.to_s
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
+    end
 
-      svninfo = elmt.get_info
-
-      fromrev = svninfo.revision
-
+    def run_diff displaypath, fromlines, fromrev, tolines, torev
       Tempfile.open('pvn') do |from|
-        # from is an empty file
+        if fromlines
+          from.puts fromlines
+        end
         from.close
 
         Tempfile.open('pvn') do |to|
-          to.puts remotelines
+          if tolines
+            to.puts tolines
+          end
           to.close
           
-          # I think this is always revision 0
-          run_diff_command path, 0, @revision.to, from.path, to.path
+          run_diff_command displaypath, fromrev, torev, from.path, to.path
         end
       end
     end
 
+    def show_as_modified elmt, path
+      fromlines = cat elmt, @revision.from - 1
+      tolines = cat elmt, @revision.to
+      run_diff path, fromlines, @revision.from - 1, tolines, @revision.to
+    end
+
+    def show_as_added elmt, path
+      tolines = elmt.cat_remote @revision.to
+      run_diff path, nil, 0, tolines, @revision.to
+    end
+
     def show_as_deleted elmt, path
-      info "elmt: #{elmt}".magenta
-
-      # this has to be of the form:
-      # svn cat 'svnurl@rev'
-      
-      remotelines = elmt.cat_remote @revision.from.to_s
-      info "remotelines: #{remotelines}"
-
-      svninfo = elmt.get_info
-
-      fromrev = svninfo.revision
-
-      Tempfile.open('pvn') do |from|
-        from.puts remotelines
-        from.close
-          
-        Tempfile.open('pvn') do |to|
-          # to is an empty file
-          to.close
-
-          # deleted are @rev.from, @rev.to
-          
-          run_diff_command path, @revision.from, @revision.to, from.path, to.path
-        end
-      end
+      fromlines = cat elmt, @revision.from - 1
+      run_diff path, fromlines, @revision.from - 1, nil, @revision.to
     end
     
     def diff_entry name, paths
@@ -164,18 +154,9 @@ module PVN::Subcommands::Diff
       
       if firstrev == lastrev
         record = paths[firstrev]
-        info "record[0]: #{record[0]}".cyan
-        info "record[1]: #{record[1]}".cyan
-
         svnpath = record[1].url + name
-        info "svnpath: #{svnpath}"
-
         elmt = PVN::IO::Element.new :svn => svnpath
-        info "elmt: #{elmt}".green
-
         action = record[0].action
-        info "action: #{action}"
-
         displaypath = name[1 .. -1]
 
         case action

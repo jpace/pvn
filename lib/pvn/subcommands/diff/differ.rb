@@ -51,6 +51,7 @@ module PVN::Subcommands::Diff
 
       [ fromrev, torev ].each do |rev|
         revstr = to_revision_string rev
+        info "revstr: #{revstr}".yellow
         cmd << " -L '#{displaypath}\t(#{revstr})'"
       end
       cmd << " #{frompath}"

@@ -116,10 +116,55 @@ module PVN::Subcommands::Diff
       assert_diff_command %w{ -r15:16 }, explines
     end
 
-    def xxxtest_revision_to_revision_one_add_one_delete
+    def test_revision_to_revision_one_add_one_delete
       explines = Array.new
 
+      explines << "Index: FifthFile.txt"
+      explines << "==================================================================="
+      explines << "--- FifthFile.txt	(revision 0)"
+      explines << "+++ FifthFile.txt	(revision 7)"
+      explines << "@@ -0,0 +1 @@"
+      explines << "+uno"
+      explines << "Index: SecondFile.txt"
+      explines << "==================================================================="
+      explines << "--- SecondFile.txt	(revision 6)"
+      explines << "+++ SecondFile.txt	(revision 7)"
+      explines << "@@ -1,4 +0,0 @@"
+      explines << "-line one of file two."
+      explines << "-# file two, line two"
+      explines << "-# line three"
+      explines << "-line four"
+
       assert_diff_command %w{ -r6:7 }, explines
+    end
+
+    def test_revision_to_revision_only_changes
+      explines = Array.new
+
+      explines << "Index: FirstFile.txt"
+      explines << "==================================================================="
+      explines << "--- FirstFile.txt	(revision 2)"
+      explines << "+++ FirstFile.txt	(revision 3)"
+      explines << "@@ -1,2 +1,3 @@"
+      explines << " This is the first line of the first file in the testbed."
+      explines << " This is the second line of the first file."
+      explines << "+Third line here."
+      explines << "Index: SecondFile.txt"
+      explines << "==================================================================="
+      explines << "--- SecondFile.txt	(revision 2)"
+      explines << "+++ SecondFile.txt	(revision 3)"
+      explines << "@@ -1,2 +1,3 @@"
+      explines << " line one of file two."
+      explines << "+file two, line two"
+      explines << " "
+      
+      assert_diff_command %w{ -r2:3 }, explines
+    end
+
+    def test_revision_to_revision_multiple_changes
+      explines = Array.new
+
+      # assert_diff_command %w{ -r1:4 }, explines
     end
   end
 end
