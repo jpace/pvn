@@ -44,6 +44,7 @@ module System
 
     def test_cache_file_defaults_to_executable
       cl = create_ls_tmp
+      info "cl.cache_file.to_s: #{cl.cache_file.to_s}"
       assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-\/bin', cl.cache_file.to_s
     end
 
