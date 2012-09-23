@@ -46,7 +46,7 @@ module PVN::Subcommands::Diff
       
       cmd = "diff -u"
       if whitespace
-        cmd << " -x -b -x -w -x --ignore-eol-style"
+        cmd << " -w"
       end
 
       [ fromrev, torev ].each do |rev|
@@ -56,6 +56,9 @@ module PVN::Subcommands::Diff
       end
       cmd << " #{frompath}"
       cmd << " #{topath}"
+
+      info "cmd: #{cmd}"
+
       $io.puts "Index: #{displaypath}"
       $io.puts "==================================================================="
       IO.popen(cmd) do |io|

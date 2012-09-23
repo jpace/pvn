@@ -59,39 +59,37 @@ module PVN::Subcommands::Diff
       pn.readlines
     end
 
-    def show_as_added entry
-      Tempfile.open('pvn') do |from|
-        # from is an empty file
-        from.close
+    def create_element entry
+      PVN::IO::Element.new :local => entry.path
+    end
 
-        # I think this is always revision 0
-        run_diff_command entry.path, 0, 0, from.path, entry.path
-      end
+    def cat elmt
+      catargs = SVNx::CatCommandArgs.new :path => elmt.local, :use_cache => false
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
+    end
+
+    def show_as_added entry
+      fromlines = nil
+      tolines = read_working_copy entry
+
+      run_diff entry.path, fromlines, 0, tolines, 0
     end
 
     def show_as_deleted entry
-      elmt = PVN::IO::Element.new :local => entry.path
+      elmt = create_element entry
 
       svninfo = elmt.get_info
-      lines = elmt.cat_remote
+      lines = cat elmt
 
-      Tempfile.open('pvn') do |from|
-        from.puts lines
-        from.close
-        Tempfile.open('pvn') do |to|
-          # to is an empty file
-          to.close
-          run_diff_command entry.path, svninfo.revision, nil, from.path, to.path
-        end
-      end
+      run_diff entry.path, lines, svninfo.revision, nil, nil
     end
     
     def show_as_modified entry
-      # only doing working copy to remote now      
-      elmt = PVN::IO::Element.new :local => entry.path
+      elmt = create_element entry
 
       svninfo = elmt.get_info
-      remotelines = elmt.cat_remote
+      remotelines = cat elmt
 
       fromrev = svninfo.revision
       torev = nil               # AKA working copy
