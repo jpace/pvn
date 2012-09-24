@@ -76,27 +76,30 @@ module PVN::Subcommands::Diff
       run_diff entry.path, fromlines, 0, tolines, 0
     end
 
+    def get_latest_revision elmt
+      svninfo = elmt.get_info
+      svninfo.revision
+    end
+
     def show_as_deleted entry
       elmt = create_element entry
 
-      svninfo = elmt.get_info
+      fromrev = get_latest_revision elmt
       lines = cat elmt
 
-      run_diff entry.path, lines, svninfo.revision, nil, nil
+      run_diff entry.path, lines, fromrev, nil, nil
     end
     
     def show_as_modified entry
       elmt = create_element entry
 
-      svninfo = elmt.get_info
       remotelines = cat elmt
 
-      fromrev = svninfo.revision
-      torev = nil               # AKA working copy
+      fromrev = get_latest_revision elmt
 
       wclines = read_working_copy entry
 
-      run_diff entry.path, remotelines, fromrev, wclines, torev
+      run_diff entry.path, remotelines, fromrev, wclines, nil
     end
   end
 end

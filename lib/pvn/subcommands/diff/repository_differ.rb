@@ -59,6 +59,19 @@ module PVN::Subcommands::Diff
       ### $$$ pvn diff -r 143
       ### $$$ pvn diff -r143:HEAD
 
+      @revision = create_revision change, rev
+
+      info "@revision: #{@revision}"
+
+      # maps by log path to log entries
+      logpaths = get_log_paths paths
+
+      logpaths.sort.each do |name, paths|
+        diff_entry name, paths
+      end
+    end
+
+    def create_revision change, rev
       if change
         @revision = Revision.new change.to_i - 1, change.to_i
       elsif rev.kind_of? Array
@@ -72,10 +85,12 @@ module PVN::Subcommands::Diff
           from, to = rev[0].split(':')
           @revision = Revision.new from.to_i + 1, to
         end
+      else
+        nil
       end
+    end
 
-      info "@revision: #{@revision}"
-
+    def get_log_paths paths
       # maps by log path to log entries
       logpaths = Hash.new { |h, k| h[k] = Hash.new }
 
@@ -93,12 +108,9 @@ module PVN::Subcommands::Diff
           end 
         end
       end
-
-      logpaths.sort.each do |name, paths|
-        diff_entry name, paths
-      end
+      logpaths
     end
-
+    
     def cat elmt, rev
       catargs = SVNx::CatCommandArgs.new :path => elmt.svn + '@' + rev.to_s
       cmd = SVNx::CatCommand.new catargs
@@ -141,11 +153,12 @@ module PVN::Subcommands::Diff
         show_as_deleted elmt, displaypath
       when 'M'
         lastrev = revisions[-1]
-        if firstrev == lastrev
-          show_as_modified elmt, displaypath, @revision.from - 1, @revision.to
-        else
-          show_as_modified elmt, displaypath, firstrev.to_i - 1, lastrev
-        end
+        fromrev, torev = if firstrev == lastrev
+                           [ @revision.from - 1, @revision.to ]
+                         else
+                           [ firstrev.to_i - 1, lastrev ]
+                         end
+        show_as_modified elmt, displaypath, fromrev, torev
       end
     end
 
