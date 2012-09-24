@@ -1,5 +1,5 @@
 require 'integration/tc'
-require 'pvn/diff/diffcmd'
+# require 'pvn/diff/diffcmd'
 
 module PVN
   class TestDiff < PVN::IntegrationTestCase
@@ -47,7 +47,7 @@ module PVN
       assert_diff_command 'svn diff', %w{ --no-diff-cmd }
     end
 
-    def test_none
+    def xtest_none
       # write ~/.pvn/config.rb and load it ...
       doc = DiffCommand.to_doc
       # puts "doc: #{doc}".on_green
@@ -100,23 +100,23 @@ module PVN
       assert_output headcmd, "< goner line\n"
     end
 
-    def test_between_two_revisions
+    def xtest_between_two_revisions
       # diff -r 132:412
     end
 
-    def test_change
+    def xtest_change
       # diff -c 317
     end
 
-    def test_revision_against_head
+    def xtest_revision_against_head
       # diff -r 317 (same as -r 317:HEAD)
     end
 
-    def test_filter_known_type_java
+    def xtest_filter_known_type_java
       # diff --diff-cmd diffj Foo.java
     end
 
-    def test_filter_unknown_type
+    def xtest_filter_unknown_type
       # diff foo.yaml
     end
   end
