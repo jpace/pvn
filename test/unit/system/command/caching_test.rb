@@ -21,6 +21,14 @@ module System
       CachingCommandLine.new [ "ls", "/bin" ]
     end
 
+    def read_gzfile gzfile
+      lines = nil
+      Zlib::GzipReader.open(gzfile.to_s) do |gz|
+        lines = gz.readlines
+      end
+      lines
+    end
+
     def test_ctor_no_args
       cl = CachingCommandLine.new [ "ls" ]
       assert_equal "ls", cl.to_command
@@ -45,7 +53,7 @@ module System
     def test_cache_file_defaults_to_executable
       cl = create_ls_tmp
       info "cl.cache_file.to_s: #{cl.cache_file.to_s}"
-      assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-\/bin', cl.cache_file.to_s
+      assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-_slash_bin.gz', cl.cache_file.to_s
     end
 
     def test_cache_dir_set_cachefile
@@ -55,7 +63,7 @@ module System
       assert !CACHE_DIR.exist?
 
       cachefile = cl.cache_file
-      assert_equal CACHE_DIR.to_s + '/ls-\/bin', cachefile.to_s
+      assert_equal CACHE_DIR.to_s + '/ls-_slash_bin.gz', cachefile.to_s
     end
 
     def test_cache_dir_created_on_execute
@@ -66,7 +74,7 @@ module System
 
       cl.execute
       assert CACHE_DIR.exist?
-      cachelines = IO.readlines cachefile.to_s
+      cachelines = read_gzfile cachefile
 
       syslines = nil
       # we can't use /tmp, since this test will add to it:
@@ -86,7 +94,8 @@ module System
 
       cl.execute
       assert CACHE_DIR.exist?
-      cachelines = IO.readlines cachefile.to_s
+
+      cachelines = read_gzfile cachefile
 
       syslines = nil
       IO.popen("ls #{dir}") do |io|
