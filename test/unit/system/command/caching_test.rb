@@ -1,32 +1,13 @@
 require 'tc'
 require 'system/command/caching'
+require 'system/command/tc'
 
 module System
-  class CachingCommandLineTestCase < PVN::TestCase
+  class CachingCommandLineTestCase < CommandTestCase
     include Loggable
-
-    CACHE_DIR = Pathname.new '/tmp/pvn/testing'
-
-    def setup
-      super
-      CACHE_DIR.rmtree if CACHE_DIR.exist?
-    end
-
-    def teardown
-      CACHE_DIR.rmtree if CACHE_DIR.exist?
-      super
-    end
 
     def create_ls_tmp
       CachingCommandLine.new [ "ls", "/bin" ]
-    end
-
-    def read_gzfile gzfile
-      lines = nil
-      Zlib::GzipReader.open(gzfile.to_s) do |gz|
-        lines = gz.readlines
-      end
-      lines
     end
 
     def test_ctor_no_args
@@ -52,7 +33,6 @@ module System
 
     def test_cache_file_defaults_to_executable
       cl = create_ls_tmp
-      info "cl.cache_file.to_s: #{cl.cache_file.to_s}"
       assert_equal '/tmp' + (Pathname.new($0).expand_path).to_s + '/ls-_slash_bin.gz', cl.cache_file.to_s
     end
 
