@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'synoption/doc'
 require 'synoption/match'
+require 'synoption/matchers'
 
 module PVN
   class BaseOption
@@ -28,16 +29,10 @@ module PVN
 
       @value = @default = default
 
-      @matchers = Hash.new
-      @matchers[:exact] = OptionExactMatch.new @tag, @name
+      @matchers = Matchers.new @tag, @name, options[:negate], options[:regexp]
 
-      if @negate = options[:negate]
-        @matchers[:negative] = OptionNegativeMatch.new @negate
-      end
-      
-      if @regexp = options[:regexp]
-        @matchers[:regexp] = OptionRegexpMatch.new @regexp
-      end
+      @negate = options[:negate]
+      @regexp = options[:regexp]
       
       if options.include? :as_cmdline_option
         if options[:as_cmdline_option].nil?
@@ -71,27 +66,15 @@ module PVN
     end
 
     def exact_match? arg
-      @matchers[:exact].match? arg
+      @matchers.exact.match? arg
     end
 
     def negative_match? arg
-      @matchers[:negative] and @matchers[:negative].match? arg
+      @matchers.negative and @matchers.negative.match? arg
     end
 
     def regexp_match? arg
-      @matchers[:regexp] and @matchers[:regexp].match? arg
-    end
-
-    def match arg
-      return nil unless arg
-      
-      @matchers.each do |type, matcher|
-        if matcher.match? arg
-          return [ type, matcher ]
-        end
-      end
-
-      nil
+      @matchers.regexp and @matchers.regexp.match? arg
     end
 
     def unset
@@ -117,16 +100,16 @@ module PVN
     end
 
     def process args
-      if @matchers[:exact].match? args[0]
+      if @matchers.exact.match? args[0]
         args.shift
         val = takes_value? ? next_argument(args) : true
         set_value val
         true
-      elsif @matchers[:negative] && @matchers[:negative].match?(args[0])
+      elsif @matchers.negative && @matchers.negative.match?(args[0])
         arg = args.shift
         set_value false
         true
-      elsif @matchers[:regexp] && (md = @matchers[:regexp].match?(args[0]))
+      elsif @matchers.regexp && (md = @matchers.regexp.match?(args[0]))
         arg = args.shift
         set_value md[0]
         true
