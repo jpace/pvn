@@ -16,9 +16,11 @@ require 'pvn/subcommands/diff/command'
 # the old ones:
 # require 'pvn/diff/diffcmd'
 # require 'pvn/pct/pctcmd'
-require 'pvn/describe'
-require 'pvn/upp/uppcmd'
-require 'pvn/wherecmd'
+
+# the new ones:
+# require 'pvn/describe'
+# require 'pvn/upp/uppcmd'
+# require 'pvn/wherecmd'
 
 module PVN; module App; end; end
 
