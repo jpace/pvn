@@ -42,5 +42,38 @@ module PVN
       subelmt = elmt.elements.detect { |el| el.name == name }
       subelmt ? subelmt.get_text.to_s : nil
     end
+
+    def assert_arrays_equal expected, actual
+      # assert_equal expected, actual
+      (0 ... [ expected.size, actual.size ].max).each do |idx|
+        assert_equal expected[idx], actual[idx]
+      end
+    end
+
+    def assert_command_output cmdcls, args, explines
+      orig_dir = Dir.pwd
+      
+      Dir.chdir '/Programs/pvn/pvntestbed.pending'
+
+      strio = StringIO.new
+
+      $io = strio
+
+      info "args: #{args}"
+
+      cmd = cmdcls.new args
+      info "cmd: #{cmd}"
+      
+      strio.close
+      puts strio.string
+      
+      actlines = strio.string.split("\n")
+      info "actlines: #{actlines}"
+
+      assert_arrays_equal explines, actlines
+
+      $io = $stdout
+      Dir.chdir orig_dir
+    end
   end
 end

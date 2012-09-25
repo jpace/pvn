@@ -41,7 +41,7 @@ module PVN::Subcommands::Status
       end
 
       fmtr = PVN::Status::EntriesFormatter.new options.color, allentries
-      puts fmtr.format
+      $io.puts fmtr.format
     end
   end
 end
