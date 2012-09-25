@@ -5,7 +5,7 @@ require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'tempfile'
 require 'pvn/subcommands/diff/differ'
-require 'pvn/subcommands/diff/revision'
+require 'pvn/revision'
 
 module PVN::Subcommands::Diff
   class RepositoryDiffer < Differ
@@ -45,21 +45,21 @@ module PVN::Subcommands::Diff
 
     def create_revision change, rev
       if change
-        @revision = Revision.new change.to_i - 1, change.to_i
+        @revision = PVN::RevisionRange.new change.to_i - 1, change.to_i
       elsif rev.kind_of? Array
         if rev.size == 2
           # this is some contorting, since -rx:y does not mean comparing the files
           # in changelist x; it means all the entries from x+1 through y, inclusive.
 
           ### $$$ this doesn't handle dates:
-          @revision = Revision.new rev[0].to_i + 1, rev[0].to_i
+          @revision = PVN::RevisionRange.new rev[0].to_i + 1, rev[0].to_i
         else
           from, to = rev[0].split(':')
           info "from: #{from}"
           info "to  : #{to}"
           to ||= :working_copy
 
-          @revision = Revision.new from.to_i + 1, to
+          @revision = PVN::RevisionRange.new from.to_i + 1, to
         end
       else
         info "revision argument not handled: #{rev}".red
@@ -103,7 +103,8 @@ module PVN::Subcommands::Diff
     def show_as_modified elmt, path, fromrev, torev
       fromlines = cat elmt, fromrev
       tolines = cat elmt, torev
-      run_diff path, fromlines, @revision.from - 1, tolines, @revision.to
+      fromrev = @revision.from.value.to_i - 1
+      run_diff path, fromlines, fromrev, tolines, @revision.to
     end
 
     def show_as_added elmt, path
@@ -112,8 +113,9 @@ module PVN::Subcommands::Diff
     end
 
     def show_as_deleted elmt, path
-      fromlines = cat elmt, @revision.from - 1
-      run_diff path, fromlines, @revision.from - 1, nil, @revision.to
+      fromrev = @revision.from.value.to_i - 1
+      fromlines = cat elmt, fromrev
+      run_diff path, fromlines, fromrev, nil, @revision.to
     end
     
     def diff_entry name, paths
@@ -137,7 +139,7 @@ module PVN::Subcommands::Diff
       when 'M'
         lastrev = revisions[-1]
         fromrev, torev = if firstrev == lastrev
-                           [ @revision.from - 1, @revision.to ]
+                           [ @revision.from.value.to_i - 1, @revision.to ]
                          else
                            [ firstrev.to_i - 1, lastrev ]
                          end

@@ -31,7 +31,7 @@ module PVN
       limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
       xmllines = run_log_command limit, path
 
-      reventry = PVN::Revision.new :value => rel, :xmllines => xmllines
+      reventry = PVN::Revision.new rel, xmllines
       revval   = reventry.value.to_s
       revval
     end

@@ -23,7 +23,6 @@ module PVN
     def assert_relative_to_absolute exp, val, path = Resources::PT_PATH
       ropt = MockRevisionOption.new
       act = ropt.relative_to_absolute val, path
-      info "act: #{act}".cyan
       assert_equal exp, act, "val: #{val}; path: #{path}"
     end
 

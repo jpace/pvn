@@ -6,8 +6,6 @@ require 'svnx/info/entries'
 
 module SVNx::Info
   class EntriesTestCase < SVNx::Info::TestCase    
-    EXPROOT = 'file:///Programs/Subversion/Repositories/pvntestbed.from'
-
     def assert_info_entry_equals entry, path, kind, revision
       assert_entry_equals entry, :path => path, :kind => 'file', :url => EXPROOT + '/' + path, :root => EXPROOT, :revision => revision
     end

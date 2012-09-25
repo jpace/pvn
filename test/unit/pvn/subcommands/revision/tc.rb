@@ -7,10 +7,7 @@ require 'resources'
 module PVN
   module MockBaseRevisionOption
     def run_log_command limit, path
-      info "limit: #{limit}; #{limit.class}".red
-      info "path : #{path}".red
       if path == Resources::PT_PATH
-        info "limit: #{limit}".green
         case limit
         when 1
           Resources::PT_LOG_R19.readlines

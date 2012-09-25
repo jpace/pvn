@@ -23,7 +23,7 @@ module PVN::App::Pct
         when %r{-r(.*)}
           md = Regexp.last_match
           info "md: #{md}".on_yellow
-          @revision = Revision.new :value => md[1]
+          @revision = Revision.new md[1]
         else
           @path = arg
         end

@@ -19,6 +19,10 @@ module PVN
     DATE_REGEXP = Regexp.new '^\{(.*?)\}'
     SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
     RELATIVE_REVISION_RE = Regexp.new '^([\+\-])(\d+)$'
+    
+    # these are also valid revisions
+    # :working_copy
+    # :head
 
     include Loggable
 
@@ -28,15 +32,12 @@ module PVN
     class << self
       alias_method :orig_new, :new
 
-      def new args = Hash.new
-        value = args[:value]
-
+      def new value, xmllines = nil
         # these are lines from "svn log -v <file>"
-        xmllines = args[:xmllines]
         if xmllines.kind_of? Array
           xmllines = xmllines.join ''
         end
-
+        
         case value
         when Fixnum
           if value < 0
@@ -54,6 +55,8 @@ module PVN
           else
             FixnumRevision.orig_new value.to_i
           end
+        when Symbol
+          raise "symbol not yet handled"
         when Date
           # $$$ this (and Time) will probably have to be converted to svn's format
           raise "date not yet handled"
@@ -70,12 +73,19 @@ module PVN
     def initialize value
       @value = value
     end
+
+    def to_s
+      @value.to_s
+    end
   end
 
   class FixnumRevision < Revision
   end
 
   class StringRevision < Revision
+  end
+
+  class WorkingCopyRevision < Revision
   end
 
   class RelativeRevision < FixnumRevision
@@ -96,6 +106,43 @@ module PVN
         @log_entry = logentries[idx]
         super @log_entry.revision.to_i
       end
+    end
+  end
+
+  # this is of the form: -r123:456
+  class RevisionRange
+    include Loggable
+    
+    attr_reader :from
+    attr_reader :to
+
+    def initialize from, to = nil, xmllines = nil
+      if to
+        @from = to_revision from, xmllines
+        @to = to_revision to, xmllines
+      else
+        @from, @to = from.split(':').collect { |x| to_revision x, xmllines }
+      end
+    end
+
+    def to_revision val, xmllines
+      val.kind_of?(Revision) || Revision.new(val)
+    end
+    
+    def to_s
+      str = @from.to_s
+      unless working_copy?
+        str << ':' << @to.to_s
+      end
+      str
+    end
+
+    def head?
+      @to == nil || @to == :head
+    end
+
+    def working_copy?
+      @to == nil || @to == :wc || @to == :working_copy
     end
   end
 end
