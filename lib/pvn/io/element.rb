@@ -124,11 +124,21 @@ module PVN::IO
       modified
     end
 
-    def cat_remote rev = nil
+    def xxxcat_remote rev = nil
       path = @local || @svn
       info "path: #{path}".blue
       info "rev: #{rev}; #{rev.class}".blue
       catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => false, :revision => rev
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
+    end
+
+    def cat revision
+      path = svn.dup
+      if revision && revision != :working_copy
+        path << '@' << revision.to_s
+      end
+      catargs = SVNx::CatCommandArgs.new :path => path
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
     end
@@ -166,6 +176,15 @@ module PVN::IO
       SVNx::Log::Entries.new :xmllines => cmd.execute
     end
 
+    # returns log entries
+    def logentries revision
+      # use_cache should be conditional on revision:
+      # cmdargs[:use_cache] = false
+      cmdargs = SVNx::LogCommandArgs.new :path => @local, :revision => revision.to_s, :use_cache => false, :verbose => true
+      cmd = SVNx::LogCommand.new cmdargs
+      SVNx::Log::Entries.new :xmllines => cmd.execute
+    end
+    
     # returns :added, :deleted, "modified"
     def status
       cmdargs = SVNx::StatusCommandArgs.new :path => @local

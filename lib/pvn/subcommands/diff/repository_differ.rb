@@ -77,7 +77,9 @@ module PVN::Subcommands::Diff
         pathinfo = pathelmt.get_info
         info "pathinfo: #{pathinfo.inspect}".on_black
 
-        logentries = get_log_entries path, @revision
+        elmt = PVN::IO::Element.new :local => path
+        logentries = elmt.logentries @revision
+
         logentries.each do |logentry|
           logentry.paths.each do |lp|
             next if lp.kind != 'file'
@@ -90,31 +92,21 @@ module PVN::Subcommands::Diff
       logpaths
     end
     
-    def cat elmt, rev
-      path = elmt.svn.dup
-      if rev && rev != :working_copy
-        path << '@' << rev.to_s
-      end
-      catargs = SVNx::CatCommandArgs.new :path => path
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
-    end
-
     def show_as_modified elmt, path, fromrev, torev
-      fromlines = cat elmt, fromrev
-      tolines = cat elmt, torev
+      fromlines = elmt.cat fromrev
+      tolines = elmt.cat torev
       fromrev = @revision.from.value.to_i - 1
       run_diff path, fromlines, fromrev, tolines, @revision.to
     end
 
     def show_as_added elmt, path
-      tolines = cat elmt, @revision.to
+      tolines = elmt.cat @revision.to
       run_diff path, nil, 0, tolines, @revision.to
     end
 
     def show_as_deleted elmt, path
       fromrev = @revision.from.value.to_i - 1
-      fromlines = cat elmt, fromrev
+      fromlines = elmt.cat fromrev
       run_diff path, fromlines, fromrev, nil, @revision.to
     end
     
@@ -145,21 +137,6 @@ module PVN::Subcommands::Diff
                          end
         show_as_modified elmt, displaypath, fromrev, torev
       end
-    end
-
-    def get_log_entries path, revision
-      cmdargs = Hash.new
-      cmdargs[:path] = path
-      cmdargs[:revision] = revision.to_s
-      cmdargs[:verbose] = true
-
-      # should be conditional on revision:
-      cmdargs[:use_cache] = false
-
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      elmt    = PVN::IO::Element.new :local => path
-      log     = elmt.log logargs
-      entries = log.entries
     end
   end
 end
