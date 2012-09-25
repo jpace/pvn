@@ -23,6 +23,7 @@ module PVN::Subcommands::Diff
       @whitespace = options.whitespace
       rev = options.revision
       info "rev: #{rev}".cyan
+
       change = options.change
       info "change: #{change}".cyan
 
@@ -54,9 +55,14 @@ module PVN::Subcommands::Diff
           @revision = Revision.new rev[0].to_i + 1, rev[0].to_i
         else
           from, to = rev[0].split(':')
+          info "from: #{from}"
+          info "to  : #{to}"
+          to ||= :working_copy
+
           @revision = Revision.new from.to_i + 1, to
         end
       else
+        info "revision argument not handled: #{rev}".red
         nil
       end
     end
@@ -79,11 +85,17 @@ module PVN::Subcommands::Diff
           end 
         end
       end
+      info "logpaths: #{logpaths}".cyan
+
       logpaths
     end
     
     def cat elmt, rev
-      catargs = SVNx::CatCommandArgs.new :path => elmt.svn + '@' + rev.to_s
+      path = elmt.svn.dup
+      if rev && rev != :working_copy
+        path << '@' << rev.to_s
+      end
+      catargs = SVNx::CatCommandArgs.new :path => path
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
     end

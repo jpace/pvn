@@ -114,5 +114,11 @@ module PVN::Subcommands::Diff
 
       assert_diff_command %w{ -r1:4 }, explines
     end
+
+    def xxxtest_revision_against_working_copy
+      explines = Array.new
+
+      assert_diff_command %w{ -r20 }, explines
+    end
   end
 end

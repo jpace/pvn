@@ -24,14 +24,18 @@ module PVN::Subcommands::Diff
 
     def to_s
       str = @from.to_s
-      if @to
+      unless working_copy?
         str << ':' << @to.to_s
       end
       str
     end
 
     def head?
-      @to == nil
+      @to == nil || @to == :head
+    end
+
+    def working_copy?
+      @to == nil || @to == :wc || @to == :working_copy
     end
   end
 end

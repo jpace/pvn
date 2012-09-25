@@ -28,12 +28,12 @@ module PVN::Subcommands::Diff
       info "args: #{args}"
 
       opts = OptionSet.new
-      info "opts: #{opts}".red
+      info "opts: #{opts}"
 
       opts.process args
 
       differ = create_differ opts
-      info "differ: #{differ}".yellow
+      info "differ: #{differ}"
       
       strio.close
       puts strio.string
@@ -49,6 +49,5 @@ module PVN::Subcommands::Diff
     def create_differ opts
       raise "not implemented for #{self.class}"
     end
-    
   end
 end
