@@ -11,7 +11,7 @@ module PVN::Subcommands::Status
 
     DEFAULT_LIMIT = 15
 
-    subcommands [ "status" ]
+    subcommands [ "status", "st" ]
     description "Prints the status for locally changed files."
     usage       "[OPTIONS] FILE..."
     summary     [ "Prints the status for the given files, with colorized",
