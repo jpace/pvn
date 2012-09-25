@@ -3,12 +3,12 @@
 
 require 'tc'
 require 'svnx/log/entries'
-require 'pvn/revision/entry'
+require 'pvn/revision'
 
 require 'resources'
 
-module PVN::Revision
-  class TestCase < PVN::TestCase
+module PVN
+  class RevisionTestCase < PVN::TestCase
     def setup
       # This is the equivalent of "log" at revision 22, when this file was added
       # at revision 13. Using this instead of just "log" when regenerating the
@@ -17,12 +17,12 @@ module PVN::Revision
     end
 
     def assert_revision_entry exp_value, value
-      rev = PVN::Revision::Entry.new :xmllines => @xmllines, :value => value
+      rev = PVN::Revision.new :xmllines => @xmllines, :value => value
       assert_equal exp_value, rev.value
     end
 
     def assert_revision_entry_raises value
-      assert_raises(PVN::Revision::RevisionError) do 
+      assert_raises(PVN::RevisionError) do 
         assert_revision_entry nil, value
       end
     end

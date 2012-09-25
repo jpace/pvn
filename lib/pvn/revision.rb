@@ -6,20 +6,20 @@ require 'svnx/log/entries'
 # This is an abuse of all the element/entry nonsense in this code. This will
 # replace lib/pvn/revision.rb as PVN::Revision.                                                                            
 
-module PVN::Revision
+module PVN
   class RevisionError < RuntimeError
   end
-
-  DATE_REGEXP = Regexp.new '^\{(.*?)\}'
-  SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
-  RELATIVE_REVISION_RE = Regexp.new '^([\+\-])(\d+)$'
 
   # Returns the Nth revision from the given logging output.
 
   # -n means to count from the end of the list.
   # +n means to count from the beginning of the list.
   #  n means the literal revision number.  
-  class Entry
+  class Revision
+    DATE_REGEXP = Regexp.new '^\{(.*?)\}'
+    SVN_REVISION_WORDS = %w{ HEAD BASE COMMITTED PREV }
+    RELATIVE_REVISION_RE = Regexp.new '^([\+\-])(\d+)$'
+
     include Loggable
 
     attr_reader :value
@@ -40,19 +40,19 @@ module PVN::Revision
         case value
         when Fixnum
           if value < 0
-            RelativeEntry.orig_new value, xmllines
+            RelativeRevision.orig_new value, xmllines
           else
-            FixnumEntry.orig_new value
+            FixnumRevision.orig_new value
           end
         when String
           if SVN_REVISION_WORDS.include? value
-            StringEntry.orig_new value
+            StringRevision.orig_new value
           elsif md = RELATIVE_REVISION_RE.match(value)
-            RelativeEntry.orig_new md[0].to_i, xmllines
+            RelativeRevision.orig_new md[0].to_i, xmllines
           elsif DATE_REGEXP.match value
-            StringEntry.orig_new value
+            StringRevision.orig_new value
           else
-            FixnumEntry.orig_new value.to_i
+            FixnumRevision.orig_new value.to_i
           end
         when Date
           # $$$ this (and Time) will probably have to be converted to svn's format
@@ -72,13 +72,13 @@ module PVN::Revision
     end
   end
 
-  class FixnumEntry < Entry
+  class FixnumRevision < Revision
   end
 
-  class StringEntry < Entry
+  class StringRevision < Revision
   end
 
-  class RelativeEntry < FixnumEntry
+  class RelativeRevision < FixnumRevision
     def initialize value, xmllines
       unless xmllines
         raise RevisionError.new "cannot determine relative revision without xmllines"

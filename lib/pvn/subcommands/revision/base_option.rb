@@ -5,7 +5,7 @@ require 'riel'
 require 'rubygems'
 require 'synoption/option'
 require 'svnx/log/command'
-require 'pvn/revision/entry'
+require 'pvn/revision'
 
 module PVN
   class BaseRevisionOption < Option
@@ -31,7 +31,7 @@ module PVN
       limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
       xmllines = run_log_command limit, path
 
-      reventry = PVN::Revision::Entry.new :value => rel, :xmllines => xmllines
+      reventry = PVN::Revision.new :value => rel, :xmllines => xmllines
       revval   = reventry.value.to_s
       revval
     end
