@@ -7,8 +7,8 @@ require 'pvn/revision'
 
 module PVN::Subcommands::Diff
   class LogPathsTestCase < PVN::IntegrationTestCase
-    def assert_log_path expname, exprevisions, explogentrypath, expsvninfo, lps, idx
-      logpath = lps.elements[idx]
+    def assert_log_path expname, exprevisions, explogentrypath, expsvninfo, logpaths, idx
+      logpath = logpaths[idx]
       msg = "element[#{idx}]"
       assert_equal expname, logpath.name, msg
       assert_equal exprevisions, logpath.revisions, msg
@@ -18,12 +18,12 @@ module PVN::Subcommands::Diff
     def test_paths
       revision = PVN::RevisionRange.new '15', '16'
       paths = %w{ . }
-      lps = LogPaths.new revision, paths
-      assert_equal 3, lps.elements.size
+      logpaths = LogPaths.new revision, paths
+      assert_equal 3, logpaths.size
       
-      assert_log_path "/SecondFile.txt",      [ "15" ], nil, nil, lps, 0
-      assert_log_path "/src/java/Bravo.java", [ "16" ], nil, nil, lps, 1
-      assert_log_path "/src/java/Alpha.java", [ "16" ], nil, nil, lps, 2
+      assert_log_path "/SecondFile.txt",      [ "15" ], nil, nil, logpaths, 0
+      assert_log_path "/src/java/Bravo.java", [ "16" ], nil, nil, logpaths, 1
+      assert_log_path "/src/java/Alpha.java", [ "16" ], nil, nil, logpaths, 2
     end
   end
 end

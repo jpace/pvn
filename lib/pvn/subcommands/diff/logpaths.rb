@@ -28,13 +28,10 @@ module PVN::Subcommands::Diff
   class LogPaths
     include Loggable
 
-    attr_reader :elements
-
     def initialize revision, paths
       @revision = revision
-      
       @elements = Array.new
-
+      
       paths.each do |path|
         info "path: #{path}"
         pathelmt = PVN::IO::Element.new :local => path
@@ -60,6 +57,21 @@ module PVN::Subcommands::Diff
         end
       end
       info "@entries: #{@entries}".cyan
+    end
+
+    def [] idx
+      @elements[idx]
+    end
+
+    def size
+      @elements.size
+    end
+
+    # returns a map from names to logpaths
+    def to_map
+      name_to_logpath = Hash.new
+      @elements.each { |logpath| name_to_logpath[logpath.name] = logpath }
+      name_to_logpath
     end
   end
 end
