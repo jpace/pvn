@@ -7,6 +7,7 @@ require 'tempfile'
 require 'pvn/subcommands/diff/differ'
 require 'pvn/subcommands/diff/logpaths'
 require 'pvn/revision'
+require 'pp'
 
 module PVN::Subcommands::Diff
   class RepositoryDiffer < Differ
@@ -37,24 +38,22 @@ module PVN::Subcommands::Diff
       info "@revision: #{@revision}"
 
       paths.each do |path|
-        info "path: #{path}".on_red
+        info "path: #{path}"
       end
 
       # maps by log path to log entries
-      logpaths = get_log_paths paths
+      lps = LogPaths.new @revision, paths
 
-      paths.each do |path|
-        info "path: #{path}".on_red
+      names = lps.elements.collect { |lpelmt| lpelmt.name }
+      info "names: #{names}".magenta
+
+      names.sort.each do |name|
+        info "name: #{name}".magenta
+        lpelmt = lps.elements.detect { |el| el.name == name }
+        info "lpelmt: #{lpelmt}".magenta
+        diff_element lpelmt
       end
-
-      logpaths.sort.each do |name, lps|
-        diff_entry name, lps
-      end
-
-      paths.each do |path|
-        info "path: #{path}".on_red
-      end
-
+      
       info "@revision: #{@revision}".red
       
       if @revision.working_copy?
@@ -75,7 +74,7 @@ module PVN::Subcommands::Diff
             when 'deleted'
               # 
             end
-            # logpaths[entry.path][:working_copy] = [ lp, :working_copy ]
+            # lpentries[entry.path][:working_copy] = [ lp, :working_copy ]
           end
           # allentries.concat entries.sort_by { |n| n.path }
         end
@@ -104,11 +103,6 @@ module PVN::Subcommands::Diff
       end
     end
 
-    def get_log_paths paths
-      lps = LogPaths.new @revision, paths
-      lps.entries
-    end
-    
     def show_as_modified elmt, path, fromrev, torev
       fromlines = elmt.cat fromrev
       tolines = elmt.cat torev
@@ -127,18 +121,31 @@ module PVN::Subcommands::Diff
       run_diff path, fromlines, fromrev, nil, @revision.to
     end
     
-    def diff_entry name, paths
-      info "name: #{name}".blue
+    def diff_element lpelmt
+      info "lpelmt.name: #{lpelmt.name}".magenta
+      info "lpelmt: #{lpelmt}".magenta
+      name = lpelmt.name
 
-      revisions = paths.keys.sort
+      pp lpelmt
+      revisions = lpelmt.revisions
+      info "revisions: #{revisions}".magenta
+      
+      # all the paths will be the same, so any can be selected (actually, a
+      # logpath should have multiple revisions)
+      svnurl = lpelmt.svninfo.url
+      info "svnurl: #{svnurl}"
+      
+      svnpath = svnurl + name
+      info "svnpath: #{svnpath}"
+      elmt = PVN::IO::Element.new :svn => svnpath
+
+      action = lpelmt.logentrypath.action
+      info "action: #{action}"
+      displaypath = name[1 .. -1]
+      info "displaypath: #{displaypath}"
 
       firstrev = revisions[0]
-      
-      record = paths[firstrev]
-      svnpath = record[1].url + name
-      elmt = PVN::IO::Element.new :svn => svnpath
-      action = record[0].action
-      displaypath = name[1 .. -1]
+      lastrev = revisions[-1]
       
       case action
       when 'A'
@@ -154,6 +161,10 @@ module PVN::Subcommands::Diff
                          end
         show_as_modified elmt, displaypath, fromrev, torev
       end
+
+
+      # lprevisions = lpelmt.collect { |lp| lp.revision }
+      # info "lprevisions: #{lprevisions}".red
     end
   end
 end

@@ -5,17 +5,35 @@ require 'pvn/io/element'
 require 'pvn/revision'
 
 module PVN::Subcommands::Diff
+  # an entry with a name, revision, logentry.path, and svninfo
+  class LogPath
+    attr_reader :name
+    attr_reader :revisions
+    attr_reader :logentrypath
+    attr_reader :svninfo
+    
+    def initialize name, revision, logentrypath, svninfo
+      @name = name
+      @revisions = [ revision ]
+      @logentrypath = logentrypath
+      @svninfo = svninfo
+    end
+
+    def to_s
+      inspect
+    end
+  end
+
   # represents the log entries from one revision through another.
   class LogPaths
     include Loggable
 
-    attr_reader :entries
+    attr_reader :elements
 
     def initialize revision, paths
       @revision = revision
       
-      # maps by log path to log entries
-      @entries = Hash.new { |h, k| h[k] = Hash.new }
+      @elements = Array.new
 
       paths.each do |path|
         info "path: #{path}"
@@ -30,17 +48,18 @@ module PVN::Subcommands::Diff
           logentry.paths.each do |lp|
             next if lp.kind != 'file'
             info "lp: #{lp}".red
-            @entries[lp.name][logentry.revision] = [ lp, pathinfo ]
+
+            logpath = @elements.detect { |element| element.name == lp.name }
+            info "logpath: #{logpath}".cyan
+            if logpath
+              logpath.revisions << logentry.revision
+            else
+              @elements << LogPath.new(lp.name, logentry.revision, lp, pathinfo)
+            end
           end 
         end
       end
       info "@entries: #{@entries}".cyan
-      
-      # require 'pp'
-      # pp @entries
-
-      @entries
     end
   end
 end
-
