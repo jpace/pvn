@@ -42,8 +42,6 @@ module PVN::Subcommands::Diff
     end
 
     def run_diff_command displaypath, fromrev, torev, frompath, topath
-      info "whitespace: #{whitespace}"
-      
       cmd = "diff -u"
       if whitespace
         cmd << " -w"

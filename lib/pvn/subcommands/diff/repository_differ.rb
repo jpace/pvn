@@ -3,7 +3,6 @@
 
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
-require 'tempfile'
 require 'pvn/subcommands/diff/differ'
 require 'pvn/subcommands/diff/logpaths'
 require 'pvn/subcommands/diff/revision'

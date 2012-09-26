@@ -3,7 +3,6 @@
 
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
-require 'tempfile'
 require 'pvn/subcommands/diff/differ'
 
 module PVN::Subcommands::Diff
@@ -14,16 +13,14 @@ module PVN::Subcommands::Diff
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
-      info "paths: #{paths}".yellow
-
       allentries = Array.new
 
-      # we sort only the sub-entries, so the order in which paths were specified is preserved
+      # we sort only the sub-entries, so the order in which paths were specified
+      # is preserved
 
       @whitespace = options.whitespace
 
       paths.each do |path|
-        info "path: #{path}"
         elmt = PVN::IO::Element.new :local => path
         entries = elmt.find_files_by_status
         
@@ -31,15 +28,19 @@ module PVN::Subcommands::Diff
       end
 
       allentries.each do |entry|
-        info "entry: #{entry.inspect}"
-        case entry.status
-        when 'modified'
-          show_as_modified entry
-        when 'deleted'
-          show_as_deleted entry
-        when 'added'
-          show_as_added entry
-        end
+        show_entry entry
+      end
+    end
+
+    def show_entry entry
+      info "entry: #{entry.inspect}"
+      case entry.status
+      when 'modified'
+        show_as_modified entry
+      when 'deleted'
+        show_as_deleted entry
+      when 'added'
+        show_as_added entry
       end
     end
 
@@ -62,9 +63,8 @@ module PVN::Subcommands::Diff
     end
 
     def cat elmt
-      catargs = SVNx::CatCommandArgs.new :path => elmt.local, :use_cache => false
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
+      elmt = PVN::IO::Element.new :local => elmt.local
+      elmt.cat nil, :use_cache => false
     end
 
     def show_as_added entry
@@ -90,13 +90,9 @@ module PVN::Subcommands::Diff
     
     def show_as_modified entry
       elmt = create_element entry
-
       remotelines = cat elmt
-
       fromrev = get_latest_revision elmt
-
       wclines = read_working_copy entry
-
       run_diff entry.path, remotelines, fromrev, wclines, nil
     end
   end

@@ -133,13 +133,13 @@ module PVN::IO
       cmd.execute
     end
 
-    def cat revision
+    def cat revision, use_cache = false
       path = (@local || @path || @svn).dup
       if revision && revision != :working_copy
         path << '@' << revision.to_s
       end
       info "path: #{path}"
-      catargs = SVNx::CatCommandArgs.new :path => path
+      catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => use_cache
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
     end
