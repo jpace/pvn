@@ -3,27 +3,9 @@
 
 require 'pvn/io/element'
 require 'pvn/revision'
+require 'pvn/subcommands/diff/logpath'
 
 module PVN::Subcommands::Diff
-  # an entry with a name, revision, logentry.path, and svninfo
-  class LogPath
-    attr_reader :name
-    attr_reader :revisions
-    attr_reader :logentrypath
-    attr_reader :svninfo
-    
-    def initialize name, revision, logentrypath, svninfo
-      @name = name
-      @revisions = [ revision ]
-      @logentrypath = logentrypath
-      @svninfo = svninfo
-    end
-
-    def to_s
-      inspect
-    end
-  end
-
   # represents the log entries from one revision through another.
   class LogPaths
     include Loggable
@@ -33,30 +15,28 @@ module PVN::Subcommands::Diff
       @elements = Array.new
       
       paths.each do |path|
-        info "path: #{path}"
         pathelmt = PVN::IO::Element.new :local => path
         pathinfo = pathelmt.get_info
-        info "pathinfo: #{pathinfo.inspect}".on_black
-
         elmt = PVN::IO::Element.new :local => path
         logentries = elmt.logentries @revision
 
         logentries.each do |logentry|
-          logentry.paths.each do |lp|
-            next if lp.kind != 'file'
-            info "lp: #{lp}".red
-
-            logpath = @elements.detect { |element| element.name == lp.name }
-            info "logpath: #{logpath}".cyan
-            if logpath
-              logpath.revisions << logentry.revision
-            else
-              @elements << LogPath.new(lp.name, logentry.revision, lp, pathinfo)
-            end
+          logentry.paths.each do |logentrypath|
+            next if logentrypath.kind != 'file'
+            add_log_entry_path logentry, logentrypath, pathinfo
           end 
         end
       end
-      info "@entries: #{@entries}".cyan
+    end
+
+    def add_log_entry_path logentry, logentrypath, pathinfo
+      name = logentrypath.name
+      logpath = @elements.detect { |element| element.name == name }
+      if logpath
+        logpath.revisions << logentry.revision
+      else
+        @elements << LogPath.new(name, logentry.revision, logentrypath, pathinfo)
+      end
     end
 
     def [] idx
