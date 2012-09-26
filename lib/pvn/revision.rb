@@ -120,8 +120,11 @@ module PVN
       if to
         @from = to_revision from, xmllines
         @to = to_revision to, xmllines
-      else
+      elsif from.kind_of? String
         @from, @to = from.split(':').collect { |x| to_revision x, xmllines }
+      else
+        @from = to_revision from, xmllines
+        @to = :working_copy
       end
     end
 
@@ -138,7 +141,7 @@ module PVN
     end
 
     def head?
-      @to == nil || @to == :head
+      @to == :head
     end
 
     def working_copy?

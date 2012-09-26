@@ -1,9 +1,10 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'tc'
+require 'integration/tc'
 require 'resources'
 require 'stringio'
+require 'pvn/subcommands/diff/command'
 
 Log.level = Log::DEBUG
 

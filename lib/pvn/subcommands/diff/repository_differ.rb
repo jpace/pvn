@@ -5,6 +5,7 @@ require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'tempfile'
 require 'pvn/subcommands/diff/differ'
+require 'pvn/subcommands/diff/logpaths'
 require 'pvn/revision'
 
 module PVN::Subcommands::Diff
@@ -35,11 +36,49 @@ module PVN::Subcommands::Diff
 
       info "@revision: #{@revision}"
 
+      paths.each do |path|
+        info "path: #{path}".on_red
+      end
+
       # maps by log path to log entries
       logpaths = get_log_paths paths
 
-      logpaths.sort.each do |name, paths|
-        diff_entry name, paths
+      paths.each do |path|
+        info "path: #{path}".on_red
+      end
+
+      logpaths.sort.each do |name, lps|
+        diff_entry name, lps
+      end
+
+      paths.each do |path|
+        info "path: #{path}".on_red
+      end
+
+      info "@revision: #{@revision}".red
+      
+      if @revision.working_copy?
+        info "@revision.working_copy?: #{@revision.working_copy?}".red
+        paths.each do |path|
+          info "path: #{path}".on_blue
+          elmt = PVN::IO::Element.new :local => path
+          entries = elmt.find_files_by_status
+          info "entries: #{entries}".yellow
+
+          entries.sort_by { |n| n.path }.each do |entry|
+            info "entry: #{entry}".cyan
+            case entry.status
+            when 'modified'
+              # show_as_modified 
+            when 'added'
+              # 
+            when 'deleted'
+              # 
+            end
+            # logpaths[entry.path][:working_copy] = [ lp, :working_copy ]
+          end
+          # allentries.concat entries.sort_by { |n| n.path }
+        end
       end
     end
 
@@ -57,8 +96,6 @@ module PVN::Subcommands::Diff
           from, to = rev[0].split(':')
           info "from: #{from}"
           info "to  : #{to}"
-          to ||= :working_copy
-
           @revision = PVN::RevisionRange.new from.to_i + 1, to
         end
       else
@@ -68,28 +105,8 @@ module PVN::Subcommands::Diff
     end
 
     def get_log_paths paths
-      # maps by log path to log entries
-      logpaths = Hash.new { |h, k| h[k] = Hash.new }
-
-      paths.each do |path|
-        info "path: #{path}"
-        pathelmt = PVN::IO::Element.new :local => path
-        pathinfo = pathelmt.get_info
-        info "pathinfo: #{pathinfo.inspect}".on_black
-
-        elmt = PVN::IO::Element.new :local => path
-        logentries = elmt.logentries @revision
-
-        logentries.each do |logentry|
-          logentry.paths.each do |lp|
-            next if lp.kind != 'file'
-            logpaths[lp.name][logentry.revision] = [ lp, pathinfo ]
-          end 
-        end
-      end
-      info "logpaths: #{logpaths}".cyan
-
-      logpaths
+      lps = LogPaths.new @revision, paths
+      lps.entries
     end
     
     def show_as_modified elmt, path, fromrev, torev
@@ -122,7 +139,7 @@ module PVN::Subcommands::Diff
       elmt = PVN::IO::Element.new :svn => svnpath
       action = record[0].action
       displaypath = name[1 .. -1]
-
+      
       case action
       when 'A'
         show_as_added elmt, displaypath

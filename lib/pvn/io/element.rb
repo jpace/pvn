@@ -134,10 +134,11 @@ module PVN::IO
     end
 
     def cat revision
-      path = svn.dup
+      path = (@local || @path || @svn).dup
       if revision && revision != :working_copy
         path << '@' << revision.to_s
       end
+      info "path: #{path}"
       catargs = SVNx::CatCommandArgs.new :path => path
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
@@ -189,8 +190,8 @@ module PVN::IO
     def status
       cmdargs = SVNx::StatusCommandArgs.new :path => @local
       cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
-      xml = cmd.execute.join ''
-      entries = SVNx::Status::Entries.new :xml => SVNx::Status::XMLEntries.new(xml)
+      xmllines = cmd.execute
+      entries = SVNx::Status::Entries.new :xmllines => xmllines
       entry = entries[0]
       entry.status
     end

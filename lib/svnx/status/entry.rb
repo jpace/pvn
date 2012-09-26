@@ -32,5 +32,9 @@ module SVNx::Status
                   "unchanged"
                 end
     end
+
+    def to_s
+      "status: #{@status}; path: #{@path}"
+    end
   end
 end

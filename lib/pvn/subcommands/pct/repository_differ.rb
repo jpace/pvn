@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'svnx/cat/command'
 require 'pvn/subcommands/pct/diffcount'
 require 'pvn/subcommands/pct/differ'
 
@@ -23,13 +22,6 @@ module PVN::Subcommands::Pct
       else
         info "rev: #{rev}".bold.white.on_red
       end
-    end
-
-    def get_line_count path, revision
-      info "path: #{path}".yellow
-      cmdargs = SVNx::CatCommandArgs.new :path => path, :revision => revision
-      catcmd = SVNx::CatCommand.new cmdargs
-      catcmd.execute.size
     end
     
     def get_diff_counts path, options
@@ -62,8 +54,8 @@ module PVN::Subcommands::Pct
         next unless elmt.has_revision? torev
         next if elmt.get_info.kind == 'dir'
 
-        from_count = get_line_count fullpath, fromrev
-        to_count = get_line_count fullpath, torev
+        from_count = elmt.cat(fromrev).size
+        to_count = elmt.cat(torev).size
 
         name = mod.dup
         name.slice! filterre

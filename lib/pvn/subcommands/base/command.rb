@@ -50,8 +50,12 @@ module PVN::Subcommands::Base
       def example *ex
         getdoc.examples << ex
       end
-    end
 
+      def matches_subcommand? sc
+        getdoc.subcommands.include? sc
+      end
+    end
+    
     def to_doc io
       doc = self.class.getdoc
       doc.write io

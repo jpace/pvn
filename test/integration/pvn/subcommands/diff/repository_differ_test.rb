@@ -120,5 +120,9 @@ module PVN::Subcommands::Diff
 
       assert_diff_command %w{ -r20 }, explines
     end
+
+    def xxxtest_get_log_paths
+      RepositoryDiffer.new opts
+    end
   end
 end

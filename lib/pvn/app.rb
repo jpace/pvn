@@ -6,8 +6,6 @@ require 'riel'
 
 require 'pvn/io/element'
 
-require 'svnx/log/entries'
-
 require 'pvn/subcommands/log/command'
 require 'pvn/subcommands/pct/command'
 require 'pvn/subcommands/status/command'
@@ -45,15 +43,13 @@ module PVN::App
           RIEL::Log.level = RIEL::Log::DEBUG
         when "help", "--help", "-h"
           run_help args
-        when "log"
-          run_command PVN::Subcommands::Log::Command, args
-        when "pct"
-          run_command PVN::Subcommands::Pct::Command, args
-        when "status"
-          run_command PVN::Subcommands::Status::Command, args
-        when "diff"
-          run_command PVN::Subcommands::Diff::Command, args
         else
+          SUBCOMMANDS.each do |sc|
+            if sc.matches_subcommand? arg
+              # run command actually exits
+              run_command sc, args
+            end
+          end
           $stderr.puts "ERROR: subcommand not valid: #{arg}"
           exit(-1)
         end
@@ -90,9 +86,9 @@ module PVN::App
 
     SUBCOMMANDS = [ PVN::Subcommands::Log::Command,
                     PVN::Subcommands::Pct::Command,
-#                    DiffCommand, 
+                    PVN::Subcommands::Status::Command,
+                    PVN::Subcommands::Diff::Command,
 #                    DescribeCommand, 
-#                    PctCommand,
 #                    WhereCommand,
 #                    UndeleteCommand,
                   ]
