@@ -52,11 +52,15 @@ module PVN::Subcommands::Diff
 
     def add_log_entry_path logentry, logentrypath, pathinfo
       name = logentrypath.name
+      revision = logentry.revision
+      action = logentrypath.action
+      url = pathinfo.url
+      
       logpath = @elements.detect { |element| element.name == name }
       if logpath
         logpath.revisions << logentry.revision
       else
-        @elements << LogPath.new(name, logentry.revision, logentrypath, pathinfo)
+        @elements << LogPath.new(name, logentry.revision, action, url)
       end
     end
 

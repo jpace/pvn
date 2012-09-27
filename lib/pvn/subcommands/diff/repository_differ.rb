@@ -23,14 +23,10 @@ module PVN::Subcommands::Diff
 
       @whitespace = options.whitespace
       rev = options.revision
-      info "rev: #{rev}".cyan
+      info "rev: #{rev}"
 
       change = options.change
-      info "change: #{change}".cyan
-
-      ### $$$ add handling revision against head:
-      ### $$$ pvn diff -r 143
-      ### $$$ pvn diff -r143:HEAD
+      info "change: #{change}"
 
       @revision = RevisionRange.new change, rev
 
@@ -56,6 +52,8 @@ module PVN::Subcommands::Diff
           entries = elmt.find_files_by_status
           info "entries: #{entries}".yellow
 
+          # we're going to create logpaths here ...
+
           entries.sort_by { |n| n.path }.each do |entry|
             info "entry: #{entry}".cyan
             info "entry: #{entry.class}".cyan
@@ -67,9 +65,7 @@ module PVN::Subcommands::Diff
             when 'deleted'
               # 
             end
-            # lpentries[entry.path][:working_copy] = [ lp, :working_copy ]
           end
-          # allentries.concat entries.sort_by { |n| n.path }
         end
       end
     end
@@ -93,36 +89,38 @@ module PVN::Subcommands::Diff
     end
     
     def diff_logpath logpath
-      info "logpath.name: #{logpath.name}".magenta
-      info "logpath: #{logpath}".magenta
+      info "logpath.name: #{logpath.name}"
+      info "logpath: #{logpath}"
       name = logpath.name
 
       revisions = logpath.revisions
-      info "revisions: #{revisions}".magenta
+      info "revisions: #{revisions}"
       
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple revisions)
       svnurl = logpath.url
-      info "svnurl: #{svnurl}".on_red
+      info "svnurl: #{svnurl}"
       
       svnpath = svnurl + name
       info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
-      action = logpath.action
-      info "action: #{action}"
       displaypath = name[1 .. -1]
       info "displaypath: #{displaypath}"
 
       firstrev = revisions[0]
       lastrev = revisions[-1]
+
+      action = logpath.action
+
+      # we ignore unversioned logpaths
       
-      case action
-      when 'A'
+      case
+      when action.added?
         show_as_added elmt, displaypath
-      when 'D'
+      when action.deleted?
         show_as_deleted elmt, displaypath
-      when 'M'
+      when action.modified?
         lastrev = revisions[-1]
         fromrev, torev = if firstrev == lastrev
                            [ @revision.from.value.to_i - 1, @revision.to ]
