@@ -102,14 +102,14 @@ module PVN::Subcommands::Diff
       
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple revisions)
-      svnurl = logpath.svninfo.url
+      svnurl = logpath.url
       info "svnurl: #{svnurl}".on_red
       
       svnpath = svnurl + name
       info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
-      action = logpath.logentrypath.action
+      action = logpath.action
       info "action: #{action}"
       displaypath = name[1 .. -1]
       info "displaypath: #{displaypath}"

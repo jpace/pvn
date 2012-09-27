@@ -1,0 +1,40 @@
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
+require 'rubygems'
+require 'riel'
+
+module SVNx
+  # $$$ this cries for a little metaprogramming ... tomorrow
+
+  class Action
+    def initialize str
+      @type = case str
+              when 'added', 'A'
+                :added
+              when 'deleted', 'D'
+                :deleted
+              when 'modified', 'M'
+                :modified
+              when 'unversioned', '?'
+                :unversioned
+              end
+    end
+
+    def added?
+      @type == :added
+    end
+
+    def deleted?
+      @type == :deleted
+    end
+    
+    def modified?
+      @type == :modified
+    end
+    
+    def unversioned?
+      @type == :unversioned
+    end
+  end
+end

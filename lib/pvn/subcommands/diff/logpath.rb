@@ -15,6 +15,8 @@ module PVN::Subcommands::Diff
       @name = name
       @revisions = [ revision ]
       @logentrypath = logentrypath
+      @action = logentrypath.action
+      @url = svninfo.url
       @svninfo = svninfo
     end
 
