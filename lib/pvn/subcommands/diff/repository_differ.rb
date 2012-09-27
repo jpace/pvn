@@ -42,32 +42,7 @@ module PVN::Subcommands::Diff
         diff_logpath logpath
       end
       
-      info "@revision: #{@revision}".red
-      
-      if @revision.working_copy?
-        info "@revision.working_copy?: #{@revision.working_copy?}".red
-        paths.each do |path|
-          info "path: #{path}".on_blue
-          elmt = PVN::IO::Element.new :local => path
-          entries = elmt.find_files_by_status
-          info "entries: #{entries}".yellow
-
-          # we're going to create logpaths here ...
-
-          entries.sort_by { |n| n.path }.each do |entry|
-            info "entry: #{entry}".cyan
-            info "entry: #{entry.class}".cyan
-            case entry.status
-            when 'modified'
-              # show_as_modified 
-            when 'added'
-              # 
-            when 'deleted'
-              # 
-            end
-          end
-        end
-      end
+      info "@revision: #{@revision}".red      
     end
 
     def show_as_modified elmt, path, fromrev, torev
