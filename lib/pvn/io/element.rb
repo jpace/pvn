@@ -152,8 +152,8 @@ module PVN::IO
     def find_files_by_status status = nil
       cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
       cmd = SVNx::StatusCommand.new cmdargs
-      xml = cmd.execute
-      entries = SVNx::Status::Entries.new :xmllines => xml
+      xmllines = cmd.execute
+      entries = SVNx::Status::Entries.new :xmllines => xmllines
       
       if status
         entries.select do |entry|

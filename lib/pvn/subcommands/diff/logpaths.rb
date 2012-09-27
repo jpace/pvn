@@ -15,9 +15,11 @@ module PVN::Subcommands::Diff
       @elements = Array.new
       
       paths.each do |path|
+        info "path: #{path}".blue
         pathelmt = PVN::IO::Element.new :local => path
         pathinfo = pathelmt.get_info
         elmt = PVN::IO::Element.new :local => path
+        info "@revision: #{@revision}".yellow
         logentries = elmt.logentries @revision
 
         logentries.each do |logentry|
@@ -25,6 +27,25 @@ module PVN::Subcommands::Diff
             next if logentrypath.kind != 'file'
             add_log_entry_path logentry, logentrypath, pathinfo
           end 
+        end
+
+        if @revision.working_copy?
+          info "getting status".cyan
+          status = elmt.find_files_by_status
+          info "status: #{status}"
+          info "status.entries: #{status.entries}"
+          status.entries.each do |entry|
+            info "entry: #{entry}".red
+            name = entry.path
+            info "name: #{name}"
+            rev = :working_copy
+            info "rev: #{rev}"
+            action = entry.status
+            info "action: #{action}"
+            unless action == 'unversioned'
+              # add_log_status_path entry.path, :working_copy, action, 
+            end
+          end
         end
       end
     end
@@ -36,6 +57,16 @@ module PVN::Subcommands::Diff
         logpath.revisions << logentry.revision
       else
         @elements << LogPath.new(name, logentry.revision, logentrypath, pathinfo)
+      end
+    end
+
+    def add_log_status_path name, revision, action, url
+      logpath = @elements.detect { |element| element.name == name }
+      if logpath
+        info "logpath: #{logpath}"
+        logpath.revisions << revision
+      else
+        @elements << LogPath.new(name, revision, nil, nil, action, url)
       end
     end
 

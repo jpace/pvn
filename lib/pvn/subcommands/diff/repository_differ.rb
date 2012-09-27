@@ -41,8 +41,8 @@ module PVN::Subcommands::Diff
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        info "name: #{name}".magenta
-        info "logpath: #{logpath}".magenta
+        info "name: #{name}"
+        info "logpath: #{logpath}"
         diff_logpath logpath
       end
       
@@ -58,6 +58,7 @@ module PVN::Subcommands::Diff
 
           entries.sort_by { |n| n.path }.each do |entry|
             info "entry: #{entry}".cyan
+            info "entry: #{entry.class}".cyan
             case entry.status
             when 'modified'
               # show_as_modified 
@@ -102,7 +103,7 @@ module PVN::Subcommands::Diff
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple revisions)
       svnurl = logpath.svninfo.url
-      info "svnurl: #{svnurl}"
+      info "svnurl: #{svnurl}".on_red
       
       svnpath = svnurl + name
       info "svnpath: #{svnpath}"

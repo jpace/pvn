@@ -19,11 +19,13 @@ module PVN
       super
 
       @origdir = Dir.pwd
+      # $$$ shouldn't this be .pending?
       Dir.chdir PT_DIRNAME
     end
 
     def teardown
-      remove_cache_dir        
+      remove_cache_dir
+      Dir.chdir @origdir
       super
     end
 

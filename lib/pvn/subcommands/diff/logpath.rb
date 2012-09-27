@@ -8,6 +8,8 @@ module PVN::Subcommands::Diff
     attr_reader :revisions
     attr_reader :logentrypath
     attr_reader :svninfo
+    attr_reader :action
+    attr_reader :url
     
     def initialize name, revision, logentrypath, svninfo
       @name = name

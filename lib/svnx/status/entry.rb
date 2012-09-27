@@ -34,7 +34,7 @@ module SVNx::Status
     end
 
     def to_s
-      "status: #{@status}; path: #{@path}"
+      "path: #{@path}; status: #{@status}"
     end
   end
 end
