@@ -41,8 +41,7 @@ module SVNx
       @type == :unversioned
     end
 
-    def <=>(other)
-      info "other: #{other}"
+    def <=> other
       @type.to_s <=> other.type.to_s
     end
   end

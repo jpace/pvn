@@ -27,6 +27,11 @@ module PVN::Subcommands::Diff
       assert_equal expaction, logpath.action
     end
 
+    def assert_logpath_url expurl, url
+      logpath = create_logpath "File.txt", "0", "deleted", url
+      assert_equal expurl, logpath.url
+    end
+
     def test_init_name
       assert_logpath_name "File.txt", "File.txt"
     end
@@ -57,6 +62,10 @@ module PVN::Subcommands::Diff
 
     def test_init_action_symbol
       assert_logpath_action SVNx::Action.new(:modified), :modified
+    end
+
+    def test_init_url
+      assert_logpath_url "file:///var/svn/repo", "file:///var/svn/repo"
     end
   end
 end
