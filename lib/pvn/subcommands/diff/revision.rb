@@ -1,10 +1,10 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision'
+require 'pvn/revision/range'
 
 module PVN::Subcommands::Diff
-  class RevisionRange < PVN::RevisionRange
+  class RevisionRange < PVN::Revision::Range
     include Loggable
 
     def initialize change, rev

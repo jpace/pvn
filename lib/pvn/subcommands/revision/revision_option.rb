@@ -8,13 +8,6 @@ module PVN
     attr_accessor :fromdate
     attr_accessor :todate
 
-    REVISION_DESCRIPTION = [ "revision to apply.",
-                             "ARG can be relative, of the form:",
-                             "    +N : N revisions from the BASE",
-                             "    -N : N revisions from the HEAD,",
-                             "         when -1 is the previous revision" ,
-                           ]
-    
     def initialize revargs = Hash.new
       @fromdate = nil
       @todate = nil

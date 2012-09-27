@@ -19,7 +19,7 @@ module PVN
       revargs[:regexp] = TAG_RE
       super
     end
-
+    
     def resolve_value optset, unprocessed
       val = value
       md  = TAG_RE.match val

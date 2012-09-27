@@ -31,7 +31,8 @@ module PVN
       limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
       xmllines = run_log_command limit, path
 
-      reventry = PVN::Revision.new rel, xmllines
+      # This is Argument, not Range, because we're getting the value
+      reventry = PVN::Revision::Argument.new rel, xmllines
       revval   = reventry.value.to_s
       revval
     end

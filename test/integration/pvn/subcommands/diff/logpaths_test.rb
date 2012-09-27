@@ -16,7 +16,7 @@ module PVN::Subcommands::Diff
     end
       
     def test_paths
-      revision = PVN::RevisionRange.new '15', '16'
+      revision = PVN::Revision::Range.new '15', '16'
       paths = %w{ . }
       logpaths = LogPaths.new revision, paths
       assert_equal 3, logpaths.size

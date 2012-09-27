@@ -49,7 +49,7 @@ module PVN
     end
 
     def assert_revision_option_raises val, path = Resources::PT_PATH
-      assert_raises(PVN::RevisionError) do 
+      assert_raises(PVN::Revision::RevisionError) do 
         opt = create_option
         # opt.process [ val ]
         opt.set_value val

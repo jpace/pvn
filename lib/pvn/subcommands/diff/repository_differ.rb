@@ -96,7 +96,6 @@ module PVN::Subcommands::Diff
       info "logpath: #{logpath}".magenta
       name = logpath.name
 
-      pp logpath
       revisions = logpath.revisions
       info "revisions: #{revisions}".magenta
       
