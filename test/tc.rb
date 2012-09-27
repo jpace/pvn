@@ -2,6 +2,7 @@ require 'rubygems'
 require 'riel'
 require 'stringio'
 require 'test/unit'
+require 'resources'
 
 Log.level = Log::DEBUG
 Log.set_widths(-35, 4, -35)

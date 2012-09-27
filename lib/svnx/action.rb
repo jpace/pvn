@@ -8,15 +8,19 @@ module SVNx
   # $$$ this cries for a little metaprogramming ... tomorrow
 
   class Action
+    include Loggable, Comparable    
+    
+    attr_reader :type
+
     def initialize str
       @type = case str
-              when 'added', 'A'
+              when 'added', 'A', :added
                 :added
-              when 'deleted', 'D'
+              when 'deleted', 'D', :deleted
                 :deleted
-              when 'modified', 'M'
+              when 'modified', 'M', :modified
                 :modified
-              when 'unversioned', '?'
+              when 'unversioned', '?', :unversioned
                 :unversioned
               end
     end
@@ -35,6 +39,11 @@ module SVNx
     
     def unversioned?
       @type == :unversioned
+    end
+
+    def <=>(other)
+      info "other: #{other}"
+      @type.to_s <=> other.type.to_s
     end
   end
 end

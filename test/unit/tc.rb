@@ -1,11 +1,6 @@
 require 'rubygems'
 require 'riel'
-require 'stringio'
-require 'test/unit'
 require 'tc'
-require 'resources'
-
-# require 'pvn'
 
 # module PVN
 #   class TestCase < Test::Unit::TestCase

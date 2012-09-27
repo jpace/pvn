@@ -5,6 +5,7 @@ require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'pvn/subcommands/diff/differ'
 require 'pvn/subcommands/diff/logpaths'
+require 'pvn/subcommands/diff/status_paths'
 require 'pvn/subcommands/diff/revision'
 require 'pp'
 
@@ -23,13 +24,9 @@ module PVN::Subcommands::Diff
 
       @whitespace = options.whitespace
       rev = options.revision
-      info "rev: #{rev}"
-
       change = options.change
-      info "change: #{change}"
 
       @revision = RevisionRange.new change, rev
-
       info "@revision: #{@revision}"
 
       logpaths = LogPaths.new @revision, paths
@@ -37,12 +34,14 @@ module PVN::Subcommands::Diff
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        info "name: #{name}"
-        info "logpath: #{logpath}"
         diff_logpath logpath
       end
-      
-      info "@revision: #{@revision}".red      
+
+      if @revision.working_copy?
+        statuspaths = StatusPaths.new @revision, paths
+        info "statuspaths: #{statuspaths}".blue
+        # name_to_logpath = logpaths.to_map
+      end        
     end
 
     def show_as_modified elmt, path, fromrev, torev
@@ -53,6 +52,7 @@ module PVN::Subcommands::Diff
     end
 
     def show_as_added elmt, path
+      info "elmt: #{elmt}".on_blue
       tolines = elmt.cat @revision.to
       run_diff path, nil, 0, tolines, @revision.to
     end
@@ -65,7 +65,7 @@ module PVN::Subcommands::Diff
     
     def diff_logpath logpath
       info "logpath.name: #{logpath.name}"
-      info "logpath: #{logpath}"
+      info "logpath: #{logpath.inspect}"
       name = logpath.name
 
       revisions = logpath.revisions
