@@ -4,7 +4,7 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/base/command'
 require 'pvn/subcommands/status/options'
-require 'pvn/status/formatter/entries_formatter'
+require 'pvn/subcommands/status/formatter/entries_formatter'
 
 module PVN::Subcommands::Status
   class Command < PVN::Subcommands::Base::Command

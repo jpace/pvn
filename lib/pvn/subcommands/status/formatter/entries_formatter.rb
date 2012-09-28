@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/status/formatter/status_formatter'
-require 'pvn/status/formatter/entry_formatter'
+require 'pvn/subcommands/status/formatter/status_formatter'
+require 'pvn/subcommands/status/formatter/entry_formatter'
 
 module PVN; module Status; end; end
 
