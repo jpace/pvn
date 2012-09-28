@@ -26,6 +26,10 @@ module PVN::Subcommands::Diff
       rev = options.revision
       change = options.change
 
+      if rev[1].nil? || rev[1].to == :working_copy
+        # rev[1] = "BASE"
+      end
+
       @revision = RevisionRange.new change, rev
       info "@revision: #{@revision}"
 
@@ -37,9 +41,15 @@ module PVN::Subcommands::Diff
         diff_logpath logpath
       end
 
+      return if true
+
       if @revision.working_copy?
         statuspaths = StatusPaths.new @revision, paths
-        info "statuspaths: #{statuspaths}".blue
+        info "statuspaths: #{statuspaths}".on_blue
+        statuspaths.each do |stpath|
+          info "stpath: #{stpath}".on_green
+          # diff_status_path stpath
+        end
         # name_to_logpath = logpaths.to_map
       end        
     end
@@ -64,7 +74,7 @@ module PVN::Subcommands::Diff
     end
     
     def diff_logpath logpath
-      info "logpath.name: #{logpath.name}"
+      info "logpath.name: #{logpath.name}".red
       info "logpath: #{logpath.inspect}"
       name = logpath.name
 
@@ -89,6 +99,8 @@ module PVN::Subcommands::Diff
       action = logpath.action
 
       # we ignore unversioned logpaths
+      
+      pp logpath
       
       case
       when action.added?

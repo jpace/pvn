@@ -6,8 +6,7 @@ require 'svnx/action'
 module PVN; module Subcommands; module Diff; end; end; end
 
 module PVN::Subcommands::Diff
-  # an entry with a name, revision, logentry.path, and svninfo
-  class LogPath
+  class Path
     attr_reader :name
     attr_reader :revisions
     attr_reader :action

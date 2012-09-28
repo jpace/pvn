@@ -3,7 +3,7 @@
 
 require 'pvn/io/element'
 require 'pvn/revision'
-require 'pvn/subcommands/diff/logpath'
+require 'pvn/subcommands/diff/path'
 
 module PVN::Subcommands::Diff
   # represents the log entries from one revision through another.
@@ -43,7 +43,10 @@ module PVN::Subcommands::Diff
         info "action: #{action}"
         revisions = get_status_revisions entry
         info "revisions: #{revisions}".on_cyan
-        @elements << LogPath.new(name, revisions, action, url)
+
+        info "status.revision: #{entry.status_revision}".red
+
+        @elements << Path.new(name, entry.status_revision, action, url)
       end
     end
 
@@ -74,6 +77,7 @@ module PVN::Subcommands::Diff
         [ @revision.from, :working_copy ]
       when action.modified?
         info "modified"
+        [ status_entry.status_revision, :working_copy ]
       end
     end    
 
@@ -87,7 +91,7 @@ module PVN::Subcommands::Diff
       if logpath
         logpath.revisions << logentry.revision
       else
-        @elements << LogPath.new(name, logentry.revision, action, url)
+        @elements << Path.new(name, logentry.revision, action, url)
       end
     end
 
@@ -98,7 +102,7 @@ module PVN::Subcommands::Diff
         logpath.revisions << revision
       else
         this_is_not_called
-        # @elements << LogPath.new(name, revision, nil, nil, action, url)
+        # @elements << Path.new(name, revision, nil, nil, action, url)
       end
     end
 

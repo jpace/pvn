@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision/range'
+require 'pvn/revision'
 
 module PVN::Subcommands::Diff
   class RevisionRange < PVN::Revision::Range
@@ -20,7 +20,7 @@ module PVN::Subcommands::Diff
         else
           from, to = rev[0].split(':')
           info "from: #{from}"
-          info "to  : #{to}"
+          info "to  : #{to}".cyan
           super from.to_i + 1, to
         end
       else

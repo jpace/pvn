@@ -3,7 +3,7 @@
 
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/paths'
-require 'pvn/subcommands/diff/logpath'
+require 'pvn/subcommands/diff/path'
 
 module PVN::Subcommands::Diff
   # represents the log entries from one revision through another.
@@ -34,11 +34,11 @@ module PVN::Subcommands::Diff
       action = logentrypath.action
       url = pathinfo.url
       
-      logpath = @elements.detect { |element| element.name == name }
-      if logpath
-        logpath.revisions << logentry.revision
+      path = @elements.detect { |element| element.name == name }
+      if path
+        path.revisions << logentry.revision
       else
-        @elements << LogPath.new(name, logentry.revision, action, url)
+        @elements << Path.new(name, logentry.revision, action, url)
       end
     end
   end
