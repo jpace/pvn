@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/formatter/log_formatter'
-require 'pvn/log/formatter/entry_formatter'
+require 'pvn/subcommands/log/formatter/log_formatter'
+require 'pvn/subcommands/log/formatter/entry_formatter'
 
 module PVN; module Log; end; end
 

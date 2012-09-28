@@ -4,9 +4,7 @@
 require 'tc'
 require 'svnx/log/entries'
 require 'pvn/io/element'
-require 'pvn/log/formatter/entry_formatter'
-
-require 'resources'
+require 'pvn/subcommands/log/formatter/entry_formatter'
 
 module PVN; module Log; end; end
 

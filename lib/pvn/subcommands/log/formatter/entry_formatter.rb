@@ -1,10 +1,10 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/formatter/log_formatter'
-require 'pvn/log/formatter/summary_formatter'
-require 'pvn/log/formatter/message_formatter'
-require 'pvn/log/formatter/path_formatter'
+require 'pvn/subcommands/log/formatter/log_formatter'
+require 'pvn/subcommands/log/formatter/summary_formatter'
+require 'pvn/subcommands/log/formatter/message_formatter'
+require 'pvn/subcommands/log/formatter/path_formatter'
 
 module PVN; module Log; end; end
 
