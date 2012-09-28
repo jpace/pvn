@@ -4,7 +4,7 @@
 require 'pvn/io/element'
 require 'pvn/subcommands/diff/options'
 require 'pvn/subcommands/diff/differ'
-require 'pvn/subcommands/diff/logpaths'
+require 'pvn/subcommands/diff/log_paths'
 require 'pvn/subcommands/diff/status_paths'
 require 'pvn/subcommands/diff/revision'
 require 'pp'
