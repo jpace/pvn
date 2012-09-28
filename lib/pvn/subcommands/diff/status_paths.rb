@@ -4,25 +4,21 @@
 require 'pvn/io/element'
 require 'pvn/revision'
 require 'pvn/subcommands/diff/path'
+require 'pvn/subcommands/diff/paths'
 
 module PVN::Subcommands::Diff
   # represents the log entries from one revision through another.
-  class StatusPaths
+  class StatusPaths < Paths
     include Loggable
 
-    def initialize revision, paths
-      @revision = revision
-      @elements = Array.new
-      
-      paths.each do |path|
-        pathelmt = PVN::IO::Element.new :local => path
-        pathinfo = pathelmt.get_info
-        elmt = PVN::IO::Element.new :local => path
-        add_from_status elmt, pathinfo.url
-      end
+    def add_for_path path
+      pathelmt = PVN::IO::Element.new :local => path
+      pathinfo = pathelmt.get_info
+      elmt = PVN::IO::Element.new :local => path
+      add elmt, pathinfo.url
     end
 
-    def add_from_status elmt, url
+    def add elmt, url
       status = elmt.find_files_by_status
       info "status: #{status}"
       status.entries.each do |entry|
@@ -59,7 +55,7 @@ module PVN::Subcommands::Diff
       #     the revisions are (0, 0)
       # when a file is modified:
       #     if the file is modified in other revisions since givenfromrev
-      #         the revision is (given from rev, working copy)
+      #         the revision is (first revision it is in log, working copy)
       #     otherwise
       #         the revision is (previous revision, working copy)
       # when a file is deleted:
@@ -80,45 +76,5 @@ module PVN::Subcommands::Diff
         [ status_entry.status_revision, :working_copy ]
       end
     end    
-
-    def add_log_entry_path logentry, logentrypath, pathinfo
-      name = logentrypath.name
-      revision = logentry.revision
-      action = logentrypath.action
-      url = pathinfo.url
-      
-      logpath = @elements.detect { |element| element.name == name }
-      if logpath
-        logpath.revisions << logentry.revision
-      else
-        @elements << Path.new(name, logentry.revision, action, url)
-      end
-    end
-
-    def add_log_status_path name, revision, action, url
-      logpath = @elements.detect { |element| element.name == name }
-      if logpath
-        info "logpath: #{logpath}"
-        logpath.revisions << revision
-      else
-        this_is_not_called
-        # @elements << Path.new(name, revision, nil, nil, action, url)
-      end
-    end
-
-    def [] idx
-      @elements[idx]
-    end
-
-    def size
-      @elements.size
-    end
-
-    # returns a map from names to logpaths
-    def to_map
-      name_to_logpath = Hash.new
-      @elements.each { |logpath| name_to_logpath[logpath.name] = logpath }
-      name_to_logpath
-    end
   end
 end

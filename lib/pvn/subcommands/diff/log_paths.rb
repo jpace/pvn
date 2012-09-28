@@ -10,10 +10,6 @@ module PVN::Subcommands::Diff
   class LogPaths < Paths
     include Loggable
 
-    def initialize revision, paths
-      super
-    end
-
     def add_for_path path
       pathelmt = PVN::IO::Element.new :local => path
       pathinfo = pathelmt.get_info
@@ -23,12 +19,12 @@ module PVN::Subcommands::Diff
       logentries.each do |logentry|
         logentry.paths.each do |logentrypath|
           next if logentrypath.kind != 'file'
-          add_log_entry_path logentry, logentrypath, pathinfo
+          add_path logentry, logentrypath, pathinfo
         end 
       end
     end
 
-    def add_log_entry_path logentry, logentrypath, pathinfo
+    def add_path logentry, logentrypath, pathinfo
       name = logentrypath.name
       revision = logentry.revision
       action = logentrypath.action
