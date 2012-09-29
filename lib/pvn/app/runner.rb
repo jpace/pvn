@@ -7,10 +7,10 @@ require 'riel'
 require 'pvn'
 require 'pvn/io/element'
 
-require 'pvn/subcommands/log/command'
+require 'pvn/log/command'
 require 'pvn/pct/command'
-require 'pvn/subcommands/status/command'
-require 'pvn/subcommands/diff/command'
+require 'pvn/status/command'
+require 'pvn/diff/command'
 
 # the old ones:
 # require 'pvn/diff/diffcmd'
