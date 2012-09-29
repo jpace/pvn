@@ -6,8 +6,8 @@ require 'pvn/command/command'
 require 'pvn/pct/local_differ'
 require 'pvn/pct/repository_differ'
 
-module PVN::Subcommands::Pct
-  class Command < PVN::Subcommands::Base::Command
+module PVN::Pct
+  class Command < PVN::Command::Command
 
     subcommands [ "pct" ]
     description "Compares revisions as a percentage of lines modified."

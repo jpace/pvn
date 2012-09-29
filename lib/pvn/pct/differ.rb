@@ -3,7 +3,7 @@
 
 require 'pvn/pct/diffcount'
 
-module PVN::Subcommands::Pct
+module PVN::Pct
   class Differ
     include Loggable
 

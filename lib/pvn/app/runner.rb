@@ -27,10 +27,10 @@ module PVN::App
   class Runner
     include Loggable
 
-    SUBCOMMANDS = [ PVN::Subcommands::Log::Command,
-                    PVN::Subcommands::Pct::Command,
-                    PVN::Subcommands::Status::Command,
-                    PVN::Subcommands::Diff::Command,
+    SUBCOMMANDS = [ PVN::Log::Command,
+                    PVN::Pct::Command,
+                    PVN::Status::Command,
+                    PVN::Diff::Command,
                     # DescribeCommand, 
                     # WhereCommand,
                     # UndeleteCommand,

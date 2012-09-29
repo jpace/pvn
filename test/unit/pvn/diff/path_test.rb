@@ -5,8 +5,7 @@ require 'tc'
 require 'pvn/diff/path'
 require 'svnx/action'
 
-module PVN::Subcommands::Diff
-  # an entry with a name, revision, logentry.path, and svninfo
+module PVN::Diff
   class PathTestCase < PVN::TestCase
     def create_path name, revision, action, url
       Path.new name, revision, action, url

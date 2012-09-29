@@ -8,7 +8,7 @@ require 'tempfile'
 
 $io = $stdout
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class Differ
     include Loggable
 

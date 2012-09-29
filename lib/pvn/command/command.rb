@@ -3,13 +3,13 @@
 
 require 'pvn/command/doc'
 
-module PVN; module Subcommands; module Base; end; end; end
+module PVN; module Command; end; end
 
-module PVN::Subcommands::Base
+module PVN::Command
   class Command
     include Loggable
 
-    @@doc_for_class = Hash.new { |h, k| h[k] = PVN::Subcommands::Documentation.new }
+    @@doc_for_class = Hash.new { |h, k| h[k] = PVN::Command::Documentation.new }
     
     class << self
       def getdoc

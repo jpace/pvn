@@ -6,8 +6,8 @@ require 'pvn/command/command'
 require 'pvn/status/options'
 require 'pvn/status/formatter/entries_formatter'
 
-module PVN::Subcommands::Status
-  class Command < PVN::Subcommands::Base::Command
+module PVN::Status
+  class Command < PVN::Command::Command
 
     DEFAULT_LIMIT = 15
 

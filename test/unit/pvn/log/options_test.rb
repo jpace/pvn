@@ -10,7 +10,7 @@ module PVN; module App; module Log; end; end; end
 module PVN::App::Log
   class OptionsTest < PVN::TestCase
     def assert_options exp, args
-      options = PVN::Subcommands::Log::OptionSet.new 
+      options = PVN::Log::OptionSet.new 
       options.process args
 
       assert_equal exp[:limit], options.limit

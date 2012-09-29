@@ -3,9 +3,9 @@
 
 require 'svnx/action'
 
-module PVN; module Subcommands; module Diff; end; end; end
+module PVN; module Diff; end; end
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class Path
     attr_reader :name
     attr_reader :revisions

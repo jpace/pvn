@@ -5,7 +5,7 @@ require 'pvn/io/element'
 require 'pvn/pct/diffcount'
 require 'pvn/pct/differ'
 
-module PVN::Subcommands::Pct
+module PVN::Pct
   class RepositoryDiffer < Differ
     ### $$$ this belongs in Revision
     def get_from_to_revisions rev

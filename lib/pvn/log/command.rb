@@ -6,8 +6,8 @@ require 'pvn/log/formatter/entries_formatter'
 require 'pvn/log/options'
 require 'pvn/command/command'
 
-module PVN::Subcommands::Log
-  class Command < PVN::Subcommands::Base::Command
+module PVN::Log
+  class Command < PVN::Command::Command
 
     DEFAULT_LIMIT = 15
 

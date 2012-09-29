@@ -8,7 +8,7 @@ require 'stringio'
 
 Log.level = Log::DEBUG
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class CommandTest < PVN::TestCase
 
     # the tests previously herewith have been moved to local and repository

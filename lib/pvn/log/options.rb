@@ -9,7 +9,7 @@ require 'pvn/revision/multiple_revisions_option'
 require 'pvn/command/options'
 require 'pvn/command/color_option'
 
-module PVN::Subcommands::Log
+module PVN::Log
   DEFAULT_LIMIT = 5
 
   class LimitOption < PVN::FixnumOption
@@ -30,10 +30,10 @@ module PVN::Subcommands::Log
     end
   end
 
-  class OptionSet < PVN::Subcommands::Base::OptionSet
+  class OptionSet < PVN::Command::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
-    has_option :color,    PVN::Subcommands::Base::ColorOption
-    has_option :help,     PVN::Subcommands::Base::HelpOption
+    has_option :color,    PVN::Command::ColorOption
+    has_option :help,     PVN::Command::HelpOption
     has_option :limit,    LimitOption
     has_option :user,     UserOption
     has_option :verbose,  PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]

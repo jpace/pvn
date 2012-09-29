@@ -9,7 +9,7 @@ require 'pvn/diff/status_paths'
 require 'pvn/diff/revision'
 require 'pp'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class RepositoryDiffer < Differ
     include Loggable
 

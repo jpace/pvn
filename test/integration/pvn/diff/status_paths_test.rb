@@ -5,7 +5,7 @@ require 'integration/pvn/diff/differ_tc'
 require 'pvn/diff/status_paths'
 require 'pvn/revision/range'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class StatusPathsTestCase < PVN::IntegrationTestCase
     def setup
       @orig_dir = Dir.pwd      

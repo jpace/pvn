@@ -6,9 +6,9 @@ require 'synoption/option'
 require 'synoption/boolean_option'
 require 'synoption/fixnum_option'
 
-module PVN; module Subcommands; end; end
+module PVN; module Command; end; end
 
-module PVN::Subcommands::Base
+module PVN::Command
   class HelpOption < PVN::BooleanOption
     def initialize args = Hash.new
       super :help, '-h', "display help", nil

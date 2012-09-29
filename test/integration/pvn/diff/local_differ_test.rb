@@ -6,7 +6,7 @@ require 'integration/pvn/diff/differ_tc'
 
 Log.level = Log::DEBUG
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class LocalDifferTestCase < DifferTestCase
 
     def create_differ opts

@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   # represents the paths from one revision through another.
   class Paths
     include Loggable

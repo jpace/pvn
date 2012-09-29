@@ -5,7 +5,7 @@ require 'pvn/io/element'
 require 'pvn/diff/path'
 require 'pvn/diff/paths'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   # represents the log entries from one revision through another.
   class StatusPaths < Paths
     include Loggable

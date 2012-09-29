@@ -4,7 +4,7 @@
 require 'pvn/diff/repository_differ'
 require 'integration/pvn/diff/differ_tc'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class RepositoryDifferTestCase < DifferTestCase
 
     def create_differ opts
@@ -118,8 +118,10 @@ module PVN::Subcommands::Diff
     # still broken
     def xxxtest_revision_against_working_copy
       explines = Array.new
+      
+      # -r20 means -r20:working_copy
 
-      assert_diff_command %w{ -r20 }, explines
+      assert_diff_command %w{ -r20 src/ruby/charlie.rb }, explines
     end
   end
 end

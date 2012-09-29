@@ -5,7 +5,7 @@ require 'pvn/io/element'
 require 'pvn/diff/options'
 require 'pvn/diff/differ'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class LocalDiffer < Differ
     def initialize options
       super

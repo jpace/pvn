@@ -9,8 +9,8 @@ require 'pvn/diff/repository_differ'
 require 'tempfile'
 require 'synoption/exception'
 
-module PVN::Subcommands::Diff
-  class Command < PVN::Subcommands::Base::Command
+module PVN::Diff
+  class Command < PVN::Command::Command
 
     subcommands [ "diff" ]
     description "Shows the changes to files."

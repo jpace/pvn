@@ -6,7 +6,7 @@ require 'svnx/cat/command'
 require 'pvn/pct/diffcount'
 require 'pvn/pct/differ'
 
-module PVN::Subcommands::Pct
+module PVN::Pct
   class LocalDiffer < Differ
     def get_diff_counts path, options
       elmt = PVN::IO::Element.new :local => path

@@ -4,9 +4,9 @@
 require 'pvn/revision/multiple_revisions_option'
 require 'pvn/command/options'
 
-module PVN::Subcommands::Pct
-  class OptionSet < PVN::Subcommands::Base::OptionSet
+module PVN::Pct
+  class OptionSet < PVN::Command::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption
-    has_option :help,     PVN::Subcommands::Base::HelpOption
+    has_option :help,     PVN::Command::HelpOption
   end
 end

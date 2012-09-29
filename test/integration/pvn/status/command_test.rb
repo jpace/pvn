@@ -8,7 +8,7 @@ require 'stringio'
 
 Log.level = Log::DEBUG
 
-module PVN::Subcommands::Status
+module PVN::Status
   class CommandTest < PVN::IntegrationTestCase
 
     def test_local
@@ -20,7 +20,7 @@ module PVN::Subcommands::Status
       explines << "    src/java/Charlie.java"
       explines << "    \e[32msrc/ruby/dog.rb\e[0m"
       
-      assert_command_output PVN::Subcommands::Status::Command, %w{ }, explines
+      assert_command_output PVN::Status::Command, %w{ }, explines
     end
   end
 end

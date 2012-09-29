@@ -4,11 +4,11 @@
 require 'rubygems'
 require 'riel'
 
-module PVN; module Subcommands; module Base; end; end; end
+module PVN; module Command; end; end
 
 # this is the same as in pvn/cmddoc.rb
 
-module PVN::Subcommands
+module PVN::Command
   class Documentation
     attr_accessor :description
     attr_accessor :usage

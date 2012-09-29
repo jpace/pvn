@@ -8,7 +8,7 @@ require 'pvn/diff/command'
 
 Log.level = Log::DEBUG
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class DifferTestCase < PVN::TestCase
 
     def assert_arrays_equal expected, actual

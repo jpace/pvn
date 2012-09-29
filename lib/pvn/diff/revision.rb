@@ -3,9 +3,9 @@
 
 require 'pvn/revision/range'
 
-module PVN::Subcommands::Diff
+module PVN::Diff
   class RevisionRange < PVN::Revision::Range
-    include Loggable
+    include Loggable, Comparable
 
     def initialize change, rev
       if change
@@ -26,6 +26,12 @@ module PVN::Subcommands::Diff
       else
         raise "revision argument not handled: #{rev}"
       end
+    end
+
+    def <=> other
+      info "other: #{other}".yellow
+      info "self: #{self}".yellow
+      nil
     end
   end
 end
