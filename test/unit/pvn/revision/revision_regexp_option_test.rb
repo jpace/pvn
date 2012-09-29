@@ -1,10 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'tc'
-require 'pvn/subcommands/revision/revision_regexp_option'
-require 'pvn/subcommands/revision/tc'
-require 'resources'
+require 'pvn/revision/tc'
+require 'pvn/revision/revision_regexp_option'
 
 module PVN
   class MockRevisionRegexpOption < RevisionRegexpOption

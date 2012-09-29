@@ -1,9 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'tc'
-require 'pvn/subcommands/revision/multiple_revisions_option'
-require 'pvn/subcommands/revision/tc'
+require 'pvn/revision/tc'
+require 'pvn/revision/multiple_revisions_option'
 
 module PVN
   class MockMultipleRevisionsRegexpOption < MultipleRevisionsRegexpOption

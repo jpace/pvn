@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/revision/multiple_revisions_option'
+require 'pvn/revision/multiple_revisions_option'
 require 'pvn/subcommands/base/options'
 
 module PVN::Subcommands::Pct

@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'synoption/boolean_option'
-require 'pvn/subcommands/revision/multiple_revisions_option'
-require 'pvn/subcommands/revision/base_option'
+require 'pvn/revision/multiple_revisions_option'
+require 'pvn/revision/base_option'
 require 'pvn/subcommands/base/options'
 
 module PVN::Subcommands::Diff
@@ -13,6 +13,8 @@ module PVN::Subcommands::Diff
     end
   end
 
+  # a change option is like a revision option, just against the previous
+  # revision
   class ChangeOption < PVN::BaseRevisionOption
     def initialize optargs = Hash.new
       super :change, '-c', 'use the given revision against the previous one', nil

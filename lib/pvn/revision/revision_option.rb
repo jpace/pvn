@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/revision/base_option'
+require 'pvn/revision/base_option'
 
 module PVN
   class RevisionOption < BaseRevisionOption

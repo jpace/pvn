@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'svnx/log/entry'
-require 'pvn/base/color_formatter'
+require 'pvn/util/color_formatter'
 
 module PVN; module Log; end; end
 

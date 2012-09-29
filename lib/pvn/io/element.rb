@@ -3,7 +3,6 @@
 
 require 'rubygems'
 require 'riel'
-require 'pvn/base/util'
 
 require 'svnx/log/command'
 require 'svnx/log/entries'

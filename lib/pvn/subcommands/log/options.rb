@@ -5,7 +5,7 @@ require 'synoption/set'
 require 'synoption/option'
 require 'synoption/fixnum_option'
 require 'synoption/boolean_option'
-require 'pvn/subcommands/revision/multiple_revisions_option'
+require 'pvn/revision/multiple_revisions_option'
 require 'pvn/subcommands/base/options'
 require 'pvn/subcommands/base/color_option'
 

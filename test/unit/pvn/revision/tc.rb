@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'resources'
 
 module PVN
   module MockBaseRevisionOption

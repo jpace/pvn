@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/revision/revision_option'
+require 'pvn/revision/revision_option'
 
 module PVN
   # A revision that is also set by -N and +N.

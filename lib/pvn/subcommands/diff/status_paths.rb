@@ -55,11 +55,19 @@ module PVN::Subcommands::Diff
       #     the revisions are (0, 0)
       # when a file is modified:
       #     if the file is modified in other revisions since givenfromrev
-      #         the revision is (first revision it is in log, working copy)
+      #         the revision is (most recent rev, working copy)
       #     otherwise
       #         the revision is (previous revision, working copy)
       # when a file is deleted:
       #     the revision is (given from rev, working copy)
+
+      # okay, summary #2:
+
+      # if a file is modified,
+      #     if the file existed at fromrev
+      #         it is compared with fromrev
+      #     else
+      #         it is compared to BASE
 
       info "status_entry.status: #{status_entry.status}".yellow
 
