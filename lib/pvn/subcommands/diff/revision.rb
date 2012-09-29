@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision'
+require 'pvn/revision/range'
 
 module PVN::Subcommands::Diff
   class RevisionRange < PVN::Revision::Range

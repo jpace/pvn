@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/revision'
 require 'pvn/subcommands/diff/path'
 require 'pvn/subcommands/diff/paths'
 

@@ -5,7 +5,6 @@ require 'riel'
 require 'rubygems'
 require 'synoption/option'
 require 'svnx/log/command'
-require 'pvn/revision'
 
 module PVN
   class BaseRevisionOption < Option

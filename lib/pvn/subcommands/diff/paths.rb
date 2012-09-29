@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision'
-
 module PVN::Subcommands::Diff
   # represents the paths from one revision through another.
   class Paths

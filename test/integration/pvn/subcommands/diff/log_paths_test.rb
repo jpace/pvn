@@ -3,7 +3,7 @@
 
 require 'integration/pvn/subcommands/diff/differ_tc'
 require 'pvn/subcommands/diff/log_paths'
-require 'pvn/revision'
+require 'pvn/revision/range'
 
 module PVN::Subcommands::Diff
   class LogPathsTestCase < PVN::IntegrationTestCase
