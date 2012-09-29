@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'integration/tc'
-require 'pvn/subcommands/pct/command'
+require 'pvn/pct/command'
 
 Log.level = Log::DEBUG
 

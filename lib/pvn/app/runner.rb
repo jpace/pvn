@@ -8,7 +8,7 @@ require 'pvn'
 require 'pvn/io/element'
 
 require 'pvn/subcommands/log/command'
-require 'pvn/subcommands/pct/command'
+require 'pvn/pct/command'
 require 'pvn/subcommands/status/command'
 require 'pvn/subcommands/diff/command'
 

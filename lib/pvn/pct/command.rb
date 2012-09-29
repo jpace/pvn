@@ -1,10 +1,10 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/pct/options'
+require 'pvn/pct/options'
 require 'pvn/command/command'
-require 'pvn/subcommands/pct/local_differ'
-require 'pvn/subcommands/pct/repository_differ'
+require 'pvn/pct/local_differ'
+require 'pvn/pct/repository_differ'
 
 module PVN::Subcommands::Pct
   class Command < PVN::Subcommands::Base::Command

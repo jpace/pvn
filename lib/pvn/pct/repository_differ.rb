@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/subcommands/pct/diffcount'
-require 'pvn/subcommands/pct/differ'
+require 'pvn/pct/diffcount'
+require 'pvn/pct/differ'
 
 module PVN::Subcommands::Pct
   class RepositoryDiffer < Differ

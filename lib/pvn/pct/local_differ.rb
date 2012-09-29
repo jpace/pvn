@@ -3,8 +3,8 @@
 
 require 'pvn/io/element'
 require 'svnx/cat/command'
-require 'pvn/subcommands/pct/diffcount'
-require 'pvn/subcommands/pct/differ'
+require 'pvn/pct/diffcount'
+require 'pvn/pct/differ'
 
 module PVN::Subcommands::Pct
   class LocalDiffer < Differ
