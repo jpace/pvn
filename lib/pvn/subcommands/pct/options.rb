@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/revision/multiple_revisions_option'
-require 'pvn/subcommands/base/options'
+require 'pvn/command/options'
 
 module PVN::Subcommands::Pct
   class OptionSet < PVN::Subcommands::Base::OptionSet

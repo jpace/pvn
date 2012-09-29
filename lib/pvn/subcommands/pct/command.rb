@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/subcommands/pct/options'
-require 'pvn/subcommands/base/command'
+require 'pvn/command/command'
 require 'pvn/subcommands/pct/local_differ'
 require 'pvn/subcommands/pct/repository_differ'
 

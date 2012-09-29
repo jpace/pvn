@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/base/options'
-require 'pvn/subcommands/base/color_option'
+require 'pvn/command/options'
+require 'pvn/command/color_option'
 
 module PVN::Subcommands::Status
   class OptionSet < PVN::Subcommands::Base::OptionSet

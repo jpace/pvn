@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/subcommands/base/doc'
+require 'pvn/command/doc'
 
 module PVN; module Subcommands; module Base; end; end; end
 

@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/subcommands/base/command'
+require 'pvn/command/command'
 require 'pvn/subcommands/status/options'
 require 'pvn/subcommands/status/formatter/entries_formatter'
 

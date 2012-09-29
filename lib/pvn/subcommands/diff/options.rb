@@ -4,7 +4,7 @@
 require 'synoption/boolean_option'
 require 'pvn/revision/multiple_revisions_option'
 require 'pvn/revision/base_option'
-require 'pvn/subcommands/base/options'
+require 'pvn/command/options'
 
 module PVN::Subcommands::Diff
   class WhitespaceOption < PVN::BooleanOption

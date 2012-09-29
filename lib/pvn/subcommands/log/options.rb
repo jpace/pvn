@@ -6,8 +6,8 @@ require 'synoption/option'
 require 'synoption/fixnum_option'
 require 'synoption/boolean_option'
 require 'pvn/revision/multiple_revisions_option'
-require 'pvn/subcommands/base/options'
-require 'pvn/subcommands/base/color_option'
+require 'pvn/command/options'
+require 'pvn/command/color_option'
 
 module PVN::Subcommands::Log
   DEFAULT_LIMIT = 5
