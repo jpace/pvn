@@ -21,8 +21,8 @@ module PVN::Revision
     end
 
     def assert_argument_value exp_value, value
-      rev = create_argument value
-      assert_equal exp_value, rev.value
+      arg = create_argument value
+      assert_equal exp_value, arg.value
     end
 
     def assert_argument_value_raises value
@@ -32,9 +32,25 @@ module PVN::Revision
     end
 
     def assert_argument_to_s exp_str, value
-      rev = create_argument value
-      assert_equal exp_str, rev.to_s
+      arg = create_argument value
+      assert_equal exp_str, arg.to_s
     end      
+
+    def assert_compare op, exp, xval, yval
+      x = create_argument xval
+      y = create_argument yval
+      msg = "xval: #{xval}; yval: #{yval}"
+      assert_equal exp, x.send(op, y), msg
+    end
+
+    def assert_argument_eq expeq, xval, yval
+      # it's the emoticon programming language
+      assert_compare :==, expeq, xval, yval
+    end
+
+    def assert_argument_gt expeq, xval, yval
+      assert_compare :>, expeq, xval, yval
+    end
 
     def test_absolute_midrange
       assert_argument_value 19, 19
@@ -61,7 +77,6 @@ module PVN::Revision
     end
 
     def test_svn_word
-      assert_argument_value 'HEAD', 'HEAD'
       %w{ HEAD BASE COMMITTED PREV }.each do |word|
         assert_argument_value word, word
       end
@@ -126,6 +141,17 @@ module PVN::Revision
     def test_to_s
       assert_argument_to_s '5', '5'
       assert_argument_to_s 'HEAD', 'HEAD'
+    end
+
+    def test_eq
+      assert_argument_eq true, '5', '5'
+      assert_argument_eq false, '4', '5'
+      assert_argument_eq false, '5', '4'
+    end
+
+    def test_gt
+      assert_argument_gt true, '17', '16'
+      assert_argument_gt false, '13', '14'
     end
   end
 end

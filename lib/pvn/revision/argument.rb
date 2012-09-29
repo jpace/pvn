@@ -17,14 +17,14 @@ module PVN::Revision
   # +n means to count from the beginning of the list.
   #  n means the literal revision number.  
   class Argument
+    include Loggable, Comparable
+
     DATE_REGEXP = Regexp.new '^\{(.*?)\}'
     SVN_ARGUMENT_WORDS = %w{ HEAD BASE COMMITTED PREV }
     
     # these are also valid revisions
     # :working_copy
     # :head
-
-    include Loggable
 
     attr_reader :value
     attr_reader :log_entry
@@ -76,6 +76,10 @@ module PVN::Revision
 
     def to_s
       @value.to_s
+    end
+
+    def <=> other
+      @value <=> other.value
     end
   end
 
