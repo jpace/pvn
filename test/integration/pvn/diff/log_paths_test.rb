@@ -7,15 +7,6 @@ require 'pvn/revision/range'
 
 module PVN::Diff
   class LogPathsTestCase < PVN::IntegrationTestCase
-    def setup
-      @orig_dir = Dir.pwd      
-      Dir.chdir '/Programs/pvn/pvntestbed.pending'
-    end
-
-    def teardown
-      Dir.chdir @orig_dir
-    end
-
     def assert_log_path expname, exprevisions, explogentrypath, expurl, logpaths, idx
       logpath = logpaths[idx]
       msg = "element[#{idx}]"

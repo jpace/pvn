@@ -20,7 +20,7 @@ module PVN
 
       @origdir = Dir.pwd
       # $$$ shouldn't this be .pending?
-      Dir.chdir PT_DIRNAME
+      Dir.chdir '/Programs/pvn/pvntestbed.pending'
     end
 
     def teardown

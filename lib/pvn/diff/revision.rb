@@ -15,13 +15,12 @@ module PVN::Diff
           # this is some contorting, since -rx:y does not mean comparing the files
           # in changelist x; it means all the entries from x+1 through y, inclusive.
 
-          ### $$$ this doesn't handle dates:
-          super rev[0].to_i + 1, rev[1].to_i
+          super rev[0].to_i, rev[1].to_i
         else
           from, to = rev[0].split(':')
           info "from: #{from}"
           info "to  : #{to}".cyan
-          super from.to_i + 1, to
+          super from, to
         end
       else
         raise "revision argument not handled: #{rev}"

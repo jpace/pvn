@@ -4,7 +4,7 @@
 module PVN::Diff
   # represents the paths from one revision through another.
   class Paths
-    include Loggable
+    include Loggable, Enumerable
 
     # takes paths of the form ".", "foo.rb", etc.
     def initialize revision, paths
@@ -33,6 +33,10 @@ module PVN::Diff
       names_to_paths = Hash.new
       @elements.each { |path| names_to_paths[path.name] = path }
       names_to_paths
+    end
+
+    def each &blk
+      @elements.each &blk
     end
   end
 end

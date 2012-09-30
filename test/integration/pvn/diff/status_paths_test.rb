@@ -7,15 +7,6 @@ require 'pvn/revision/range'
 
 module PVN::Diff
   class StatusPathsTestCase < PVN::IntegrationTestCase
-    def setup
-      @orig_dir = Dir.pwd      
-      Dir.chdir '/Programs/pvn/pvntestbed.pending'
-    end
-
-    def teardown
-      Dir.chdir @orig_dir
-    end
-
     def assert_status_path expname, exprevisions, expstatusentrypath, expurl, statuspaths, idx
       statuspath = statuspaths[idx]
       msg = "element[#{idx}]"

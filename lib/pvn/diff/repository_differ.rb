@@ -30,15 +30,30 @@ module PVN::Diff
         # rev[1] = "BASE"
       end
 
+      fromrev = if change 
+                  change.to_i - 1
+                else
+                  rev[0].to_i
+                end
+
+      info "fromrev: #{fromrev}".on_red
+
       @revision = RevisionRange.new change, rev
-      info "@revision: #{@revision}"
+      info "@revision: #{@revision}".on_blue
 
       logpaths = LogPaths.new @revision, paths
 
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        diff_logpath logpath
+        info "logpath: #{logpath}".red
+        info "logpath.logpath: #{logpath.revisions}".red
+        if logpath.revisions[0].to_i > fromrev.to_i
+          info "logpath: #{logpath}".red
+          diff_logpath logpath
+        else
+          info "logpath: #{logpath}".on_red
+        end
       end
 
       return if true
@@ -57,18 +72,18 @@ module PVN::Diff
     def show_as_modified elmt, path, fromrev, torev
       fromlines = elmt.cat fromrev
       tolines = elmt.cat torev
-      fromrev = @revision.from.value.to_i - 1
+      fromrev = @revision.from.value.to_i
       run_diff path, fromlines, fromrev, tolines, @revision.to
     end
 
     def show_as_added elmt, path
-      info "elmt: #{elmt}".on_blue
+      info "elmt: #{elmt}"
       tolines = elmt.cat @revision.to
       run_diff path, nil, 0, tolines, @revision.to
     end
 
     def show_as_deleted elmt, path
-      fromrev = @revision.from.value.to_i - 1
+      fromrev = @revision.from.value.to_i
       fromlines = elmt.cat fromrev
       run_diff path, fromlines, fromrev, nil, @revision.to
     end

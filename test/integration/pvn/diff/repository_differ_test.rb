@@ -66,7 +66,7 @@ module PVN::Diff
       assert_diff_command %w{ -r6:7 }, explines
     end
 
-    def test_only_changes
+    def xxxtest_only_changes
       explines = Array.new
 
       explines << "Index: FirstFile.txt"
@@ -89,7 +89,7 @@ module PVN::Diff
       assert_diff_command %w{ -r2:3 }, explines
     end
 
-    def test_multiple_changes
+    def xxxtest_multiple_changes
       explines = Array.new
 
       explines << "Index: FirstFile.txt"
