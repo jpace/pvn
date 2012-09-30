@@ -7,7 +7,6 @@ require 'pvn/diff/differ'
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/revision'
-require 'pp'
 
 module PVN::Diff
   class RepositoryDiffer < Differ
@@ -36,29 +35,22 @@ module PVN::Diff
                   rev[0].to_i
                 end
 
-      info "fromrev: #{fromrev}".on_red
-
       @revision = RevisionRange.new change, rev
-      info "@revision: #{@revision}".on_blue
 
       logpaths = LogPaths.new @revision, paths
-
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        info "logpath: #{logpath}".red
-        info "logpath.logpath: #{logpath.revisions}".red
-        if logpath.revisions[0].to_i > fromrev.to_i
-          info "logpath: #{logpath}".red
+        pathrevs = logpath.revisions.collect { |x| x.to_i }
+        if pathrevs.detect { |rev| rev > fromrev.to_i }
           diff_logpath logpath
-        else
-          info "logpath: #{logpath}".on_red
         end
       end
 
       return if true
 
       if @revision.working_copy?
+        ### $$$ not handled yet
         statuspaths = StatusPaths.new @revision, paths
         info "statuspaths: #{statuspaths}".on_blue
         statuspaths.each do |stpath|
@@ -70,6 +62,7 @@ module PVN::Diff
     end
 
     def show_as_modified elmt, path, fromrev, torev
+      info "elmt: #{elmt}"
       fromlines = elmt.cat fromrev
       tolines = elmt.cat torev
       fromrev = @revision.from.value.to_i
@@ -83,18 +76,17 @@ module PVN::Diff
     end
 
     def show_as_deleted elmt, path
+      info "elmt: #{elmt}"
       fromrev = @revision.from.value.to_i
       fromlines = elmt.cat fromrev
       run_diff path, fromlines, fromrev, nil, @revision.to
     end
     
     def diff_logpath logpath
-      info "logpath.name: #{logpath.name}".red
-      info "logpath: #{logpath.inspect}"
+      info "logpath.name: #{logpath.name}"
       name = logpath.name
 
       revisions = logpath.revisions
-      info "revisions: #{revisions}"
       
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple revisions)
@@ -112,24 +104,40 @@ module PVN::Diff
       lastrev = revisions[-1]
 
       action = logpath.action
+      info "action: #{action}".on_blue
+
+      pathrevs = logpath.path_revisions
+      info "pathrevs: #{pathrevs}".green
+
+      info "@revision.from: #{@revision.from}".cyan
+
+      pathrevs = logpath.path_revisions.select do |rev| 
+        info "rev.revision: #{rev.revision.inspect}".cyan
+        revarg = PVN::Revision::Argument.new rev.revision
+        revarg > @revision.from
+      end
+
+      info "pathrevs: #{pathrevs}".green
 
       # we ignore unversioned logpaths
       
-      pp logpath
+      # I'm sure there is a bunch of permutations here, so this is probably
+      # overly simplistic.
+      firstaction = pathrevs[0].action
       
       case
-      when action.added?
+      when firstaction.added?
         show_as_added elmt, displaypath
-      when action.deleted?
+      when firstaction.deleted?
         show_as_deleted elmt, displaypath
-      when action.modified?
+      when firstaction.modified?
         lastrev = revisions[-1]
         fromrev, torev = if firstrev == lastrev
                            [ @revision.from.value.to_i - 1, @revision.to ]
                          else
                            [ firstrev.to_i - 1, lastrev ]
                          end
-        show_as_modified elmt, displaypath, fromrev, torev
+        show_as_modified elmt, displaypath, firstrev, torev
       end
     end
   end

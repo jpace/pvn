@@ -44,5 +44,9 @@ module SVNx
     def <=> other
       @type.to_s <=> other.type.to_s
     end
+
+    def to_s
+      @type.to_s
+    end
   end
 end

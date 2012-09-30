@@ -29,12 +29,17 @@ module PVN::Diff
       revision = logentry.revision
       action = logentrypath.action
       url = pathinfo.url
+
+      info "action: #{action}".blue
       
       path = @elements.detect { |element| element.name == name }
       if path
-        path.revisions << logentry.revision
+        info "path: #{path}".on_blue
+        path.add_revision logentry.revision, action
       else
-        @elements << Path.new(name, logentry.revision, action, url)
+        path = Path.new(name, logentry.revision, action, url)
+        info "path: #{path}".on_cyan
+        @elements << path
       end
     end
   end

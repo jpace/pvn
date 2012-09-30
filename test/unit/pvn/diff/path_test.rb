@@ -3,7 +3,6 @@
 
 require 'tc'
 require 'pvn/diff/path'
-require 'svnx/action'
 
 module PVN::Diff
   class PathTestCase < PVN::TestCase
@@ -16,16 +15,6 @@ module PVN::Diff
       assert_equal expname, logpath.name
     end
 
-    def assert_path_revision exprevisions, revisions
-      logpath = create_path "File.txt", revisions, "added", "file:///var/svn/repo"
-      assert_equal exprevisions, logpath.revisions
-    end
-
-    def assert_path_action expaction, action
-      logpath = create_path "File.txt", "0", action, "file:///var/svn/repo"
-      assert_equal expaction, logpath.action
-    end
-
     def assert_path_url expurl, url
       logpath = create_path "File.txt", "0", "deleted", url
       assert_equal expurl, logpath.url
@@ -35,36 +24,15 @@ module PVN::Diff
       assert_path_name "File.txt", "File.txt"
     end
 
-    def test_init_revision_string
-      assert_path_revision [ "0" ], "0"
-    end
-
-    def test_init_revision_integer
-      assert_path_revision [ "0" ], 0
-    end
-
-    def test_init_revision_array_strings
-      assert_path_revision [ "0", "14" ], [ "0", "14" ]
-    end
-
-    def test_init_revision_array_integers
-      assert_path_revision [ "0", "14" ], [ 0, 14 ]
-    end
-
-    def test_init_action_long_string
-      assert_path_action SVNx::Action.new(:added), "added"
-    end
-
-    def test_init_action_short_string
-      assert_path_action SVNx::Action.new(:deleted), "D"
-    end
-
-    def test_init_action_symbol
-      assert_path_action SVNx::Action.new(:modified), :modified
-    end
-
     def test_init_url
       assert_path_url "file:///var/svn/repo", "file:///var/svn/repo"
+    end
+
+    def test_add_revision
+      path = create_path "File.txt", "0", :added, "file:///var/svn/repo"
+      assert_equal 1, path.path_revisions.size
+      path.add_revision "1", :modified
+      assert_equal 2, path.path_revisions.size
     end
   end
 end

@@ -4,6 +4,7 @@
 require 'integration/pvn/diff/differ_tc'
 require 'pvn/diff/status_paths'
 require 'pvn/revision/range'
+require 'pp'
 
 module PVN::Diff
   class StatusPathsTestCase < PVN::IntegrationTestCase
