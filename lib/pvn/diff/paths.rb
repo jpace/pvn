@@ -35,8 +35,8 @@ module PVN::Diff
       names_to_paths
     end
 
-    def each &blk
-      @elements.each &blk
+    def each(&blk)
+      @elements.each(&blk)
     end
   end
 end

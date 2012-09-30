@@ -41,8 +41,7 @@ module PVN::Diff
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        pathrevs = logpath.revisions.collect { |x| x.to_i }
-        if pathrevs.detect { |rev| rev > fromrev.to_i }
+        if is_revision_later_than? logpath, fromrev
           diff_logpath logpath
         end
       end
@@ -59,6 +58,15 @@ module PVN::Diff
         end
         # name_to_logpath = logpaths.to_map
       end        
+    end
+
+    def is_revision_later_than? logpath, revision
+      logpath.path_revisions.detect do |rev|
+        info "rev.revision: #{rev.revision.inspect}".cyan
+        x = PVN::Revision::Argument.new rev.revision
+        y = PVN::Revision::Argument.new revision
+        x > y
+      end
     end
 
     def show_as_modified elmt, path, fromrev, torev
@@ -86,7 +94,7 @@ module PVN::Diff
       info "logpath.name: #{logpath.name}"
       name = logpath.name
 
-      revisions = logpath.revisions
+      revisions = logpath.path_revisions
       
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple revisions)
@@ -100,8 +108,9 @@ module PVN::Diff
       displaypath = name[1 .. -1]
       info "displaypath: #{displaypath}"
 
-      firstrev = revisions[0]
-      lastrev = revisions[-1]
+      firstrev = revisions[0].revision
+      info "firstrev: #{firstrev}".yellow
+      lastrev = revisions[-1].revision
 
       action = logpath.action
       info "action: #{action}".on_blue
@@ -131,12 +140,13 @@ module PVN::Diff
       when firstaction.deleted?
         show_as_deleted elmt, displaypath
       when firstaction.modified?
-        lastrev = revisions[-1]
         fromrev, torev = if firstrev == lastrev
                            [ @revision.from.value.to_i - 1, @revision.to ]
                          else
                            [ firstrev.to_i - 1, lastrev ]
                          end
+        info "firstrev: #{firstrev.inspect}"
+        info "torev: #{torev.inspect}"
         show_as_modified elmt, displaypath, firstrev, torev
       end
     end

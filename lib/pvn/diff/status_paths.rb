@@ -24,8 +24,8 @@ module PVN::Diff
         # we don't care about unversioned entries for diffing.
         next if entry.status == 'unversioned'
         
-        info "@revision: #{@revision}".red
-        info "entry: #{entry}".red
+        info "@revision: #{@revision}"
+        info "entry: #{entry}"
         # svn log prepends /; svn status does not
         name = '/' + entry.path
         info "name: #{name}"
@@ -37,9 +37,9 @@ module PVN::Diff
         action = entry.status
         info "action: #{action}"
         revisions = get_status_revisions entry
-        info "revisions: #{revisions}".on_cyan
+        info "revisions: #{revisions}"
 
-        info "status.revision: #{entry.status_revision}".red
+        info "status.revision: #{entry.status_revision}"
 
         @elements << Path.new(name, entry.status_revision, action, url)
       end
@@ -68,7 +68,7 @@ module PVN::Diff
       #     else
       #         it is compared to BASE
 
-      info "status_entry.status: #{status_entry.status}".yellow
+      info "status_entry.status: #{status_entry.status}"
 
       action = SVNx::Action.new status_entry.status
       case

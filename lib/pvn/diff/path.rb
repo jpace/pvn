@@ -11,7 +11,7 @@ module PVN::Diff
     include Loggable
     
     attr_reader :name
-    attr_reader :revisions
+    # attr_reader :revisions
     attr_reader :action
     attr_reader :url
     ### $$$ this will be renamed revisions, when the old one is gone.

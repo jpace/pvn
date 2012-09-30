@@ -70,7 +70,7 @@ module PVN::Command
       options.process args
       
       if options.help
-        cmd.show_help
+        show_help
       else
         init options
       end
