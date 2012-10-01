@@ -116,7 +116,7 @@ module PVN::Diff
     end
 
     # still broken
-    def xxxtest_revision_against_working_copy
+    def test_revision_against_working_copy
       explines = Array.new
       
       # -r20 means -r20:working_copy

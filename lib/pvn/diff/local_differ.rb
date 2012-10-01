@@ -23,7 +23,6 @@ module PVN::Diff
       paths.each do |path|
         elmt = PVN::IO::Element.new :local => path
         entries = elmt.find_files_by_status
-        
         allentries.concat entries.sort_by { |n| n.path }
       end
 

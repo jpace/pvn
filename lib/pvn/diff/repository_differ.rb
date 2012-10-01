@@ -29,32 +29,46 @@ module PVN::Diff
         # rev[1] = "BASE"
       end
 
-      fromrev = if change 
-                  change.to_i - 1
-                else
-                  rev[0].to_i
-                end
+      # this is for getting revisions only later than the given revision
+      # (argument); this only handling revision numbers (not dates) for now.
+
+      @fromrev = if change 
+                   change.to_i - 1
+                 else
+                   rev[0].to_i
+                 end
 
       @revision = RevisionRange.new change, rev
 
+      # this indicates that this should be split into two classes:
+      if @revision.working_copy?
+        diff_revision_to_working_copy paths
+      else
+        diff_revision_to_revision paths
+      end
+    end
+
+    def diff_revision_to_working_copy paths
+      logpaths = LogPaths.new @revision, paths
+      name_to_logpath = logpaths.to_map
+
+      statuspaths = StatusPaths.new @revision, paths
+      info "statuspaths: #{statuspaths}".on_blue
+      statuspaths.each do |stpath|
+        info "stpath: #{stpath}".on_green
+        # diff_status_path stpath
+      end
+    end
+
+    def diff_revision_to_revision paths
       logpaths = LogPaths.new @revision, paths
       name_to_logpath = logpaths.to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        if is_revision_later_than? logpath, fromrev
+        if is_revision_later_than? logpath, @fromrev
           diff_logpath logpath
         end
       end
-
-      if @revision.working_copy?
-        statuspaths = StatusPaths.new @revision, paths
-        info "statuspaths: #{statuspaths}".on_blue
-        statuspaths.each do |stpath|
-          info "stpath: #{stpath}".on_green
-          # diff_status_path stpath
-        end
-        # name_to_logpath = logpaths.to_map
-      end        
     end
 
     def is_revision_later_than? logpath, revision
