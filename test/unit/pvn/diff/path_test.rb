@@ -28,11 +28,11 @@ module PVN::Diff
       assert_path_url "file:///var/svn/repo", "file:///var/svn/repo"
     end
 
-    def test_add_revision
+    def test_add_change
       path = create_path "File.txt", "0", :added, "file:///var/svn/repo"
-      assert_equal 1, path.path_revisions.size
-      path.add_revision "1", :modified
-      assert_equal 2, path.path_revisions.size
+      assert_equal 1, path.changes.size
+      path.add_change "1", :modified
+      assert_equal 2, path.changes.size
     end
   end
 end

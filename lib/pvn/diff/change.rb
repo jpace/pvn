@@ -7,7 +7,7 @@ module PVN; module Diff; end; end
 
 # A Path Revision is the change to a path within a changelist. 
 module PVN::Diff
-  class PathRevision
+  class Change
     include Loggable
     
     attr_reader :revision

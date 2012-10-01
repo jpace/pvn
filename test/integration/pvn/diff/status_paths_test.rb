@@ -7,11 +7,11 @@ require 'pp'
 
 module PVN::Diff
   class StatusPathsTestCase < PVN::IntegrationTestCase
-    def assert_status_path exp_name, exp_nrevisions, exp_url, statuspaths, idx
+    def assert_status_path exp_name, exp_nchanges, exp_url, statuspaths, idx
       statuspath = statuspaths[idx]
       msg = "element[#{idx}]"
-      assert_equal exp_name, statuspath.name, msg
-      assert_equal exp_nrevisions, statuspath.path_revisions.size, msg
+      assert_equal exp_name,     statuspath.name,         msg
+      assert_equal exp_nchanges, statuspath.changes.size, msg
     end
       
     def test_to_working_copy

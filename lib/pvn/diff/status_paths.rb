@@ -19,28 +19,18 @@ module PVN::Diff
 
     def add elmt, url
       status = elmt.find_files_by_status
-      info "status: #{status}"
       status.entries.each do |entry|
         # we don't care about unversioned entries for diffing.
         next if entry.status == 'unversioned'
         
-        info "@revision: #{@revision}"
-        info "entry: #{entry}"
         # svn log prepends /; svn status does not
         name = '/' + entry.path
-        info "name: #{name}"
         rev = :working_copy
-        info "rev: #{rev}"
 
         # what Status::Entry calls a status, we call an action, unifying it with
         # svn log representation.
         action = entry.status
-        info "action: #{action}"
         revisions = get_status_revisions entry
-        info "revisions: #{revisions}"
-
-        info "status.revision: #{entry.status_revision}"
-
         @elements << Path.new(name, entry.status_revision, action, url)
       end
     end

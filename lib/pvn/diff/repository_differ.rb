@@ -46,10 +46,7 @@ module PVN::Diff
         end
       end
 
-      return if true
-
       if @revision.working_copy?
-        ### $$$ not handled yet
         statuspaths = StatusPaths.new @revision, paths
         info "statuspaths: #{statuspaths}".on_blue
         statuspaths.each do |stpath|
@@ -61,9 +58,9 @@ module PVN::Diff
     end
 
     def is_revision_later_than? logpath, revision
-      logpath.path_revisions.detect do |rev|
-        info "rev.revision: #{rev.revision.inspect}".cyan
-        x = PVN::Revision::Argument.new rev.revision
+      logpath.changes.detect do |chg|
+        info "chg: #{chg.revision.inspect}".cyan
+        x = PVN::Revision::Argument.new chg.revision
         y = PVN::Revision::Argument.new revision
         x > y
       end
@@ -94,10 +91,10 @@ module PVN::Diff
       info "logpath.name: #{logpath.name}"
       name = logpath.name
 
-      revisions = logpath.path_revisions
+      allchanges = logpath.changes
       
       # all the paths will be the same, so any can be selected (actually, a
-      # logpath should have multiple revisions)
+      # logpath should have multiple changes)
       svnurl = logpath.url
       info "svnurl: #{svnurl}"
       
@@ -108,31 +105,25 @@ module PVN::Diff
       displaypath = name[1 .. -1]
       info "displaypath: #{displaypath}"
 
-      firstrev = revisions[0].revision
+      firstrev = allchanges[0].revision
       info "firstrev: #{firstrev}".yellow
-      lastrev = revisions[-1].revision
-
-      action = logpath.action
-      info "action: #{action}".on_blue
-
-      pathrevs = logpath.path_revisions
-      info "pathrevs: #{pathrevs}".green
+      lastrev = allchanges[-1].revision
 
       info "@revision.from: #{@revision.from}".cyan
 
-      pathrevs = logpath.path_revisions.select do |rev| 
-        info "rev.revision: #{rev.revision.inspect}".cyan
-        revarg = PVN::Revision::Argument.new rev.revision
+      changes = logpath.changes.select do |chg| 
+        info "chg.revision: #{chg.revision.inspect}".cyan
+        revarg = PVN::Revision::Argument.new chg.revision
         revarg > @revision.from
       end
 
-      info "pathrevs: #{pathrevs}".green
+      info "changes: #{changes}".green
 
       # we ignore unversioned logpaths
       
       # I'm sure there is a bunch of permutations here, so this is probably
       # overly simplistic.
-      firstaction = pathrevs[0].action
+      firstaction = changes[0].action
       
       case
       when firstaction.added?

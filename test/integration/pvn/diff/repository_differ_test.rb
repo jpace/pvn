@@ -121,7 +121,7 @@ module PVN::Diff
       
       # -r20 means -r20:working_copy
 
-      assert_diff_command %w{ -r20 src/ruby/charlie.rb }, explines
+      assert_diff_command %w{ -r20 }, explines
     end
   end
 end
