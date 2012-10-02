@@ -3,7 +3,7 @@
 
 require 'pvn/io/element'
 require 'pvn/diff/paths'
-require 'pvn/diff/path'
+require 'pvn/diff/log_path'
 
 module PVN::Diff
   # represents the log entries from one revision through another.
@@ -37,7 +37,7 @@ module PVN::Diff
         info "path: #{path}".on_blue
         path.add_change logentry.revision, action
       else
-        path = Path.new(name, logentry.revision, action, url)
+        path = LogPath.new(name, logentry.revision, action, url)
         info "path: #{path}".on_cyan
         @elements << path
       end

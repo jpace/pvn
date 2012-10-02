@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/diff/options'
 require 'pvn/diff/path'
 
 module PVN::Diff

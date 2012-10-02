@@ -102,29 +102,6 @@ module PVN::Diff
       end
     end
 
-    # the "path" parameter is the displayed name; "logpath" is the LogPath.
-    # These are in the process of refactoring.
-    def show_as_modified elmt, path, fromrev, torev, logpath
-      info "elmt: #{elmt}"
-      fromlines = elmt.cat fromrev
-      tolines = elmt.cat torev
-      fromrev = @revision.from.value.to_i
-      logpath.run_diff path, fromlines, fromrev, tolines, @revision.to, @whitespace
-    end
-
-    def show_as_added elmt, path, logpath
-      info "elmt: #{elmt}"
-      tolines = elmt.cat @revision.to
-      logpath.run_diff path, nil, 0, tolines, @revision.to, @whitespace
-    end
-
-    def show_as_deleted elmt, path, logpath
-      info "elmt: #{elmt}"
-      fromrev = @revision.from.value.to_i
-      fromlines = elmt.cat fromrev
-      logpath.run_diff path, fromlines, fromrev, nil, @revision.to, @whitespace
-    end
-
     def diff_status_path statuspath, logpath
     end
     
@@ -146,10 +123,6 @@ module PVN::Diff
       displaypath = name[1 .. -1]
       info "displaypath: #{displaypath}"
 
-      firstrev = allchanges[0].revision
-      info "firstrev: #{firstrev}".yellow
-      lastrev = allchanges[-1].revision
-
       info "@revision.from: #{@revision.from}".cyan
 
       changes = logpath.changes.select do |chg| 
@@ -168,10 +141,13 @@ module PVN::Diff
       
       case
       when firstaction.added?
-        show_as_added elmt, displaypath, logpath
+        logpath.show_as_added elmt, displaypath, @revision, @whitespace
       when firstaction.deleted?
-        show_as_deleted elmt, displaypath, logpath
+        logpath.show_as_deleted elmt, displaypath, @revision, @whitespace
       when firstaction.modified?
+        firstrev = allchanges[0].revision
+        info "firstrev: #{firstrev}".yellow
+        lastrev = allchanges[-1].revision
         fromrev, torev = if firstrev == lastrev
                            [ @revision.from.value.to_i - 1, @revision.to ]
                          else
@@ -179,7 +155,7 @@ module PVN::Diff
                          end
         info "firstrev: #{firstrev.inspect}"
         info "torev: #{torev.inspect}"
-        show_as_modified elmt, displaypath, firstrev, torev, logpath
+        logpath.show_as_modified elmt, displaypath, firstrev, torev, @revision, @whitespace
       end
     end
   end
