@@ -4,6 +4,7 @@
 require 'pvn/io/element'
 require 'pvn/diff/options'
 require 'pvn/diff/differ'
+require 'pvn/diff/local_path'
 
 module PVN::Diff
   class LocalDiffer < Differ
@@ -27,20 +28,17 @@ module PVN::Diff
       end
 
       allentries.each do |entry|
-        show_entry entry
+        next if entry.status == 'unversioned'
+        path = LocalPath.new entry
+        path.show_diff @whitespace
       end
     end
 
     def show_entry entry
-      info "entry: #{entry.inspect}"
-      case entry.status
-      when 'modified'
-        show_as_modified entry
-      when 'deleted'
-        show_as_deleted entry
-      when 'added'
-        show_as_added entry
-      end
+      return if entry.status == 'unversioned'
+
+      path = LocalPath.new entry
+      path.show_entry @whitespace
     end
 
     ### $$$ todo: integrate these, from old diff/diffcmd
@@ -50,52 +48,6 @@ module PVN::Diff
 
     def against_head?
       @options.change.value.nil? && @options.revision.head?
-    end
-
-    def read_working_copy entry
-      pn = Pathname.new entry.path
-      pn.readlines
-    end
-
-    def create_element entry
-      PVN::IO::Element.new :local => entry.path
-    end
-
-    def cat elmt
-      elmt = PVN::IO::Element.new :local => elmt.local
-      elmt.cat nil, :use_cache => false
-    end
-
-    def show_as_added entry
-      fromlines = nil
-      tolines = read_working_copy entry
-      path = Path.new entry.path, 0, :added, nil
-      path.run_diff entry.path, fromlines, 0, tolines, 0, @whitespace
-      # run_diff entry.path, fromlines, 0, tolines, 0
-    end
-
-    def get_latest_revision elmt
-      svninfo = elmt.get_info
-      svninfo.revision
-    end
-
-    def show_as_deleted entry
-      elmt = create_element entry
-      fromrev = get_latest_revision elmt
-      lines = cat elmt
-      path = Path.new entry.path, fromrev, :deleted, nil
-      path.run_diff entry.path, lines, fromrev, nil, nil, @whitespace
-      # run_diff entry.path, lines, fromrev, nil, nil
-    end
-    
-    def show_as_modified entry
-      elmt = create_element entry
-      remotelines = cat elmt
-      fromrev = get_latest_revision elmt
-      wclines = read_working_copy entry
-      path = Path.new entry.path, fromrev, :modified, nil
-      path.run_diff entry.path, remotelines, fromrev, wclines, nil, @whitespace
-      # run_diff entry.path, remotelines, fromrev, wclines, nil
     end
   end
 end
