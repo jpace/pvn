@@ -69,8 +69,9 @@ module PVN::Diff
     def show_as_added entry
       fromlines = nil
       tolines = read_working_copy entry
-
-      run_diff entry.path, fromlines, 0, tolines, 0
+      path = Path.new entry.path, 0, :added, nil
+      path.run_diff entry.path, fromlines, 0, tolines, 0, @whitespace
+      # run_diff entry.path, fromlines, 0, tolines, 0
     end
 
     def get_latest_revision elmt
@@ -80,11 +81,11 @@ module PVN::Diff
 
     def show_as_deleted entry
       elmt = create_element entry
-
       fromrev = get_latest_revision elmt
       lines = cat elmt
-
-      run_diff entry.path, lines, fromrev, nil, nil
+      path = Path.new entry.path, fromrev, :deleted, nil
+      path.run_diff entry.path, lines, fromrev, nil, nil, @whitespace
+      # run_diff entry.path, lines, fromrev, nil, nil
     end
     
     def show_as_modified entry
@@ -92,7 +93,9 @@ module PVN::Diff
       remotelines = cat elmt
       fromrev = get_latest_revision elmt
       wclines = read_working_copy entry
-      run_diff entry.path, remotelines, fromrev, wclines, nil
+      path = Path.new entry.path, fromrev, :modified, nil
+      path.run_diff entry.path, remotelines, fromrev, wclines, nil, @whitespace
+      # run_diff entry.path, remotelines, fromrev, wclines, nil
     end
   end
 end

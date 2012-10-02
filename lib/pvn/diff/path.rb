@@ -36,5 +36,49 @@ module PVN::Diff
     def to_s
       inspect
     end
+    
+    def to_revision_string rev
+      rev ? "revision #{rev}" : "working copy"
+    end
+
+    def run_diff_command displaypath, fromrev, torev, frompath, topath, whitespace
+      cmd = "diff -u"
+      if whitespace
+        cmd << " -w"
+      end
+
+      [ fromrev, torev ].each do |rev|
+        revstr = to_revision_string rev
+        cmd << " -L '#{displaypath}\t(#{revstr})'"
+      end
+      cmd << " #{frompath}"
+      cmd << " #{topath}"
+
+      info "cmd: #{cmd}"
+
+      $io.puts "Index: #{displaypath}"
+      $io.puts "==================================================================="
+      IO.popen(cmd) do |io|
+        $io.puts io.readlines
+      end
+    end
+
+    def run_diff displaypath, fromlines, fromrev, tolines, torev, whitespace
+      Tempfile.open('pvn') do |from|
+        if fromlines
+          from.puts fromlines
+        end
+        from.close
+
+        Tempfile.open('pvn') do |to|
+          if tolines
+            to.puts tolines
+          end
+          to.close
+          
+          run_diff_command displaypath, fromrev, torev, from.path, to.path, whitespace
+        end
+      end
+    end
   end
 end

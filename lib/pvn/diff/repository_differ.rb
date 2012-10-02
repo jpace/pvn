@@ -52,14 +52,36 @@ module PVN::Diff
       logpaths = LogPaths.new @revision, paths
       name_to_logpath = logpaths.to_map
 
+      names = Set.new
+      names.merge name_to_logpath.keys
+      info "names: #{names.inspect}".red
+
+      name_to_logpath.sort.each do |name, logpath|
+        info "name: #{name}".cyan
+        info "logpath: #{logpath}".cyan
+        if is_revision_later_than? logpath, @fromrev
+          info "logpath: #{logpath}".on_cyan
+          # diff_logpath logpath
+        end
+      end
+
       statuspaths = StatusPaths.new @revision, paths
       info "statuspaths: #{statuspaths}".on_blue
-      statuspaths.each do |stpath|
-        info "stpath: #{stpath}".on_green
-        # diff_status_path stpath
+      name_to_statuspath = statuspaths.to_map
+
+      names.merge name_to_statuspath.keys
+      info "names: #{names.inspect}".red
+
+      names.sort.each do |name|
+        info "name: #{name}".on_blue
+        logpath = name_to_logpath[name]
+        info "logpath: #{logpath}".blue
+        statuspath = name_to_statuspath[name]
+        info "statuspath: #{statuspath}".blue
+        diff_status_path statuspath, logpath
       end
     end
-
+    
     def diff_revision_to_revision paths
       logpaths = LogPaths.new @revision, paths
       name_to_logpath = logpaths.to_map
@@ -80,25 +102,30 @@ module PVN::Diff
       end
     end
 
-    def show_as_modified elmt, path, fromrev, torev
+    # the "path" parameter is the displayed name; "logpath" is the LogPath.
+    # These are in the process of refactoring.
+    def show_as_modified elmt, path, fromrev, torev, logpath
       info "elmt: #{elmt}"
       fromlines = elmt.cat fromrev
       tolines = elmt.cat torev
       fromrev = @revision.from.value.to_i
-      run_diff path, fromlines, fromrev, tolines, @revision.to
+      logpath.run_diff path, fromlines, fromrev, tolines, @revision.to, @whitespace
     end
 
-    def show_as_added elmt, path
+    def show_as_added elmt, path, logpath
       info "elmt: #{elmt}"
       tolines = elmt.cat @revision.to
-      run_diff path, nil, 0, tolines, @revision.to
+      logpath.run_diff path, nil, 0, tolines, @revision.to, @whitespace
     end
 
-    def show_as_deleted elmt, path
+    def show_as_deleted elmt, path, logpath
       info "elmt: #{elmt}"
       fromrev = @revision.from.value.to_i
       fromlines = elmt.cat fromrev
-      run_diff path, fromlines, fromrev, nil, @revision.to
+      logpath.run_diff path, fromlines, fromrev, nil, @revision.to, @whitespace
+    end
+
+    def diff_status_path statuspath, logpath
     end
     
     def diff_logpath logpath
@@ -141,9 +168,9 @@ module PVN::Diff
       
       case
       when firstaction.added?
-        show_as_added elmt, displaypath
+        show_as_added elmt, displaypath, logpath
       when firstaction.deleted?
-        show_as_deleted elmt, displaypath
+        show_as_deleted elmt, displaypath, logpath
       when firstaction.modified?
         fromrev, torev = if firstrev == lastrev
                            [ @revision.from.value.to_i - 1, @revision.to ]
@@ -152,7 +179,7 @@ module PVN::Diff
                          end
         info "firstrev: #{firstrev.inspect}"
         info "torev: #{torev.inspect}"
-        show_as_modified elmt, displaypath, firstrev, torev
+        show_as_modified elmt, displaypath, firstrev, torev, logpath
       end
     end
   end
