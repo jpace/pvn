@@ -23,7 +23,7 @@ module PVN::Diff
     end
 
     def add_change rev, action
-      info "rev: #{rev}".on_green
+      info "rev: #{rev}"
       @changes << Change.new(to_revision(rev), action)
     end
 

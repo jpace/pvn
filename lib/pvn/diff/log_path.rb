@@ -31,5 +31,69 @@ module PVN::Diff
       fromlines = elmt.cat fromrev
       run_diff path, fromlines, fromrev, nil, revision.to, whitespace
     end
+
+    def diff revision, whitespace
+      logpath = self
+      info "logpath.name: #{logpath.name}"
+      name = logpath.name
+
+      allchanges = logpath.changes
+      
+      # all the paths will be the same, so any can be selected (actually, a
+      # logpath should have multiple changes)
+      svnurl = logpath.url
+      info "svnurl: #{svnurl}"
+      
+      svnpath = svnurl + name
+      info "svnpath: #{svnpath}"
+      elmt = PVN::IO::Element.new :svn => svnpath
+
+      displaypath = name[1 .. -1]
+      info "displaypath: #{displaypath}"
+
+      info "revision.from: #{revision.from}".cyan
+
+      changes = logpath.changes.select do |chg| 
+        info "chg.revision: #{chg.revision.inspect}".cyan
+        revarg = PVN::Revision::Argument.new chg.revision
+        revarg > revision.from
+      end
+
+      info "changes: #{changes}".green
+
+      # we ignore unversioned logpaths
+      
+      # I'm sure there is a bunch of permutations here, so this is probably
+      # overly simplistic.
+      firstaction = changes[0].action
+      
+      case
+      when firstaction.added?
+        logpath.show_as_added elmt, displaypath, revision, whitespace
+      when firstaction.deleted?
+        logpath.show_as_deleted elmt, displaypath, revision, whitespace
+      when firstaction.modified?
+        firstrev = allchanges[0].revision
+        info "firstrev: #{firstrev}".yellow
+        lastrev = allchanges[-1].revision
+        fromrev, torev = if firstrev == lastrev
+                           [ revision.from.value.to_i - 1, revision.to ]
+                         else
+                           [ firstrev.to_i - 1, lastrev ]
+                         end
+        info "firstrev: #{firstrev.inspect}"
+        info "torev: #{torev.inspect}"
+        logpath.show_as_modified elmt, displaypath, firstrev, torev, revision, whitespace
+      end
+    end
+
+    def is_revision_later_than? revision
+      changes.detect do |chg|
+        info "chg: #{chg.revision.inspect}"
+        x = PVN::Revision::Argument.new chg.revision
+        y = PVN::Revision::Argument.new revision
+        x > y
+      end
+    end
   end
 end

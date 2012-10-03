@@ -15,7 +15,7 @@ module PVN::Diff
           # this is some contorting, since -rx:y does not mean comparing the files
           # in changelist x; it means all the entries from x+1 through y, inclusive.
 
-          super rev[0].to_i, rev[1].to_i
+          super rev[0], rev[1]
         else
           from, to = rev[0].split(':')
           info "from: #{from}"

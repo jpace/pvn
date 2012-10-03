@@ -30,16 +30,26 @@ module PVN::Diff
       action = logentrypath.action
       url = pathinfo.url
 
-      info "action: #{action}".blue
+      info "action: #{action}"
       
       path = @elements.detect { |element| element.name == name }
       if path
-        info "path: #{path}".on_blue
+        info "path: #{path}"
         path.add_change logentry.revision, action
       else
         path = LogPath.new(name, logentry.revision, action, url)
-        info "path: #{path}".on_cyan
+        info "path: #{path}"
         @elements << path
+      end
+    end
+
+    def diff_revision_to_revision fromrev, revision, whitespace
+      name_to_logpath = to_map
+
+      name_to_logpath.sort.each do |name, logpath|
+        if logpath.is_revision_later_than? fromrev
+          logpath.diff revision, whitespace
+        end
       end
     end
   end

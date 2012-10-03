@@ -44,119 +44,47 @@ module PVN::Diff
       if @revision.working_copy?
         diff_revision_to_working_copy paths
       else
-        diff_revision_to_revision paths
+        logpaths = LogPaths.new @revision, paths
+        logpaths.diff_revision_to_revision @fromrev, @revision, @whitespace
       end
     end
 
     def diff_revision_to_working_copy paths
-      logpaths = LogPaths.new @revision, paths
+      rev = PVN::Diff::RevisionRange.new nil, [ @revision.to_s, 'HEAD' ]
+      logpaths = LogPaths.new rev, paths
       name_to_logpath = logpaths.to_map
 
-      names = Set.new
-      names.merge name_to_logpath.keys
-      info "names: #{names.inspect}".red
+      changed_paths = Hash.new { |h, k| h[k] = Array.new }
 
       name_to_logpath.sort.each do |name, logpath|
-        info "name: #{name}".cyan
+        info "name: #{name}"
         info "logpath: #{logpath}".cyan
-        if is_revision_later_than? logpath, @fromrev
-          info "logpath: #{logpath}".on_cyan
-          # diff_logpath logpath
+        if logpath.is_revision_later_than? @fromrev
+          info "name: #{name}".bold.green
+          info "logpath: #{logpath}".green
+          changed_paths[name] << logpath
         end
       end
+
+      # info "changed_paths: #{changed_paths}".blue
 
       statuspaths = StatusPaths.new @revision, paths
-      info "statuspaths: #{statuspaths}".on_blue
       name_to_statuspath = statuspaths.to_map
 
-      names.merge name_to_statuspath.keys
-      info "names: #{names.inspect}".red
-
-      names.sort.each do |name|
-        info "name: #{name}".on_blue
-        logpath = name_to_logpath[name]
-        info "logpath: #{logpath}".blue
-        statuspath = name_to_statuspath[name]
-        info "statuspath: #{statuspath}".blue
-        diff_status_path statuspath, logpath
+      name_to_statuspath.each do |name, statuspath|
+        changed_paths[name] << statuspath
       end
-    end
-    
-    def diff_revision_to_revision paths
-      logpaths = LogPaths.new @revision, paths
-      name_to_logpath = logpaths.to_map
 
-      name_to_logpath.sort.each do |name, logpath|
-        if is_revision_later_than? logpath, @fromrev
-          diff_logpath logpath
+      changed_paths.sort.each do |name, paths|
+        info "name: #{name}".bold.yellow
+        paths.each do |path|
+          info "path: #{path}".yellow
         end
-      end
-    end
-
-    def is_revision_later_than? logpath, revision
-      logpath.changes.detect do |chg|
-        info "chg: #{chg.revision.inspect}".cyan
-        x = PVN::Revision::Argument.new chg.revision
-        y = PVN::Revision::Argument.new revision
-        x > y
+        # diff_paths paths
       end
     end
 
     def diff_status_path statuspath, logpath
-    end
-    
-    def diff_logpath logpath
-      info "logpath.name: #{logpath.name}"
-      name = logpath.name
-
-      allchanges = logpath.changes
-      
-      # all the paths will be the same, so any can be selected (actually, a
-      # logpath should have multiple changes)
-      svnurl = logpath.url
-      info "svnurl: #{svnurl}"
-      
-      svnpath = svnurl + name
-      info "svnpath: #{svnpath}"
-      elmt = PVN::IO::Element.new :svn => svnpath
-
-      displaypath = name[1 .. -1]
-      info "displaypath: #{displaypath}"
-
-      info "@revision.from: #{@revision.from}".cyan
-
-      changes = logpath.changes.select do |chg| 
-        info "chg.revision: #{chg.revision.inspect}".cyan
-        revarg = PVN::Revision::Argument.new chg.revision
-        revarg > @revision.from
-      end
-
-      info "changes: #{changes}".green
-
-      # we ignore unversioned logpaths
-      
-      # I'm sure there is a bunch of permutations here, so this is probably
-      # overly simplistic.
-      firstaction = changes[0].action
-      
-      case
-      when firstaction.added?
-        logpath.show_as_added elmt, displaypath, @revision, @whitespace
-      when firstaction.deleted?
-        logpath.show_as_deleted elmt, displaypath, @revision, @whitespace
-      when firstaction.modified?
-        firstrev = allchanges[0].revision
-        info "firstrev: #{firstrev}".yellow
-        lastrev = allchanges[-1].revision
-        fromrev, torev = if firstrev == lastrev
-                           [ @revision.from.value.to_i - 1, @revision.to ]
-                         else
-                           [ firstrev.to_i - 1, lastrev ]
-                         end
-        info "firstrev: #{firstrev.inspect}"
-        info "torev: #{torev.inspect}"
-        logpath.show_as_modified elmt, displaypath, firstrev, torev, @revision, @whitespace
-      end
     end
   end
 end
