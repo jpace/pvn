@@ -5,6 +5,7 @@ require 'pvn/io/element'
 require 'pvn/diff/options'
 require 'pvn/diff/differ'
 require 'pvn/diff/local_path'
+# require 'pvn/diff/status_path'
 
 module PVN::Diff
   class LocalDiffer < Differ
@@ -19,8 +20,6 @@ module PVN::Diff
       # we sort only the sub-entries, so the order in which paths were specified
       # is preserved
 
-      @whitespace = options.whitespace
-
       paths.each do |path|
         elmt = PVN::IO::Element.new :local => path
         entries = elmt.find_files_by_status
@@ -34,20 +33,9 @@ module PVN::Diff
       end
     end
 
-    def show_entry entry
-      return if entry.status == 'unversioned'
-
-      path = LocalPath.new entry
-      path.show_entry @whitespace
-    end
-
     ### $$$ todo: integrate these, from old diff/diffcmd
     def use_cache?
       super && !against_head?
-    end
-
-    def against_head?
-      @options.change.value.nil? && @options.revision.head?
     end
   end
 end

@@ -1,9 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/io/element'
-require 'pvn/diff/options'
-require 'pvn/diff/differ'
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/revision'
@@ -52,7 +49,7 @@ module PVN::Diff
       end
     end
 
-    def diff_status_path statuspath, logpath
+    def diff_paths paths
     end
   end
 end

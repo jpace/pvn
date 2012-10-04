@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/io/element'
 require 'pvn/diff/options'
 require 'pvn/diff/differ'
 require 'pvn/diff/log_paths'

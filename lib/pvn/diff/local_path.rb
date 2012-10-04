@@ -32,10 +32,6 @@ module PVN::Diff
       super && !against_head?
     end
 
-    def against_head?
-      @options.change.value.nil? && @options.revision.head?
-    end
-
     def read_working_copy
       pn = Pathname.new @entry.path
       pn.readlines
