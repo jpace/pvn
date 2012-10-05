@@ -22,10 +22,10 @@ module PVN::Diff
       pp statuspaths
       assert_equal 4, statuspaths.size
       
-      assert_status_path "/FirstFile.txt",         1, nil, statuspaths, 0
-      assert_status_path "/src/ruby/dog.rb",       1, nil, statuspaths, 1
-      assert_status_path "/SeventhFile.txt",       1, nil, statuspaths, 2
-      assert_status_path "/dirzero/SixthFile.txt", 1, nil, statuspaths, 3
+      assert_status_path "FirstFile.txt",         1, nil, statuspaths, 0
+      assert_status_path "src/ruby/dog.rb",       1, nil, statuspaths, 1
+      assert_status_path "SeventhFile.txt",       1, nil, statuspaths, 2
+      assert_status_path "dirzero/SixthFile.txt", 1, nil, statuspaths, 3
     end
   end
 end

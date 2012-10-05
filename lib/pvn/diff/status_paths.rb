@@ -29,8 +29,9 @@ module PVN::Diff
         # what Status::Entry calls a status, we call an action, unifying it with
         # svn log representation.
         action = entry.status
-        revisions = get_status_revisions entry
-        @elements << Path.new(name, entry.status_revision, action, url)
+        info "entry.status_revision: #{entry.status_revision}"
+        path = LocalPath.new entry
+        @elements << path
       end
     end
 
@@ -38,18 +39,6 @@ module PVN::Diff
     def get_status_revisions status_entry
       # the printing revision in svn (svn diff -r20) are confusing, but this
       # is what it looks like:
-
-      # when a file is added locally
-      #     the revisions are (0, 0)
-      # when a file is modified:
-      #     if the file is modified in other revisions since givenfromrev
-      #         the revision is (most recent rev, working copy)
-      #     otherwise
-      #         the revision is (previous revision, working copy)
-      # when a file is deleted:
-      #     the revision is (given from rev, working copy)
-
-      # okay, summary #2:
 
       # if a file is modified,
       #     if the file existed at fromrev

@@ -3,7 +3,6 @@
 
 require 'pvn/io/element'
 require 'svnx/cat/command'
-require 'pvn/pct/diffcount'
 require 'pvn/pct/differ'
 
 module PVN::Pct

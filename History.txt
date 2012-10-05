@@ -1,4 +1,32 @@
-=== 0.0.1 2011-11-09
+0.0.1 @ 2012-08-31
 
-* 1 major enhancement:
-  * Initial release
+  Added log subcommand, handling relative revisions.
+
+0.0.2 @ 2012-08-31
+
+  Refactored code, fixing bugs.
+
+0.0.3 @ 2012-09-01
+
+  Added --user username filter for log subcommand, to filter entries for a given
+  user.
+
+0.0.4 @ 2012-09-04
+
+  Added pct subcommand.
+
+0.0.5 @ 2012-09-09
+
+  Added status subcommand.
+
+0.0.6 @ 2012-09-15
+
+  Added diff subcommand.
+
+0.0.7 @ 2012-09-15
+
+  Refined diff behavior.
+
+0.0.8 @ 2012-09-30
+
+  Refactored code.

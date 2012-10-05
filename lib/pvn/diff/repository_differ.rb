@@ -38,7 +38,10 @@ module PVN::Diff
                    rev[0].to_i
                  end
 
+      info "@fromrev: #{@fromrev}".on_blue
+
       @revision = RevisionRange.new change, rev
+      info "@revision: #{@revision}".on_red
 
       # this indicates that this should be split into two classes:
       if @revision.working_copy?

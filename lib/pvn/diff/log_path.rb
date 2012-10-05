@@ -28,6 +28,11 @@ module PVN::Diff
       fromlines = elmt.cat fromrev
       run_diff path, fromlines, fromrev, nil, revision.to, whitespace
     end
+    
+    # log entries have names of the form /foo/bar.rb, relative to the URL.
+    def get_display_path
+      name[1 .. -1]
+    end
 
     def diff revision, whitespace
       logpath = self
@@ -41,30 +46,29 @@ module PVN::Diff
       info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
-      displaypath = name[1 .. -1]
-      info "displaypath: #{displaypath}"
+      displaypath = get_display_path
 
       info "revision.from: #{revision.from}".cyan
 
-      rev_changes = changes.select do |chg| 
+      rev_change = changes.detect do |chg| 
         revarg = PVN::Revision::Argument.new chg.revision
         revarg > revision.from
       end
 
-      info "rev_changes: #{rev_changes}".green
+      info "rev_change: #{rev_change}".green
 
       # we ignore unversioned logpaths
       
       # I'm sure there is a bunch of permutations here, so this is probably
       # overly simplistic.
-      firstaction = rev_changes[0].action
+      action = rev_change.action
       
       case
-      when firstaction.added?
+      when action.added?
         show_as_added elmt, displaypath, revision, whitespace
-      when firstaction.deleted?
+      when action.deleted?
         show_as_deleted elmt, displaypath, revision, whitespace
-      when firstaction.modified?
+      when action.modified?
         firstrev = allchanges[0].revision
         lastrev = allchanges[-1].revision
         fromrev, torev = if firstrev == lastrev

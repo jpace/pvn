@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/pct/diffcount'
+require 'pvn/util/diffcount'
 
 module PVN::Pct
   class Differ

@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'pvn/pct/diffcount'
 require 'pvn/pct/differ'
 
 module PVN::Pct
