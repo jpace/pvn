@@ -3,8 +3,8 @@
 
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
-require 'pvn/diff/revision'
 require 'pvn/diff/local_path'
+require 'pvn/revision/range'
 require 'pp'
 
 module PVN::Diff
@@ -18,7 +18,7 @@ module PVN::Diff
 
     def diff_revision_to_working_copy fromrev, revision, whitespace
       info "revision: #{revision}".cyan
-      rev = PVN::Diff::RevisionRange.new nil, [ revision.to_s, 'HEAD' ]
+      rev = PVN::Revision::Range.new revision.to_s, 'HEAD'
       info "rev: #{rev}".cyan
 
       logpaths = LogPaths.new rev, @paths

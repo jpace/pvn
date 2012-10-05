@@ -6,7 +6,6 @@ require 'pvn/diff/differ'
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/changed_paths'
-require 'pvn/diff/revision'
 
 module PVN::Diff
   class RepositoryDiffer < Differ
@@ -25,31 +24,25 @@ module PVN::Diff
       rev = options.revision
       change = options.change
 
-      if rev[1].nil? || rev[1].to == :working_copy
-        # rev[1] = "BASE"
-      end
-
       # this is for getting revisions only later than the given revision
       # (argument); this only handling revision numbers (not dates) for now.
 
-      @fromrev = if change 
-                   change.to_i - 1
-                 else
-                   rev[0].to_i
-                 end
+      rev = change ? [ change.to_i - 1, change.to_i ] : options.revision
+      info "rev: #{rev}".yellow
+      fromrev = rev[0]
+      torev = rev[1]
 
-      info "@fromrev: #{@fromrev}".on_blue
-
-      @revision = RevisionRange.new change, rev
+      # @revision = PVN::Diff::RevisionRange.new change, rev
+      @revision = PVN::Revision::Range.new fromrev, torev
       info "@revision: #{@revision}".on_red
 
       # this indicates that this should be split into two classes:
       if @revision.working_copy?
         chgpaths = ChangedPaths.new paths
-        chgpaths.diff_revision_to_working_copy @fromrev, @revision, @whitespace
+        chgpaths.diff_revision_to_working_copy fromrev, @revision, @whitespace
       else
         logpaths = LogPaths.new @revision, paths
-        logpaths.diff_revision_to_revision @fromrev, @revision, @whitespace
+        logpaths.diff_revision_to_revision fromrev, @revision, @whitespace
       end
     end
   end

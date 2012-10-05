@@ -11,14 +11,9 @@ module PVN::Diff
 
     def assert_diff paths, fromrev, revision, whitespace, explines
       orig_dir = Dir.pwd
-      
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
-
       strio = StringIO.new
-
       $io = strio
-
-      info "paths: #{paths}"
 
       cp = ChangedPaths.new paths
       cp.diff_revision_to_working_copy fromrev, revision, whitespace
@@ -26,7 +21,7 @@ module PVN::Diff
       strio.close
       puts strio.string
       
-      actlines = strio.string.split("\n")
+      actlines = strio.string.split "\n"
 
       assert_arrays_equal explines, actlines
 
@@ -65,9 +60,9 @@ module PVN::Diff
       explines << "@@ -0,0 +1 @@"
       explines << "+this is the 7th file."
 
+      ### $$$ this revision might not be zero in svn-land:
       explines << "Index: archive/rubies.zip"
       explines << "==================================================================="
-      ### $$$ this revision might not be zero:
       explines << "Binary files archive/rubies.zip\t(revision 0) and archive/rubies.zip\t(revision working_copy) differ"
 
       explines << "Index: dirzero/SixthFile.txt"
@@ -105,8 +100,7 @@ module PVN::Diff
       # -r20 means -r20:working_copy
 
       fromrev = 20
-      ### $$$ this is the Diff::Revision, not PVN::Revision. Another tofix.
-      revision = RevisionRange.new nil, [ 20, nil ]
+      revision = PVN::Revision::Range.new 20, nil
       whitespace = false
       paths = %w{ . }
 
