@@ -7,7 +7,7 @@ require 'pvn/revision/range'
 
 module PVN::Pct
   class RepositoryDiffer < Differ
-    ### $$$ this belongs in Revision
+    # 
     def get_from_to_revisions rev
       fromrev = nil
       torev = nil
@@ -27,19 +27,17 @@ module PVN::Pct
       diff_counts = Array.new
 
       revision = options.revision
-      
-      elmt = PVN::IO::Element.new :local => path
-      modified = elmt.find_modified_entries revision
-
-      modnames = modified.collect { |m| m.name }.sort.uniq
 
       # revision -r20 is like diff -c20:
       info "revision: #{revision}".bold.yellow
-      rev = PVN::Revision::Range.new revision
-      info "rev: #{rev}".bold.yellow
       fromrev, torev = get_from_to_revisions revision
       info "fromrev: #{fromrev}".yellow
       info "torev: #{torev}".yellow
+      
+      elmt = PVN::IO::Element.new :local => path
+      modified = elmt.find_modified_entries [ fromrev + ':' + torev ]
+
+      modnames = modified.collect { |m| m.name }.sort.uniq
 
       reporoot = elmt.repo_root
 

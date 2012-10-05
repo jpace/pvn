@@ -16,5 +16,25 @@ module PVN::Pct
       
       assert_diff_command RepositoryDiffer, %w{ -r20 }, explines
     end
+
+    def test_revision_to_revision
+      explines = Array.new
+
+      explines << "       3        7        4    133.3% SecondFile.txt"
+      explines << "       7        8        1     14.3% src/ruby/charlie.rb"
+      explines << "      10       15        5     50.0% total"
+      
+      assert_diff_command RepositoryDiffer, %w{ -r19:22 }, explines
+    end
+
+    def test_revision_to_relative_revision
+      explines = Array.new
+
+      explines << "       3        7        4    133.3% SecondFile.txt"
+      explines << "       7        8        1     14.3% src/ruby/charlie.rb"
+      explines << "      10       15        5     50.0% total"
+      
+      assert_diff_command RepositoryDiffer, %w{ -r19 -1 }, explines
+    end
   end
 end

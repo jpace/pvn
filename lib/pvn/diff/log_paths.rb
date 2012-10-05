@@ -43,11 +43,11 @@ module PVN::Diff
       end
     end
 
-    def diff_revision_to_revision fromrev, revision, whitespace
+    def diff_revision_to_revision revision, whitespace
       name_to_logpath = to_map
 
       name_to_logpath.sort.each do |name, logpath|
-        if logpath.is_revision_later_than? fromrev
+        if logpath.is_revision_later_than? revision.from.value
           logpath.diff revision, whitespace
         end
       end

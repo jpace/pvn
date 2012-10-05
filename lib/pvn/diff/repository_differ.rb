@@ -15,12 +15,13 @@ module PVN::Diff
     attr_reader :revision
     
     def initialize options
+      super
+      
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
       # we sort only the sub-entries, so the order in which paths were specified is preserved
 
-      @whitespace = options.whitespace
       rev = options.revision
       change = options.change
 
@@ -28,21 +29,17 @@ module PVN::Diff
       # (argument); this only handling revision numbers (not dates) for now.
 
       rev = change ? [ change.to_i - 1, change.to_i ] : options.revision
-      info "rev: #{rev}".yellow
-      fromrev = rev[0]
-      torev = rev[1]
-
-      # @revision = PVN::Diff::RevisionRange.new change, rev
-      @revision = PVN::Revision::Range.new fromrev, torev
-      info "@revision: #{@revision}".on_red
+      info "rev: #{rev}"
+      @revision = PVN::Revision::Range.new(*rev)
+      info "@revision: #{@revision}"
 
       # this indicates that this should be split into two classes:
       if @revision.working_copy?
         chgpaths = ChangedPaths.new paths
-        chgpaths.diff_revision_to_working_copy fromrev, @revision, @whitespace
+        chgpaths.diff_revision_to_working_copy @revision, @whitespace
       else
         logpaths = LogPaths.new @revision, paths
-        logpaths.diff_revision_to_revision fromrev, @revision, @whitespace
+        logpaths.diff_revision_to_revision @revision, @whitespace
       end
     end
   end

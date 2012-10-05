@@ -16,7 +16,9 @@ module PVN::Diff
       @paths = paths
     end
 
-    def diff_revision_to_working_copy fromrev, revision, whitespace
+    def diff_revision_to_working_copy revision, whitespace
+      fromrev = revision.from.value
+
       info "revision: #{revision}".cyan
       rev = PVN::Revision::Range.new revision.to_s, 'HEAD'
       info "rev: #{rev}".cyan

@@ -9,14 +9,14 @@ require 'integration/pvn/diff/tc'
 module PVN::Diff
   class ChangedPathsTestCase < TestCase
 
-    def assert_diff paths, fromrev, revision, whitespace, explines
+    def assert_diff paths, revision, whitespace, explines
       orig_dir = Dir.pwd
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
       strio = StringIO.new
       $io = strio
 
       cp = ChangedPaths.new paths
-      cp.diff_revision_to_working_copy fromrev, revision, whitespace
+      cp.diff_revision_to_working_copy revision, whitespace
       
       strio.close
       puts strio.string
@@ -99,12 +99,11 @@ module PVN::Diff
       
       # -r20 means -r20:working_copy
 
-      fromrev = 20
       revision = PVN::Revision::Range.new 20, nil
       whitespace = false
       paths = %w{ . }
 
-      assert_diff paths, fromrev, revision, whitespace, explines
+      assert_diff paths, revision, whitespace, explines
     end
   end
 end
