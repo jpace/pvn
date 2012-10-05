@@ -3,23 +3,23 @@
 
 require 'pvn/io/element'
 require 'pvn/pct/differ'
+require 'pvn/revision/range'
 
 module PVN::Pct
   class RepositoryDiffer < Differ
     ### $$$ this belongs in Revision
     def get_from_to_revisions rev
-      if rev.kind_of? Array
-        if rev.size == 1
-          if md = Regexp.new('(.+):(.+)').match(rev[0])
-            return [ md[1], md[2] ]
-          else
-            return [ (rev[0].to_i - 1).to_s, rev[0] ]
-          end
+      fromrev = nil
+      torev = nil
+      
+      if rev.size == 1
+        if md = Regexp.new('(.+):(.+)').match(rev[0])
+          return [ md[1], md[2] ]
         else
-          return [ rev[0], rev[1] ]
+          return [ (rev[0].to_i - 1).to_s, rev[0] ]
         end
       else
-        info "rev: #{rev}".bold.white.on_red
+        return [ rev[0], rev[1] ]
       end
     end
     
@@ -33,7 +33,13 @@ module PVN::Pct
 
       modnames = modified.collect { |m| m.name }.sort.uniq
 
+      # revision -r20 is like diff -c20:
+      info "revision: #{revision}".bold.yellow
+      rev = PVN::Revision::Range.new revision
+      info "rev: #{rev}".bold.yellow
       fromrev, torev = get_from_to_revisions revision
+      info "fromrev: #{fromrev}".yellow
+      info "torev: #{torev}".yellow
 
       reporoot = elmt.repo_root
 
