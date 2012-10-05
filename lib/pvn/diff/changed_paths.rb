@@ -17,7 +17,9 @@ module PVN::Diff
     end
 
     def diff_revision_to_working_copy fromrev, revision, whitespace
+      info "revision: #{revision}".cyan
       rev = PVN::Diff::RevisionRange.new nil, [ revision.to_s, 'HEAD' ]
+      info "rev: #{rev}".cyan
 
       logpaths = LogPaths.new rev, @paths
       name_to_logpath = logpaths.to_map
@@ -49,12 +51,8 @@ module PVN::Diff
         frrev = nil
 
         if logpath
-          if logpath.is_revision_later_than? fromrev
-            diff_logpath logpath, fromrev, revision, whitespace
-          else
-            # wtf?
-            info "logpath: #{logpath}".red
-          end
+          chgrevs = logpath.revisions_later_than fromrev
+          diff_logpath logpath, fromrev, revision, whitespace
         else
           # it's a local file only
           stpath.show_diff whitespace
@@ -62,21 +60,19 @@ module PVN::Diff
       end
     end
 
-    def get_diff_revision logpath, revision
-      info "logpath: #{logpath}"
+    def get_diff_revision change, revision
+      info "change: #{change}"
       info "revision: #{revision}"
       # find the first revision where logpath was in svn, no earlier than the
       # revision.from value
-      logpath.changes.each do |chg|
-        info "chg: #{chg}"
-        if chg.action.added?
-          return chg.revision.to_i
-        elsif chg.revision.to_i >= revision.from.value
-          info "chg: #{chg}"
-          return revision.from.value
-        end
+      if change.action.added?
+        return change.revision.to_i
+      elsif change.revision.to_i >= revision.from.value
+        info "change: #{change}"
+        return revision.from.value
+      else
+        nil
       end
-      nil
     end
 
     def diff_logpath logpath, fromrev, revision, whitespace
@@ -84,8 +80,11 @@ module PVN::Diff
 
       info "logpath: #{logpath}"
 
+      change = logpath.revisions_later_than(fromrev).first
+      info "change: #{change}".red
+
       # revision should be a class here, not a primitive
-      diffrev = get_diff_revision logpath, revision
+      diffrev = get_diff_revision change, revision
       
       display_path = logpath.get_display_path
 
@@ -95,13 +94,19 @@ module PVN::Diff
       info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
+      case
+      when change.action.added?
+        logpath.show_as_added elmt, display_path, revision, whitespace
+        return
+      end
+      
       fromlines = elmt.cat diffrev
       info "fromlines.size: #{fromlines.size}"
-      # pp fromlines
+      pp fromlines
 
-      tolines = pn.readlines
+      tolines = pn.read
       info "tolines.size: #{tolines.size}"
-      # pp tolines
+      pp tolines
 
       fromrev = revision.from.value.to_i
       logpath.run_diff display_path, fromlines, diffrev, tolines, nil, whitespace

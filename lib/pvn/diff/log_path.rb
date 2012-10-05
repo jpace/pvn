@@ -38,8 +38,6 @@ module PVN::Diff
       logpath = self
       info "name: #{name}"
 
-      allchanges = changes
-      
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple changes)
       svnpath = url + name
@@ -69,8 +67,8 @@ module PVN::Diff
       when action.deleted?
         show_as_deleted elmt, displaypath, revision, whitespace
       when action.modified?
-        firstrev = allchanges[0].revision
-        lastrev = allchanges[-1].revision
+        firstrev = changes[0].revision
+        lastrev = changes[-1].revision
         fromrev, torev = if firstrev == lastrev
                            [ revision.from.value.to_i - 1, revision.to ]
                          else
@@ -81,7 +79,11 @@ module PVN::Diff
     end
 
     def is_revision_later_than? revision
-      changes.detect do |chg|
+      revisions_later_than(revision).first
+    end
+
+    def revisions_later_than revision
+      changes.select do |chg|
         info "chg: #{chg.revision.inspect}"
         x = PVN::Revision::Argument.new chg.revision
         y = PVN::Revision::Argument.new revision

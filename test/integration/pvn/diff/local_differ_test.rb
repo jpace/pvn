@@ -2,15 +2,15 @@
 # -*- ruby -*-
 
 require 'pvn/diff/local_differ'
-require 'integration/pvn/diff/differ_tc'
+require 'integration/pvn/diff/tc'
 
 Log.level = Log::DEBUG
 
 module PVN::Diff
-  class LocalDifferTestCase < DifferTestCase
+  class LocalDifferTestCase < TestCase
 
-    def create_differ opts
-      LocalDiffer.new opts
+    def assert_diff_command args, explines
+      super LocalDiffer, args, explines
     end
 
     def get_explines comparing_whitespace
