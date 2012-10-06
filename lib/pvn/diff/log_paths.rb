@@ -48,7 +48,7 @@ module PVN::Diff
 
       name_to_logpath.sort.each do |name, logpath|
         if logpath.is_revision_later_than? revision.from.value
-          logpath.diff revision, whitespace
+          logpath.diff_revision_to_revision revision, whitespace
         end
       end
     end

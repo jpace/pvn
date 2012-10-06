@@ -19,7 +19,9 @@ module PVN::Diff
     end
 
     def show_as_added elmt, path, revision, whitespace
+      info "path: #{path}".on_blue
       tolines = elmt.cat revision.to
+      info "tolines: #{tolines}".blue
       run_diff path, nil, 0, tolines, revision.to, whitespace
     end
 
@@ -34,7 +36,7 @@ module PVN::Diff
       name[1 .. -1]
     end
 
-    def diff revision, whitespace
+    def diff_revision_to_revision revision, whitespace
       logpath = self
       info "name: #{name}"
 
@@ -75,6 +77,55 @@ module PVN::Diff
                            [ firstrev.to_i - 1, lastrev ]
                          end
         show_as_modified elmt, displaypath, firstrev, torev, revision, whitespace
+      end
+    end
+
+    def get_diff_revision change, revision
+      info "change: #{change}"
+      info "revision: #{revision}"
+      # find the first revision where logpath was in svn, no earlier than the
+      # revision.from value
+      if change.action.added?
+        return change.revision.to_i
+      elsif change.revision.to_i >= revision.from.value
+        return revision.from.value
+      else
+        nil
+      end
+    end
+
+    def diff_revision_to_working_copy revision, whitespace
+      fromrev = revision.from.value.to_i
+
+      ### $$$ this doesn't handle the case where a file has been added, then
+      ### modified.
+
+      change = revisions_later_than(fromrev).first
+      info "change: #{change}".red
+
+      # revision should be a class here, not a primitive
+      diffrev = get_diff_revision change, revision
+      
+      display_path = get_display_path
+
+      pn = Pathname.new display_path
+
+      svnpath = url + name
+      info "svnpath: #{svnpath}"
+      elmt = PVN::IO::Element.new :svn => svnpath
+
+      if change.action.added?
+        show_as_added elmt, display_path, revision, whitespace
+      else
+        fromlines = elmt.cat diffrev
+        info "fromlines.size: #{fromlines.size}"
+        pp fromlines
+
+        tolines = pn.readlines
+        info "tolines.size: #{tolines.size}"
+        pp tolines
+
+        run_diff display_path, fromlines, diffrev, tolines, nil, whitespace
       end
     end
 

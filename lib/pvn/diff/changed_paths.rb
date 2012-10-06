@@ -5,7 +5,6 @@ require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/local_path'
 require 'pvn/revision/range'
-require 'pp'
 
 module PVN::Diff
   # represents both LogPaths and StatusPaths
@@ -29,7 +28,7 @@ module PVN::Diff
       statuspaths = StatusPaths.new revision, @paths
       name_to_statuspath = statuspaths.to_map
 
-      # log names and status names should have a Name class
+      ### $$$ log names and status names should have a Name class
 
       names = Set.new
       names.merge name_to_logpath.keys.collect { |name| name[1 .. -1] }
@@ -54,68 +53,12 @@ module PVN::Diff
 
         if logpath
           chgrevs = logpath.revisions_later_than fromrev
-          diff_logpath logpath, revision, whitespace
+          logpath.diff_revision_to_working_copy revision, whitespace
         else
           # it's a local file only
           stpath.show_diff whitespace
         end
       end
-    end
-
-    def get_diff_revision change, revision
-      info "change: #{change}"
-      info "revision: #{revision}"
-      # find the first revision where logpath was in svn, no earlier than the
-      # revision.from value
-      if change.action.added?
-        return change.revision.to_i
-      elsif change.revision.to_i >= revision.from.value
-        info "change: #{change}"
-        return revision.from.value
-      else
-        nil
-      end
-    end
-
-    def diff_logpath logpath, revision, whitespace
-      # return unless logpath.name.index 'rubies.zip'
-
-      info "logpath: #{logpath}"
-
-      fromrev = revision.from.value.to_i
-
-      change = logpath.revisions_later_than(fromrev).first
-      info "change: #{change}".red
-
-      # revision should be a class here, not a primitive
-      diffrev = get_diff_revision change, revision
-      
-      display_path = logpath.get_display_path
-
-      pn = Pathname.new display_path
-
-      svnpath = logpath.url + logpath.name
-      info "svnpath: #{svnpath}"
-      elmt = PVN::IO::Element.new :svn => svnpath
-
-      case
-      when change.action.added?
-        logpath.show_as_added elmt, display_path, revision, whitespace
-        return
-      end
-      
-      fromlines = elmt.cat diffrev
-      info "fromlines.size: #{fromlines.size}"
-      pp fromlines
-
-      tolines = pn.read
-      info "tolines.size: #{tolines.size}"
-      pp tolines
-
-      logpath.run_diff display_path, fromlines, diffrev, tolines, nil, whitespace
-    end
-      
-    def diff_paths paths
     end
   end
 end

@@ -34,8 +34,8 @@ module PVN::Diff
         @elements << path
       end
     end
-
-    # this may belong in Status::Entry
+    
+    ### $$$ this may belong in Status::Entry
     def get_status_revisions status_entry
       # the printing revision in svn (svn diff -r20) are confusing, but this
       # is what it looks like:
