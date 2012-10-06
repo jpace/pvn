@@ -8,60 +8,31 @@ module SVNx
   class ActionTestCase < PVN::TestCase
     include Loggable
 
-    def assert_action_added exp, str
-      action = Action.new str
-      assert_equal exp, action.added?
-    end
-
-    def assert_action_deleted exp, str
-      action = Action.new str
-      assert_equal exp, action.deleted?
-    end
-
-    def assert_action_modified exp, str
-      action = Action.new str
-      assert_equal exp, action.modified?
-    end
-
-    def assert_action_unversioned exp, str
-      action = Action.new str
-      assert_equal exp, action.unversioned?
-    end
-    
-    def test_added
-      [ 'added', 'A' ].each do |str|
-        assert_action_added       true,  str
-        assert_action_deleted     false, str
-        assert_action_modified    false, str
-        assert_action_unversioned false, str
-      end
-    end
-    
-    def test_deleted
-      [ 'deleted', 'D' ].each do |str|
-        assert_action_added       false, str
-        assert_action_deleted     true,  str
-        assert_action_modified    false, str
-        assert_action_unversioned false, str
-      end
-    end
-    
-    def test_modified
-      [ 'modified', 'M' ].each do |str|
-        assert_action_added       false, str
-        assert_action_deleted     false,  str
-        assert_action_modified    true,  str
-        assert_action_unversioned false, str
+    def assert_action_equals expadd, expdel, expmod, expunver, *vals
+      vals.each do |val|
+        action = Action.new val
+        msg = "value: #{val}"
+        assert_equal expadd, action.added?, msg
+        assert_equal expdel, action.deleted?, msg
+        assert_equal expmod, action.modified?, msg
+        assert_equal expunver, action.unversioned?, msg
       end
     end    
     
+    def test_added
+      assert_action_equals true, false, false, false, 'added', 'A'
+    end
+    
+    def test_deleted
+      assert_action_equals false, true, false, false, 'deleted', 'D'
+    end
+    
+    def test_modified
+      assert_action_equals false, false, true, false, 'modified', 'M'
+    end    
+    
     def test_unversioned
-      [ 'unversioned', '?' ].each do |str|
-        assert_action_added       false, str
-        assert_action_deleted     false, str
-        assert_action_modified    false, str
-        assert_action_unversioned true, str
-      end
+      assert_action_equals false, false, false, true, 'unversioned', '?'
     end
   end
 end

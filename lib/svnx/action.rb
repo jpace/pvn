@@ -8,37 +8,34 @@ module SVNx
   # $$$ this cries for a little metaprogramming ... tomorrow
 
   class Action
-    include Loggable, Comparable    
+    include Loggable, Comparable
     
     attr_reader :type
 
+    STATUS_TO_TYPE = Hash.new
+
+    def self.add_type sym, str, char
+      [ sym, str, char ].each do |key|
+        STATUS_TO_TYPE[key] = sym
+      end
+    end
+
+    add_type :added, 'added', 'A'
+    add_type :deleted, 'deleted', 'D'
+    add_type :modified, 'modified', 'M'
+    add_type :unversioned, 'unversioned', '?'
+
+    STATUS_TO_TYPE.values.uniq.each do |val|
+      methname = val.to_s + '?'
+      define_method methname do
+        instance_eval do
+          @type == STATUS_TO_TYPE[val]
+        end
+      end
+    end
+    
     def initialize str
-      @type = case str
-              when 'added', 'A', :added
-                :added
-              when 'deleted', 'D', :deleted
-                :deleted
-              when 'modified', 'M', :modified
-                :modified
-              when 'unversioned', '?', :unversioned
-                :unversioned
-              end
-    end
-
-    def added?
-      @type == :added
-    end
-
-    def deleted?
-      @type == :deleted
-    end
-    
-    def modified?
-      @type == :modified
-    end
-    
-    def unversioned?
-      @type == :unversioned
+      @type = STATUS_TO_TYPE[str]
     end
 
     def <=> other
