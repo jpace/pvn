@@ -54,7 +54,7 @@ module PVN::Diff
 
         if logpath
           chgrevs = logpath.revisions_later_than fromrev
-          diff_logpath logpath, fromrev, revision, whitespace
+          diff_logpath logpath, revision, whitespace
         else
           # it's a local file only
           stpath.show_diff whitespace
@@ -77,10 +77,12 @@ module PVN::Diff
       end
     end
 
-    def diff_logpath logpath, fromrev, revision, whitespace
+    def diff_logpath logpath, revision, whitespace
       # return unless logpath.name.index 'rubies.zip'
 
       info "logpath: #{logpath}"
+
+      fromrev = revision.from.value.to_i
 
       change = logpath.revisions_later_than(fromrev).first
       info "change: #{change}".red
@@ -110,7 +112,6 @@ module PVN::Diff
       info "tolines.size: #{tolines.size}"
       pp tolines
 
-      fromrev = revision.from.value.to_i
       logpath.run_diff display_path, fromlines, diffrev, tolines, nil, whitespace
     end
       

@@ -32,11 +32,6 @@ module PVN::Command
         getdoc.summary = smry
       end
 
-      ### $$$ remove this:
-      def options opts
-        getdoc.options.concat opts
-      end
-
       def optscls
         getdoc.options.concat optset.options
       end
