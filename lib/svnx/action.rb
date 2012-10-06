@@ -5,8 +5,6 @@ require 'rubygems'
 require 'riel'
 
 module SVNx
-  # $$$ this cries for a little metaprogramming ... tomorrow
-
   class Action
     include Loggable, Comparable
     
