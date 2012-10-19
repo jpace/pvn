@@ -11,7 +11,7 @@ module PVN::Seek
     description "Searches through revisions for a pattern match."
     usage       "[OPTIONS] FILE..."
     summary   [ "Goes through a set of revisions, looking for when a pattern",
-                "matched." ]
+                "first matched a line within a file." ]
     
     # summary   [ "Goes through a set of revisions, looking for when a pattern",
     #             "matched (the default), or when a pattern does not match.",
@@ -46,48 +46,52 @@ module PVN::Seek
     end
 
     def matches? contents, pattern
-      contents.each do |line|
+      contents.each_with_index do |line, idx|
         # info "line: #{line}".cyan
         if line.index pattern
           info "line: #{line}".red
-          return line
+          return [ idx, line ]
         end
       end
       false
     end
 
-    # here is the seekiness, a 40 year old algorithm
+    def cat revision
+      info "path: #{@path}"
+      info "revision: #{revision}"
+      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => false, :revision => revision
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
+    end
+
     def seek entries, pattern, from, to
       info "from: #{from}".cyan
       info "to: #{to}".cyan
-      
-      return nil if from >= to
-      
+
       midpt = from + (to - from) / 2
-      info "midpt: #{midpt}".cyan
+      return nil if midpt + 1 >= to
 
       entry = entries[midpt]
-      info "entry: #{entry.class}"
-
-      # contents = SVNx::Cat::Command 
-
-      info "path: #{@path}"
-      info "revision: #{entry.revision}"
-      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => false, :revision => entry.revision
-      cmd = SVNx::CatCommand.new catargs
-      contents = cmd.execute
-      # info "contents: #{contents}".yellow
-
-      if line = matches?(contents, pattern)
-        if midpt == from + 1
-          # we just found the precise moment
-          info "line: #{line}".on_red
+        
+      lines = cat entry.revision
+      info "entry.revision: #{entry.revision}"
+      info "lines: #{lines.size}"
+      
+      if ref = matches?(lines, pattern)
+        prevrev = entries[midpt + 1].revision
+        info "prevrev: #{prevrev}"
+        prevlines = cat prevrev
+        info "prevlines: #{prevlines.size}"
+        
+        if !matches?(prevlines, pattern)
+          info "ref: #{ref}"
+          $io.puts "path: #{@path} revision: #{entry.revision}"
+          $io.puts "#{@path}:#{ref[0]}: #{ref[1]}"
         else
-          # go back 
-          seek entries, pattern, from, midpt + 1
+          seek entries, pattern, midpt, to
         end
       else
-        seek entries, pattern, midpt + 1, to
+        seek entries, pattern, from, midpt + 1
       end
     end
 
