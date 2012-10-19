@@ -11,6 +11,7 @@ require 'pvn/log/command'
 require 'pvn/pct/command'
 require 'pvn/status/command'
 require 'pvn/diff/command'
+require 'pvn/seek/command'
 
 # the old ones:
 # require 'pvn/diff/diffcmd'
@@ -31,6 +32,7 @@ module PVN::App
                     PVN::Pct::Command,
                     PVN::Status::Command,
                     PVN::Diff::Command,
+                    PVN::Seek::Command,
                     # DescribeCommand, 
                     # WhereCommand,
                     # UndeleteCommand,
