@@ -57,6 +57,34 @@ module PVN::Seek
       info "from: #{from}"
       info "to: #{to}"
 
+      prevref = nil
+
+      idx = from
+      while idx < to
+        info "idx: #{idx}"
+        entry = @entries[idx]
+        info "entry: #{entry}"
+
+        ref = matches? entry.revision
+        info "ref: #{ref}".yellow
+
+        if !ref && prevref
+          return Match.new(idx - 1, prevref[0], prevref[1])
+        end
+
+        if ref
+          prevref = ref
+        end
+
+        idx += 1
+      end
+      nil
+    end
+    
+    def seek_when_removed from = 0, to = @entries.size
+      info "from: #{from}"
+      info "to: #{to}"
+
       return nil if from == to
       midpt = from + (to - from) / 2
 
@@ -66,7 +94,7 @@ module PVN::Seek
       
       if ref = matches?(entry.revision)
         info "midpt: #{midpt}"
-        prevmatch = seek_when_added from, midpt
+        prevmatch = seek_when_removed from, midpt
         info "prevmatch: #{prevmatch}".yellow
         prevmatch || Match.new(midpt, ref[0], ref[1])
       else
@@ -74,7 +102,7 @@ module PVN::Seek
       end
     end
 
-    def seek_when_removed from = 0, to = @entries.size
+    def xxxseek_when_removed from = 0, to = @entries.size
       entries = @entries
       
       info "from: #{from}".cyan
@@ -141,7 +169,7 @@ module PVN::Seek
       logargs = SVNx::LogCommandArgs.new cmdargs
       elmt    = PVN::IO::Element.new :local => @path || '.'
       log     = elmt.log logargs
-      @entries = log.entries.reverse
+      @entries = log.entries
     end
   end
 end
