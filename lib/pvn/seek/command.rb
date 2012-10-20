@@ -3,6 +3,7 @@
 
 require 'pvn/seek/options'
 require 'pvn/command/command'
+require 'pvn/seek/path'
 
 module PVN::Seek
   class Command < PVN::Command::Command
@@ -36,76 +37,8 @@ module PVN::Seek
       info "paths: #{paths}".cyan
 
       # can handle only one path for now
-
-      @path = paths[0]
-      
-      # should I embed glark in pvn?
-
-      entries = find_log_entries @path
-      seek entries, pattern, 0, entries.size
-    end
-
-    def matches? contents, pattern
-      contents.each_with_index do |line, idx|
-        # info "line: #{line}".cyan
-        if line.index pattern
-          info "line: #{line}".red
-          return [ idx, line ]
-        end
-      end
-      false
-    end
-
-    def cat revision
-      info "path: #{@path}"
-      info "revision: #{revision}"
-      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => false, :revision => revision
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
-    end
-
-    def seek entries, pattern, from, to
-      info "from: #{from}".cyan
-      info "to: #{to}".cyan
-
-      midpt = from + (to - from) / 2
-      return nil if midpt + 1 >= to
-
-      entry = entries[midpt]
-        
-      lines = cat entry.revision
-      info "entry.revision: #{entry.revision}"
-      info "lines: #{lines.size}"
-      
-      if ref = matches?(lines, pattern)
-        prevrev = entries[midpt + 1].revision
-        info "prevrev: #{prevrev}"
-        prevlines = cat prevrev
-        info "prevlines: #{prevlines.size}"
-        
-        if !matches?(prevlines, pattern)
-          info "ref: #{ref}"
-          $io.puts "path: #{@path} revision: #{entry.revision}"
-          $io.puts "#{@path}:#{ref[0]}: #{ref[1]}"
-        else
-          seek entries, pattern, midpt, to
-        end
-      else
-        seek entries, pattern, from, midpt + 1
-      end
-    end
-
-    ### $$$ this is sliced from Log::Command, from which many options will apply
-    ### here (limit, user, revision)
-    def find_log_entries path
-      cmdargs = Hash.new
-      cmdargs[:path] = path
-      cmdargs[:use_cache] = false
-
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      elmt    = PVN::IO::Element.new :local => path || '.'
-      log     = elmt.log logargs
-      entries = log.entries
+      seekpath = Path.new paths[0], pattern
+      seekpath.seek 
     end
   end
 end
