@@ -45,22 +45,18 @@ module PVN::Seek
       cmd.execute
     end
 
-    def seek from = 0, to = @entries.size
-      ref = seek_when_added from, to
+    def seek
+      ref = seek_when_added
       if ref
         $io.puts "path: #{@path} revision: #{@entries[ref.index].revision}"
         $io.puts "#{@path}:#{ref.lnum}: #{ref.line}"
       end
     end
 
-    def seek_when_added from = 0, to = @entries.size
-      info "from: #{from}"
-      info "to: #{to}"
-
+    def seek_for criteria
       prevref = nil
 
-      idx = from
-      while idx < to
+      (0 ... @entries.size).each do |idx|
         info "idx: #{idx}"
         entry = @entries[idx]
         info "entry: #{entry}"
@@ -68,94 +64,25 @@ module PVN::Seek
         ref = matches? entry.revision
         info "ref: #{ref}".yellow
 
-        if !ref && prevref
-          return Match.new(idx - 1, prevref[0], prevref[1])
+        if matchref = criteria.call(prevref, ref)
+          return Match.new idx - 1, matchref[0], matchref[1]
         end
 
         if ref
           prevref = ref
         end
-
-        idx += 1
       end
       nil
     end
-    
-    def seek_when_removed from = 0, to = @entries.size
-      info "from: #{from}"
-      info "to: #{to}"
 
-      return nil if from == to
-      midpt = from + (to - from) / 2
-
-      info "midpt: #{midpt}"
-      entry = @entries[midpt]
-      info "entry: #{entry}"
-      
-      if ref = matches?(entry.revision)
-        info "midpt: #{midpt}"
-        prevmatch = seek_when_removed from, midpt
-        info "prevmatch: #{prevmatch}".yellow
-        prevmatch || Match.new(midpt, ref[0], ref[1])
-      else
-        seek_when_added midpt + 1, to
-      end
+    def seek_when_added
+      criteria = Proc.new { |prevref, ref| !ref && prevref }
+      seek_for criteria
     end
 
-    def xxxseek_when_removed from = 0, to = @entries.size
-      entries = @entries
-      
-      info "from: #{from}".cyan
-      info "to: #{to}".cyan
-
-      midpt = from + (to - from) / 2
-      return nil if midpt - 1 < from
-
-      entry = entries[midpt]
-      
-      if ref = matches?(entry.revision)
-        # entries are sorted most to least recent:
-        nextrev = entries[midpt - 1].revision
-        info "nextrev: #{nextrev}".red
-        
-        if matches? nextrev
-          seek from, midpt - 1
-        else
-          info "ref: #{ref}"
-          $io.puts "path: #{@path} revision: #{nextrev}"
-          $io.puts "#{@path}:#{ref[0]}: #{ref[1]}"
-        end
-      else
-        seek midpt, to
-      end
-    end
-
-    def xxxseek_when_added from = 0, to = @entries.size
-      entries = @entries
-      
-      info "from: #{from}".cyan
-      info "to: #{to}".cyan
-
-      midpt = from + (to - from) / 2
-      return nil if midpt + 1 >= to
-
-      entry = entries[midpt]
-      
-      if ref = matches?(entry.revision)
-        # entries are sorted most to least recent:
-        prevrev = entries[midpt + 1].revision
-        info "prevrev: #{prevrev}"
-        
-        if matches? prevrev
-          seek midpt, to
-        else
-          info "ref: #{ref}"
-          $io.puts "path: #{@path} revision: #{entry.revision}"
-          $io.puts "#{@path}:#{ref[0]}: #{ref[1]}"
-        end
-      else
-        seek from, midpt + 1
-      end
+    def seek_when_removed
+      criteria = Proc.new { |prevref, ref| !prevref && ref }
+      seek_for criteria
     end
 
     ### $$$ this is sliced from Log::Command, from which many options will apply
