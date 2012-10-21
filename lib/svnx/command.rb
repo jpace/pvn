@@ -8,11 +8,17 @@ require 'system/command/line'
 # this replaces svnx/lib/command/svncommand.
 
 module SVNx
-  class CommandLine < System::CommandLine
-    def initialize subcmd, args = Array.new
+  DEFAULT_CACHE_DIR = '/tmp/svnx'
+  TMP_DIR_ENV_VARNAME = 'SVNX_TMP_DIR'
+
+  module CmdLine
+    include Loggable
+
+    def initialize subcmd, args
       info "args: #{args}"
       cmdargs = [ 'svn', subcmd ]
       cmdargs << '--xml' if uses_xml?
+      info "cmdargs: #{cmdargs}"
       cmdargs.concat args
       info "cmdargs: #{cmdargs}"
       super cmdargs
@@ -20,21 +26,19 @@ module SVNx
 
     def uses_xml?
       true
+    end
+
+    def cache_dir
+      ENV[TMP_DIR_ENV_VARNAME] || DEFAULT_CACHE_DIR
     end
   end
 
-  class CachingCommandLine < System::CachingCommandLine
-    def initialize subcmd, args = Array.new
-      info "args: #{args}"
-      cmdargs << '--xml' if uses_xml?
-      cmdargs.concat args
-      info "cmdargs: #{cmdargs}"
-      super cmdargs
-    end
+  class CommandLine < System::CommandLine
+    include CmdLine
+  end
 
-    def uses_xml?
-      true
-    end
+  class CachingCommandLine < System::CachingCommandLine
+    include CmdLine
   end
 
   class CommandArgs

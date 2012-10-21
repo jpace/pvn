@@ -1,33 +1,26 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
 require 'system/command/line'
 require 'system/command/caching'
 require 'svnx/command'
 
 module SVNx
-  DEFAULT_CACHE_DIR = '/tmp/svnx'
-
-  TMP_DIR_ENV_VARNAME = 'SVNX_TMP_DIR'
-
-  class LogCommandLine < CommandLine
+  module LogCmdLine
+    # this can be either an Array (for which to_a returns itself), or
+    # a CommandArgs, which also has to_a.
     def initialize args = Array.new
       info "args: #{args}"
       super "log", args.to_a
     end
   end
 
-  class LogCommandLineCaching < CachingCommandLine
-    def initialize args = Array.new
-      info "args: #{args}"
-      super "log", args.to_a
-    end
+  class LogCommandLine < CommandLine
+    include LogCmdLine
+  end
 
-    def cache_dir
-      ENV[TMP_DIR_ENV_VARNAME] || DEFAULT_CACHE_DIR
-    end
+  class LogCommandLineCaching < CachingCommandLine
+    include LogCmdLine
   end
 
   class LogCommandArgs < CommandArgs
@@ -81,7 +74,8 @@ module SVNx
     end
 
     def command_line
-      @use_cache ? LogCommandLineCaching.new(@args) : LogCommandLine.new(@args)
+      cls = @use_cache ? LogCommandLineCaching : LogCommandLine
+      cls.new @args
     end
   end
 end

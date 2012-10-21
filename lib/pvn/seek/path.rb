@@ -40,7 +40,7 @@ module PVN::Seek
     def cat revision
       info "path: #{@path}"
       info "revision: #{revision}"
-      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => false, :revision => revision
+      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => true, :revision => revision
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
     end
@@ -82,16 +82,6 @@ module PVN::Seek
         end
       end
       nil
-    end
-
-    def seek_when_added
-      criteria = Proc.new { |prevref, ref| !ref && prevref }
-      seek_for criteria
-    end
-
-    def seek_when_removed
-      criteria = Proc.new { |prevref, ref| !prevref && ref }
-      seek_for criteria
     end
 
     ### $$$ this is sliced from Log::Command, from which many options will apply

@@ -19,7 +19,8 @@ module PVN::Pct
 
       modified.each do |entry|
         info "entry.path: #{entry.path}"
-        catcmd      = SVNx::CatCommand.new entry.path
+        catargs     = SVNx::CatCommandArgs.new :path => entry.path, :use_cache => false
+        catcmd      = SVNx::CatCommand.new catargs
         svn_count   = catcmd.execute.size
         local_count = Pathname.new(entry.path).readlines.size
         

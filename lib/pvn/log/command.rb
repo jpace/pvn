@@ -84,10 +84,6 @@ module PVN::Log
       if options.user
         entries = find_entries_for_user entries, options.user, options.limit
         info { "entries: #{entries}" }
-
-        # don't show relative revisions, since we've got a slice out of the list:
-        from_head = nil
-        from_tail = nil
       end
 
       entries

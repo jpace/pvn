@@ -4,16 +4,25 @@
 require 'svnx/command'
 
 module SVNx
-  class CatCommandLine < CommandLine
+  module CatCmdLine
     # this can be either an Array (for which to_a returns itself), or
     # a CommandArgs, which also has to_a.
     def initialize args = Array.new
+      info "args: #{args}"
       super "cat", args.to_a
     end
 
     def uses_xml?
       false
     end
+  end
+  
+  class CatCommandLine < CommandLine
+    include CatCmdLine
+  end
+
+  class CatCommandLineCaching < CachingCommandLine
+    include CatCmdLine
   end
 
   class CatCommandArgs < CommandArgs
@@ -41,8 +50,14 @@ module SVNx
   end  
 
   class CatCommand < Command
+    def initialize args
+      @use_cache = args.use_cache
+      super
+    end
+
     def command_line
-      CatCommandLine.new @args
+      cls = @use_cache ? CatCommandLineCaching : CatCommandLine
+      cls.new @args
     end
   end
 end
