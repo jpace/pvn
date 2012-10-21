@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'svnx/cat/command'
+require 'pvn/log/entries'
 
 module PVN::Seek
   class Match
@@ -66,12 +67,8 @@ module PVN::Seek
       prevref = nil
 
       (0 ... @entries.size).each do |idx|
-        info "idx: #{idx}"
         entry = @entries[idx]
-        info "entry: #{entry}"
-
         ref = matches? entry.revision
-        info "ref: #{ref}".yellow
 
         if matchref = criteria.call(prevref, ref)
           return Match.new idx - 1, matchref[0], matchref[1]
@@ -84,18 +81,17 @@ module PVN::Seek
       nil
     end
 
-    ### $$$ this is sliced from Log::Command, from which many options will apply
-    ### here (limit, user, revision)
-    
     def get_log_entries
-      cmdargs = Hash.new
-      cmdargs[:path] = @path
-      cmdargs[:use_cache] = false
+      # these mock Log::Options, kind of:
+      options = Object.new
+      def options.limit; nil; end
+      def options.verbose; nil; end
+      def options.revision; nil; end
+      def options.user; nil; end
+      def options.use_cache; nil; end
 
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      elmt    = PVN::IO::Element.new :local => @path || '.'
-      log     = elmt.log logargs
-      @entries = log.entries
+      logentries = PVN::Log::Entries.new @path, options
+      @entries = logentries.entries
     end
   end
 end
