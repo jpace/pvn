@@ -33,9 +33,11 @@ module SVNx
     end
 
     def get_elements doc
+      raise "get_elements must be implemented for: #{self.class}"
     end
 
     def create_entry xmlelement
+      raise "create_entry must be implemented for: #{self.class}"
     end
 
     # this doesn't handle negative indices
@@ -51,6 +53,8 @@ module SVNx
     end
 
     def each(&blk)
+      stack "blk: #{blk}".on_magenta
+
       # all elements must be processed before this can happen:
       if @elements
         # a little confusing here: REXML does each_with_index with idx

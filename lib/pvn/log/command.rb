@@ -5,6 +5,7 @@ require 'pvn/io/element'
 require 'pvn/log/formatter/entries_formatter'
 require 'pvn/log/options'
 require 'pvn/command/command'
+require 'pvn/log/entries'
 
 module PVN::Log
   class Command < PVN::Command::Command
@@ -58,6 +59,10 @@ module PVN::Log
     end
 
     def find_entries_for_path path, options
+      Entries.new(path, options).entries
+    end
+
+    def xxxfind_entries_for_path path, options
       cmdargs = Hash.new
       cmdargs[:path] = path
       
