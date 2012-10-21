@@ -45,8 +45,17 @@ module PVN::Seek
       cmd.execute
     end
 
-    def seek
-      ref = seek_when_added
+    def get_seek_criteria type = :added
+      if type == :added
+        Proc.new { |prevref, ref| !ref && prevref }
+      else
+        Proc.new { |prevref, ref| !prevref && ref }
+      end
+    end
+
+    def seek type = :added
+      criteria = get_seek_criteria type
+      ref = seek_for criteria
       if ref
         $io.puts "path: #{@path} revision: #{@entries[ref.index].revision}"
         $io.puts "#{@path}:#{ref.lnum}: #{ref.line}"

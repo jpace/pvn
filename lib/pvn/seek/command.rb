@@ -23,7 +23,7 @@ module PVN::Seek
 
     example "pvn seek 'raise \w+Exception' foo.rb", "Shows when 'raise \w+Exception was added, through all revisions."
     # example "pvn seek -r137:211 'raise \w+Exception' foo.rb", "As above, but only between revisions 137 and 211."
-    # example "pvn seek --no-match 'void\s+reinitialize()' *.java", "Looks through Java files for when 'void reinitialize() does _not_ match."
+    example "pvn seek --removed 'void\s+reinitialize()' *.java", "Looks through Java files for the latest revision when 'void reinitialize() does not match."
 
     def init options
       info "options: #{options.inspect}".red
@@ -36,9 +36,11 @@ module PVN::Seek
       paths = %w{ . } if paths.empty?
       info "paths: #{paths}".cyan
 
+      seektype = options.removed ? :removed : :added
+
       # can handle only one path for now
       seekpath = Path.new paths[0], pattern
-      seekpath.seek 
+      seekpath.seek seektype
     end
   end
 end
