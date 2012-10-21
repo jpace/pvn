@@ -42,7 +42,7 @@ module PVN::Log
       allentries = Array.new
 
       paths.each do |path|
-        allentries.concat find_entries_for_path path, options
+        allentries.concat Entries.new(path, options).entries
       end
 
       # we can show relative revisions for a single path, without filtering by
@@ -56,52 +56,6 @@ module PVN::Log
 
       ef = PVN::Log::EntriesFormatter.new options.color, allentries, from_head, from_tail
       puts ef.format
-    end
-
-    def find_entries_for_path path, options
-      Entries.new(path, options).entries
-    end
-
-    def xxxfind_entries_for_path path, options
-      cmdargs = Hash.new
-      cmdargs[:path] = path
-      
-      [ :limit, :verbose, :revision ].each do |field|
-        cmdargs[field] = options.send field
-      end
-
-      if options.user
-        cmdargs[:limit] = nil
-      end
-      
-      # we can't cache this, because we don't know if there has been an svn
-      # update since the previous run:
-      cmdargs[:use_cache] = false
-
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      elmt    = PVN::IO::Element.new :local => path || '.'
-      log     = elmt.log logargs
-      entries = log.entries
-
-      info { "options: #{options}" }
-      info { "options.user: #{options.user}" }
-
-      if options.user
-        entries = find_entries_for_user entries, options.user, options.limit
-        info { "entries: #{entries}" }
-      end
-
-      entries
-    end
-
-    def find_entries_for_user entries, user, limit
-      entries = entries.select { |entry| entry.author == user }
-
-      raise "ERROR: no matching log entries for '#{user}'" if entries.empty?
-
-      info { "entries: #{entries}" }
-
-      limit ? entries[0 ... limit] : entries
     end
   end
 end

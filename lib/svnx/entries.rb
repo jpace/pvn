@@ -13,12 +13,10 @@ module SVNx
     attr_reader :size
 
     def initialize args = Hash.new
-      # it's a hash, but indexed with integers.
+      # it's a hash, but indexed with integers, for non-sequential access:
       @entries = Hash.new
 
       if xmllines = args[:xmllines]
-        # this is preferred
-
         if xmllines.kind_of? Array
           xmllines = xmllines.join ''
         end
@@ -48,14 +46,11 @@ module SVNx
       if idx < 0 && idx >= size
         raise "error: index #{idx} is not in range(0 .. #{size})"
       end
-
       @entries[idx] = create_entry(@elements[idx + 1])
     end
 
     def each(&blk)
-      stack "blk: #{blk}".on_magenta
-
-      # all elements must be processed before this can happen:
+      # all elements must be processed before each can run:
       if @elements
         # a little confusing here: REXML does each_with_index with idx
         # zero-based, but elements[0] is invalid.
