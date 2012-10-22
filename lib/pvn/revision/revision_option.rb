@@ -11,7 +11,11 @@ module PVN
     def initialize revargs = Hash.new
       @fromdate = nil
       @todate = nil
-      super :revision, '-r', REVISION_DESCRIPTION, nil, revargs
+      super :revision, '-r', description, nil, revargs
+    end
+
+    def description
+      REVISION_DESCRIPTION
     end
 
     def to_svn_revision_date date

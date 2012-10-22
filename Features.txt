@@ -7,3 +7,7 @@ Mon Oct 22 14:08:18 2012
 
   Added --revision option to seek. Handles revisions of the form -rM:N, but not
   relative revisions (e.g., -3).
+
+Mon Oct 22 14:30:38 2012
+
+  Added handling of relative revisions, both single and multiple.

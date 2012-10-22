@@ -95,7 +95,17 @@ module PVN::Seek
     end
 
     def get_log_entries
-      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(@revision)
+      rev = if @revision
+              if @revision.size == 1
+                [ @revision[0], 'HEAD' ].join(':')
+              else
+                @revision.join(':')
+              end
+            else
+              nil
+            end
+      
+      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(rev)
       @entries = logentries.entries
     end
   end

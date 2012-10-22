@@ -24,6 +24,8 @@ module PVN::Log
       # update since the previous run:
       cmdargs[:use_cache] = false
 
+      info "cmdargs: #{cmdargs}".magenta
+
       logargs = SVNx::LogCommandArgs.new cmdargs
       cmd = SVNx::LogCommand.new logargs
       

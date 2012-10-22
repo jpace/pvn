@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/revision/revision_regexp_option'
+require 'pvn/revision/multiple_revisions_option'
 require 'pvn/command/options'
 
 module PVN::Seek
@@ -20,8 +20,27 @@ module PVN::Seek
     end
   end
 
+  class SeekRevisionOption < PVN::MultipleRevisionsRegexpOption
+    REVISION_DESCRIPTION = PVN::RevisionRegexpOption::REVISION_DESCRIPTION + 
+      [
+       'Zero, one, or two revisions may be specified:',
+       '    A single revision is the equivalent of -rN:HEAD.',
+       '    Multiple revisions are the equivalent of -rM:N.'
+      ]
+    
+    def resolve_value optset, unprocessed
+      info "optset: #{optset}".on_blue
+      info "unprocessed: #{unprocessed}".on_red
+      super optset, unprocessed[-1, 1]
+    end
+
+    def description
+      REVISION_DESCRIPTION
+    end
+  end
+
   class OptionSet < PVN::Command::OptionSet
-    has_option :revision, PVN::RevisionRegexpOption
+    has_option :revision, SeekRevisionOption
     # has_option :match,    MatchOption
     has_option :removed,  RemovedOption
     has_option :help,     PVN::Command::HelpOption

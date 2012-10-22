@@ -8,13 +8,6 @@ module PVN
   class RevisionRegexpOption < PVN::RevisionOption
     TAG_RE = Regexp.new '^(?:([\-\+]\d+)|(-r(.+)))$'
 
-    REVISION_DESCRIPTION = [ "revision to apply.",
-                             "ARG can be relative, of the form:",
-                             "    +N : N revisions from the BASE",
-                             "    -N : N revisions from the HEAD,",
-                             "         when -1 is the previous revision" ,
-                           ]
-    
     def initialize revargs = Hash.new
       revargs[:regexp] = TAG_RE
       super

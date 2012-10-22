@@ -17,6 +17,10 @@ module PVN
       end
     end
 
+    def description
+      REVISION_DESCRIPTION
+    end
+
     def resolve_value optset, unprocessed
       newvalues = Array.new
       currvalues = value
