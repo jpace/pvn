@@ -36,10 +36,12 @@ module PVN::Seek
       paths = %w{ . } if paths.empty?
       info "paths: #{paths}".cyan
 
+      info "options.revision: #{options.revision}".bold.black.on_cyan
+
       seektype = options.removed ? :removed : :added
 
       # can handle only one path for now
-      seekpath = Path.new paths[0], pattern
+      seekpath = Path.new paths[0], pattern, options.revision
       seekpath.seek seektype
     end
   end

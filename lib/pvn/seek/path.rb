@@ -17,12 +17,25 @@ module PVN::Seek
     end
   end
 
+  class PathLogOptions
+    def initialize revision
+      @revision = revision
+    end
+
+    def limit; nil; end
+    def verbose; nil; end
+    def revision; @revision; end
+    def user; nil; end
+    def use_cache; nil; end
+  end
+
   class Path
     include Loggable
 
-    def initialize path, pattern
+    def initialize path, pattern, revision
       @path = path
       @pattern = pattern
+      @revision = revision
       get_log_entries
     end
 
@@ -82,15 +95,7 @@ module PVN::Seek
     end
 
     def get_log_entries
-      # these mock Log::Options, kind of:
-      options = Object.new
-      def options.limit; nil; end
-      def options.verbose; nil; end
-      def options.revision; nil; end
-      def options.user; nil; end
-      def options.use_cache; nil; end
-
-      logentries = PVN::Log::Entries.new @path, options
+      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(@revision)
       @entries = logentries.entries
     end
   end

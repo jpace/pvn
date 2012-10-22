@@ -21,7 +21,7 @@ module PVN::Seek
   end
 
   class OptionSet < PVN::Command::OptionSet
-    # has_option :revision, PVN::RevisionRegexpOption
+    has_option :revision, PVN::RevisionRegexpOption
     # has_option :match,    MatchOption
     has_option :removed,  RemovedOption
     has_option :help,     PVN::Command::HelpOption

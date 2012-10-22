@@ -1,0 +1,9 @@
+Sun Oct 21 18:32:13 2012
+
+  Added seek --removed option, for determining the first revision in which a
+  pattern does not match a file, to determine when a line of code was deleted.
+
+Mon Oct 22 14:08:18 2012
+
+  Added --revision option to seek. Handles revisions of the form -rM:N, but not
+  relative revisions (e.g., -3).
