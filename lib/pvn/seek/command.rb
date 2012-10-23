@@ -21,9 +21,9 @@ module PVN::Seek
     
     optscls
 
-    example "pvn seek 'raise \w+Exception' foo.rb", "Shows when 'raise \w+Exception was added, through all revisions."
+    example "pvn seek 'raise \\w+Exception' foo.rb", "Shows when 'raise \\w+Exception was added, through all revisions."
     # example "pvn seek -r137:211 'raise \w+Exception' foo.rb", "As above, but only between revisions 137 and 211."
-    example "pvn seek --removed 'void\s+reinitialize()' *.java", "Looks through Java files for the latest revision when 'void reinitialize() does not match."
+    example "pvn seek --removed 'void\\s+reinitialize()' *.java", "Looks through Java files for the latest revision when 'void reinitialize() does not match."
 
     def init options
       info "options: #{options.inspect}".red

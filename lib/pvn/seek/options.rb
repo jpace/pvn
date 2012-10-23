@@ -29,8 +29,6 @@ module PVN::Seek
       ]
     
     def resolve_value optset, unprocessed
-      info "optset: #{optset}".on_blue
-      info "unprocessed: #{unprocessed}".on_red
       super optset, unprocessed[-1, 1]
     end
 
