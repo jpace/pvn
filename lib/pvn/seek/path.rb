@@ -9,11 +9,13 @@ module PVN::Seek
     attr_reader :index
     attr_reader :lnum
     attr_reader :line
+    attr_reader :entry
     
-    def initialize index, lnum, line
+    def initialize index, lnum, line, entry
       @index = index
       @lnum = lnum
       @line = line
+      @entry = entry
     end
   end
 
@@ -71,8 +73,9 @@ module PVN::Seek
       criteria = get_seek_criteria type
       ref = seek_for criteria
       if ref
-        $io.puts "path: #{@path} revision: #{@entries[ref.index].revision}"
-        $io.puts "#{@path}:#{ref.lnum}: #{ref.line}"
+        log ref.entry.inspect.red
+        $io.puts "#{@path} revision: #{@entries[ref.index].revision}".bold
+        $io.puts "#{@path}:#{ref.lnum}: #{ref.line.chomp}".bold.black.on_yellow
       end
     end
 
@@ -84,7 +87,7 @@ module PVN::Seek
         ref = matches? entry.revision
 
         if matchref = criteria.call(prevref, ref)
-          return Match.new idx - 1, matchref[0], matchref[1]
+          return Match.new idx - 1, matchref[0], matchref[1], entry
         end
 
         if ref

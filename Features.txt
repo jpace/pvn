@@ -11,3 +11,7 @@ Mon Oct 22 14:08:18 2012
 Mon Oct 22 14:30:38 2012
 
   Added handling of relative revisions, both single and multiple.
+
+Tue Oct 23 19:39:37 2012
+  
+  seek command: added color highlighting for matched line and revision
