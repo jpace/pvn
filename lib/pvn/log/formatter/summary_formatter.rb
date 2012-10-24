@@ -23,7 +23,7 @@ module PVN::Log
     end
 
     def format
-      lines = add_field(entry.revision, :revision)
+      lines = add_field entry.revision, :revision
       negidx  = (-1 - idx).to_s
 
       if from_head

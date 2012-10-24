@@ -14,4 +14,9 @@ Mon Oct 22 14:30:38 2012
 
 Tue Oct 23 19:39:37 2012
   
-  seek command: added color highlighting for matched line and revision
+  seek command: added color highlighting for matched line and revision.
+
+Wed Oct 24 15:24:05 2012
+
+  seek command: added revision range (from:to) to displayed output for a match
+  seek command: added "not found" line for no match
