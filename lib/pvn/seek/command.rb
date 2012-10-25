@@ -42,7 +42,7 @@ module PVN::Seek
 
       # can handle only one path for now
       seekpath = Path.new paths[0], pattern, options.revision
-      seekpath.seek seektype
+      seekpath.seek seektype, options.color
     end
   end
 end

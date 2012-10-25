@@ -3,6 +3,7 @@
 
 require 'pvn/revision/multiple_revisions_option'
 require 'pvn/command/options'
+require 'pvn/command/color_option'
 
 module PVN::Seek
   class MatchOption < PVN::BooleanOption
@@ -39,6 +40,7 @@ module PVN::Seek
 
   class OptionSet < PVN::Command::OptionSet
     has_option :revision, SeekRevisionOption
+    has_option :color,    PVN::Command::ColorOption
     # has_option :match,    MatchOption
     has_option :removed,  RemovedOption
     has_option :help,     PVN::Command::HelpOption

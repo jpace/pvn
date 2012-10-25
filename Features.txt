@@ -18,5 +18,9 @@ Tue Oct 23 19:39:37 2012
 
 Wed Oct 24 15:24:05 2012
 
-  seek command: added revision range (from:to) to displayed output for a match
-  seek command: added "not found" line for no match
+  seek command: added revision range (from:to) to displayed output for a match.
+  seek command: added "not found" line for no match.
+
+Thu Oct 25 19:22:52 2012
+
+  seek command: added [ -C --no-color ] option.

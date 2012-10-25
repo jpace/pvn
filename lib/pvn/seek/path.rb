@@ -69,7 +69,7 @@ module PVN::Seek
       end
     end
 
-    def seek type = :added
+    def seek type, use_color
       criteria = get_seek_criteria type
       ref = seek_for criteria
       if ref
@@ -77,10 +77,22 @@ module PVN::Seek
         log ref.entry.inspect.red
         entry = @entries[ref.index]
         info "entry: #{entry}"
-        $io.puts "#{@path} -r#{@entries[ref.index].revision}:#{@entries[ref.index + 1].revision}".bold
-        $io.puts "#{@path}:#{ref.lnum}: #{ref.line.chomp}".bold.black.on_yellow
+        
+        info "use_color: #{use_color}".on_magenta
+        fromrev = @entries[ref.index + 1].revision
+        torev   = @entries[ref.index].revision
+        pathrev = "#{@path} -r#{fromrev}:#{torev}"
+        line = "#{@path}:#{ref.lnum}: #{ref.line.chomp}"
+
+        if use_color
+          pathrev = pathrev.bold
+          line = line.bold.black.on_yellow
+        end
+
+        $io.puts pathrev
+        $io.puts line
       else
-        $io.puts "not found in revisions: #{@entries[-1].revision} .. #{@entries[0].revision}".bold
+        $io.puts "not found in revisions: #{@entries[-1].revision} .. #{@entries[0].revision}"
       end
     end
 
