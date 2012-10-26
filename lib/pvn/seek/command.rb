@@ -12,12 +12,9 @@ module PVN::Seek
     description "Searches through revisions for a pattern match."
     usage       "[OPTIONS] FILE..."
     summary   [ "Goes through a set of revisions, looking for when a pattern",
-                "first matched a line within a file." ]
-    
-    # summary   [ "Goes through a set of revisions, looking for when a pattern",
-    #             "matched (the default), or when a pattern does not match.",
-    #             "This command therefore shows when a file changed to add",
-    #             "or remove something such as a method." ]
+                "first matched (the default), or when a pattern no longer matched.",
+                "This command therefore shows when a file was changed to add",
+                "or remove something such as a method." ]
     
     optscls
 

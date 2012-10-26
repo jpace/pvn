@@ -24,3 +24,7 @@ Wed Oct 24 15:24:05 2012
 Thu Oct 25 19:22:52 2012
 
   seek command: added [ -C --no-color ] option.
+
+Fri Oct 26 13:45:28 2012
+
+  help: added handling of 'pvn help subcommand'.

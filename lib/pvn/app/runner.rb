@@ -84,22 +84,22 @@ module PVN::App
     def run_help args
       forwhat = args[0]
 
-      cls = SUBCOMMANDS.find do |cls|
-        cls.getdoc.subcommands.include? forwhat
-      end
-
-      if cls
-        cls.to_doc
-      else
-        puts "usage: pvn [--verbose] <command> [<options>] [<args>]"
-        puts "PVN, version #{PVN::VERSION}"
-        puts
-        puts "PVN has the subcommands:"
-        SUBCOMMANDS.each do |sc|
-          printf "   %-10s %s\n", sc.getdoc.subcommands[0], sc.getdoc.description
+     SUBCOMMANDS.each do |sc|
+        puts sc
+        if sc.matches_subcommand? forwhat
+          sc.new(%w{ --help })
+          exit 0
         end
       end
-      exit(0)
+
+      puts "usage: pvn [--verbose] <command> [<options>] [<args>]"
+      puts "PVN, version #{PVN::VERSION}"
+      puts
+      puts "PVN has the subcommands:"
+      SUBCOMMANDS.each do |sc|
+        printf "   %-10s %s\n", sc.getdoc.subcommands[0], sc.getdoc.description
+      end
+      exit 0
     end
   end
 end
