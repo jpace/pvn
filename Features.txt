@@ -28,3 +28,7 @@ Thu Oct 25 19:22:52 2012
 Fri Oct 26 13:45:28 2012
 
   help: added handling of 'pvn help subcommand'.
+
+Sat Oct 27 16:36:13 2012
+
+  seek: improved message for not found, not removed.

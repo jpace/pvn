@@ -44,7 +44,6 @@ module PVN::Seek
     def matches? entry
       contents = cat entry.revision
       contents.each_with_index do |line, lnum|
-        # info "line: #{line}".cyan
         if line.index @pattern
           info "line: #{line}".red
           return [ entry, lnum, line ]
@@ -78,7 +77,7 @@ module PVN::Seek
         entry = @entries[ref.index]
         info "entry: #{entry}"
         
-        info "use_color: #{use_color}".on_magenta
+        info "use_color: #{use_color}"
         fromrev = @entries[ref.index + 1].revision
         torev   = @entries[ref.index].revision
         pathrev = "#{@path} -r#{fromrev}:#{torev}"
@@ -92,7 +91,10 @@ module PVN::Seek
         $io.puts pathrev
         $io.puts line
       else
-        $io.puts "not found in revisions: #{@entries[-1].revision} .. #{@entries[0].revision}"
+        msg = type == :added ? "not found" : "not removed"
+        fromrev = @entries[-1].revision
+        torev = @entries[0].revision
+        $io.puts "#{msg} in revisions: #{fromrev} .. #{torev}"
       end
     end
 
@@ -109,7 +111,8 @@ module PVN::Seek
         end
 
         info "idx: #{idx}; entry: #{entry}"
-        info "ref: #{ref}; prevref: #{prevref}"
+        info "ref: #{ref}"
+        info "prevref: #{prevref}"
 
         if matchref = criteria.call(prevref, ref)
           info "matchref: #{matchref}"
