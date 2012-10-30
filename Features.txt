@@ -19,6 +19,7 @@ Tue Oct 23 19:39:37 2012
 Wed Oct 24 15:24:05 2012
 
   seek command: added revision range (from:to) to displayed output for a match.
+
   seek command: added "not found" line for no match.
 
 Thu Oct 25 19:22:52 2012
@@ -32,3 +33,8 @@ Fri Oct 26 13:45:28 2012
 Sat Oct 27 16:36:13 2012
 
   seek: improved message for not found, not removed.
+
+Tue Oct 30 08:51:36 2012
+
+  seek: refined colors used for components (path, revisions, line number) in
+  output.

@@ -80,12 +80,15 @@ module PVN::Seek
         info "use_color: #{use_color}"
         fromrev = @entries[ref.index + 1].revision
         torev   = @entries[ref.index].revision
-        pathrev = "#{@path} -r#{fromrev}:#{torev}"
-        line = "#{@path}:#{ref.lnum}: #{ref.line.chomp}"
+        pathrev = nil
+        line = nil
 
         if use_color
-          pathrev = pathrev.bold
-          line = line.bold.black.on_yellow
+          pathrev = "#{@path.yellow} -r#{fromrev.magenta}:#{torev.green}"
+          line = "#{ref.lnum}: #{ref.line.chomp.bold}"
+        else
+          pathrev = "#{@path} -r#{fromrev}:#{torev}"
+          line = "#{ref.lnum}: #{ref.line.chomp}"
         end
 
         $io.puts pathrev
