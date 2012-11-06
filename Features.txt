@@ -38,3 +38,8 @@ Tue Oct 30 08:51:36 2012
 
   seek: refined colors used for components (path, revisions, line number) in
   output.
+
+Mon Nov  5 19:29:52 2012
+
+  log: changed -v (verbose) to -f (--files), to include files. This eliminates
+  confusion with the standard -v option for debugging output.

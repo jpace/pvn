@@ -24,6 +24,12 @@ module PVN::Log
     end
   end
 
+  class FilesOption < PVN::BooleanOption
+    def initialize optargs = Hash.new
+      super :files, '-f', [ "list the files in the change" ], false
+    end
+  end
+
   class UserOption < PVN::Option
     def initialize optargs = Hash.new
       super :user, '-u', "show only changes for the given user", nil, :as_cmdline_option => nil
@@ -36,6 +42,6 @@ module PVN::Log
     has_option :help,     PVN::Command::HelpOption
     has_option :limit,    LimitOption
     has_option :user,     UserOption
-    has_option :verbose,  PVN::BooleanOption, [ :verbose, '-v', [ "include the files in the change" ], false ]
+    has_option :files,    FilesOption
   end
 end

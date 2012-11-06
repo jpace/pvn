@@ -6,6 +6,7 @@ require 'pvn/log/formatter/entries_formatter'
 require 'pvn/log/options'
 require 'pvn/command/command'
 require 'pvn/log/entries'
+require 'pvn/log/user_entries'
 
 module PVN::Log
   class Command < PVN::Command::Command
@@ -29,7 +30,7 @@ module PVN::Log
     example "pvn log -3 foo.rb",        "Prints the log entry for revision (HEAD - 3)."
     example "pvn log +3 foo.rb",        "Prints the 3rd log entry."
     example "pvn log -l 10 --no-color", "Prints the latest 10 entries, uncolorized."
-    example "pvn log -r 122 -v",        "Prints log entry for revision 122, with the files in that change."
+    example "pvn log -r 122 -f",        "Prints log entry for revision 122, including the files in that change."
     example "pvn log -u barney",        "Prints log entries only for user 'barney', with the default limit."
     
     def init options
@@ -40,9 +41,11 @@ module PVN::Log
       info "paths: #{paths}"
 
       allentries = Array.new
+      
+      entcls = options.user ? UserEntries : Entries
 
       paths.each do |path|
-        allentries.concat Entries.new(path, options).entries
+        allentries.concat entcls.new(path, options).entries
       end
 
       # we can show relative revisions for a single path, without filtering by
