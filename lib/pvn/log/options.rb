@@ -18,12 +18,6 @@ module PVN::Log
     end
   end
 
-  class VerboseOption < PVN::BooleanOption
-    def initialize optargs = Hash.new
-      super :verbose, '-v', [ "include the files in the change" ], false
-    end
-  end
-
   class FilesOption < PVN::BooleanOption
     def initialize optargs = Hash.new
       super :files, '-f', [ "list the files in the change" ], false
@@ -39,7 +33,6 @@ module PVN::Log
   class OptionSet < PVN::Command::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
     has_option :color,    PVN::Command::ColorOption
-    has_option :help,     PVN::Command::HelpOption
     has_option :limit,    LimitOption
     has_option :user,     UserOption
     has_option :files,    FilesOption

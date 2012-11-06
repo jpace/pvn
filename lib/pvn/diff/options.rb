@@ -25,6 +25,5 @@ module PVN::Diff
     has_option :revision,   PVN::MultipleRevisionsRegexpOption
     has_option :change,     ChangeOption
     has_option :whitespace, WhitespaceOption
-    has_option :help,       PVN::Command::HelpOption
   end
 end

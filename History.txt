@@ -36,8 +36,12 @@
   Added seek subcommand, for determining the first revision in which a pattern
   matches a file.
 
-0.0.10 @ 2012-xx-xx
+0.0.10 @ 2012-11-05
 
   Added seek --removed option, for determining the first revision in which a
   pattern does not match a file, to determine when a line of code was deleted.
 
+0.0.11 @ 2012-11-06
+
+  Refined seek command, fixing a bug and added an exception when no pattern is
+  provided.

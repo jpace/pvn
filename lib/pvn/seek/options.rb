@@ -43,6 +43,5 @@ module PVN::Seek
     has_option :color,    PVN::Command::ColorOption
     # has_option :match,    MatchOption
     has_option :removed,  RemovedOption
-    has_option :help,     PVN::Command::HelpOption
   end
 end

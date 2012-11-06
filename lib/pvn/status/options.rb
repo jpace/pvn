@@ -6,7 +6,6 @@ require 'pvn/command/color_option'
 
 module PVN::Status
   class OptionSet < PVN::Command::OptionSet
-    has_option :color,    PVN::Command::ColorOption
-    has_option :help,     PVN::Command::HelpOption
+    has_option :color, PVN::Command::ColorOption
   end
 end

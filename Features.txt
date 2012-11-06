@@ -43,3 +43,9 @@ Mon Nov  5 19:29:52 2012
 
   log: changed -v (verbose) to -f (--files), to include files. This eliminates
   confusion with the standard -v option for debugging output.
+
+Tue Nov  6 08:39:10 2012
+
+  all subcommands: added -v as universal option.
+  seek: fixed bug handling files.
+  seek: added exception when no expression provided.

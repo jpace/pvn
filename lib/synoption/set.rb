@@ -18,7 +18,6 @@ module PVN
     class << self
       def has_option name, optcls, optargs = Hash.new
         attr_reader name
-
         @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
 
         define_method name do
@@ -38,7 +37,13 @@ module PVN
       @options = options
       @arguments = Array.new
 
-      opts = @@options_for_class[self.class]
+      [ self.class, self.class.superclass ].each do |cls|
+        add_options_for_class cls
+      end
+    end
+
+    def add_options_for_class cls
+      opts = @@options_for_class[cls]
 
       opts.each do |option|
         name = option[:name]

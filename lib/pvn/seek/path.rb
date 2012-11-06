@@ -29,6 +29,8 @@ module PVN::Seek
     def revision; @revision; end
     def user; nil; end
     def use_cache; nil; end
+
+    def files; end
   end
 
   class Path

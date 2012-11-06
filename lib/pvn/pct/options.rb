@@ -7,6 +7,5 @@ require 'pvn/command/options'
 module PVN::Pct
   class OptionSet < PVN::Command::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption
-    has_option :help,     PVN::Command::HelpOption
   end
 end

@@ -15,7 +15,20 @@ module PVN::Command
     end
   end
 
+  class VerboseOption < PVN::BooleanOption
+    def initialize optargs = Hash.new
+      super :verbose, '-v', [ "display verbose output" ], false
+    end
+
+    def set_value val
+      RIEL::Log.level = RIEL::Log::DEBUG
+    end
+  end
+
   class OptionSet < PVN::OptionSet
+    has_option :help,       HelpOption
+    has_option :verbose,    VerboseOption
+
     def name
       self.class.to_s.split('::')[-2].downcase
     end
