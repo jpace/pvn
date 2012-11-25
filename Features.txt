@@ -49,3 +49,7 @@ Tue Nov  6 08:39:10 2012
   all subcommands: added -v as universal option.
   seek: fixed bug handling files.
   seek: added exception when no expression provided.
+
+Thu Nov  8 10:39:48 2012
+
+  commands: removed -f as short option for --color, which is the default.

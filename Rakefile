@@ -40,7 +40,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
-  s.version            = "0.0.11"
+  s.version            = "0.0.12"
   s.author             = "Jeff Pace"
   s.email              = "jeugenepace@gmail.com"
   s.homepage           = "http://www.incava.org/projects/pvn"
