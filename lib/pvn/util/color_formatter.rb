@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'riel/log'
+require 'rainbow'
 
 module PVN
   class ColorFormatter
@@ -17,7 +18,12 @@ module PVN
       colors = colors field
       return what if colors.nil? || colors.empty?
       colors.each do |col|
-        what = what.send col
+        case col
+        when "bold", :bold
+          what = what.bright
+        else
+          what = what.color col.to_sym
+        end
       end
       what
     end

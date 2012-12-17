@@ -15,7 +15,7 @@ module PVN
     end
 
     def set_value opt, vals
-      vals.each do |val|
+      [ vals ].flatten.each do |val|
         opt.set_value val
       end
     end

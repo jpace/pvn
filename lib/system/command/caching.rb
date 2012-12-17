@@ -7,7 +7,7 @@ require 'system/command/cachefile'
 module System
   class CachingCommandLine < CommandLine
     # caches its input and values.
-    @@cache_dir = '/tmp' + Pathname.new($0).expand_path
+    @@cache_dir = '/tmp' + Pathname.new($0).expand_path.to_s
 
     class << self
       def cache_dir

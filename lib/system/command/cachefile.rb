@@ -3,10 +3,11 @@
 
 require 'system/command/line'
 require 'zlib'
+require 'riel/log/loggable'
 
 module System
   class CacheFile
-    include Loggable
+    include RIEL::Loggable
 
     attr_reader :output
     

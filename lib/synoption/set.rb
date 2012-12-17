@@ -2,57 +2,16 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 require 'synoption/option'
 require 'synoption/exception'
 
 module PVN
-  class OptionSet
-    include Loggable
-
-    # maps from the option set class to the valid options for that class.
-    @@options_for_class = Hash.new { |h, k| h[k] = Array.new }
-
-    attr_reader :unprocessed
-    
-    class << self
-      def has_option name, optcls, optargs = Hash.new
-        attr_reader name
-        @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
-
-        define_method name do
-          instance_eval do
-            meth = name
-            opt  = instance_variable_get '@' + name.to_s
-            opt.value
-          end
-        end
-      end
-    end
-
+  class OptionList    
     attr_reader :options
-    attr_reader :arguments
     
     def initialize options = Array.new
       @options = options
-      @arguments = Array.new
-
-      [ self.class, self.class.superclass ].each do |cls|
-        add_options_for_class cls
-      end
-    end
-
-    def add_options_for_class cls
-      opts = @@options_for_class[cls]
-
-      opts.each do |option|
-        name = option[:name]
-        cls  = option[:class]
-        args = option[:args]
-        opt  = cls.new(*args)
-        add opt
-        instance_variable_set '@' + name.to_s, opt
-      end
     end
 
     def inspect
@@ -75,6 +34,72 @@ module PVN
         end
       end
       cmdline
+    end
+
+    def << option
+      @options << option
+    end
+
+    def add option
+      @options << option
+      option
+    end
+  end
+
+  class OptionSet < OptionList
+    include RIEL::Loggable
+
+    # maps from the option set class to the valid options for that class.
+    @@options_for_class = Hash.new { |h, k| h[k] = Array.new }
+
+    attr_reader :unprocessed
+
+    class << self
+      puts "self: #{self}"
+      
+      def has_option name, optcls, optargs = Hash.new
+        puts "name: #{name}"
+        
+        attr_reader name
+        @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
+
+        RIEL::Log.stack "defining: #{name}"
+
+        define_method name do
+          instance_eval do
+            meth = name
+            opt  = instance_variable_get '@' + name.to_s
+            opt.value
+          end
+        end
+
+        # val = send name
+        puts "name: #{name}"
+        puts "-------------------------------------------------------"
+      end
+    end
+
+    attr_reader :options
+    
+    def initialize options = Array.new
+      super 
+      
+      [ self.class, self.class.superclass ].each do |cls|
+        add_options_for_class cls
+      end
+    end
+
+    def add_options_for_class cls
+      opts = @@options_for_class[cls]
+
+      opts.each do |option|
+        name = option[:name]
+        cls  = option[:class]
+        args = option[:args]
+        opt  = cls.new(*args)
+        add opt
+        instance_variable_set '@' + name.to_s, opt
+      end
     end
 
     def unset key
@@ -127,19 +152,6 @@ module PVN
       options_processed.each do |opt|
         opt.post_process self, @unprocessed
       end
-    end
-
-    def << option
-      @options << option
-    end
-
-    def add option
-      @options << option
-      option
-    end
-
-    def as_command_line
-      to_command_line + arguments
     end
   end
 end

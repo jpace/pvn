@@ -3,10 +3,11 @@
 
 require 'svnx/info/entry'
 require 'svnx/entries'
+require 'riel/log/loggable'
 
 module SVNx::Info
   class Entries < SVNx::Entries
-    include Loggable
+    include RIEL::Loggable
 
     def get_elements doc
       doc.elements['info'].elements

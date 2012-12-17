@@ -2,7 +2,8 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
+require 'riel/log/log'
 
 require 'pvn'
 require 'pvn/io/element'
@@ -26,7 +27,7 @@ module PVN; module App; end; end
 
 module PVN::App
   class Runner
-    include Loggable
+    include RIEL::Loggable
 
     SUBCOMMANDS = [ PVN::Log::Command,
                     PVN::Pct::Command,
@@ -51,6 +52,8 @@ module PVN::App
         info "arg: #{arg}"
 
         case arg
+        when "-v", "--version"
+          show_version
         when "--verbose"
           RIEL::Log.level = RIEL::Log::DEBUG
         when "help", "--help", "-h"
@@ -70,6 +73,13 @@ module PVN::App
       run_help args
     end
 
+    def show_version
+      puts "pvn, version #{PVN::VERSION}"
+      puts "Written by Jeff Pace (jeugenepace@gmail.com)."
+      puts "Released under the I Haven't Decided Yet License."
+      exit 0
+    end
+
     def run_command cmdcls, args
       begin
         cmdcls.new args
@@ -85,7 +95,7 @@ module PVN::App
       forwhat = args[0]
 
      SUBCOMMANDS.each do |sc|
-        puts sc
+        info "sc: #{sc}"
         if sc.matches_subcommand? forwhat
           sc.new(%w{ --help })
           exit 0

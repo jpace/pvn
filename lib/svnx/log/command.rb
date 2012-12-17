@@ -4,6 +4,7 @@
 require 'system/command/line'
 require 'system/command/caching'
 require 'svnx/command'
+require 'riel/log/loggable'
 
 module SVNx
   module LogCmdLine
@@ -24,7 +25,7 @@ module SVNx
   end
 
   class LogCommandArgs < CommandArgs
-    include Loggable
+    include RIEL::Loggable
     
     attr_reader :limit
     attr_reader :verbose

@@ -40,7 +40,7 @@ module PVN::Command
       @subcommands = args
     end
 
-    def write io = $stdout
+    def write out = $stdout
       doc = Array.new
 
       subcmds = @subcommands
@@ -50,45 +50,45 @@ module PVN::Command
         subcmdstr << " (" << subcmds[1 .. -1].join(" ") << ")"
       end
 
-      io.puts subcmdstr + ": " + @description
-      io.puts "usage: " + subcmds[0] + " " + @usage
-      io.puts ""
-      io.puts @summary.collect { |line| "  " + line }
+      out.puts subcmdstr + ": " + @description
+      out.puts "usage: " + subcmds[0] + " " + @usage
+      out.puts ""
+      out.puts @summary.collect { |line| "  " + line }
 
-      write_section "options", @options, io do |opt, io|
+      write_section "options", @options, out do |opt, io|
         option_to_doc opt, io
       end
 
-      write_section "examples", @examples, io do |ex, io|
+      write_section "examples", @examples, out do |ex, io|
         example_to_doc ex, io
       end
     end
 
-    def write_section name, section, io
+    def write_section name, section, out
       if section.length > 0
-        io.puts ""
-        io.puts "#{name.capitalize}:"
-        io.puts ""
+        out.puts ""
+        out.puts "#{name.capitalize}:"
+        out.puts ""
         
         section.each do |opt|
-          yield opt, io
+          yield opt, out
         end
       end
     end
 
-    def example_to_doc ex, io
+    def example_to_doc ex, out
       ex.each_with_index do |line, idx|
         if idx == 0
-          io.puts "  % #{line}"
+          out.puts "  % #{line}"
         else
-          io.puts "    #{line}"
+          out.puts "    #{line}"
         end
       end
-      io.puts
+      out.puts
     end
 
-    def option_to_doc opt, io
-      opt.to_doc io
+    def option_to_doc opt, out
+      opt.to_doc out
     end
   end
 end

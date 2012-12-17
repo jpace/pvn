@@ -59,7 +59,7 @@ module PVN
       
       # wrap optdesc?
 
-      @option.description.each_with_index do |descline, idx|
+      [ @option.description ].flatten.each_with_index do |descline, idx|
         lhs = idx == 0 ? to_doc_tag :  ""
         io.puts to_doc_line lhs, descline, idx == 0 ? ":" : ""
       end

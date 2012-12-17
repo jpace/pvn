@@ -4,10 +4,11 @@
 require 'rubygems'
 require 'riel'
 require 'rexml/document'
+require 'riel/log/loggable'
 
 module SVNx
   class Entry
-    include Loggable
+    include RIEL::Loggable
 
     def initialize args = Hash.new
       if xmllines = args[:xmllines]

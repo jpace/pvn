@@ -3,10 +3,11 @@
 
 require 'rubygems'
 require 'riel'
+require 'riel/log/loggable'
 
 module SVNx
   class Action
-    include Loggable, Comparable
+    include RIEL::Loggable, Comparable
     
     attr_reader :type
 

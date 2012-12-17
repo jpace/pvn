@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'riel'
+require 'riel/log'
 require 'stringio'
 require 'test/unit'
 require 'resources'

@@ -2,11 +2,13 @@
 # -*- ruby -*-
 
 require 'system/command/arg'
+require 'riel/log/loggable'
+require 'riel/pathname'
 require 'open3'
 
 module System
   class CommandLine
-    include Loggable
+    include RIEL::Loggable
 
     attr_reader :output
 

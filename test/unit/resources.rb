@@ -2,11 +2,11 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 require 'singleton'
 
 class SvnResource
-  include Loggable
+  include RIEL::Loggable
   
   RES_DIR = '/proj/org/incava/pvn/test/resources/'
   
@@ -32,10 +32,10 @@ class SvnResource
 
     Dir.chdir @dir
     
-    IO.popen(svncmd) do |io|
-      lines = io.readlines
-      File.open(outfile, "w") do |io|
-        io.puts lines
+    IO.popen(svncmd) do |svnio|
+      lines = svnio.readlines
+      File.open(outfile, "w") do |fio|
+        fio.puts lines
       end
     end
     Dir.chdir origdir.to_s

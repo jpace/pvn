@@ -4,6 +4,7 @@
 require 'rubygems'
 require 'riel'
 require 'system/command/line'
+require 'riel/log/loggable'
 
 # this replaces svnx/lib/command/svncommand.
 
@@ -12,7 +13,7 @@ module SVNx
   TMP_DIR_ENV_VARNAME = 'SVNX_TMP_DIR'
 
   module CmdLine
-    include Loggable
+    include RIEL::Loggable
 
     def initialize subcmd, args
       info "args: #{args}"
@@ -42,7 +43,7 @@ module SVNx
   end
 
   class CommandArgs
-    include Loggable
+    include RIEL::Loggable
     
     attr_accessor :path
 
@@ -56,7 +57,7 @@ module SVNx
   end  
 
   class Command
-    include Loggable
+    include RIEL::Loggable
 
     attr_reader :output
     

@@ -13,7 +13,7 @@ module PVN::Log
     end
 
     def format
-      use_colors ? @msg.white : @msg
+      use_colors ? @msg.color(:white) : @msg
     end
   end
 end

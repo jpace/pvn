@@ -2,13 +2,14 @@
 # -*- ruby -*-
 
 require 'rexml/document'
+require 'riel/log/loggable'
 
 module SVNx
   # this is a parse/process on-demand list of entries, acting like an
   # Enumerable.
 
   class Entries
-    include Loggable, Enumerable
+    include RIEL::Loggable, Enumerable
 
     attr_reader :size
 
