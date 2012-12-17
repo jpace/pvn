@@ -15,8 +15,6 @@ module PVN::Pct
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
-      info "paths: #{paths}"
-
       total = PVN::DiffCount.new 0, 0, 'total'
 
       paths.each do |path|

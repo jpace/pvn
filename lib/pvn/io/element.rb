@@ -84,8 +84,9 @@ module PVN::IO
         svninfo = get_info rev
         true
       rescue => e
-        # skip it
-        false
+        puts "e: #{e}"
+        raise e
+        # false
       end
     end
 

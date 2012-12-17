@@ -6,7 +6,7 @@ require 'svnx/command'
 module SVNx
   class InfoCommandLine < CommandLine
     def initialize args = Array.new
-      puts "args.to_a: #{args.to_a}".color(:blue)
+      info "args.to_a: #{args.to_a}".color(:blue)
       super "info", args.to_a
     end
   end
@@ -23,7 +23,7 @@ module SVNx
       ary = Array.new
 
       if @revision
-        @revision.each do |rev|
+        [ @revision ].flatten.each do |rev|
           ary << "-r#{rev}"
         end
       end

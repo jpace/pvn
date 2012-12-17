@@ -30,10 +30,10 @@ module PVN::Pct
       revision = options.revision
 
       # revision -r20 is like diff -c20:
-      info "revision: #{revision}".bright.color(:yellow)
+      info "revision: #{revision}"
       fromrev, torev = get_from_to_revisions revision
-      info "fromrev: #{fromrev}".color(:yellow)
-      info "torev: #{torev}".color(:yellow)
+      info "fromrev: #{fromrev}"
+      info "torev: #{torev}"
       
       elmt = PVN::IO::Element.new :local => path
       modified = elmt.find_modified_entries [ fromrev + ':' + torev ]
@@ -54,9 +54,13 @@ module PVN::Pct
         fullpath = reporoot + mod
         elmt = PVN::IO::Element.new :path => fullpath
 
+        info "elmt: #{elmt}"
+
         next unless elmt.has_revision? fromrev
         next unless elmt.has_revision? torev
-        next if elmt.get_info.kind == 'dir'
+
+        elmtinfo = elmt.get_info
+        next if elmtinfo.kind == 'dir'
 
         from_count = elmt.cat(fromrev).size
         to_count = elmt.cat(torev).size

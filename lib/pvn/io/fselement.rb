@@ -20,5 +20,9 @@ module PVN
     def line_count
       readlines.size
     end
+
+    def to_s
+      super
+    end
   end
 end
