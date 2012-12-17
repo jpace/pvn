@@ -18,9 +18,9 @@ module PVN::Diff
     def diff_revision_to_working_copy revision, whitespace
       fromrev = revision.from.value
 
-      info "revision: #{revision}".cyan
+      info "revision: #{revision}".color(:cyan)
       rev = PVN::Revision::Range.new revision.to_s, 'HEAD'
-      info "rev: #{rev}".cyan
+      info "rev: #{rev}".color(:cyan)
 
       logpaths = LogPaths.new rev, @paths
       name_to_logpath = logpaths.to_map

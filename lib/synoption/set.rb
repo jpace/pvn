@@ -54,28 +54,15 @@ module PVN
 
     attr_reader :unprocessed
 
-    class << self
-      puts "self: #{self}"
-      
-      def has_option name, optcls, optargs = Hash.new
-        puts "name: #{name}"
-        
-        attr_reader name
-        @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
+    def self.has_option name, optcls, optargs = Hash.new
+      @@options_for_class[self] << { :name => name, :class => optcls, :args => optargs }
 
-        RIEL::Log.stack "defining: #{name}"
-
-        define_method name do
-          instance_eval do
-            meth = name
-            opt  = instance_variable_get '@' + name.to_s
-            opt.value
-          end
+      define_method name do
+        instance_eval do
+          meth = name
+          opt  = instance_variable_get '@' + name.to_s
+          opt.value
         end
-
-        # val = send name
-        puts "name: #{name}"
-        puts "-------------------------------------------------------"
       end
     end
 
@@ -83,9 +70,11 @@ module PVN
     
     def initialize options = Array.new
       super 
-      
-      [ self.class, self.class.superclass ].each do |cls|
+
+      cls = self.class
+      while cls != OptionSet
         add_options_for_class cls
+        cls = cls.superclass
       end
     end
 

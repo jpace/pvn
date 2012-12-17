@@ -4,6 +4,7 @@
 require 'pvn/io/element'
 require 'pvn/pct/differ'
 require 'pvn/revision/range'
+require 'rainbow'
 
 module PVN::Pct
   class RepositoryDiffer < Differ
@@ -29,10 +30,10 @@ module PVN::Pct
       revision = options.revision
 
       # revision -r20 is like diff -c20:
-      info "revision: #{revision}".bold.yellow
+      info "revision: #{revision}".bright.color(:yellow)
       fromrev, torev = get_from_to_revisions revision
-      info "fromrev: #{fromrev}".yellow
-      info "torev: #{torev}".yellow
+      info "fromrev: #{fromrev}".color(:yellow)
+      info "torev: #{torev}".color(:yellow)
       
       elmt = PVN::IO::Element.new :local => path
       modified = elmt.find_modified_entries [ fromrev + ':' + torev ]

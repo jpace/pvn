@@ -31,7 +31,7 @@ module PVN
 
     def remove_cache_dir
       pn = Pathname.new @cache_dir
-      info "pn: #{pn}".red
+      info "pn: #{pn}"
       pn.rmtree if pn.exist?
     end
 

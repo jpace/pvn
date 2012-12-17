@@ -23,9 +23,5 @@ module PVN::Diff
       # Revision::Range?
       rev.kind_of?(Fixnum) ? rev.to_s : rev
     end
-
-    def to_s
-      inspect
-    end
   end
 end

@@ -55,7 +55,7 @@ module SVNx
       end
 
       if @revision
-        @revision.each do |rev|
+        [ @revision ].flatten.each do |rev|
           ary << "-r#{rev}"
         end
       end

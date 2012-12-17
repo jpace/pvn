@@ -24,6 +24,8 @@ module System
     def execute
       cmd = to_command
 
+      info "cmd: #{cmd}".color("8A8A43")
+
       # cmd << " 2>&1"
 
       # I want to use popen3, but the version that works (sets $?) is in 1.9.x,
@@ -33,9 +35,9 @@ module System
       end
 
       if $? && $?.exitstatus != 0
-        info "cmd: #{cmd}".red
-        info "$?: #{$?.inspect}".red
-        info "$?.exitstatus: #{$? && $?.exitstatus}".red
+        info "cmd: #{cmd}".color(:red)
+        info "$?: #{$?.inspect}".color(:red)
+        info "$?.exitstatus: #{$? && $?.exitstatus}".color(:red)
         raise "ERROR running command '#{cmd}': #{@output[-1]}"
       end
 

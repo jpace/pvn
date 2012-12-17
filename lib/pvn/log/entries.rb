@@ -12,7 +12,7 @@ module PVN::Log
       cmdargs = create_cmd_args options, path
       cmdargs[:path] = path
       
-      info "cmdargs: #{cmdargs}".magenta
+      info "cmdargs: #{cmdargs}".color(:magenta)
 
       logargs = SVNx::LogCommandArgs.new cmdargs
       cmd = SVNx::LogCommand.new logargs
@@ -20,7 +20,7 @@ module PVN::Log
       super :xmllines => cmd.execute
 
       info { "options: #{options}" }
-      info { "options.user: #{options.user}".yellow }
+      info { "options.user: #{options.user}".color(:yellow) }
     end
 
     def create_cmd_args options, path

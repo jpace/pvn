@@ -3,50 +3,28 @@ require 'riel'
 require 'rake/testtask'
 require 'rubygems/package_task'
 require 'fileutils'
-
-# require './lib/pvn'
 require './test/unit/resources'
 
 Dir['tasks/**/*.rake'].each { |t| load t }
 
-task :default => :test
+task :default => 'test:unit'
 
-class PvnTestTask < Rake::TestTask
-  def initialize name = 'test'
-    puts "name: #{name}"
-    
-    super
-
-    libs << "lib"
-    libs << "test"
-    libs << "test/unit"
-    
-    # libs << "test/integration"
-    warning = true
-    verbose = true
+class PVNTestTask < Rake::TestTask
+  def initialize name, pattern
+    super name do |t|
+      t.libs << 'lib'
+      t.libs << 'test'
+      t.libs << 'test/unit'
+      t.pattern = 'test/' + pattern
+      t.warning = true
+      t.verbose = true
+    end
   end
 end
 
-Rake::TestTask.new('test:every') do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.libs << 'test/unit'
-  t.pattern = 'test/unit/**/*_test.rb'
-  t.warning = true
-  t.verbose = true
-end
-
-PvnTestTask.new do |t|
-  t.test_files = FileList['test/unit/**/*test*.rb']
-end
-
-PvnTestTask.new('test:integration') do |t|
-  t.test_files = FileList['test/integration/**/*test*.rb']
-end
-
-PvnTestTask.new('test:all') do |t|
-  t.test_files = FileList['test/**/*test*.rb']
-end
+PVNTestTask.new 'test:unit', 'unit/**/*_test.rb'
+PVNTestTask.new 'test:integration', 'integration/**/*_test.rb'
+PVNTestTask.new 'test:all', '**/*_test.rb'
 
 task :build_fixtures do
   Resources.instance.generate

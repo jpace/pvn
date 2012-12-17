@@ -33,10 +33,6 @@ module PVN::Diff
       rev.kind_of?(Fixnum) ? rev.to_s : rev
     end
 
-    def to_s
-      inspect
-    end
-    
     def to_revision_string rev
       rev ? "revision #{rev}" : "working copy"
     end

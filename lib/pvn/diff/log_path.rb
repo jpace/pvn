@@ -19,9 +19,9 @@ module PVN::Diff
     end
 
     def show_as_added elmt, path, revision, whitespace
-      info "path: #{path}".on_blue
+      info "path: #{path}".background(:blue)
       tolines = elmt.cat revision.to
-      info "tolines: #{tolines}".blue
+      info "tolines: #{tolines}".color(:blue)
       run_diff path, nil, 0, tolines, revision.to, whitespace
     end
 
@@ -48,14 +48,14 @@ module PVN::Diff
 
       displaypath = get_display_path
 
-      info "revision.from: #{revision.from}".cyan
+      info "revision.from: #{revision.from}".color(:cyan)
 
       rev_change = changes.detect do |chg| 
         revarg = PVN::Revision::Argument.new chg.revision
         revarg > revision.from
       end
 
-      info "rev_change: #{rev_change}".green
+      info "rev_change: #{rev_change}".color(:green)
 
       # we ignore unversioned logpaths
       
@@ -101,7 +101,7 @@ module PVN::Diff
       ### modified.
 
       change = revisions_later_than(fromrev).first
-      info "change: #{change}".red
+      info "change: #{change}".color(:red)
 
       # revision should be a class here, not a primitive
       diffrev = get_diff_revision change, revision

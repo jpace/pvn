@@ -26,8 +26,6 @@ module PVN::Command
   end
 
   class OptionSet < PVN::OptionSet
-    Log.stack "self: #{self.inspect}"
-    
     has_option :help,       HelpOption
     has_option :verbose,    VerboseOption
 
