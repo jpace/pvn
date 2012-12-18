@@ -30,7 +30,7 @@ module PVN
         def ste.run(*args)
           RIEL::Log.debug "self: #{self}".bold
           RIEL::Log.debug "@@cls: #{@@cls}".bold
-
+          
           @@cls.setup
 
           RIEL::Log.debug "self: #{self}".bold

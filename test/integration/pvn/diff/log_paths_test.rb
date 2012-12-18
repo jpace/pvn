@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'integration/pvn/diff/differ_tc'
+require 'integration/tc'
 require 'pvn/diff/log_paths'
 require 'pvn/revision/range'
 

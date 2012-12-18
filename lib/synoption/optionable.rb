@@ -2,14 +2,14 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 require 'synoption/set'
 require 'synoption/option'
 require 'pvn/cmddoc'
 
 module PVN
   module Optionable
-    include Loggable
+    include RIEL::Loggable
 
     def self.included base
       base.extend ClassMethods

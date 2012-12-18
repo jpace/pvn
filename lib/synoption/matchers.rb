@@ -2,12 +2,12 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 require 'synoption/match'
 
 module PVN
   class Matchers
-    include Loggable
+    include RIEL::Loggable
 
     attr_reader :exact
     attr_reader :negative

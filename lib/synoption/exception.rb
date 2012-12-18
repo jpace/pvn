@@ -2,11 +2,10 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 
 module PVN
   class OptionException < RuntimeError
-    include Loggable
-
+    include RIEL::Loggable
   end
 end

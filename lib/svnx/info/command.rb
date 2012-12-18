@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'svnx/command'
+require 'rainbow'
 
 module SVNx
   class InfoCommandLine < CommandLine

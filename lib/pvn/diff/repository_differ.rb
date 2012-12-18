@@ -6,10 +6,11 @@ require 'pvn/diff/differ'
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/changed_paths'
+require 'riel/log/loggable'
 
 module PVN::Diff
   class RepositoryDiffer < Differ
-    include Loggable
+    include RIEL::Loggable
 
     attr_reader :whitespace
     attr_reader :revision

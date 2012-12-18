@@ -53,3 +53,7 @@ Tue Nov  6 08:39:10 2012
 Thu Nov  8 10:39:48 2012
 
   commands: removed -f as short option for --color, which is the default.
+
+Mon Dec 17 20:33:26 2012
+
+  Updated code to work with Rainbow and RIEL gems.

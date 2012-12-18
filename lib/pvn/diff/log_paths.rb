@@ -4,11 +4,12 @@
 require 'pvn/io/element'
 require 'pvn/diff/paths'
 require 'pvn/diff/log_path'
+require 'riel/log/loggable'
 
 module PVN::Diff
   # represents the log entries from one revision through another.
   class LogPaths < Paths
-    include Loggable
+    include RIEL::Loggable
 
     def add_for_path path
       pathelmt = PVN::IO::Element.new :local => path

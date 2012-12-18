@@ -47,7 +47,7 @@ module PVN::Seek
       contents = cat entry.revision
       contents.each_with_index do |line, lnum|
         if line.index @pattern
-          info "line: #{line}".red
+          info "line: #{line}".color(:red)
           return [ entry, lnum, line ]
         end
       end
@@ -75,7 +75,7 @@ module PVN::Seek
       ref = seek_for criteria
       if ref
         # todo: use previous or current entry, and run through entry formatter in log:
-        log ref.entry.inspect.red
+        log ref.entry.inspect.color(:red)
         entry = @entries[ref.index]
         info "entry: #{entry}"
         
@@ -86,8 +86,8 @@ module PVN::Seek
         line = nil
 
         if use_color
-          pathrev = "#{@path.yellow} -r#{fromrev.magenta}:#{torev.green}"
-          line = "#{ref.lnum}: #{ref.line.chomp.bold}"
+          pathrev = "#{@path.to_s.color(:yellow)} -r#{fromrev.color(:magenta)}:#{torev.color(:green)}"
+          line = "#{ref.lnum}: #{ref.line.chomp.bright}"
         else
           pathrev = "#{@path} -r#{fromrev}:#{torev}"
           line = "#{ref.lnum}: #{ref.line.chomp}"

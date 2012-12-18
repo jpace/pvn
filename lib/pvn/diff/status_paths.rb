@@ -4,10 +4,11 @@
 require 'pvn/io/element'
 require 'pvn/diff/path'
 require 'pvn/diff/paths'
+require 'riel/log/loggable'
 
 module PVN::Diff
   class StatusPaths < Paths
-    include Loggable
+    include RIEL::Loggable
 
     def add_for_path path
       pathelmt = PVN::IO::Element.new :local => path

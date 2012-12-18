@@ -5,11 +5,12 @@ require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/local_path'
 require 'pvn/revision/range'
+require 'riel/log/loggable'
 
 module PVN::Diff
   # represents both LogPaths and StatusPaths
   class ChangedPaths
-    include Loggable
+    include RIEL::Loggable
 
     def initialize paths
       @paths = paths

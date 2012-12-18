@@ -2,11 +2,11 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 
 module PVN
   class OptionMatch
-    include Loggable
+    include RIEL::Loggable
 
     def match? arg
       raise "not implemented"

@@ -9,7 +9,7 @@ require 'synoption/matchers'
 
 module PVN
   class BaseOption
-    include Loggable
+    include RIEL::Loggable
 
     # for as_cmdline_option:
     NO_CMDLINE_OPTION = Object.new

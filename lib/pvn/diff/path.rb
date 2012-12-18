@@ -3,12 +3,13 @@
 
 require 'svnx/action'
 require 'pvn/diff/change'
+require 'riel/log/loggable'
 
 module PVN; module Diff; end; end
 
 module PVN::Diff
   class Path
-    include Loggable
+    include RIEL::Loggable
     
     attr_reader :name
     attr_reader :url

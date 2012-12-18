@@ -2,12 +2,12 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 
 module PVN
   # documentation for an option.
   class Doc
-    include Loggable
+    include RIEL::Loggable
 
     def initialize option
       @option = option

@@ -7,7 +7,7 @@ require './test/unit/resources'
 
 Dir['tasks/**/*.rake'].each { |t| load t }
 
-task :default => 'test:unit'
+task :default => 'test:all'
 
 class PVNTestTask < Rake::TestTask
   def initialize name, pattern

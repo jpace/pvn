@@ -83,7 +83,7 @@ module PVN::App
     def run_command cmdcls, args
       begin
         cmdcls.new args
-        exit(0)
+        exit 0
       rescue => e
         puts e.backtrace
         $stderr.puts e
@@ -94,7 +94,7 @@ module PVN::App
     def run_help args
       forwhat = args[0]
 
-     SUBCOMMANDS.each do |sc|
+      SUBCOMMANDS.each do |sc|
         info "sc: #{sc}"
         if sc.matches_subcommand? forwhat
           sc.new(%w{ --help })

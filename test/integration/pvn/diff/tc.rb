@@ -39,7 +39,7 @@ module PVN::Diff
       strio.close
       puts strio.string
       
-      actlines = strio.string.split("\n")
+      actlines = strio.string.split "\n"
 
       assert_arrays_equal explines, actlines
 
