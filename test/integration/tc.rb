@@ -19,7 +19,6 @@ module PVN
       super
 
       @origdir = Dir.pwd
-      # $$$ shouldn't this be .pending?
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
     end
 

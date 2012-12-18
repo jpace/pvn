@@ -8,7 +8,7 @@ require 'pvn/pct/options'
 
 module PVN::Pct
   class TestCase < PVN::IntegrationTestCase
-    def assert_diff_command diffcls, args, explines
+    def assert_command cls, args, explines
       orig_dir = Dir.pwd
       
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
@@ -24,8 +24,8 @@ module PVN::Pct
 
       opts.process args
 
-      differ = diffcls.new opts
-      info "differ: #{differ}"
+      cmd = cls.new opts
+      info "cmd: #{cmd}"
       
       strio.close
       puts strio.string

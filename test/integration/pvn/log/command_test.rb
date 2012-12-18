@@ -24,6 +24,5 @@ module PVN::App::Log
       # fetch_log_in_pieces (-n LIMIT, LIMIT * 2, LIMIT * 4, LIMIT * 8 ... )
       # PVN::Log::Command.new [ PT_DIRNAME ]
     end
-
   end
 end

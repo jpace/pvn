@@ -15,7 +15,7 @@ module PVN::Pct
       explines << "       3        4        1     33.3% FirstFile.txt"
       explines << "       3        4        1     33.3% total"
 
-      assert_diff_command LocalDiffer, %w{ }, explines
+      assert_command LocalDiffer, %w{ }, explines
     end
   end
 end
