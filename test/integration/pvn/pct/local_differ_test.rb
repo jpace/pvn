@@ -1,11 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
-require 'integration/pvn/pct/tc'
 require 'pvn/pct/local_differ'
-require 'pvn/pct/options'
+require 'integration/pvn/pct/tc'
 
 module PVN::Pct
   class LocalDifferTest < TestCase

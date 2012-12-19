@@ -1,10 +1,11 @@
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
 require 'tc'
 require 'system/command/line'
 
 module System
   class CommandLineTestCase < PVN::TestCase
-    include Loggable
-
     def test_ctor
       cl = System::CommandLine.new [ "ls" ]
       assert_equal "ls", cl.to_command

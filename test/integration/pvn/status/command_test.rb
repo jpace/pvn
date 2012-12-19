@@ -1,12 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'integration/tc'
 require 'pvn/status/command'
-require 'resources'
-require 'stringio'
-
-Log.level = Log::DEBUG
+require 'integration/tc'
 
 module PVN::Status
   class CommandTest < PVN::IntegrationTestCase

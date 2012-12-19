@@ -1,10 +1,12 @@
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
 require 'tc'
 require 'zlib'
+require 'pathname'
 
 module System
   class CommandTestCase < PVN::TestCase
-    include Loggable
-
     CACHE_DIR = Pathname.new '/tmp/pvn/testing'
 
     def setup

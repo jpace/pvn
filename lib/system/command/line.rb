@@ -1,10 +1,12 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
+require 'rubygems'
 require 'system/command/arg'
 require 'riel/log/loggable'
 require 'riel/pathname'
 require 'open3'
+require 'rainbow'
 
 module System
   class CommandLine

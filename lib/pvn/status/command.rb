@@ -25,6 +25,7 @@ module PVN::Status
     example "pvn status --no-color",  "Prints the status, uncolorized, for locally changed files."
     
     def init options
+      info "options: #{options}"
       paths = options.paths
 
       paths = %w{ . } if paths.empty?

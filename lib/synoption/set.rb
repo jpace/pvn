@@ -99,7 +99,9 @@ module PVN
     def process args
       options_processed = Array.new
 
+      info "args: #{args}"
       @unprocessed = args
+      info "@unprocessed: #{@unprocessed}"
 
       aborted = false
       

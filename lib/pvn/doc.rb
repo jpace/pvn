@@ -2,14 +2,12 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'riel/log/loggable'
 require 'pvn/documenter'
-
-# Log.level = Log::DEBUG
 
 module PVN
   module Doc
-    include Loggable
+    include RIEL::Loggable
 
     def self.included base
       base.extend ClassMethods

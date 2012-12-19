@@ -2,11 +2,11 @@
 # -*- ruby -*-
 
 require 'integration/tc'
-require 'pvn/pct/options'
+require 'pvn/seek/command'
 
-module PVN::Pct
+module PVN::Seek
   class TestCase < PVN::IntegrationTestCase
-    def assert_command cls, args, explines
+    def assert_seek_command diffcls, args, explines
       orig_dir = Dir.pwd
       
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
@@ -22,13 +22,13 @@ module PVN::Pct
 
       opts.process args
 
-      cmd = cls.new opts
-      info "cmd: #{cmd}"
+      # cmd = cls.new opts
+      # info "cmd: #{cmd}"
       
       strio.close
       puts strio.string
       
-      actlines = strio.string.split("\n")
+      actlines = strio.string.split "\n"
 
       assert_arrays_equal explines, actlines
 

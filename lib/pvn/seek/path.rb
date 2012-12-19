@@ -3,6 +3,7 @@
 
 require 'svnx/cat/command'
 require 'pvn/log/entries'
+require 'riel/log/loggable'
 
 module PVN::Seek
   class Match
@@ -34,7 +35,7 @@ module PVN::Seek
   end
 
   class Path
-    include Loggable
+    include RIEL::Loggable
 
     def initialize path, pattern, revision
       @path = path

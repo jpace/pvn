@@ -2,10 +2,11 @@
 # -*- ruby -*-
 
 require 'pvn/log/entries'
+require 'riel/log/loggable'
 
 module PVN::Log
   class UserEntries < PVN::Log::Entries
-    include Loggable
+    include RIEL::Loggable
 
     def initialize path, options
       @user = options.user

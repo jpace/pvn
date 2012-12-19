@@ -6,9 +6,7 @@ require 'synoption/base_option'
 require 'stringio'
 
 module PVN
-  class BaseOptionTestCase < Test::Unit::TestCase
-    include Loggable
-    
+  class BaseOptionTestCase < TestCase    
     def test_init_minimal
       opt = BaseOption.new :limit, '-l', "the number of log entries", nil
       assert_equal :limit, opt.name

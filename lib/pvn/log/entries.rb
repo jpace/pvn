@@ -3,10 +3,11 @@
 
 require 'svnx/log/command'
 require 'svnx/log/entries'
+require 'riel/log/loggable'
 
 module PVN::Log
   class Entries < SVNx::Log::Entries
-    include Loggable
+    include RIEL::Loggable
 
     def initialize path, options
       cmdargs = create_cmd_args options, path

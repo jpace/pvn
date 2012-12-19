@@ -8,8 +8,6 @@ module SVNx; module Info; end; end
 
 module SVNx::Info
   class TestCase < PVN::TestCase
-    include Loggable
-
     EXPROOT = 'file:///Programs/Subversion/Repositories/pvntestbed.from'
 
     def assert_entry_equals entry, expdata

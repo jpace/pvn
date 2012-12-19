@@ -6,9 +6,7 @@ require 'synoption/set'
 require 'synoption/base_option'
 
 module PVN
-  class SetTestCase < Test::Unit::TestCase
-    include Loggable
-
+  class SetTestCase < TestCase
     class TestOptionSet < OptionSet
       def name
         'test'

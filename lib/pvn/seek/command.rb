@@ -4,6 +4,9 @@
 require 'pvn/seek/options'
 require 'pvn/command/command'
 require 'pvn/seek/path'
+require 'rainbow'
+
+Sickill::Rainbow.enabled = true
 
 module PVN::Seek
   class Command < PVN::Command::Command

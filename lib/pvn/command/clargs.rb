@@ -1,11 +1,13 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
+require 'riel/log/loggable'
+
 module PVN; module App; end; end
 
 module PVN::App::Base
   class CmdLineArgs
-    include Loggable
+    include RIEL::Loggable
 
     class << self
       def has_option name

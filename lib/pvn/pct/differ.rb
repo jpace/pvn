@@ -2,10 +2,11 @@
 # -*- ruby -*-
 
 require 'pvn/util/diffcount'
+require 'riel/log/loggable'
 
 module PVN::Pct
   class Differ
-    include Loggable
+    include RIEL::Loggable
 
     def initialize options
       show_diff_counts options

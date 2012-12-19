@@ -6,8 +6,6 @@ require 'svnx/action'
 
 module SVNx
   class ActionTestCase < PVN::TestCase
-    include Loggable
-
     def assert_action_equals expadd, expdel, expmod, expunver, *vals
       vals.each do |val|
         action = Action.new val

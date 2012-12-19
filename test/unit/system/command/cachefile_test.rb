@@ -1,3 +1,6 @@
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
 require 'tc'
 require 'system/command/tc'
 require 'system/command/caching'
@@ -5,8 +8,6 @@ require 'zlib'
 
 module System
   class CacheFileTestCase < CommandTestCase
-    include Loggable
-
     CACHE_DIR = Pathname.new '/tmp/pvn/testing'
 
     def test_creates_gzfile

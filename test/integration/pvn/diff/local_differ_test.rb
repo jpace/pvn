@@ -4,8 +4,6 @@
 require 'pvn/diff/local_differ'
 require 'integration/pvn/diff/tc'
 
-Log.level = Log::DEBUG
-
 module PVN::Diff
   class LocalDifferTestCase < TestCase
 

@@ -5,7 +5,7 @@ require 'svnx/info/tc'
 require 'svnx/info/entries'
 
 module SVNx::Info
-  class EntriesTestCase < SVNx::Info::TestCase    
+  class EntriesTestCase < SVNx::Info::TestCase
     def assert_info_entry_equals entry, path, kind, revision
       assert_entry_equals entry, :path => path, :kind => 'file', :url => EXPROOT + '/' + path, :root => EXPROOT, :revision => revision
     end

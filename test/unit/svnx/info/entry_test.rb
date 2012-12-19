@@ -6,8 +6,6 @@ require 'svnx/info/entry'
 
 module SVNx::Info
   class EntryTestCase < SVNx::Info::TestCase
-    include Loggable
-    
     def assert_info_entry_equals entry, path, kind, revision
       assert_entry_equals entry, :path => path, :kind => 'file', :url => EXPROOT + '/' + path, :root => EXPROOT, :revision => revision
     end

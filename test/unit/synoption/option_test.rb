@@ -6,9 +6,7 @@ require 'synoption/option'
 require 'stringio'
 
 module PVN
-  class OptionTestCase < Test::Unit::TestCase
-    include Loggable
-    
+  class OptionTestCase < TestCase
     def test_nothing_yet
     end
   end

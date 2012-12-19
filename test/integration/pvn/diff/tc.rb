@@ -6,17 +6,8 @@ require 'resources'
 require 'stringio'
 require 'pvn/diff/command'
 
-Log.level = Log::DEBUG
-
 module PVN::Diff
-  class TestCase < PVN::TestCase
-
-    def assert_arrays_equal expected, actual
-      (0 ... [ expected.size, actual.size ].max).each do |idx|
-        assert_equal expected[idx], actual[idx]
-      end
-    end
-
+  class TestCase < PVN::IntegrationTestCase
     def assert_diff_command diffcls, args, explines
       orig_dir = Dir.pwd
       
@@ -45,10 +36,6 @@ module PVN::Diff
 
       $io = $stdout
       Dir.chdir orig_dir
-    end
-
-    def create_differ opts
-      raise "not implemented for #{self.class}"
     end
   end
 end

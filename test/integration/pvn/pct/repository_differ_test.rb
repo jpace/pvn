@@ -1,10 +1,8 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'rubygems'
-require 'riel'
-require 'integration/pvn/pct/tc'
 require 'pvn/pct/repository_differ'
+require 'integration/pvn/pct/tc'
 
 module PVN::Pct
   class RepositoryDifferTest < TestCase

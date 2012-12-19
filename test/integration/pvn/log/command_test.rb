@@ -4,18 +4,16 @@
 require 'integration/tc'
 require 'pvn/log/command'
 
-module PVN; module App; module Log; end; end; end
-
-module PVN::App::Log
+module PVN::Log
   class CommandTest < PVN::IntegrationTestCase
     
     def test_path
-      PVN::Log::Command.new [ PT_DIRNAME ]
+      Command.new [ PT_DIRNAME ]
     end
     
     def test_invalid_path
       assert_raises(RuntimeError) do
-        PVN::Log::Command.new %w{ /this/doesnt/exist }
+        Command.new %w{ /this/doesnt/exist }
       end
     end
 

@@ -5,9 +5,7 @@ require 'tc'
 require 'synoption/match'
 
 module PVN
-  class MatchTestCase < Test::Unit::TestCase
-    include Loggable
-
+  class MatchTestCase < TestCase
     def assert_match exp, matcher, arg
       assert_equal exp, matcher.match?(arg), "arg: #{arg}"
     end

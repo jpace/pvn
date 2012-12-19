@@ -6,7 +6,6 @@ require 'svnx/status/entries'
 
 module SVNx::Status
   class EntriesTestCase < SVNx::Status::TestCase
-    
     def test_create_from_xml
       entries = Entries.new :xmllines => Resources::PTP_STATUS.readlines
 

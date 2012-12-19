@@ -1,8 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel'
-require 'rubygems'
 require 'synoption/option'
 require 'svnx/log/command'
 

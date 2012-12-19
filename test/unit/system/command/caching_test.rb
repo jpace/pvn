@@ -1,11 +1,11 @@
-require 'tc'
+#!/usr/bin/ruby -w
+# -*- ruby -*-
+
 require 'system/command/caching'
 require 'system/command/tc'
 
 module System
   class CachingCommandLineTestCase < CommandTestCase
-    include Loggable
-
     def create_ls_tmp
       CachingCommandLine.new [ "ls", "/bin" ]
     end
