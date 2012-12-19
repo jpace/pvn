@@ -57,3 +57,7 @@ Thu Nov  8 10:39:48 2012
 Mon Dec 17 20:33:26 2012
 
   Updated code to work with Rainbow and RIEL gems.
+
+Tue Dec 18 20:27:19 2012
+
+  seek: fixed to be one-indexed, a la grep.

@@ -119,11 +119,11 @@ module PVN::Diff
       else
         fromlines = elmt.cat diffrev
         info "fromlines.size: #{fromlines.size}"
-        pp fromlines
+        # pp fromlines
 
         tolines = pn.readlines
         info "tolines.size: #{tolines.size}"
-        pp tolines
+        # pp tolines
 
         run_diff display_path, fromlines, diffrev, tolines, nil, whitespace
       end

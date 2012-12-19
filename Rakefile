@@ -30,6 +30,11 @@ task :build_fixtures do
   Resources.instance.generate
 end
 
+desc "generate man page"
+task :generate_manpage do 
+  sh "ronn -r --pipe README.md > man/pvn.1"
+end
+
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
   s.version            = "0.0.13"

@@ -5,6 +5,7 @@ require 'pvn/io/element'
 require 'pvn/diff/path'
 require 'pvn/diff/paths'
 require 'riel/log/loggable'
+require 'pvn/diff/local_path'
 
 module PVN::Diff
   class StatusPaths < Paths

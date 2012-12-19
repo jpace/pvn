@@ -40,7 +40,7 @@ module PVN::Seek
     def test_found
       expected = [
                   "[33mFirstFile.txt[0m -r[35m3[0m:[32m5[0m",
-                  "0: [1mthis is the first line of the first file in the testbed.[0m"
+                  "1: [1mthis is the first line of the first file in the testbed.[0m"
                  ]
 
       assert_seek_command expected, %w{ this FirstFile.txt }

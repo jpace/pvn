@@ -17,7 +17,9 @@ module PVN::Diff
       cp.diff_revision_to_working_copy revision, whitespace
       
       strio.close
-      puts strio.string
+      if Log.verbose
+        puts strio.string
+      end
       
       actlines = strio.string.split "\n"
 

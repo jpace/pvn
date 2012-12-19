@@ -88,10 +88,10 @@ module PVN::Seek
 
         if use_color
           pathrev = "#{@path.to_s.color(:yellow)} -r#{fromrev.color(:magenta)}:#{torev.color(:green)}"
-          line = "#{ref.lnum}: #{ref.line.chomp.bright}"
+          line = "#{ref.lnum + 1}: #{ref.line.chomp.bright}"
         else
           pathrev = "#{@path} -r#{fromrev}:#{torev}"
-          line = "#{ref.lnum}: #{ref.line.chomp}"
+          line = "#{ref.lnum + 1}: #{ref.line.chomp}"
         end
 
         $io.puts pathrev

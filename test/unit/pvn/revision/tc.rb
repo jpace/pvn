@@ -2,6 +2,8 @@
 # -*- ruby -*-
 
 require 'tc'
+require 'pvn/revision/error'
+require 'pvn/revision/argument'
 
 module PVN
   module MockBaseRevisionOption

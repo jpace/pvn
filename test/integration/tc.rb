@@ -66,7 +66,9 @@ module PVN
       info "cmd: #{cmd}"
       
       strio.close
-      puts strio.string
+      if Log.verbose
+        puts strio.string
+      end
       
       actlines = strio.string.split("\n")
       info "actlines: #{actlines}"

@@ -38,7 +38,7 @@ module SVNx
     def to_a
       ary = Array.new
       if @revision
-        @revision.each do |rev|
+        [ @revision ].flatten.each do |rev|
           ary << "-r#{rev}"
         end
       end

@@ -4,6 +4,7 @@
 require 'pvn/diff/status_paths'
 require 'pvn/revision/range'
 require 'pp'
+require 'integration/tc'
 
 module PVN::Diff
   class StatusPathsTestCase < PVN::IntegrationTestCase
@@ -19,7 +20,7 @@ module PVN::Diff
       revision = PVN::Revision::Range.new '20'
       paths = %w{ . }
       statuspaths = StatusPaths.new revision, paths
-      pp statuspaths
+      # pp statuspaths
       assert_equal 4, statuspaths.size
       
       assert_status_path "FirstFile.txt",         1, nil, statuspaths, 0
