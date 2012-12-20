@@ -34,14 +34,22 @@ module PVN::Seek
     def files; end
   end
 
-  class Path
+  class Seeker
     include RIEL::Loggable
 
-    def initialize path, pattern, revision
+    def initialize path, pattern, revision, entries
       @path = path
       @pattern = pattern
       @revision = revision
-      get_log_entries
+      @entries = entries
+    end
+
+    def cat revision
+      info "path: #{@path}"
+      info "revision: #{revision}"
+      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => true, :revision => revision
+      cmd = SVNx::CatCommand.new catargs
+      cmd.execute
     end
 
     def matches? entry
@@ -55,58 +63,10 @@ module PVN::Seek
       nil
     end
 
-    def cat revision
-      info "path: #{@path}"
-      info "revision: #{revision}"
-      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => true, :revision => revision
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
-    end
-
-    def get_seek_criteria type = :added
-      if type == :added
-        Proc.new { |preventry, currentry| !currentry && preventry }
-      else
-        Proc.new { |preventry, currentry| !preventry && currentry }
-      end
-    end
-
-    def seek type, use_color
-      criteria = get_seek_criteria type
-      ref = seek_for criteria
-      if ref
-        # todo: use previous or current entry, and run through entry formatter in log:
-        log ref.entry.inspect.color(:red)
-        entry = @entries[ref.index]
-        info "entry: #{entry}"
-        
-        info "use_color: #{use_color}"
-        fromrev = @entries[ref.index + 1].revision
-        torev   = @entries[ref.index].revision
-        pathrev = nil
-        line = nil
-
-        if use_color
-          pathrev = "#{@path.to_s.color(:yellow)} -r#{fromrev.color(:magenta)}:#{torev.color(:green)}"
-          line = "#{ref.lnum + 1}: #{ref.line.chomp.bright}"
-        else
-          pathrev = "#{@path} -r#{fromrev}:#{torev}"
-          line = "#{ref.lnum + 1}: #{ref.line.chomp}"
-        end
-
-        $io.puts pathrev
-        $io.puts line
-      else
-        msg = type == :added ? "not found" : "not removed"
-        fromrev = @entries[-1].revision
-        torev = @entries[0].revision
-        $io.puts "#{msg} in revisions: #{fromrev} .. #{torev}"
-      end
-    end
-
-    def seek_for criteria
+    def seek
+      criteria = self.criteria
       prevref = nil
-
+      
       (0 ... @entries.size).each do |idx|
         entry = @entries[idx]
         ref = matches? entry
@@ -121,7 +81,10 @@ module PVN::Seek
         info "prevref: #{prevref}"
 
         if matchref = criteria.call(prevref, ref)
-          info "matchref: #{matchref}"
+          info "matchref: #{matchref.inspect}".background("449922")
+          info "matchref: #{matchref[0].inspect}".color("449922")
+          info "matchref: #{matchref[1].inspect}".color("449922")
+          info "matchref: #{matchref[2].inspect}".color("449922")
           return Match.new idx - 1, matchref[1], matchref[2], matchref[0]
         end
         
@@ -133,13 +96,50 @@ module PVN::Seek
       end
       nil
     end
+  end
 
-    def get_log_entries
-      rev = if @revision
-              if @revision.size == 1
-                [ @revision[0], 'HEAD' ].join(':')
+  class SeekerAdded < Seeker
+    def criteria
+      Proc.new { |preventry, currentry| !currentry && preventry }
+    end
+  end
+
+  class SeekerRemoved < Seeker
+    def criteria
+      Proc.new { |preventry, currentry| !preventry && currentry }
+    end
+  end
+
+  class Path
+    include RIEL::Loggable
+
+    def initialize path
+      @path = path
+    end
+
+    def show_entry use_color, ref
+      fromrev = @entries[ref.index + 1].revision
+      torev   = @entries[ref.index].revision
+
+      pathstr, fromrevstr, torevstr, linestr = if use_color
+                                                 [ @path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), ref.line.chomp.bright ]
+                                               else
+                                                 [ @path.to_s, fromrev, torev, ref.line.chomp ]
+                                               end
+      
+      pathrev = "#{pathstr} -r#{fromrevstr}:#{torevstr}"
+      line = "#{ref.lnum + 1}: #{linestr}"
+      
+      $io.puts pathrev
+      $io.puts line
+    end
+    
+    def seek type, pattern, revision, use_color
+      rev = if revision
+              if revision.size == 1
+                [ revision[0], 'HEAD' ].join(':')
               else
-                @revision.join(':')
+                revision.join(':')
               end
             else
               nil
@@ -147,6 +147,21 @@ module PVN::Seek
       
       logentries = PVN::Log::Entries.new @path, PathLogOptions.new(rev)
       @entries = logentries.entries
+      
+      seekcls = type == :added ? SeekerAdded : SeekerRemoved
+      @seeker = seekcls.new @path, pattern, revision, @entries
+      ref = @seeker.seek
+
+      if ref
+        # todo: use previous or current entry, and run through entry formatter in log:
+        log ref.entry.inspect.color(:red)
+        show_entry use_color, ref
+      else
+        msg = type == :added ? "not found" : "not removed"
+        fromrev = @entries[-1].revision
+        torev = @entries[0].revision
+        $io.puts "#{msg} in revisions: #{fromrev} .. #{torev}"
+      end
     end
   end
 end

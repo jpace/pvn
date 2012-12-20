@@ -66,7 +66,7 @@ module PVN
       info "cmd: #{cmd}"
       
       strio.close
-      if Log.verbose
+      if RIEL::Log.verbose
         puts strio.string
       end
       

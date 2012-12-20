@@ -5,7 +5,7 @@ require 'test/unit'
 require 'resources'
 require 'rainbow'
 
-# Log.level = Log::DEBUG
+Log.level = Log::DEBUG
 Log.set_widths(-35, 4, -35)
 
 module PVN

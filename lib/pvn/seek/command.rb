@@ -43,8 +43,8 @@ module PVN::Seek
       seektype = options.removed ? :removed : :added
 
       # can handle only one path for now
-      seekpath = Path.new paths[0], pattern, options.revision
-      seekpath.seek seektype, options.color
+      seekpath = Path.new paths[0]
+      seekpath.seek seektype, pattern, options.revision, options.color
     end
   end
 end

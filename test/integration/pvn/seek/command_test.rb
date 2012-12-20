@@ -27,7 +27,9 @@ module PVN::Seek
       info "seek: #{seek}"
       
       strio.close
+      puts "......................................................."
       puts strio.string
+      puts "......................................................."
       
       actlines = strio.string.split "\n"
 
@@ -37,13 +39,72 @@ module PVN::Seek
       Dir.chdir orig_dir
     end
 
-    def test_found
+    def test_added_found
       expected = [
                   "[33mFirstFile.txt[0m -r[35m3[0m:[32m5[0m",
                   "1: [1mthis is the first line of the first file in the testbed.[0m"
                  ]
 
       assert_seek_command expected, %w{ this FirstFile.txt }
+    end
+
+    def test_added_not_found
+      expected = [
+                  "not found in revisions: 1 .. 13"
+                 ]
+
+      assert_seek_command expected, %w{ that FirstFile.txt }
+    end
+
+    def test_removed_found
+      expected = [
+                  "[33mSecondFile.txt[0m -r[35m13[0m:[32m15[0m",
+                  "3: [1m# line three[0m"
+                 ]
+      
+      assert_seek_command expected, %w{ -M three SecondFile.txt }
+    end
+
+    def test_removed_not_found
+      expected = [
+                  "not removed in revisions: 13 .. 22"
+                 ]
+      
+      assert_seek_command expected, [ '-M', 'line four', 'SecondFile.txt' ]
+    end
+
+    def test_no_color_added_found
+      expected = [
+                  "FirstFile.txt -r3:5",
+                  "1: this is the first line of the first file in the testbed."
+                 ]
+
+      assert_seek_command expected, %w{ --no-color this FirstFile.txt }
+    end
+
+    def test_no_color_added_not_found
+      expected = [
+                  "not found in revisions: 1 .. 13"
+                 ]
+
+      assert_seek_command expected, %w{ --no-color that FirstFile.txt }
+    end
+
+    def test_no_color_removed_found
+      expected = [
+                  "SecondFile.txt -r13:15",
+                  "3: # line three"
+                 ]
+      
+      assert_seek_command expected, %w{ -M --no-color three SecondFile.txt }
+    end
+
+    def test_no_color_removed_not_found
+      expected = [
+                  "not removed in revisions: 13 .. 22"
+                 ]
+      
+      assert_seek_command expected, [ '-M', '--no-color', 'line four', 'SecondFile.txt' ]
     end
   end
 end

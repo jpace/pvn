@@ -61,3 +61,7 @@ Mon Dec 17 20:33:26 2012
 Tue Dec 18 20:27:19 2012
 
   seek: fixed to be one-indexed, a la grep.
+
+Wed Dec 19 18:27:37 2012
+
+  seek: added tests.
