@@ -99,12 +99,12 @@ module PVN::Seek
       assert_seek_command expected, %w{ -M --no-color three SecondFile.txt }
     end
 
-    def test_no_color_removed_not_found
+    def xxx_test_added_between_revisions
       expected = [
                   "not removed in revisions: 13 .. 22"
                  ]
       
-      assert_seek_command expected, [ '-M', '--no-color', 'line four', 'SecondFile.txt' ]
+      assert_seek_command expected, [ '-r15', '-r22', '--no-color', 'line f', 'SecondFile.txt' ]
     end
   end
 end

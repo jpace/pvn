@@ -22,6 +22,8 @@ Output from some commands is cached, for speed.
 
 ### SUBCOMMANDS
 
+For all subcommands, `pvn help <command>` shows extended information.
+
   * `log`:
     Prints log messages for files.
 
@@ -41,3 +43,9 @@ Output from some commands is cached, for speed.
 
   * `seek`:
     Searches through revision history for pattern match.
+
+## AUTHOR
+
+Jeff Pace (jeugenepace at gmail dot com)
+
+http://www.github.com/jeugenepace/pvn

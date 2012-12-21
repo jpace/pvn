@@ -65,3 +65,7 @@ Tue Dec 18 20:27:19 2012
 Wed Dec 19 18:27:37 2012
 
   seek: added tests.
+
+Thu Dec 20 20:01:24 2012
+
+  Added information to readme.
