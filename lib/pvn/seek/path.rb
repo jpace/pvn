@@ -11,12 +11,16 @@ module PVN::Seek
     attr_reader :lnum
     attr_reader :line
     attr_reader :entry
+    attr_reader :current_entry
+    attr_reader :previous_entry
     
-    def initialize index, lnum, line, entry
+    def initialize index, lnum, line, current_entry
       @index = index
       @lnum = lnum
       @line = line
-      @entry = entry
+      @entry = current_entry
+      @current_entry = current_entry
+      @previous_entry = previous_entry
     end
   end
 
@@ -30,7 +34,6 @@ module PVN::Seek
     def revision; @revision; end
     def user; nil; end
     def use_cache; nil; end
-
     def files; end
   end
 
@@ -57,41 +60,37 @@ module PVN::Seek
       contents.each_with_index do |line, lnum|
         if line.index @pattern
           info "line: #{line}".color(:red)
-          return [ entry, lnum, line ]
+          return { :entry => entry, :lnum => lnum, :line => line }
         end
       end
       nil
     end
 
     def seek
-      criteria = self.criteria
-      prevref = nil
+      latest_match = nil
       
       (0 ... @entries.size).each do |idx|
         entry = @entries[idx]
-        ref = matches? entry
-
+        current_match = matches? entry
+        
         if idx == 0
-          prevref = ref
+          latest_match = current_match
           next
         end
 
         info "idx: #{idx}; entry: #{entry}"
-        info "ref: #{ref}"
-        info "prevref: #{prevref}"
+        info "current_match: #{current_match}"
+        info "latest_match: #{latest_match}"
 
-        if matchref = criteria.call(prevref, ref)
-          info "matchref: #{matchref.inspect}".background("449922")
-          info "matchref: #{matchref[0].inspect}".color("449922")
-          info "matchref: #{matchref[1].inspect}".color("449922")
-          info "matchref: #{matchref[2].inspect}".color("449922")
-          return Match.new idx - 1, matchref[1], matchref[2], matchref[0]
+        if matchref = process_match(latest_match, current_match)
+          info "matchref: #{matchref.inspect}".color("449922")
+          return Match.new idx - 1, matchref[:lnum], matchref[:line], matchref[:entry]
         end
         
-        info "ref: #{ref}"
+        info "current_match: #{current_match}"
 
-        if ref
-          prevref = ref
+        if current_match
+          latest_match = current_match
         end
       end
       nil
@@ -99,14 +98,14 @@ module PVN::Seek
   end
 
   class SeekerAdded < Seeker
-    def criteria
-      Proc.new { |preventry, currentry| !currentry && preventry }
+    def process_match preventry, currentry
+      !currentry && preventry
     end
   end
 
   class SeekerRemoved < Seeker
-    def criteria
-      Proc.new { |preventry, currentry| !preventry && currentry }
+    def process_match preventry, currentry
+      !preventry && currentry
     end
   end
 
@@ -147,6 +146,9 @@ module PVN::Seek
       
       logentries = PVN::Log::Entries.new @path, PathLogOptions.new(rev)
       @entries = logentries.entries
+      @entries.each do |entry|
+        info "entry: #{entry}".color("98aacc")
+      end
       
       seekcls = type == :added ? SeekerAdded : SeekerRemoved
       @seeker = seekcls.new @path, pattern, revision, @entries

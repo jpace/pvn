@@ -4,6 +4,9 @@
 require 'pvn/seek/command'
 require 'pvn/seek/options'
 require 'integration/tc'
+require 'rainbow'
+
+Sickill::Rainbow.enabled = true
 
 module PVN::Seek
   class CommandTest < PVN::TestCase
@@ -97,6 +100,15 @@ module PVN::Seek
                  ]
       
       assert_seek_command expected, %w{ -M --no-color three SecondFile.txt }
+    end
+
+    def test_added_in_most_recent_revision
+      expected = [
+                  "[33mSecondFile.txt[0m -r[35m20[0m:[32m22[0m",
+                  "3: [1mthird line[0m"
+                 ]
+      
+      assert_seek_command expected, %w{ third SecondFile.txt }
     end
 
     def xxx_test_added_between_revisions
