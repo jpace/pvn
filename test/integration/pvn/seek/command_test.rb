@@ -17,8 +17,8 @@ module PVN::Seek
 
     def test_added_found
       expected = [
-                  "[33mFirstFile.txt[0m -r[35m3[0m:[32m5[0m",
-                  "1: [1mthis is the first line of the first file in the testbed.[0m"
+                  "[33mFirstFile.txt[0m -r[35m5[0m:[32m13[0m",
+                  "3: [1mfourth line this is.[0m"
                  ]
 
       assert_seek_command expected, %w{ this FirstFile.txt }
@@ -51,8 +51,8 @@ module PVN::Seek
 
     def test_no_color_added_found
       expected = [
-                  "FirstFile.txt -r3:5",
-                  "1: this is the first line of the first file in the testbed."
+                  "FirstFile.txt -r5:13",
+                  "3: fourth line this is."
                  ]
 
       assert_seek_command expected, %w{ --no-color this FirstFile.txt }

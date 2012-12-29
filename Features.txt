@@ -69,3 +69,7 @@ Wed Dec 19 18:27:37 2012
 Thu Dec 20 20:01:24 2012
 
   Added information to readme.
+
+Sat Dec 29 13:20:24 2012
+
+  Fixed seek behavior on first match.

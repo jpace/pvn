@@ -4,6 +4,7 @@
 require 'svnx/cat/command'
 require 'pvn/log/entries'
 require 'riel/log/loggable'
+# require 'riel/array'
 
 module PVN::Seek
   class Match
@@ -51,7 +52,7 @@ module PVN::Seek
     end
 
     def to_s
-      "[#{lnum}]: #{line.chomp}; #{previous_entry.revision}; #{current_entry.revision}"
+      "[#{lnums}]: #{lines}; prev: #{previous_entry && previous_entry.revision}; curr: #{current_entry && current_entry.revision}"
     end
 
     def orig_diff othermatch
@@ -122,27 +123,30 @@ module PVN::Seek
 
     def matches? previous_entry, current_entry
       contents = cat current_entry.revision
+      contents.collect! { |x| x.chomp! }
       matchlnums = (0 ... contents.length).select do |lnum|
         contents[lnum].index @pattern
       end
       return if matchlnums.empty?
-      matchlnum = matchlnums[0]
+      info "matchlnums: #{matchlnums.inspect}".color("33CC22")
       Match.new(matchlnums, contents, previous_entry, current_entry)
     end
 
+    def match idx
+      entry = @entries[idx]
+      info "entry.revision: #{entry.revision}"
+      preventry = idx > 0 ? @entries[idx - 1] : nil
+      info "preventry: #{preventry}"
+      matches? preventry, entry
+    end
+    
     def seek
-      latest_match = nil
+      latest_match = match 0
       
-      (0 ... @entries.size).each do |idx|
+      (1 ... @entries.size).each do |idx|
         entry = @entries[idx]
         info "entry.revision: #{entry.revision}"
         current_match = matches? @entries[idx - 1], entry
-        
-        if idx == 0
-          latest_match = current_match
-          next
-        end
-
         info "current_match: #{current_match}"
         info "latest_match: #{latest_match}"
 
@@ -160,25 +164,24 @@ module PVN::Seek
     end
   end
 
-  # class SeekerAdded < Seeker
-  #   def process_match prevmatch, currmatch
-  #     return if currmatch.nil? && prevmatch.nil?
-  #     info "prevmatch.lnums: #{prevmatch && prevmatch.lnums.inspect}".color("8a9a33")
-  #     info "currmatch.lnums: #{currmatch && currmatch.lnums.inspect}".color("8a9a33")
-  #     return prevmatch if !currmatch && prevmatch
-  #     difflines = currmatch.diff prevmatch
-  #     return if difflines.empty?
-  #     info "difflines: #{difflines}".color("cc33ff")
-  #     Match.new difflines.collect { |x| x[0] }, currmatch.contents, prevmatch.previous_entry, currmatch.current_entry
-  #     nil
-  #   end
-  # end
-
   class SeekerAdded < Seeker
     def process_match prevmatch, currmatch
-      !currmatch && prevmatch
+      return if currmatch.nil? && prevmatch.nil?
+      info "prevmatch.lnums: #{prevmatch && prevmatch.lnums.inspect}".color("8a9a33")
+      info "currmatch.lnums: #{currmatch && currmatch.lnums.inspect}".color("8a9a33")
+      return prevmatch if !currmatch && prevmatch
+      difflines = prevmatch.diff currmatch
+      return if difflines.empty?
+      info "difflines: #{difflines}".color("cc33ff")
+      Match.new difflines.collect { |x| x[0] }, prevmatch.contents, prevmatch.previous_entry, currmatch.current_entry
     end
   end
+
+  # class SeekerAdded < Seeker
+  #   def process_match prevmatch, currmatch
+  #     !currmatch && prevmatch
+  #   end
+  # end
 
   class SeekerRemoved < Seeker
     def process_match prevmatch, currmatch
