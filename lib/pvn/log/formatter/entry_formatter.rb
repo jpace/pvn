@@ -26,18 +26,6 @@ module PVN::Log
     end
     
     def format
-      if false
-        info "@entry.revision: #{@entry.revision}"
-        info "@entry.author  : #{@entry.author}"
-        info "@entry.date    : #{@entry.date}"
-        info "@entry.message : #{@entry.message}"
-        @entry.paths.each do |path|
-          info "    path.kind  : #{path.kind}"
-          info "    path.action: #{path.action}"
-          info "    path.name  : #{path.name}"
-        end
-      end
-      
       lines = Array.new
       
       sf = SummaryFormatter.new use_colors, entry, idx, from_head, from_tail, total

@@ -12,7 +12,7 @@ module PVN::Pct
       explines << "       3        5        2     66.7% SecondFile.txt"
       explines << "       3        5        2     66.7% total"
       
-      assert_command RepositoryDiffer, %w{ -r20 }, explines
+      assert_command RepositoryDiffer, explines, %w{ -r20 }
     end
 
     def test_revision_to_revision
@@ -22,7 +22,7 @@ module PVN::Pct
       explines << "       7        8        1     14.3% src/ruby/charlie.rb"
       explines << "      10       15        5     50.0% total"
       
-      assert_command RepositoryDiffer, %w{ -r19:22 }, explines
+      assert_command RepositoryDiffer, explines, %w{ -r19:22 }
     end
 
     def test_revision_to_relative_revision
@@ -32,7 +32,7 @@ module PVN::Pct
       explines << "       7        8        1     14.3% src/ruby/charlie.rb"
       explines << "      10       15        5     50.0% total"
       
-      assert_command RepositoryDiffer, %w{ -r19 -1 }, explines
+      assert_command RepositoryDiffer, explines, %w{ -r19 -1 }
     end
   end
 end

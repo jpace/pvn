@@ -34,11 +34,8 @@ module PVN::Pct
     example "pvn pct -r31 -4",      "Prints the changes between revision 31 and relative revision -4."
 
     def init options
-      if options.revision && !options.revision.empty?
-        RepositoryDiffer.new options
-      else
-        LocalDiffer.new options
-      end
+      cls = options.revision && !options.revision.empty? ? RepositoryDiffer : LocalDiffer
+      cls.new options
     end
   end
 end

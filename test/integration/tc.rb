@@ -51,7 +51,7 @@ module PVN
       # end
     end
 
-    def assert_command_output cmdcls, args, explines
+    def assert_command_output cmdcls, explines, args
       orig_dir = Dir.pwd
       
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
@@ -67,7 +67,9 @@ module PVN
       
       strio.close
       if RIEL::Log.verbose
+        puts "......................................................."
         puts strio.string
+        puts "......................................................."
       end
       
       actlines = strio.string.split("\n")

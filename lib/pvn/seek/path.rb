@@ -14,13 +14,13 @@ module PVN::Seek
     attr_reader :current_entry
     attr_reader :previous_entry
     
-    def initialize index, lnum, line, current_entry
+    def initialize lnum, line, previous_entry, current_entry
       @index = index
       @lnum = lnum
       @line = line
       @entry = current_entry
-      @current_entry = current_entry
       @previous_entry = previous_entry
+      @current_entry = current_entry
     end
   end
 
@@ -55,12 +55,12 @@ module PVN::Seek
       cmd.execute
     end
 
-    def matches? entry
-      contents = cat entry.revision
+    def matches? previous_entry, current_entry
+      contents = cat current_entry.revision
       contents.each_with_index do |line, lnum|
         if line.index @pattern
           info "line: #{line}".color(:red)
-          return { :entry => entry, :lnum => lnum, :line => line }
+          return Match.new lnum, line, previous_entry, current_entry
         end
       end
       nil
@@ -71,7 +71,7 @@ module PVN::Seek
       
       (0 ... @entries.size).each do |idx|
         entry = @entries[idx]
-        current_match = matches? entry
+        current_match = matches? @entries[idx - 1], entry
         
         if idx == 0
           latest_match = current_match
@@ -84,7 +84,7 @@ module PVN::Seek
 
         if matchref = process_match(latest_match, current_match)
           info "matchref: #{matchref.inspect}".color("449922")
-          return Match.new idx - 1, matchref[:lnum], matchref[:line], matchref[:entry]
+          return Match.new matchref.lnum, matchref.line, @entries[idx - 1], entry
         end
         
         info "current_match: #{current_match}"
@@ -116,18 +116,18 @@ module PVN::Seek
       @path = path
     end
 
-    def show_entry use_color, ref
-      fromrev = @entries[ref.index + 1].revision
-      torev   = @entries[ref.index].revision
+    def show_entry use_color, match
+      fromrev = match.current_entry.revision
+      torev   = match.previous_entry.revision
 
       pathstr, fromrevstr, torevstr, linestr = if use_color
-                                                 [ @path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), ref.line.chomp.bright ]
+                                                 [ @path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), match.line.chomp.bright ]
                                                else
-                                                 [ @path.to_s, fromrev, torev, ref.line.chomp ]
+                                                 [ @path.to_s, fromrev, torev, match.line.chomp ]
                                                end
       
       pathrev = "#{pathstr} -r#{fromrevstr}:#{torevstr}"
-      line = "#{ref.lnum + 1}: #{linestr}"
+      line = "#{match.lnum + 1}: #{linestr}"
       
       $io.puts pathrev
       $io.puts line
@@ -152,12 +152,12 @@ module PVN::Seek
       
       seekcls = type == :added ? SeekerAdded : SeekerRemoved
       @seeker = seekcls.new @path, pattern, revision, @entries
-      ref = @seeker.seek
+      match = @seeker.seek
 
-      if ref
+      if match
         # todo: use previous or current entry, and run through entry formatter in log:
-        log ref.entry.inspect.color(:red)
-        show_entry use_color, ref
+        log match.entry.inspect.color(:red)
+        show_entry use_color, match
       else
         msg = type == :added ? "not found" : "not removed"
         fromrev = @entries[-1].revision

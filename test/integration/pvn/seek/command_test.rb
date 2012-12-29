@@ -6,40 +6,13 @@ require 'pvn/seek/options'
 require 'integration/tc'
 require 'rainbow'
 
+# produce colorized output, even when redirecting to a file:
 Sickill::Rainbow.enabled = true
 
 module PVN::Seek
-  class CommandTest < PVN::TestCase
+  class CommandTest < PVN::IntegrationTestCase
     def assert_seek_command explines, args
-      orig_dir = Dir.pwd
-      
-      Dir.chdir '/Programs/pvn/pvntestbed.pending'
-
-      strio = StringIO.new
-
-      $io = strio
-
-      info "args: #{args}"
-
-      # opts = OptionSet.new
-      # info "opts: #{opts}"
-
-      # opts.process args
-
-      seek = Command.new args
-      info "seek: #{seek}"
-      
-      strio.close
-      puts "......................................................."
-      puts strio.string
-      puts "......................................................."
-      
-      actlines = strio.string.split "\n"
-
-      assert_equal explines, actlines
-
-      $io = $stdout
-      Dir.chdir orig_dir
+      assert_command_output Command, explines, args
     end
 
     def test_added_found

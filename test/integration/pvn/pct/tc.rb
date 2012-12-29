@@ -6,7 +6,7 @@ require 'pvn/pct/options'
 
 module PVN::Pct
   class TestCase < PVN::IntegrationTestCase
-    def assert_command cls, args, explines
+    def assert_command cls, explines, args
       orig_dir = Dir.pwd
       
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
