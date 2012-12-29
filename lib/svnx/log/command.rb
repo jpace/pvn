@@ -11,7 +11,6 @@ module SVNx
     # this can be either an Array (for which to_a returns itself), or
     # a CommandArgs, which also has to_a.
     def initialize args = Array.new
-      # info "args: #{args}"
       super "log", args.to_a
     end
   end
@@ -37,11 +36,6 @@ module SVNx
       @verbose = args[:verbose]
       @use_cache = args[:use_cache].nil? || args[:use_cache]
       @revision = args[:revision]
-      info "args      : #{args}"
-      info "@limit    : #{@limit}"
-      info "@verbose  : #{@verbose}"
-      info "@use_cache: #{@use_cache}"
-      info "@revision : #{@revision}"
       super
     end
 

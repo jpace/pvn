@@ -13,7 +13,6 @@ module PVN
 
     def setup
       @cache_dir = ENV['PVN_CACHE_DIR'] || '/tmp/pvncache.testing'
-      info "@cache_dir: #{@cache_dir}"
       remove_cache_dir
       
       super
@@ -30,7 +29,6 @@ module PVN
 
     def remove_cache_dir
       pn = Pathname.new @cache_dir
-      info "pn: #{pn}"
       pn.rmtree if pn.exist?
     end
 
@@ -60,10 +58,7 @@ module PVN
 
       $io = strio
 
-      info "args: #{args}"
-
       cmd = cmdcls.new args
-      info "cmd: #{cmd}"
       
       strio.close
       if RIEL::Log.verbose
@@ -73,7 +68,6 @@ module PVN
       end
       
       actlines = strio.string.split("\n")
-      info "actlines: #{actlines}"
 
       assert_arrays_equal explines, actlines
 

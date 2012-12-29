@@ -7,20 +7,30 @@ require 'riel/log/loggable'
 
 module PVN::Seek
   class Match
-    attr_reader :lnum
+    include RIEL::Loggable
+
+    attr_reader :lnums
     attr_reader :contents
     attr_reader :current_entry
     attr_reader :previous_entry
     
-    def initialize lnum, contents, previous_entry, current_entry
-      @lnum = lnum
+    def initialize lnums, contents, previous_entry, current_entry
+      @lnums = lnums
       @contents = contents
       @previous_entry = previous_entry
       @current_entry = current_entry
     end
 
+    def lnum
+      @lnums[0]
+    end
+
+    def lines
+      @lnums.collect { |lnum| @contents[lnum] }
+    end
+
     def line
-      @contents[lnum]
+      @contents[@lnums[0]]
     end
 
     def decorate path, fromrev, torev
@@ -41,7 +51,43 @@ module PVN::Seek
     end
 
     def to_s
-      "[#{lnum}]: #{line.chomp}; #{previous_entry}; #{current_entry}"
+      "[#{lnum}]: #{line.chomp}; #{previous_entry.revision}; #{current_entry.revision}"
+    end
+
+    def orig_diff othermatch
+      otherlines = othermatch.lines
+      currlines = lines
+
+      info "otherlines: <<<#{otherlines}>>>".color("8a9acc")
+      info "currlines: <<<#{currlines}>>>".color("8a9acc")
+
+      difflines = currlines - otherlines
+      info "difflines: #{difflines}".color("cc33ff")
+      difflines
+    end
+
+    def has_line? line
+      @lnums.detect { |lnum| @contents[lnum].index line }
+    end
+
+    def diff othermatch
+      info "lines: #{lines}"
+      info "othermatch.lines: #{othermatch.lines}"
+      otherlnums = othermatch.lnums
+      currlnums = lnums
+
+      diff = Array.new
+      lnums.each do |lnum|
+        line = @contents[lnum]
+        info "line: #{line}".color("88CC33")
+        unless othermatch.has_line? line
+          diff << [ lnum, line ]
+          info "diff: #{diff}".color("88CC33")
+        end
+      end
+
+      info "diff: #{diff}".color("ee3399")
+      diff
     end
   end
 
@@ -69,8 +115,6 @@ module PVN::Seek
     end
 
     def cat revision
-      info "path: #{@path}"
-      info "revision: #{revision}"
       catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => true, :revision => revision
       cmd = SVNx::CatCommand.new catargs
       cmd.execute
@@ -79,21 +123,11 @@ module PVN::Seek
     def matches? previous_entry, current_entry
       contents = cat current_entry.revision
       matchlnums = (0 ... contents.length).select do |lnum|
-        if contents[lnum].index @pattern
-          info "lnum: #{lnum}".color("994a9a")
-          info "contents[lnum]: #{contents[lnum]}".color("9a449a")
-        end
-
         contents[lnum].index @pattern
       end
       return if matchlnums.empty?
-      info "matchlnums: #{matchlnums.inspect}".color("bb9a8c")
       matchlnum = matchlnums[0]
-      begin 
-        info "matchlnum: #{matchlnum}".color("994a9a")
-        info "contents[matchlnum]: #{contents[matchlnum]}".color("994a9a")
-        Match.new(matchlnum, contents, previous_entry, current_entry)
-      end
+      Match.new(matchlnums, contents, previous_entry, current_entry)
     end
 
     def seek
@@ -101,6 +135,7 @@ module PVN::Seek
       
       (0 ... @entries.size).each do |idx|
         entry = @entries[idx]
+        info "entry.revision: #{entry.revision}"
         current_match = matches? @entries[idx - 1], entry
         
         if idx == 0
@@ -108,13 +143,11 @@ module PVN::Seek
           next
         end
 
-        info "idx: #{idx}; entry: #{entry}"
         info "current_match: #{current_match}"
         info "latest_match: #{latest_match}"
 
         if matchref = process_match(latest_match, current_match)
-          info "matchref: #{matchref.inspect}".color("449922")
-          return Match.new matchref.lnum, matchref.contents, @entries[idx - 1], entry
+          return Match.new matchref.lnums, matchref.contents, @entries[idx - 1], entry
         end
         
         info "current_match: #{current_match}"
@@ -127,15 +160,29 @@ module PVN::Seek
     end
   end
 
+  # class SeekerAdded < Seeker
+  #   def process_match prevmatch, currmatch
+  #     return if currmatch.nil? && prevmatch.nil?
+  #     info "prevmatch.lnums: #{prevmatch && prevmatch.lnums.inspect}".color("8a9a33")
+  #     info "currmatch.lnums: #{currmatch && currmatch.lnums.inspect}".color("8a9a33")
+  #     return prevmatch if !currmatch && prevmatch
+  #     difflines = currmatch.diff prevmatch
+  #     return if difflines.empty?
+  #     info "difflines: #{difflines}".color("cc33ff")
+  #     Match.new difflines.collect { |x| x[0] }, currmatch.contents, prevmatch.previous_entry, currmatch.current_entry
+  #     nil
+  #   end
+  # end
+
   class SeekerAdded < Seeker
-    def process_match preventry, currentry
-      !currentry && preventry
+    def process_match prevmatch, currmatch
+      !currmatch && prevmatch
     end
   end
 
   class SeekerRemoved < Seeker
-    def process_match preventry, currentry
-      !preventry && currentry
+    def process_match prevmatch, currmatch
+      !prevmatch && currmatch
     end
   end
 
@@ -159,9 +206,6 @@ module PVN::Seek
       
       logentries = PVN::Log::Entries.new @path, PathLogOptions.new(rev)
       @entries = logentries.entries
-      @entries.each do |entry|
-        info "entry: #{entry}".color("98aacc")
-      end
       
       seekcls = type == :added ? SeekerAdded : SeekerRemoved
       @seeker = seekcls.new @path, pattern, revision, @entries
@@ -169,7 +213,6 @@ module PVN::Seek
 
       if match
         # todo: use previous or current entry, and run through entry formatter in log:
-        log match.current_entry.inspect.color(:red)
         match.show @path, use_color
       else
         msg = type == :added ? "not found" : "not removed"

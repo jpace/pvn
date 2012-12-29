@@ -24,20 +24,12 @@ module PVN::Seek
     example "pvn seek --removed 'void\\s+reinitialize()' *.java", "Looks through Java files for the latest revision when 'void reinitialize() does not match."
 
     def init options
-      info "options: #{options.inspect}"
-
       paths = options.paths
-
       pattern = paths.shift
-      info "pattern: #{pattern}"
       
       raise "error: no pattern given to seek command" unless pattern
 
       paths = %w{ . } if paths.empty?
-      info "paths: #{paths}"
-
-      info "options.revision: #{options.revision}"
-
       seektype = options.removed ? :removed : :added
 
       # can handle only one path for now
