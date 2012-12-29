@@ -16,12 +16,12 @@ module SVNx
     include RIEL::Loggable
 
     def initialize subcmd, args
-      info "args: #{args}"
+      # info "args: #{args}"
       cmdargs = [ 'svn', subcmd ]
       cmdargs << '--xml' if uses_xml?
-      info "cmdargs: #{cmdargs}"
+      # info "cmdargs: #{cmdargs}"
       cmdargs.concat args
-      info "cmdargs: #{cmdargs}"
+      # info "cmdargs: #{cmdargs}"
       super cmdargs
     end
 

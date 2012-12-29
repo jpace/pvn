@@ -84,7 +84,7 @@ module PVN::Seek
       assert_seek_command expected, %w{ third SecondFile.txt }
     end
 
-    def xxx_test_added_between_revisions
+    def xxxtest_added_between_revisions
       expected = [
                   "not removed in revisions: 13 .. 22"
                  ]

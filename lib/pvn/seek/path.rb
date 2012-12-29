@@ -7,20 +7,41 @@ require 'riel/log/loggable'
 
 module PVN::Seek
   class Match
-    attr_reader :index
     attr_reader :lnum
-    attr_reader :line
-    attr_reader :entry
+    attr_reader :contents
     attr_reader :current_entry
     attr_reader :previous_entry
     
-    def initialize lnum, line, previous_entry, current_entry
-      @index = index
+    def initialize lnum, contents, previous_entry, current_entry
       @lnum = lnum
-      @line = line
-      @entry = current_entry
+      @contents = contents
       @previous_entry = previous_entry
       @current_entry = current_entry
+    end
+
+    def line
+      @contents[lnum]
+    end
+
+    def decorate path, fromrev, torev
+      [ path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), line.chomp.bright ]
+    end
+    
+    def show path, use_color
+      fromrev = current_entry.revision
+      torev   = previous_entry.revision
+
+      pathstr, fromrevstr, torevstr, linestr = use_color ? decorate(path, fromrev, torev) : [ path.to_s, fromrev, torev, line.chomp ]
+      
+      pathrev = "#{pathstr} -r#{fromrevstr}:#{torevstr}"
+      line = "#{lnum + 1}: #{linestr}"
+      
+      $io.puts pathrev
+      $io.puts line
+    end
+
+    def to_s
+      "[#{lnum}]: #{line.chomp}; #{previous_entry}; #{current_entry}"
     end
   end
 
@@ -57,13 +78,22 @@ module PVN::Seek
 
     def matches? previous_entry, current_entry
       contents = cat current_entry.revision
-      contents.each_with_index do |line, lnum|
-        if line.index @pattern
-          info "line: #{line}".color(:red)
-          return Match.new lnum, line, previous_entry, current_entry
+      matchlnums = (0 ... contents.length).select do |lnum|
+        if contents[lnum].index @pattern
+          info "lnum: #{lnum}".color("994a9a")
+          info "contents[lnum]: #{contents[lnum]}".color("9a449a")
         end
+
+        contents[lnum].index @pattern
       end
-      nil
+      return if matchlnums.empty?
+      info "matchlnums: #{matchlnums.inspect}".color("bb9a8c")
+      matchlnum = matchlnums[0]
+      begin 
+        info "matchlnum: #{matchlnum}".color("994a9a")
+        info "contents[matchlnum]: #{contents[matchlnum]}".color("994a9a")
+        Match.new(matchlnum, contents, previous_entry, current_entry)
+      end
     end
 
     def seek
@@ -84,7 +114,7 @@ module PVN::Seek
 
         if matchref = process_match(latest_match, current_match)
           info "matchref: #{matchref.inspect}".color("449922")
-          return Match.new matchref.lnum, matchref.line, @entries[idx - 1], entry
+          return Match.new matchref.lnum, matchref.contents, @entries[idx - 1], entry
         end
         
         info "current_match: #{current_match}"
@@ -116,23 +146,6 @@ module PVN::Seek
       @path = path
     end
 
-    def show_entry use_color, match
-      fromrev = match.current_entry.revision
-      torev   = match.previous_entry.revision
-
-      pathstr, fromrevstr, torevstr, linestr = if use_color
-                                                 [ @path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), match.line.chomp.bright ]
-                                               else
-                                                 [ @path.to_s, fromrev, torev, match.line.chomp ]
-                                               end
-      
-      pathrev = "#{pathstr} -r#{fromrevstr}:#{torevstr}"
-      line = "#{match.lnum + 1}: #{linestr}"
-      
-      $io.puts pathrev
-      $io.puts line
-    end
-    
     def seek type, pattern, revision, use_color
       rev = if revision
               if revision.size == 1
@@ -156,8 +169,8 @@ module PVN::Seek
 
       if match
         # todo: use previous or current entry, and run through entry formatter in log:
-        log match.entry.inspect.color(:red)
-        show_entry use_color, match
+        log match.current_entry.inspect.color(:red)
+        match.show @path, use_color
       else
         msg = type == :added ? "not found" : "not removed"
         fromrev = @entries[-1].revision
