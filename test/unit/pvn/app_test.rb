@@ -1,5 +1,5 @@
 require 'tc'
-require 'pvn/app'
+require 'pvn/app/runner'
 require 'stringio'
 
 class TestPVNCli < PVN::TestCase

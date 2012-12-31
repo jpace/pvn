@@ -6,8 +6,6 @@ require 'rubygems/text'
 
 module PVN; module Command; end; end
 
-# this is the same as in pvn/cmddoc.rb
-
 module PVN::Command
   class Documentation
     include Gem::Text
@@ -45,7 +43,8 @@ module PVN::Command
     end
 
     def wrap out, str
-      out.puts format_text str.gsub("\n", ''), 80, 2
+      # I could use tput cols; ENV['COLUMNS'] works in irb, not in Ruby scripts.
+      out.puts format_text str.gsub("\n", ''), 78, 2
     end
 
     def write_summary out

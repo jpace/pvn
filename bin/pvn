@@ -11,6 +11,6 @@ unless $:.include?(fdirname) || $:.include?(File.expand_path(fdirname))
 end
 
 require 'pvn'
-require "pvn/app"
+require "pvn/app/runner"
 
 PVN::App::Runner.new STDOUT, ARGV

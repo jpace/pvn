@@ -14,7 +14,7 @@ module PVN::Status
     subcommands [ "status", "st" ]
     description "Prints the status for locally changed files."
     usage       "[OPTIONS] FILE..."
-    summary     [ "Prints the status for the given files, with colorized",
+    summary     [ "Prints the status for the given files, with colorized ",
                   "output, and names sorted."
                 ]
 
