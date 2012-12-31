@@ -12,16 +12,19 @@ module PVN::Pct
     subcommands [ "pct" ]
     description "Compares revisions as a percentage of lines modified."
     usage       "[OPTIONS] FILE..."
-    summary   [ "Compares to revisions, showing the changes in the size (length)",
-                "of files that have been modified in the latter revision, to",
-                "show the extent to which they have increased or decreased.",
+    summary   [ "Compares to revisions, showing the changes in the size (length) ",
+                "of files that have been modified in the latter revision, to ",
+                "show the extent to which they have increased or decreased. ",
+                "\n",
+                "NOWRAP",
                 "The columns are:",
                 " - length in svn repository",
                 " - length in local version",
                 " - difference",
                 " - percentage change",
                 " - file name",
-                "The total numbers are displayed as the last line.",
+                "/NOWRAP",
+                "The total numbers are displayed as the last line. ",
                 "Added and deleted files are not included." ]
     
     optscls

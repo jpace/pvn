@@ -35,36 +35,29 @@ module PVN::Seek
     end
 
     def decorate path, fromrev, torev
-      [ path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green), line.chomp.bright ]
+      [ path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green) ]
     end
     
     def show path, use_color
       fromrev = current_entry.revision
       torev   = previous_entry.revision
 
-      pathstr, fromrevstr, torevstr, linestr = use_color ? decorate(path, fromrev, torev) : [ path.to_s, fromrev, torev, line.chomp ]
-      
+      info "lines: #{lines}".color("98aacc")
+
+      pathstr, fromrevstr, torevstr = use_color ? decorate(path, fromrev, torev) : [ path.to_s, fromrev, torev ]
       pathrev = "#{pathstr} -r#{fromrevstr}:#{torevstr}"
-      line = "#{lnum + 1}: #{linestr}"
-      
       $io.puts pathrev
-      $io.puts line
+      
+      @lnums.each do |lnum|
+        line = @contents[lnum]
+        linestr = use_color ? line.chomp.bright : line.chomp
+        line = "#{lnum + 1}: #{linestr}"
+        $io.puts line
+      end
     end
 
     def to_s
       "[#{lnums}]: #{lines}; prev: #{previous_entry && previous_entry.revision}; curr: #{current_entry && current_entry.revision}"
-    end
-
-    def orig_diff othermatch
-      otherlines = othermatch.lines
-      currlines = lines
-
-      info "otherlines: <<<#{otherlines}>>>".color("8a9acc")
-      info "currlines: <<<#{currlines}>>>".color("8a9acc")
-
-      difflines = currlines - otherlines
-      info "difflines: #{difflines}".color("cc33ff")
-      difflines
     end
 
     def has_line? line

@@ -73,3 +73,9 @@ Thu Dec 20 20:01:24 2012
 Sat Dec 29 13:20:24 2012
 
   Fixed seek behavior on first match.
+
+Sun Dec 30 18:47:42 2012
+
+  seek: added display of multiple matches.
+  all subcommands: wrapped summary output.
+  

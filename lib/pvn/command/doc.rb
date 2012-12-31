@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel'
+require 'rubygems/text'
 
 module PVN; module Command; end; end
 
@@ -10,6 +10,10 @@ module PVN; module Command; end; end
 
 module PVN::Command
   class Documentation
+    include Gem::Text
+
+    SUMMARY_RE = Regexp.new '^(?:(.*)(?:NOWRAP(.*)/NOWRAP)|(.*))(.*)$', Regexp::MULTILINE
+    
     attr_accessor :description
     attr_accessor :usage
     attr_accessor :summary
@@ -40,7 +44,26 @@ module PVN::Command
       @subcommands = args
     end
 
-    def write out = $stdout
+    def wrap out, str
+      out.puts format_text str.gsub("\n", ''), 80, 2
+    end
+
+    def write_summary out
+      summary.join("\n").scan(SUMMARY_RE) do |md|
+        if md[2]
+          wrap out, md[2]
+          next
+        end
+
+        wrap out, md[0]
+        out.puts md[1].collect { |x| "  " + x }
+        
+        out.puts
+        wrap out, md[3]
+      end
+    end
+
+    def write out = $io
       doc = Array.new
 
       subcmds = @subcommands
@@ -53,8 +76,8 @@ module PVN::Command
       out.puts subcmdstr + ": " + @description
       out.puts "usage: " + subcmds[0] + " " + @usage
       out.puts ""
-      out.puts @summary.collect { |line| "  " + line }
-
+      write_summary out
+      
       write_section "options", @options, out do |opt, io|
         option_to_doc opt, io
       end

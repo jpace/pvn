@@ -11,6 +11,10 @@ Sickill::Rainbow.enabled = true
 
 module PVN::Seek
   class CommandTest < PVN::IntegrationTestCase
+    def assert_seek_command_no_color explines, args
+      assert_command_output Command, explines, %w{ --no-color } + args
+    end
+
     def assert_seek_command explines, args
       assert_command_output Command, explines, args
     end
@@ -55,7 +59,7 @@ module PVN::Seek
                   "3: fourth line this is."
                  ]
 
-      assert_seek_command expected, %w{ --no-color this FirstFile.txt }
+      assert_seek_command_no_color expected, %w{ this FirstFile.txt }
     end
 
     def test_no_color_added_not_found
@@ -63,7 +67,7 @@ module PVN::Seek
                   "not found in revisions: 1 .. 13"
                  ]
 
-      assert_seek_command expected, %w{ --no-color that FirstFile.txt }
+      assert_seek_command_no_color expected, %w{ that FirstFile.txt }
     end
 
     def test_no_color_removed_found
@@ -72,7 +76,7 @@ module PVN::Seek
                   "3: # line three"
                  ]
       
-      assert_seek_command expected, %w{ -M --no-color three SecondFile.txt }
+      assert_seek_command_no_color expected, %w{ -M three SecondFile.txt }
     end
 
     def test_added_in_most_recent_revision
@@ -82,6 +86,16 @@ module PVN::Seek
                  ]
       
       assert_seek_command expected, %w{ third SecondFile.txt }
+    end
+
+    def test_added_multiple_matches
+      expected = [
+                  "SecondFile.txt -r20:22",
+                  "2: second line",
+                  "3: third line",
+                 ]
+      
+      assert_seek_command_no_color expected, [ 'd line', 'SecondFile.txt' ]
     end
 
     def xxxtest_added_between_revisions

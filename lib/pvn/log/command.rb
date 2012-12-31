@@ -16,9 +16,9 @@ module PVN::Log
     subcommands [ "log" ]
     description "Print log messages for the given files."
     usage       "[OPTIONS] FILE..."
-    summary     [ "Prints the log entries for the given files, with colorized",
+    summary     [ "Prints the log entries for the given files, with colorized ",
                   "output. Unlike 'svn log', which prints all log entries, ",
-                  "'pvn log' prints #{DEFAULT_LIMIT} entries by default.",
+                  "'pvn log' prints #{DEFAULT_LIMIT} entries by default. ",
                   "As with other pvn subcommands, 'pvn log' accepts relative ",
                   "revisions."
                 ]

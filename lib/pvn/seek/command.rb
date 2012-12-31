@@ -12,9 +12,11 @@ module PVN::Seek
     subcommands [ "seek" ]
     description "Searches through revisions for a pattern match."
     usage       "[OPTIONS] FILE..."
-    summary   [ "Goes through a set of revisions, looking for when a pattern",
-                "first matched (the default), or when a pattern no longer matched.",
-                "This command therefore shows when a file was changed to add",
+    summary   [ "Looks through revisions and displays (a la grep) the most ",
+                "recent revision when the given pattern matched. In the case ",
+                "of the `--no-match` argument, the displayed revision is the most ",
+                "recent one in which the pattern did not match. ",
+                "This command therefore shows when a file was changed to add ",
                 "or remove something such as a method." ]
     
     optscls

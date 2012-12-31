@@ -44,6 +44,11 @@ For all subcommands, `pvn help <command>` shows extended information.
   * `seek`:
     Searches through revision history for pattern match.
 
+    This command looks through revisions and displays (a la grep) the most
+    recent revision when the given pattern matched. In the case of the
+    `--no-match` argument, the displayed revision is the most recent one in
+    which the pattern did not match.
+
 ## AUTHOR
 
 Jeff Pace (jeugenepace at gmail dot com)

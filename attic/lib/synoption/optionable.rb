@@ -17,17 +17,17 @@ module PVN
 
     module ClassMethods
       def has_option optname, tag, desc, args = Hash.new
-        RIEL::Log.debug "self: #{self}"
-        RIEL::Log.debug "optname: #{optname}"
+        RIEL::Log.info "self: #{self}"
+        RIEL::Log.info "optname: #{optname}"
 
         self.instance_eval do 
           @option_set ||= OptionSet.new
           opt = Option.new optname, tag, desc, args
           @option_set.options << opt
 
-          RIEL::Log.debug "self: #{self}"
-          RIEL::Log.debug "opt: #{opt.inspect}"
-          RIEL::Log.debug "@option_set: #{@option_set.inspect}"
+          RIEL::Log.info "self: #{self}".background("9a88cc")
+          RIEL::Log.info "opt: #{opt.inspect}"
+          RIEL::Log.info "@option_set: #{@option_set.inspect}".kljkljlk
 
           @doc.options << opt
         end

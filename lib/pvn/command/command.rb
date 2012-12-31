@@ -52,13 +52,13 @@ module PVN::Command
       end
     end
     
-    def to_doc io
+    def to_doc
       doc = self.class.getdoc
-      doc.write io
+      doc.write
     end
 
     def show_help
-      to_doc $stdout
+      to_doc
     end
 
     def initialize args

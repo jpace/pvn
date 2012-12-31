@@ -57,10 +57,9 @@ module PVN
       strio = StringIO.new
 
       $io = strio
-
-      cmd = cmdcls.new args
-      
+      cmdcls.new args
       strio.close
+
       if RIEL::Log.verbose
         puts "......................................................."
         puts strio.string

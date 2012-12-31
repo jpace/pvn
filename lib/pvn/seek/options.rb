@@ -9,7 +9,7 @@ module PVN::Seek
   class MatchOption < PVN::BooleanOption
     def initialize optargs = Hash.new
       opts = Hash.new
-      opts[:negate] = '--nomatch', '-M'
+      opts[:negate] = '--nomatch', '--no-match', '-M'
       super :match, '-m', 'find where the pattern matched', true, opts
     end
   end
