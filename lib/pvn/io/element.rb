@@ -124,15 +124,6 @@ module PVN::IO
       modified
     end
 
-    def xxxcat_remote rev = nil
-      path = @local || @svn
-      info "path: #{path}".blue
-      info "rev: #{rev}; #{rev.class}".blue
-      catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => false, :revision => rev
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
-    end
-
     def cat revision, use_cache = false
       path = (@local || @path || @svn).dup
       if revision && revision != :working_copy

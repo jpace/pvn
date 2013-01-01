@@ -159,10 +159,10 @@ module PVN::Seek
 
   class SeekerAdded < Seeker
     def process_match prevmatch, currmatch
-      return if currmatch.nil? && prevmatch.nil?
+      return unless prevmatch
       info "prevmatch.lnums: #{prevmatch && prevmatch.lnums.inspect}".color("8a9a33")
       info "currmatch.lnums: #{currmatch && currmatch.lnums.inspect}".color("8a9a33")
-      return prevmatch if !currmatch && prevmatch
+      return prevmatch if !currmatch
       difflines = prevmatch.diff currmatch
       return if difflines.empty?
       info "difflines: #{difflines}".color("cc33ff")
@@ -189,32 +189,43 @@ module PVN::Seek
       @path = path
     end
 
-    def seek type, pattern, revision, use_color
-      rev = if revision
-              if revision.size == 1
-                [ revision[0], 'HEAD' ].join(':')
-              else
-                revision.join(':')
-              end
-            else
-              nil
-            end
-      
-      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(rev)
-      @entries = logentries.entries
-      
-      seekcls = type == :added ? SeekerAdded : SeekerRemoved
-      @seeker = seekcls.new @path, pattern, revision, @entries
-      match = @seeker.seek
+    def to_revision_arg revision
+      return unless revision
+      if revision.size == 1
+        [ revision[0], 'HEAD' ].join(':')
+      else
+        revision.join ':'
+      end
+    end
 
-      if match
+    def get_entries revision
+      rev = to_revision_arg revision      
+      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(revision)
+      logentries.entries
+    end
+
+    def show_no_match type, entries
+      msg = type == :added ? "not found" : "not removed"
+      fromrev = entries[-1].revision
+      torev = entries[0].revision
+      $io.puts "#{msg} in revisions: #{fromrev} .. #{torev}"
+    end
+
+    def get_seek_class type
+      type == :added ? SeekerAdded : SeekerRemoved
+    end
+    
+    def seek type, pattern, revision, use_color
+      entries = get_entries revision
+      
+      seekcls = get_seek_class type
+      @seeker = seekcls.new @path, pattern, revision, entries
+      
+      if match = @seeker.seek
         # todo: use previous or current entry, and run through entry formatter in log:
         match.show @path, use_color
       else
-        msg = type == :added ? "not found" : "not removed"
-        fromrev = @entries[-1].revision
-        torev = @entries[0].revision
-        $io.puts "#{msg} in revisions: #{fromrev} .. #{torev}"
+        show_no_match type, entries
       end
     end
   end

@@ -79,3 +79,6 @@ Sun Dec 30 18:47:42 2012
   seek: added display of multiple matches.
   all subcommands: wrapped summary output.
   
+Mon Dec 31 19:56:01 2012
+
+  seek: refined seek to match multiple revisions.

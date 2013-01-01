@@ -5,8 +5,8 @@ require 'svnx/command'
 
 module SVNx
   module CatCmdLine
-    # this can be either an Array (for which to_a returns itself), or
-    # a CommandArgs, which also has to_a.
+    # this can be either an Array (for which to_a returns itself), or a
+    # CommandArgs, which also has to_a.
     def initialize args = Array.new
       super "cat", args.to_a
     end
@@ -37,11 +37,9 @@ module SVNx
     def to_a
       ary = Array.new
       if @revision
-        [ @revision ].flatten.each do |rev|
-          ary << "-r#{rev}"
-        end
+        ary << "-r#{@revision}"
       end
-    
+      
       if @path
         ary << @path
       end
