@@ -5,6 +5,7 @@ require 'rubygems'
 require 'riel'
 require 'system/command/line'
 require 'riel/log/loggable'
+require 'system/command/caching'
 
 # this replaces svnx/lib/command/svncommand.
 

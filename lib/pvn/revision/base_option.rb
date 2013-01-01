@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'synoption/option'
-require 'svnx/log/command'
+require 'svnx/exec'
 
 module PVN
   class BaseRevisionOption < Option
@@ -30,14 +30,11 @@ module PVN
 
       # This is Argument, not Range, because we're getting the value
       reventry = PVN::Revision::Argument.new rel, xmllines
-      revval   = reventry.value.to_s
-      revval
+      reventry.value.to_s
     end
-
+    
     def run_log_command limit, path
-      cmdargs = SVNx::LogCommandArgs.new :limit => limit, :path => path, :use_cache => false
-      cmd = SVNx::LogCommand.new cmdargs
-      cmd.execute
+      SVNx::Exec.new.log path, nil, limit, false, false
     end
 
     def entry

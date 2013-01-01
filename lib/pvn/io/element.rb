@@ -3,17 +3,9 @@
 
 require 'rubygems'
 require 'riel/log/loggable'
-
-require 'svnx/log/command'
 require 'svnx/log/entries'
-
-require 'svnx/status/command'
 require 'svnx/status/entries'
-
-require 'svnx/info/command'
 require 'svnx/info/entries'
-
-require 'svnx/cat/command'
 
 require 'pvn/io/fselement'
 
@@ -66,9 +58,7 @@ module PVN::IO
 
     def get_info revision = nil
       usepath = @local || @path
-      cmdargs = SVNx::InfoCommandArgs.new :path => usepath, :revision => revision
-      infcmd  = SVNx::InfoCommand.new cmdargs
-      output  = infcmd.execute
+      output = SVNx::Exec.new.info usepath, revision
       
       infentries = SVNx::Info::Entries.new :xmllines => output
       infentries[0]
@@ -92,25 +82,16 @@ module PVN::IO
 
     # returns a set of entries modified over the given revision
     def find_modified_entries revision
-      cmdargs = Hash.new
-
       svninfo = get_info
 
       filter = svninfo.url.dup
       filter.slice! svninfo.root
 
-      cmdargs[:path] = @local
-      
       # we can't cache this, because we don't know if there has been an svn
       # update since the previous run:
-      cmdargs[:use_cache] = false
-      cmdargs[:limit] = nil
-      cmdargs[:verbose] = true
-      cmdargs[:revision] = revision
-
-      logargs = SVNx::LogCommandArgs.new cmdargs
-      entries = log(logargs).entries
-
+      xmllines = SVNx::Exec.new.log @local, revision, nil, true, false
+      entries = SVNx::Log::Entries.new :xmllines => xmllines
+      
       modified = Set.new
 
       entries.each do |entry|
@@ -130,28 +111,16 @@ module PVN::IO
         path << '@' << revision.to_s
       end
       info "path: #{path}"
-      catargs = SVNx::CatCommandArgs.new :path => path, :use_cache => use_cache
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
-    end
-
-    # returns a set of local files that are in the given status
-    def find_files
+      SVNx::Exec.new.cat path, nil, use_cache
     end
 
     # returns a set of local files that are in the given status
     def find_files_by_status status = nil
-      cmdargs = SVNx::StatusCommandArgs.new :path => @local, :use_cache => false
-      cmd = SVNx::StatusCommand.new cmdargs
-      xmllines = cmd.execute
+      xmllines = SVNx::Exec.new.status @local, false
       entries = SVNx::Status::Entries.new :xmllines => xmllines
-      
-      if status
-        entries.select do |entry|
-          entry.status == status
-        end
-      else
-        entries
+
+      entries.select do |entry|
+        status.nil? || entry.status == status
       end
     end
 
@@ -161,36 +130,12 @@ module PVN::IO
     end
 
     # returns log entries
-    def log cmdargs = SVNx::LogCommandArgs.new
-      # $$$ todo: this should be either @local if set, otherwise @svn (url)
-      # cmdargs.path = @local
-      cmd = SVNx::LogCommand.new cmdargs
-      SVNx::Log::Entries.new :xmllines => cmd.execute
-    end
-
-    # returns log entries
     def logentries revision
       # use_cache should be conditional on revision:
-      # cmdargs[:use_cache] = false
-      cmdargs = SVNx::LogCommandArgs.new :path => @local, :revision => revision.to_s, :use_cache => false, :verbose => true
-      cmd = SVNx::LogCommand.new cmdargs
-      SVNx::Log::Entries.new :xmllines => cmd.execute
+      xmllines = SVNx::Exec.new.log @local, revision.to_s, nil, true, false
+      SVNx::Log::Entries.new :xmllines => xmllines
     end
     
-    # returns :added, :deleted, "modified"
-    def status
-      cmdargs = SVNx::StatusCommandArgs.new :path => @local
-      cmd = SVNx::StatusCommand.new :cmdargs => cmdargs
-      xmllines = cmd.execute
-      entries = SVNx::Status::Entries.new :xmllines => xmllines
-      entry = entries[0]
-      entry.status
-    end
-
-    # def line_counts
-    #   [ @svnelement && @svnelement.line_count, @fselement && @fselement.line_count ]
-    # end
-
     def <=> other
       @svn <=> other.svn
     end

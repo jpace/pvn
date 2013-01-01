@@ -17,10 +17,8 @@ module PVN::Log
       filter_entries_for_user
     end
 
-    def create_cmd_args options, path
-      cmdargs = super
-      cmdargs[:limit] = nil      
-      cmdargs
+    def limit options
+      nil
     end
 
     def filter_entries_for_user

@@ -1,10 +1,9 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/cat/command'
 require 'pvn/log/entries'
 require 'riel/log/loggable'
-# require 'riel/array'
+require 'svnx/exec'
 
 module PVN::Seek
   class Match
@@ -109,9 +108,8 @@ module PVN::Seek
     end
 
     def cat revision
-      catargs = SVNx::CatCommandArgs.new :path => @path, :use_cache => true, :revision => revision
-      cmd = SVNx::CatCommand.new catargs
-      cmd.execute
+      ex = SVNx::Exec.new
+      ex.cat @path, revision, true
     end
 
     def matches? previous_entry, current_entry

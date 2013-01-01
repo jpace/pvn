@@ -29,7 +29,7 @@ module PVN::Log
       super :user, '-u', "show only changes for the given user", nil, :as_cmdline_option => nil
     end
   end
-
+  
   class OptionSet < PVN::Command::OptionSet
     has_option :revision, PVN::MultipleRevisionsRegexpOption, [ :unsets => :limit ]
     has_option :color,    PVN::Command::ColorOption

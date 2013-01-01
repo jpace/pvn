@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'svnx/command'
+require 'system/command/caching'
 
 module SVNx
   module CatCmdLine

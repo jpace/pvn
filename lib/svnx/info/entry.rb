@@ -15,14 +15,7 @@ module SVNx::Info
 
     def set_from_xml xmldoc
       entry = xmldoc.elements['info/entry']
-
-      set_attr_var entry, 'kind'
-      set_attr_var entry, 'path'
-      set_attr_var entry, 'revision'
-      set_elmt_var entry, 'url'
-
-      repo = entry.elements['repository']
-      set_elmt_var repo, 'root'
+      set_from_element entry
     end
 
     def set_from_element elmt

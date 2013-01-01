@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'pvn/io/element'
-require 'svnx/cat/command'
 require 'pvn/pct/differ'
+require 'svnx/exec'
 
 module PVN::Pct
   class LocalDiffer < Differ
@@ -19,9 +19,8 @@ module PVN::Pct
 
       modified.each do |entry|
         info "entry.path: #{entry.path}"
-        catargs     = SVNx::CatCommandArgs.new :path => entry.path, :use_cache => false
-        catcmd      = SVNx::CatCommand.new catargs
-        svn_count   = catcmd.execute.size
+        lines = SVNx::Exec.new.cat entry.path, nil, false
+        svn_count = lines.size
         local_count = Pathname.new(entry.path).readlines.size
         
         dc = PVN::DiffCount.new svn_count, local_count, entry.path
