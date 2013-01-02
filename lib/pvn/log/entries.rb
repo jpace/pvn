@@ -1,9 +1,9 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/log/entries'
-require 'svnx/exec'
 require 'riel/log/loggable'
+require 'svnx/exec'
+require 'svnx/log/entries'
 
 module PVN::Log
   class Entries < SVNx::Log::Entries

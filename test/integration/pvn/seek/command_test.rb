@@ -11,11 +11,11 @@ Sickill::Rainbow.enabled = true
 
 module PVN::Seek
   class CommandTest < PVN::IntegrationTestCase
-    def assert_seek_command_no_color explines, args
+    def assert_command_no_color explines, args
       assert_command_output Command, explines, %w{ --no-color } + args
     end
 
-    def assert_seek_command explines, args
+    def assert_command explines, args
       assert_command_output Command, explines, args
     end
 
@@ -24,16 +24,14 @@ module PVN::Seek
                   "FirstFile.txt -r5:13",
                   "3: fourth line this is."
                  ]
-
-      assert_seek_command_no_color expected, %w{ this FirstFile.txt }
+      assert_command_no_color expected, %w{ this FirstFile.txt }
     end
 
     def test_added_not_found
       expected = [
                   "not found in revisions: 1 .. 13"
                  ]
-
-      assert_seek_command expected, %w{ that FirstFile.txt }
+      assert_command expected, %w{ that FirstFile.txt }
     end
 
     def test_added_found_color
@@ -41,8 +39,7 @@ module PVN::Seek
                   "[33mFirstFile.txt[0m -r[35m5[0m:[32m13[0m",
                   "3: [1mfourth line this is.[0m"
                  ]
-
-      assert_seek_command expected, %w{ this FirstFile.txt }
+      assert_command expected, %w{ this FirstFile.txt }
     end
 
     def test_removed_found
@@ -50,16 +47,14 @@ module PVN::Seek
                   "SecondFile.txt -r13:15",
                   "3: # line three"
                  ]
-      
-      assert_seek_command_no_color expected, %w{ -M three SecondFile.txt }
+      assert_command_no_color expected, %w{ -M three SecondFile.txt }
     end
 
     def test_removed_not_found
       expected = [
                   "not removed in revisions: 13 .. 22"
                  ]
-      
-      assert_seek_command expected, [ '-M', 'line four', 'SecondFile.txt' ]
+      assert_command expected, [ '-M', 'line four', 'SecondFile.txt' ]
     end
 
     def test_removed_found_color
@@ -67,8 +62,7 @@ module PVN::Seek
                   "[33mSecondFile.txt[0m -r[35m13[0m:[32m15[0m",
                   "3: [1m# line three[0m"
                  ]
-      
-      assert_seek_command expected, %w{ -M three SecondFile.txt }
+      assert_command expected, %w{ -M three SecondFile.txt }
     end
 
     def test_added_in_most_recent_revision
@@ -76,8 +70,7 @@ module PVN::Seek
                   "SecondFile.txt -r20:22",
                   "3: third line"
                  ]
-      
-      assert_seek_command_no_color expected, %w{ third SecondFile.txt }
+      assert_command_no_color expected, %w{ third SecondFile.txt }
     end
 
     def test_added_multiple_matches
@@ -86,25 +79,31 @@ module PVN::Seek
                   "2: second line",
                   "3: third line",
                  ]
-      
-      assert_seek_command_no_color expected, [ 'd line', 'SecondFile.txt' ]
+      assert_command_no_color expected, [ 'd line', 'SecondFile.txt' ]
     end
 
-    def test_matches_in_current_and_previous_revisions
+    def test_added_in_current_and_previous_revisions
       expected = [
                   "FirstFile.txt -r1:2",
                   "2: This is the second line of the first file."
                  ]
-      
-      assert_seek_command_no_color expected, [ 'This', 'FirstFile.txt' ]
+      assert_command_no_color expected, [ 'This', 'FirstFile.txt' ]
     end
 
-    def xxxtest_added_between_revisions
+    def test_added_between_revisions
       expected = [
-                  "not removed in revisions: 13 .. 22"
+                  "SecondFile.txt -r15:13", "3: # line three"
+                 ]      
+      assert_command_no_color expected, [ '-r1:18', 'th', 'SecondFile.txt' ]
+    end
+
+    def test_removed_in_current_and_previous_revisions
+      expected = [
+                  "SecondFile.txt -r13:15",
+                  "2: # file two, line two",
+                  "3: # line three"
                  ]
-      
-      assert_seek_command expected, [ '-r15', '-r22', '--no-color', 'line f', 'SecondFile.txt' ]
+      assert_command_no_color expected, [ '--removed', 'line', 'SecondFile.txt' ]
     end
   end
 end

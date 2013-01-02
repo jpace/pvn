@@ -82,3 +82,8 @@ Sun Dec 30 18:47:42 2012
 Mon Dec 31 19:56:01 2012
 
   seek: refined seek to match multiple revisions.
+
+Tue Jan  1 18:22:02 2013
+
+  seek: added --removed functionality.
+  seek: added functionality for between revisions.

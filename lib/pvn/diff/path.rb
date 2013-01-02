@@ -1,9 +1,9 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
+require 'riel/log/loggable'
 require 'svnx/action'
 require 'pvn/diff/change'
-require 'riel/log/loggable'
 
 module PVN; module Diff; end; end
 
@@ -22,9 +22,8 @@ module PVN::Diff
       add_change revision, action
       @url = url
     end
-
+    
     def add_change rev, action
-      info "rev: #{rev}"
       @changes << Change.new(to_revision(rev), action)
     end
 

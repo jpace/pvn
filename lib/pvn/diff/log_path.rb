@@ -19,9 +19,7 @@ module PVN::Diff
     end
 
     def show_as_added elmt, path, revision, whitespace
-      info "path: #{path}".background(:blue)
       tolines = elmt.cat revision.to
-      info "tolines: #{tolines}".color(:blue)
       run_diff path, nil, 0, tolines, revision.to, whitespace
     end
 
@@ -38,24 +36,18 @@ module PVN::Diff
 
     def diff_revision_to_revision revision, whitespace
       logpath = self
-      info "name: #{name}"
 
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple changes)
       svnpath = url + name
-      info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
       displaypath = get_display_path
-
-      info "revision.from: #{revision.from}".color(:cyan)
 
       rev_change = changes.detect do |chg| 
         revarg = PVN::Revision::Argument.new chg.revision
         revarg > revision.from
       end
-
-      info "rev_change: #{rev_change}".color(:green)
 
       # we ignore unversioned logpaths
       
@@ -81,14 +73,12 @@ module PVN::Diff
     end
 
     def get_diff_revision change, revision
-      info "change: #{change}"
-      info "revision: #{revision}"
       # find the first revision where logpath was in svn, no earlier than the
       # revision.from value
       if change.action.added?
-        return change.revision.to_i
+        change.revision.to_i
       elsif change.revision.to_i >= revision.from.value
-        return revision.from.value
+        revision.from.value
       else
         nil
       end
@@ -111,7 +101,6 @@ module PVN::Diff
       pn = Pathname.new display_path
 
       svnpath = url + name
-      info "svnpath: #{svnpath}"
       elmt = PVN::IO::Element.new :svn => svnpath
 
       if change.action.added?
@@ -135,7 +124,6 @@ module PVN::Diff
 
     def revisions_later_than revision
       changes.select do |chg|
-        info "chg: #{chg.revision.inspect}"
         x = PVN::Revision::Argument.new chg.revision
         y = PVN::Revision::Argument.new revision
         x > y

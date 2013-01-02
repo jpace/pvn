@@ -14,15 +14,6 @@ require 'pvn/status/command'
 require 'pvn/diff/command'
 require 'pvn/seek/command'
 
-# the old ones:
-# require 'pvn/diff/diffcmd'
-# require 'pvn/pct/pctcmd'
-
-# the new ones:
-# require 'pvn/describe'
-# require 'pvn/upp/uppcmd'
-# require 'pvn/wherecmd'
-
 module PVN; module App; end; end
 
 module PVN::App

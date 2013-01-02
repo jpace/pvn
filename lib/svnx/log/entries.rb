@@ -6,7 +6,6 @@ require 'svnx/log/entry'
 
 module SVNx::Log
   class Entries < SVNx::Entries
-
     def get_elements doc
       doc.elements['log'].elements
     end
