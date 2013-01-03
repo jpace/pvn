@@ -6,34 +6,8 @@ require 'pvn/pct/options'
 
 module PVN::Pct
   class TestCase < PVN::IntegrationTestCase
-    def assert_command cls, explines, args
-      orig_dir = Dir.pwd
-      
-      Dir.chdir '/Programs/pvn/pvntestbed.pending'
-
-      strio = StringIO.new
-
-      $io = strio
-
-      info "args: #{args}"
-
-      opts = OptionSet.new
-      info "opts: #{opts}"
-
-      opts.process args
-
-      cmd = cls.new opts
-      info "cmd: #{cmd}"
-      
-      strio.close
-      puts strio.string
-      
-      actlines = strio.string.split("\n")
-
-      assert_arrays_equal explines, actlines
-
-      $io = $stdout
-      Dir.chdir orig_dir
+    def assert_command cmdcls, explines, args
+      assert_command_option_output cmdcls, OptionSet, args, explines
     end
   end
 end

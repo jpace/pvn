@@ -16,7 +16,7 @@ module PVN::Status
       explines << "    src/java/Charlie.java"
       explines << "    \e[32msrc/ruby/dog.rb\e[0m"
       
-      assert_command_output PVN::Status::Command, explines, Array.new
+      assert_command_output Command, explines, Array.new
     end
   end
 end

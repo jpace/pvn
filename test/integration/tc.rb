@@ -73,5 +73,38 @@ module PVN
       $io = $stdout
       Dir.chdir orig_dir
     end
+
+    def assert_command_option_output cmdcls, optcls, args, explines
+      orig_dir = Dir.pwd
+      
+      Dir.chdir '/Programs/pvn/pvntestbed.pending'
+
+      strio = StringIO.new
+
+      $io = strio
+
+      info "args: #{args}"
+
+      opts = optcls.new
+      info "opts: #{opts}"
+
+      opts.process args
+
+      cmd = cmdcls.new opts
+      info "cmd: #{cmd}"
+      
+      if RIEL::Log.verbose
+        puts "......................................................."
+        puts strio.string
+        puts "......................................................."
+      end
+      
+      actlines = strio.string.split "\n"
+
+      assert_arrays_equal explines, actlines
+
+      $io = $stdout
+      Dir.chdir orig_dir
+    end
   end
 end
