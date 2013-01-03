@@ -6,9 +6,6 @@ require 'pvn/seek/options'
 require 'integration/tc'
 require 'rainbow'
 
-# produce colorized output, even when redirecting to a file:
-Sickill::Rainbow.enabled = true
-
 module PVN::Seek
   class CommandTest < PVN::IntegrationTestCase
     def assert_command_no_color explines, args
@@ -36,8 +33,8 @@ module PVN::Seek
 
     def test_added_found_color
       expected = [
-                  "[33mFirstFile.txt[0m -r[35m5[0m:[32m13[0m",
-                  "3: [1mfourth line this is.[0m"
+                  "[33mFirstFile.txt[0m -r5:13",
+                  "3: fourth line this is."
                  ]
       assert_command expected, %w{ this FirstFile.txt }
     end
@@ -59,8 +56,8 @@ module PVN::Seek
 
     def test_removed_found_color
       expected = [
-                  "[33mSecondFile.txt[0m -r[35m13[0m:[32m15[0m",
-                  "3: [1m# line three[0m"
+                  "[33mSecondFile.txt[0m -r13:15",
+                  "3: # line three"
                  ]
       assert_command expected, %w{ -M three SecondFile.txt }
     end

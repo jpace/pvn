@@ -24,7 +24,7 @@ module PVN::Seek
     end
 
     def decorate path, fromrev, torev
-      [ path.to_s.color(:yellow), fromrev.color(:magenta), torev.color(:green) ]
+      [ path.to_s.color(:yellow), fromrev, torev ]
     end
     
     def show path, use_color
@@ -39,9 +39,7 @@ module PVN::Seek
       
       @lnums.each do |lnum|
         line = @contents[lnum]
-        linestr = use_color ? line.chomp.bright : line.chomp
-        line = "#{lnum + 1}: #{linestr}"
-        $io.puts line
+        $io.puts "#{lnum + 1}: #{line}"
       end
     end
 

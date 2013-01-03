@@ -87,3 +87,7 @@ Tue Jan  1 18:22:02 2013
 
   seek: added --removed functionality.
   seek: added functionality for between revisions.
+
+Wed Jan  2 19:18:35 2013
+
+  seek: reduced colors in output.
