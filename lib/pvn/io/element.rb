@@ -6,7 +6,6 @@ require 'riel/log/loggable'
 require 'svnx/log/entries'
 require 'svnx/status/entries'
 require 'svnx/info/entries'
-
 require 'pvn/io/fselement'
 
 module PVN; module IO; end; end
@@ -22,7 +21,7 @@ module PVN::IO
     attr_reader :local
     
     def initialize args = Hash.new
-      info "args: #{args}"
+      info "args: #{args.inspect}".color("438802")
       
       svnurl = args[:svnurl]
       fname  = args[:filename] || args[:file] # legacy
@@ -32,7 +31,7 @@ module PVN::IO
       @local = args[:local] && PVN::FSElement.new(args[:local] || args[:file])
       @path  = args[:path]
       
-      info "local: #{@local}"
+      info "local: #{@local.inspect}"
     end
 
     def exist?
@@ -106,7 +105,12 @@ module PVN::IO
     end
 
     def cat revision, use_cache = false
+      info "@local: #{@local}"
+      info "@path: #{@path}"
+      info "@svn: #{@svn}"
+      
       path = (@local || @path || @svn).dup
+      info "path: #{path.to_s}"
       if revision && revision != :working_copy
         path << '@' << revision.to_s
       end

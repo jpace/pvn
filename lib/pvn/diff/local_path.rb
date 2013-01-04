@@ -9,7 +9,7 @@ module PVN::Diff
     # that's a Status::Entry
     def initialize entry
       @entry = entry
-      @elmt = create_element
+      @elmt = PVN::IO::Element.new :local => @entry.path
       name = entry.path
       action = SVNx::Action.new @entry.status
       revision = action.added? ? 0 : @elmt.get_info.revision
@@ -37,33 +37,32 @@ module PVN::Diff
       pn.readlines
     end
 
-    def create_element
-      PVN::IO::Element.new :local => @entry.path
-    end
-
     def get_latest_revision
       svninfo = @elmt.get_info
       svninfo.revision
     end
 
+    def get_remote_lines
+      # revision = nil; use_cache = false
+      @elmt.cat nil, false
+    end
+
+    def run_diff from_lines, from_rev, to_lines, to_rev, whitespace
+      super @entry.path, from_lines, from_rev, to_lines, to_rev, whitespace
+    end
+
     def show_as_added
-      fromlines = nil
-      tolines = read_working_copy
-      run_diff @entry.path, fromlines, 0, tolines, 0, nil
+      run_diff nil, 0, read_working_copy, 0, nil
     end
 
     def show_as_deleted
       fromrev = changes[0].revision
-      # revision = nil; use_cache = false
-      lines = @elmt.cat nil, false
-      run_diff @entry.path, lines, fromrev, nil, nil, nil
+      run_diff get_remote_lines, fromrev, nil, nil, nil
     end
     
     def show_as_modified whitespace
-      remotelines = @elmt.cat nil, false
       fromrev = changes[0].revision
-      wclines = read_working_copy
-      run_diff @entry.path, remotelines, fromrev, wclines, nil, whitespace
+      run_diff get_remote_lines, fromrev, read_working_copy, nil, whitespace
     end
   end
 end

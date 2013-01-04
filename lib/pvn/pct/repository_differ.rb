@@ -67,7 +67,7 @@ module PVN::Pct
       modnames.each do |mod|
         fullpath = reporoot + mod
         elmt = PVN::IO::Element.new :path => fullpath
-
+        
         next unless has_revisions? elmt, fromrev, torev
         next if directory? elmt
 

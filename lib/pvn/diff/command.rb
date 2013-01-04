@@ -15,9 +15,9 @@ module PVN::Diff
     subcommands [ "diff" ]
     description "Shows the changes to files."
     usage       "[OPTIONS] FILE..."
-    summary     [ "Compare two revisions, filtering through external programs.",
-                  "For each file compared, the file extension is used to find",
-                  "a diff program.",
+    summary     [ "Compare two revisions, filtering through external programs. ",
+                  "For each file compared, the file extension is used to find ",
+                  "a diff program. ",
                   "As with other pvn subcommands, 'pvn log' accepts relative ",
                   "revisions."
                 ]

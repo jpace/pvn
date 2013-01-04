@@ -8,11 +8,18 @@ module PVN::Diff
   # this is a path wrapping a log entry; it could also be a RemotePath or a
   # RepoPath.
   class LogPath < Path
-    
     # the "path" parameter is the displayed name; "logpath" is the LogPath.
-    # These are in the process of refactoring.
-    def show_as_modified elmt, path, fromrev, torev, revision, whitespace
-      fromlines = elmt.cat fromrev
+    # These are in the process of being refactored.
+    def show_as_modified elmt, path, changes, revision, whitespace
+      firstrev = changes[0].revision
+      lastrev = changes[-1].revision
+      fromrev, torev = if firstrev == lastrev
+                         [ revision.from.value.to_i - 1, revision.to ]
+                       else
+                         [ firstrev.to_i - 1, lastrev ]
+                       end
+
+      fromlines = elmt.cat firstrev
       tolines = elmt.cat torev
       fromrev = revision.from.value.to_i
       run_diff path, fromlines, fromrev, tolines, revision.to, whitespace
@@ -35,8 +42,6 @@ module PVN::Diff
     end
 
     def diff_revision_to_revision revision, whitespace
-      logpath = self
-
       # all the paths will be the same, so any can be selected (actually, a
       # logpath should have multiple changes)
       svnpath = url + name
@@ -61,14 +66,7 @@ module PVN::Diff
       when action.deleted?
         show_as_deleted elmt, displaypath, revision, whitespace
       when action.modified?
-        firstrev = changes[0].revision
-        lastrev = changes[-1].revision
-        fromrev, torev = if firstrev == lastrev
-                           [ revision.from.value.to_i - 1, revision.to ]
-                         else
-                           [ firstrev.to_i - 1, lastrev ]
-                         end
-        show_as_modified elmt, displaypath, firstrev, torev, revision, whitespace
+        show_as_modified elmt, displaypath, changes, revision, whitespace
       end
     end
 
@@ -96,15 +94,19 @@ module PVN::Diff
       # revision should be a class here, not a primitive
       diffrev = get_diff_revision change, revision
       
-      display_path = get_display_path
+      displaypath = get_display_path
 
-      pn = Pathname.new display_path
+      pn = Pathname.new displaypath
 
+      info "url: #{url}"
+      info "name: #{name}"
       svnpath = url + name
+      info "svnpath: #{svnpath}"
+
       elmt = PVN::IO::Element.new :svn => svnpath
 
       if change.action.added?
-        show_as_added elmt, display_path, revision, whitespace
+        show_as_added elmt, displaypath, revision, whitespace
       else
         fromlines = elmt.cat diffrev
         info "fromlines.size: #{fromlines.size}"
@@ -114,7 +116,7 @@ module PVN::Diff
         info "tolines.size: #{tolines.size}"
         # pp tolines
 
-        run_diff display_path, fromlines, diffrev, tolines, nil, whitespace
+        run_diff displaypath, fromlines, diffrev, tolines, nil, whitespace
       end
     end
 
