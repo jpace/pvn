@@ -21,6 +21,8 @@ module PVN::Diff
       paths = options.paths
       paths = %w{ . } if paths.empty?
 
+      info "paths: #{paths}"
+
       # we sort only the sub-entries, so the order in which paths were specified is preserved
 
       rev = options.revision

@@ -32,6 +32,7 @@ module PVN::Diff
       url = pathinfo.url
 
       info "action: #{action}"
+      info "url: #{url}"
       
       path = @elements.detect { |element| element.name == name }
       if path

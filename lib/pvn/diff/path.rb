@@ -3,7 +3,6 @@
 
 require 'riel/log/loggable'
 require 'riel/pathname'
-require 'svnx/action'
 require 'pvn/diff/change'
 require 'pvn/diff/diffcmd'
 
@@ -31,21 +30,8 @@ module PVN::Diff
       info "display_path: #{@display_path}".color("fafa33")
       ext = Pathname.new(@display_path).extname
       info "ext: #{ext}".color("fafa11")
-      Tempfile.open('pvn') do |from|
-        if @from_lines
-          from.puts @from_lines
-        end
-        from.close
 
-        Tempfile.open('pvn') do |to|
-          if @to_lines
-            to.puts @to_lines
-          end
-          to.close
-          
-          cmd = Cmd.new @display_path, @from_revision, @to_revision, from.path, to.path, @whitespace
-        end
-      end
+      cmd = Cmd.new @display_path, @from_revision, @to_revision, @from_lines, @to_lines, @whitespace
     end
   end
 
@@ -77,6 +63,10 @@ module PVN::Diff
     def run_diff displaypath, fromlines, fromrev, tolines, torev, whitespace
       ds = DiffSet.new displaypath, fromlines, fromrev, tolines, torev, whitespace
       ds.run_diff
+    end
+
+    def to_s
+      "#{name}; #{url}"
     end
   end
 end

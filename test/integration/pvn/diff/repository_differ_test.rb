@@ -114,5 +114,11 @@ module PVN::Diff
 
       assert_diff_command %w{ -r1:4 }, explines
     end
+
+    def xxxtest_revision_to_local
+      explines = Array.new
+      
+      assert_diff_command %w{ -r2 FirstFile.txt }, explines
+    end
   end
 end
