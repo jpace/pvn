@@ -95,3 +95,7 @@ Wed Jan  2 19:18:35 2013
 Thu Jan  3 19:09:41 2013
 
   diff: fixed description to reflect the current, not projected, functionality.
+
+Fri Jan  4 20:07:57 2013
+
+  readme: expanded description of the pct subcommand.

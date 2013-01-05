@@ -12,7 +12,7 @@ module PVN::Pct
     subcommands [ "pct" ]
     description "Compares revisions as a percentage of lines modified."
     usage       "[OPTIONS] FILE..."
-    summary   [ "Compares to revisions, showing the changes in the size (length) ",
+    summary   [ "Compares two revisions, showing the changes in the size (length) ",
                 "of files that have been modified in the latter revision, to ",
                 "show the extent to which they have increased or decreased. ",
                 "\n",

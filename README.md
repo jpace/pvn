@@ -33,7 +33,24 @@ For all subcommands, `pvn help <command>` shows extended information.
     relative revision.
 
   * `pct`:
-    Compares revisions as a percentage of lines modified.
+    Compares two revisions, showing the changes in the size (length)
+    of files that have been modified in the latter revision, to
+    show the extent to which they have increased or decreased.
+
+    The columns are:
+
+    length in svn repository
+
+    length in local version
+
+    difference in line counts
+
+    percentage, with the base being the lines in the svn revision.
+
+    file name
+
+    The total numbers are displayed as the last line.
+    Added and deleted files are not included.
 
   * `status`:
     Prints the status for locally changed files.
