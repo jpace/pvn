@@ -99,3 +99,7 @@ Thu Jan  3 19:09:41 2013
 Fri Jan  4 20:07:57 2013
 
   readme: expanded description of the pct subcommand.
+
+Sat Jan  5 13:32:28 2013
+
+  svnx: migrated into its own gem.
