@@ -103,3 +103,7 @@ Fri Jan  4 20:07:57 2013
 Sat Jan  5 13:32:28 2013
 
   svnx: migrated into its own gem.
+
+Sun Jan  6 18:03:42 2013
+
+  synoption: migrated into its own gem.
