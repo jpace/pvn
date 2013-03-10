@@ -70,4 +70,4 @@ For all subcommands, `pvn help <command>` shows extended information.
 
 Jeff Pace (jeugenepace at gmail dot com)
 
-http://www.github.com/jeugenepace/pvn
+http://www.github.com/jpace/pvn
