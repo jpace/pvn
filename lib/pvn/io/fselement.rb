@@ -3,12 +3,12 @@
 
 require 'rubygems'
 require 'riel/pathname'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN
   # A filesystem element (directory or file).
   class FSElement < Pathname
-    include RIEL::Loggable
+    include Logue::Loggable
     
     attr_reader :name
     

@@ -5,7 +5,7 @@ require 'synoption/option'
 require 'svnx/exec'
 
 module PVN
-  class BaseRevisionOption < Option
+  class BaseRevisionOption < Synoption::Option
     REVISION_DESCRIPTION = [ "revision to apply.",
                              "ARG can be relative, of the form:",
                              "    +N : N revisions from the BASE",

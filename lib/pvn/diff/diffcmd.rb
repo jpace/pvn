@@ -1,12 +1,12 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 # the command-line diff program.
 module PVN::Diff
   class Cmd
-    include RIEL::Loggable
+    include Logue::Loggable
 
     def initialize displaypath, fromrev, torev, fromlines, tolines, whitespace
       open_temp_file(fromlines) do |from|

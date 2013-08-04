@@ -6,7 +6,7 @@ require 'pvn/command/options'
 require 'pvn/command/color_option'
 
 module PVN::Seek
-  class MatchOption < PVN::BooleanOption
+  class MatchOption < Synoption::BooleanOption
     def initialize optargs = Hash.new
       opts = Hash.new
       opts[:negate] = '--nomatch', '--no-match', '-M'
@@ -14,7 +14,7 @@ module PVN::Seek
     end
   end
 
-  class RemovedOption < PVN::BooleanOption
+  class RemovedOption < Synoption::BooleanOption
     def initialize optargs = Hash.new
       opts = Hash.new
       super :removed, '-M', 'find where the pattern did not match', false, opts

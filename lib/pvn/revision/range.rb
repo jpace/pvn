@@ -3,14 +3,14 @@
 
 require 'svnx/log/entries'
 require 'pvn/revision/argument'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN; module Revision; end; end
 
 module PVN::Revision
   # this is of the form: -r123:456
   class Range
-    include RIEL::Loggable
+    include Logue::Loggable
     
     attr_reader :from
     attr_reader :to

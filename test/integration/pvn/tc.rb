@@ -20,25 +20,25 @@ module PVN
       end
 
       def suite
-        RIEL::Log.debug "self: #{self}".negative
+        Logue::Log.debug "self: #{self}".negative
         @@cls = self
-        RIEL::Log.debug "@@cls: #{@@cls}".negative
+        Logue::Log.debug "@@cls: #{@@cls}".negative
 
         ste = super
-        RIEL::Log.debug "ste: #{ste}".negative
+        Logue::Log.debug "ste: #{ste}".negative
 
         def ste.run(*args)
-          RIEL::Log.debug "self: #{self}".bold
-          RIEL::Log.debug "@@cls: #{@@cls}".bold
+          Logue::Log.debug "self: #{self}".bold
+          Logue::Log.debug "@@cls: #{@@cls}".bold
           
           @@cls.setup
 
-          RIEL::Log.debug "self: #{self}".bold
+          Logue::Log.debug "self: #{self}".bold
 
           super
           
-          RIEL::Log.debug "self: #{self}".negative
-          RIEL::Log.debug "@@cls: #{@@cls}".negative
+          Logue::Log.debug "self: #{self}".negative
+          Logue::Log.debug "@@cls: #{@@cls}".negative
           @@cls.teardown
         end
         ste

@@ -1,14 +1,14 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'riel/pathname'
 require 'pvn/diff/change'
 require 'pvn/diff/diffcmd'
 
 module PVN::Diff
   class DiffSet
-    include RIEL::Loggable
+    include Logue::Loggable
     
     attr_reader :display_path
     attr_reader :from_lines
@@ -36,7 +36,7 @@ module PVN::Diff
   end
 
   class Path
-    include RIEL::Loggable
+    include Logue::Loggable
     
     attr_reader :name
     attr_reader :url

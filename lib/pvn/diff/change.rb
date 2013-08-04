@@ -2,14 +2,14 @@
 # -*- ruby -*-
 
 require 'svnx/action'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN; module Diff; end; end
 
 # A Path Revision is the change to a path within a changelist. 
 module PVN::Diff
   class Change
-    include RIEL::Loggable
+    include Logue::Loggable
     
     attr_reader :revision
     attr_reader :action

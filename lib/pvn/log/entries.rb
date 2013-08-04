@@ -1,13 +1,13 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'svnx/exec'
 require 'svnx/log/entries'
 
 module PVN::Log
   class Entries < SVNx::Log::Entries
-    include RIEL::Loggable
+    include Logue::Loggable
 
     def initialize path, options
       revision = options.revision

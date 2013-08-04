@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel/log/loggable'
-require 'riel/log/log'
+require 'logue/loggable'
+require 'logue/log'
 
 require 'pvn'
 require 'pvn/io/element'
@@ -18,7 +18,7 @@ module PVN; module App; end; end
 
 module PVN::App
   class Runner
-    include RIEL::Loggable
+    include Logue::Loggable
 
     SUBCOMMANDS = [ PVN::Log::Command,
                     PVN::Pct::Command,
@@ -31,8 +31,8 @@ module PVN::App
                   ]
 
     def initialize io, args
-      RIEL::Log.level = RIEL::Log::WARN
-      RIEL::Log.set_widths(-25, 5, -35)
+      Logue::Log.level = Logue::Log::WARN
+      Logue::Log.set_widths(-25, 5, -35)
 
       if args.empty?
         run_help args
@@ -46,7 +46,7 @@ module PVN::App
         when "-v", "--version"
           show_version
         when "--verbose"
-          RIEL::Log.level = RIEL::Log::DEBUG
+          Logue::Log.level = Logue::Log::DEBUG
         when "help", "--help", "-h"
           run_help args
         else

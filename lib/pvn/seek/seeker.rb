@@ -2,13 +2,13 @@
 # -*- ruby -*-
 
 require 'pvn/log/entries'
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'svnx/exec'
 require 'pvn/seek/match'
 
 module PVN::Seek
   class Seeker
-    include RIEL::Loggable
+    include Logue::Loggable
 
     def initialize path, pattern, revision, entries
       @path = path

@@ -2,13 +2,13 @@
 # -*- ruby -*-
 
 require 'pvn/command/doc'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN; module Command; end; end
 
 module PVN::Command
   class Command
-    include RIEL::Loggable
+    include Logue::Loggable
 
     @@doc_for_class = Hash.new { |h, k| h[k] = PVN::Command::Documentation.new }
     

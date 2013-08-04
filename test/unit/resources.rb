@@ -2,11 +2,11 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'singleton'
 
 class SvnResource
-  include RIEL::Loggable
+  include Logue::Loggable
   
   RES_DIR = '/proj/org/incava/pvn/test/resources/'
   

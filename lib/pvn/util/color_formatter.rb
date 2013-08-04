@@ -2,12 +2,12 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'rainbow'
 
 module PVN
   class ColorFormatter
-    include RIEL::Loggable
+    include Logue::Loggable
 
     def pad what, field
       nspaces = [ width(field) - what.length, 1 ].max

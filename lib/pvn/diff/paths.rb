@@ -1,12 +1,12 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN::Diff
   # represents the paths from one revision through another.
   class Paths
-    include RIEL::Loggable, Enumerable
+    include Logue::Loggable, Enumerable
 
     # takes paths of the form ".", "foo.rb", etc.
     def initialize revision, paths

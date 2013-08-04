@@ -1,11 +1,11 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN::Seek
   class Match
-    include RIEL::Loggable
+    include Logue::Loggable
 
     attr_reader :lnums
     attr_reader :contents

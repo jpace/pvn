@@ -12,19 +12,19 @@ require 'pvn/command/color_option'
 module PVN::Log
   DEFAULT_LIMIT = 5
 
-  class LimitOption < PVN::FixnumOption
+  class LimitOption < Synoption::FixnumOption
     def initialize lmtargs = Hash.new
       super :limit, '-l', "the number of log entries", DEFAULT_LIMIT, :negate => [ %r{^--no-?limit} ]
     end
   end
 
-  class FilesOption < PVN::BooleanOption
+  class FilesOption < Synoption::BooleanOption
     def initialize optargs = Hash.new
       super :files, '-f', [ "list the files in the change" ], false
     end
   end
 
-  class UserOption < PVN::Option
+  class UserOption < Synoption::Option
     def initialize optargs = Hash.new
       super :user, '-u', "show only changes for the given user", nil, :as_cmdline_option => nil
     end

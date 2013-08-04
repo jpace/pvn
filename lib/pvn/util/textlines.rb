@@ -2,11 +2,11 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN
   class TextLines
-    include RIEL::Loggable
+    include Logue::Loggable
 
     attr_reader :lines
 

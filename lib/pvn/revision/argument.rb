@@ -3,7 +3,7 @@
 
 require 'svnx/log/entries'
 require 'pvn/revision/error'
-require 'riel/log/loggable'
+require 'logue/loggable'
 
 module PVN; module Revision; end; end
 
@@ -18,7 +18,7 @@ module PVN::Revision
   # +n means to count from the beginning of the list.
   #  n means the literal revision number.  
   class Argument
-    include RIEL::Loggable, Comparable
+    include Logue::Loggable, Comparable
 
     DATE_REGEXP = Regexp.new '^\{(.*?)\}'
     SVN_ARGUMENT_WORDS = %w{ HEAD BASE COMMITTED PREV }

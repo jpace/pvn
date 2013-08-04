@@ -4,10 +4,11 @@
 require 'tc'
 require 'svnx/log/command'
 require 'rexml/document'
+require 'logue/loggable'
 
 module PVN
   class IntegrationTestCase < PVN::TestCase
-    include Loggable
+    include Logue::Loggable
 
     PT_DIRNAME = '/Programs/pvn/pvntestbed.from'
 
@@ -60,7 +61,7 @@ module PVN
       cmdcls.new args
       strio.close
 
-      if RIEL::Log.verbose
+      if Logue::Log.verbose
         puts "......................................................."
         puts strio.string
         puts "......................................................."
@@ -93,7 +94,7 @@ module PVN
       cmd = cmdcls.new opts
       info "cmd: #{cmd}"
       
-      if RIEL::Log.verbose
+      if Logue::Log.verbose
         puts "......................................................."
         puts strio.string
         puts "......................................................."

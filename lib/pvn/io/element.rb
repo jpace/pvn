@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'rubygems'
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'svnx/log/entries'
 require 'svnx/status/entries'
 require 'svnx/info/entries'
@@ -15,7 +15,7 @@ module PVN::IO
   # which should exist).
 
   class Element
-    include RIEL::Loggable
+    include Logue::Loggable
 
     attr_reader :svn
     attr_reader :local

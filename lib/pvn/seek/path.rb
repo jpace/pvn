@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'riel/log/loggable'
+require 'logue/loggable'
 require 'pvn/log/entries'
 require 'pvn/seek/seeker'
 
@@ -20,7 +20,7 @@ module PVN::Seek
   end
 
   class Path
-    include RIEL::Loggable
+    include Logue::Loggable
 
     def initialize path
       @path = path

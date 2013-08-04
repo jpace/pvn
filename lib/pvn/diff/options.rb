@@ -7,7 +7,7 @@ require 'pvn/revision/base_option'
 require 'pvn/command/options'
 
 module PVN::Diff
-  class WhitespaceOption < PVN::BooleanOption
+  class WhitespaceOption < Synoption::BooleanOption
     def initialize optargs = Hash.new
       super :whitespace, '-w', 'ignore all whitespace', false
     end
