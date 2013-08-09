@@ -11,7 +11,7 @@ module PVN::Pct
       elmt = PVN::IO::Element.new :local => path
       modified = elmt.find_modified_files
 
-      total = PVN::DiffCount.new
+      # total = PVN::DiffCount.new
 
       modified = modified.sort_by { |n| n.path }
 

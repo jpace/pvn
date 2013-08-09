@@ -9,9 +9,6 @@ require 'rainbow'
 module PVN::Pct
   class RepositoryDiffer < Differ
     def get_from_to_revisions rev
-      fromrev = nil
-      torev = nil
-      
       if rev.size == 1
         if md = Regexp.new('(.+):(.+)').match(rev[0])
           [ md[1], md[2] ]

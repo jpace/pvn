@@ -63,8 +63,6 @@ module PVN::Command
     end
 
     def write out = $io
-      doc = Array.new
-
       subcmds = @subcommands
 
       subcmdstr = subcmds[0].dup

@@ -2,6 +2,7 @@
 # -*- ruby -*-
 
 require 'logue/loggable'
+require 'set'
 
 module PVN::Diff
   # represents the paths from one revision through another.
@@ -11,7 +12,7 @@ module PVN::Diff
     # takes paths of the form ".", "foo.rb", etc.
     def initialize revision, paths
       @revision = revision
-      @elements = Array.new
+      @elements = SortedSet.new
       
       paths.each do |path|
         add_for_path path
@@ -23,7 +24,7 @@ module PVN::Diff
     end
 
     def [] idx
-      @elements[idx]
+      @elements.to_a[idx]
     end
 
     def size

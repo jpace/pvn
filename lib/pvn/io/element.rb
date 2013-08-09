@@ -7,6 +7,7 @@ require 'svnx/log/entries'
 require 'svnx/status/entries'
 require 'svnx/info/entries'
 require 'pvn/io/fselement'
+require 'svnx/exec'
 
 module PVN; module IO; end; end
 
@@ -23,8 +24,8 @@ module PVN::IO
     def initialize args = Hash.new
       info "args: #{args.inspect}".color("438802")
       
-      svnurl = args[:svnurl]
-      fname  = args[:filename] || args[:file] # legacy
+      # svnurl = args[:svnurl]
+      # fname  = args[:filename] || args[:file] # legacy
       # $$$ todo: map svnurl to SVNElement, and fname to FSElement
 
       @svn   = args[:svn] || (args[:file] && SVNElement.new(:filename => args[:file]))
@@ -70,7 +71,7 @@ module PVN::IO
     def has_revision? rev
       # was there a revision then?
       begin
-        svninfo = get_info rev
+        get_info rev
         true
       rescue => e
         puts "e: #{e}"

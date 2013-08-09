@@ -37,9 +37,9 @@ module PVN::Diff
       path = @elements.detect { |element| element.name == name }
       if path
         info "path: #{path}"
-        path.add_change logentry.revision, action
+        path.add_change revision, action
       else
-        path = LogPath.new(name, logentry.revision, action, url)
+        path = LogPath.new(name, revision, action, url)
         info "path: #{path}"
         @elements << path
       end

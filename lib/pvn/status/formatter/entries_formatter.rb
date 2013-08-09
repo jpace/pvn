@@ -15,7 +15,6 @@ module PVN::Status
 
     def format
       lines = Array.new
-      total = @entries.size
       @entries.each_with_index do |entry, idx|
         ef = EntryFormatter.new use_colors, entry
         lines.concat ef.format

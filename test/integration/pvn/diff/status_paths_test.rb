@@ -20,13 +20,17 @@ module PVN::Diff
       revision = PVN::Revision::Range.new '20'
       paths = %w{ . }
       statuspaths = StatusPaths.new revision, paths
-      # pp statuspaths
-      assert_equal 4, statuspaths.size
-      
-      assert_status_path "FirstFile.txt",         1, nil, statuspaths, 0
-      assert_status_path "src/ruby/dog.rb",       1, nil, statuspaths, 1
-      assert_status_path "SeventhFile.txt",       1, nil, statuspaths, 2
-      assert_status_path "dirzero/SixthFile.txt", 1, nil, statuspaths, 3
+      expnames = [
+               "FirstFile.txt",
+               "SeventhFile.txt",
+               "dirzero/SixthFile.txt",
+               "src/ruby/dog.rb"
+              ]
+      assert_equal 4, expnames.size
+
+      expnames.each_with_index do |expname, idx|
+        assert_status_path expname, 1, nil, statuspaths, idx
+      end
     end
   end
 end

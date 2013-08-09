@@ -25,12 +25,13 @@ module PVN::Diff
         next if entry.status == 'unversioned'
         
         # svn log prepends /; svn status does not
-        name = '/' + entry.path
-        rev = :working_copy
+        # name = '/' + entry.path
+        # rev = :working_copy
 
         # what Status::Entry calls a status, we call an action, unifying it with
         # svn log representation.
-        action = entry.status
+        # action = entry.status
+
         info "entry.status_revision: #{entry.status_revision}"
         path = LocalPath.new entry
         @elements << path

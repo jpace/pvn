@@ -17,7 +17,7 @@ module PVN::Diff
       cp.diff_revision_to_working_copy revision, whitespace
       
       strio.close
-      if Log.verbose
+      if Logue::Log.verbose
         puts strio.string
       end
       

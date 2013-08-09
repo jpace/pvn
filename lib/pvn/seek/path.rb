@@ -36,7 +36,6 @@ module PVN::Seek
     end
 
     def get_entries revision
-      rev = revision && to_revision_arg(revision)
       logentries = PVN::Log::Entries.new @path, PathLogOptions.new(revision)
       logentries.to_a
     end

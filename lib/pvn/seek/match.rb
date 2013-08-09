@@ -52,9 +52,6 @@ module PVN::Seek
     end
 
     def diff othermatch
-      otherlnums = othermatch.lnums
-      currlnums = lnums
-
       diff = Array.new
       lnums.each do |lnum|
         line = @contents[lnum]

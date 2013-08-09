@@ -17,7 +17,7 @@ module PVN::Diff
     end
 
     def diff_revision_to_working_copy revision, whitespace
-      fromrev = revision.from.value
+      # fromrev = revision.from.value
 
       info "revision: #{revision}".color(:cyan)
       rev = PVN::Revision::Range.new revision.to_s, 'HEAD'
@@ -50,10 +50,10 @@ module PVN::Diff
         stpath = name_to_statuspath[name]
         info "stpath: #{stpath}"
 
-        frrev = nil
+        # frrev = nil
 
         if logpath
-          chgrevs = logpath.revisions_later_than fromrev
+          # chgrevs = logpath.revisions_later_than fromrev
           logpath.diff_revision_to_working_copy revision, whitespace
         else
           # it's a local file only
