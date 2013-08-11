@@ -36,7 +36,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
-  s.version            = "0.0.12"
+  s.version            = "0.1.0"
   s.author             = "Jeff Pace"
   s.email              = "jeugenepace@gmail.com"
   s.homepage           = "http://www.incava.org/projects/pvn"
@@ -50,13 +50,12 @@ spec = Gem::Specification.new do |s|
   s.bindir             = 'bin'
   s.executables        = %w{ pvn pvndiff }
   s.default_executable = 'pvn'
+  s.license            = 'MIT'
 
-  s.add_dependency("synoption", ">= 0.0.1")
-  s.add_dependency("svnx", ">= 0.0.1")
+  s.add_dependency("synoption", ">= 0.0.2")
+  s.add_dependency("svnx", ">= 0.0.2")
   s.add_dependency("riel", ">= 1.1.16")
   s.add_dependency("rainbow", ">= 1.1.4")
-
-  s.license = 'MIT'
 end
  
 Gem::PackageTask.new(spec) do |pkg| 
