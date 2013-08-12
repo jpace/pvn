@@ -31,8 +31,9 @@ module PVN::Log
     end
 
     def test_colors_from_head_not_from_tail_index_0
+      # 2012-09-16T14:24:07.913759Z
       explines = [
-                  "\e[1m19\e[0m        \e[1m-1\e[0m        \e[1m\e[36mLili von Shtupp\e[0m          \e[1m\e[35m2012-09-16T14:24:07.913759Z\e[0m",
+                  "\e[1m19\e[0m        \e[1m-1\e[0m        \e[1m\e[36mLili von Shtupp\e[0m          \e[1m\e[35m12-09-16 14:24:07\e[0m",
                   "",
                   "\e[37m\e[0m",
                   "",
@@ -43,7 +44,7 @@ module PVN::Log
 
     def test_colors_from_head_not_from_tail_index_3
       explines = [
-                  "\e[1m16\e[0m        \e[1m-4\e[0m        \e[1m\e[36mBuddy Bizarre\e[0m            \e[1m\e[35m2012-09-16T14:07:30.329525Z\e[0m",
+                  "\e[1m16\e[0m        \e[1m-4\e[0m        \e[1m\e[36mBuddy Bizarre\e[0m            \e[1m\e[35m12-09-16 14:07:30\e[0m",
                   "",
                   "\e[37mCUT! What in the hell do you think you're doing here? This is a closed set.\e[0m",
                   "",
@@ -56,7 +57,7 @@ module PVN::Log
 
     def test_no_colors_from_head_from_tail_index_3
       explines = [
-                  "16        -4   +11  Buddy Bizarre            2012-09-16T14:07:30.329525Z",
+                  "16        -4   +11  Buddy Bizarre            12-09-16 14:07:30",
                   "",
                   "CUT! What in the hell do you think you're doing here? This is a closed set.",
                   "",
@@ -68,8 +69,9 @@ module PVN::Log
     end
 
     def test_colors_from_head_from_tail_index_3
+      # was 2012-09-16T14:07:30.329525Z, svn's format
       explines = [
-                  "\e[1m16\e[0m        \e[1m-4\e[0m   \e[1m+11\e[0m  \e[1m\e[36mBuddy Bizarre\e[0m            \e[1m\e[35m2012-09-16T14:07:30.329525Z\e[0m",
+                  "\e[1m16\e[0m        \e[1m-4\e[0m   \e[1m+11\e[0m  \e[1m\e[36mBuddy Bizarre\e[0m            \e[1m\e[35m12-09-16 14:07:30\e[0m",
                   "",
                   "\e[37mCUT! What in the hell do you think you're doing here? This is a closed set.\e[0m",
                   "",
@@ -82,7 +84,7 @@ module PVN::Log
 
     def test_no_colors_from_head_not_from_tail_index_3
       explines = [
-                  "16        -4        Buddy Bizarre            2012-09-16T14:07:30.329525Z",
+                  "16        -4        Buddy Bizarre            12-09-16 14:07:30",
                   "",
                   "CUT! What in the hell do you think you're doing here? This is a closed set.",
                   "",

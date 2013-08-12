@@ -111,3 +111,7 @@ Sun Jan  6 18:03:42 2013
 Fri Aug  9 19:25:19 2013
 
   status and log: paths are now displayed sorted by name.
+
+Mon Aug 12 07:45:05 2013
+
+  Improved date displayed with log, with a more concise and clearer format.

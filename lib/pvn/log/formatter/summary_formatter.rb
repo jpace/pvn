@@ -2,6 +2,8 @@
 # -*- ruby -*-
 
 require 'pvn/log/formatter/log_formatter'
+require 'pvn/log/formatter/date_formatter'
+require 'date'
 
 module PVN; module Log; end; end
 
@@ -40,7 +42,12 @@ module PVN::Log
       end
       
       lines << add_field(entry.author, :author)
-      lines << colorize(entry.date, :date)
+      info "entry.date: #{entry.date}"
+      info "entry.date.class: #{entry.date.class}"
+      dt = DateTime.parse entry.date
+      info "dt: #{dt}"
+      dfmt = DateFormatter.new.format(entry.date)
+      lines << colorize(dfmt, :date)
       lines
     end
   end

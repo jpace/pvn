@@ -32,6 +32,8 @@ For all subcommands, `pvn help <command>` shows extended information.
     the element (added, deleted, changed). The logging output also shows the
     relative revision.
 
+    The `log` subcommand displays dates in a shorter form than svn does.
+
   * `pct`:
     Compares two revisions, showing the changes in the size (length)
     of files that have been modified in the latter revision, to
