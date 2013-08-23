@@ -58,10 +58,8 @@ module PVN::IO
 
     def get_info revision = nil
       usepath = @local || @path
-      output = SVNx::Exec.new.info usepath, revision
-      
-      infentries = SVNx::Info::Entries.new :xmllines => output
-      infentries[0]
+      info = SVNx::InfoExec.new path: usepath, revision: revision
+      info.entry
     end
 
     def repo_root
@@ -89,8 +87,8 @@ module PVN::IO
 
       # we can't cache this, because we don't know if there has been an svn
       # update since the previous run:
-      xmllines = SVNx::Exec.new.log @local, revision, nil, true, false
-      entries = SVNx::Log::Entries.new :xmllines => xmllines
+      logexec = SVNx::LogExec.new :path => @local, :revision => revision, :verbose => true, :use_cache => false
+      entries = logexec.entries
       
       modified = Set.new
 
@@ -116,13 +114,14 @@ module PVN::IO
         path << '@' << revision.to_s
       end
       info "path: #{path}"
-      SVNx::Exec.new.cat path, nil, use_cache
+      catexec = SVNx::CatExec.new path: path, revision: nil, use_cache: use_cache
+      catexec.output
     end
 
     # returns a set of local files that are in the given status
     def find_files_by_status status = nil
-      xmllines = SVNx::Exec.new.status @local, false
-      entries = SVNx::Status::Entries.new :xmllines => xmllines
+      statexec = SVNx::StatusExec.new path: @local, use_cache: false
+      entries = statexec.entries
 
       entries.select do |entry|
         status.nil? || entry.status == status
@@ -137,8 +136,8 @@ module PVN::IO
     # returns log entries
     def logentries revision
       # use_cache should be conditional on revision:
-      xmllines = SVNx::Exec.new.log @local, revision.to_s, nil, true, false
-      SVNx::Log::Entries.new :xmllines => xmllines
+      logexec = SVNx::LogExec.new :path => @local, :revision => revision.to_s, :verbose => true, :use_cache => false
+      logexec.entries
     end
     
     def <=> other
