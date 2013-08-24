@@ -15,20 +15,20 @@ module PVN::Revision
     attr_reader :from
     attr_reader :to
 
-    def initialize from, to = nil, xmllines = nil
+    def initialize from, to = nil, entries = nil
       if to
-        @from = to_revision from, xmllines
-        @to = to_revision to, xmllines
+        @from = to_revision from, entries
+        @to = to_revision to, entries
       elsif from.kind_of? String
-        @from, @to = from.split(':').collect { |x| to_revision x, xmllines }
+        @from, @to = from.split(':').collect { |x| to_revision x, entries }
       else
-        @from = to_revision from, xmllines
+        @from = to_revision from, entries
         @to = :working_copy
       end
     end
 
-    def to_revision val, xmllines
-      val.kind_of?(Argument) || Argument.new(val, xmllines: xmllines)
+    def to_revision val, entries
+      val.kind_of?(Argument) || Argument.new(val, entries: entries)
     end
     
     def to_s

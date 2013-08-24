@@ -32,8 +32,9 @@ module PVN::Diff
       # (argument); this only handling revision numbers (not dates) for now.
 
       rev = change ? [ change.to_i - 1, change.to_i ] : options.revision
-      info "rev: #{rev}"
-      @revision = PVN::Revision::Range.new(*rev)
+      from, to = rev[0], rev[1]
+
+      @revision = PVN::Revision::Range.new from, to
       info "@revision: #{@revision}"
 
       # this indicates that this should be split into two classes:

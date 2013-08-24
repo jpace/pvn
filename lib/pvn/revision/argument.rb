@@ -28,19 +28,18 @@ module PVN::Revision
     # :head
 
     attr_reader :value
-    attr_reader :log_entry
 
     class << self
       alias_method :orig_new, :new
 
       def new value, args = Hash.new
-        # these are lines from "svn log -v <file>"
-        xmllines = args[:xmllines]
+        # these are log entries:
+        entries = args[:entries]
         
         case value
         when Fixnum
           if value < 0
-            RelativeArgument.orig_new value, xmllines: xmllines
+            RelativeArgument.orig_new value, entries: entries
           else
             FixnumArgument.orig_new value
           end
@@ -48,7 +47,7 @@ module PVN::Revision
           if SVN_ARGUMENT_WORDS.include? value
             StringArgument.orig_new value
           elsif md = RELATIVE_REVISION_RE.match(value)
-            RelativeArgument.orig_new md[0].to_i, xmllines: xmllines
+            RelativeArgument.orig_new md[0].to_i, entries: entries
           elsif DATE_REGEXP.match value
             StringArgument.orig_new value
           else
@@ -95,18 +94,13 @@ module PVN::Revision
   # recent; -1 is the most recent).
   class RelativeArgument < FixnumArgument
     def initialize value, args
-      xmllines = args[:xmllines]
+      entries = args[:entries]
       
-      unless xmllines
-        raise RevisionError.new "cannot determine relative revision without xmllines"
-      end
-
-      if xmllines.kind_of? Array
-        xmllines = xmllines.join ''
+      unless entries
+        raise RevisionError.new "cannot determine relative revision without entries"
       end
       
-      logentries = SVNx::Log::Entries.new :xmllines => xmllines
-      nentries = logentries.size
+      nentries = entries.size
 
       # logentries are in descending order, so the most recent one is index 0
 
@@ -114,8 +108,8 @@ module PVN::Revision
         raise RevisionError.new "ERROR: no entry for revision: #{value.abs}; number of entries: #{nentries}"
       else
         idx = value < 0 ? -1 + value.abs : nentries - value
-        @log_entry = logentries[idx]
-        super @log_entry.revision.to_i
+        log_entry = entries[idx]
+        super log_entry.revision.to_i
       end
     end
   end

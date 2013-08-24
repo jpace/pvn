@@ -26,15 +26,16 @@ module PVN
 
     def relative_to_absolute rel, path
       limit = rel[0, 1] == '-' ? rel.to_i.abs : nil
-      xmllines = run_log_command limit, path
-
+      entries = run_log_command limit, path
+      
       # This is Argument, not Range, because we're getting the value
-      reventry = PVN::Revision::Argument.new rel, xmllines: xmllines
+      reventry = PVN::Revision::Argument.new rel, entries: entries
       reventry.value.to_s
     end
     
     def run_log_command limit, path
-      SVNx::Exec.new.log path, nil, limit, false, false
+      logexec = SVNx::LogExec.new path: path, limit: limit, revision: nil, verbose: false, use_cache: false
+      logexec.entries
     end
 
     def entry

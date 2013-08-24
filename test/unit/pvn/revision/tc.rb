@@ -8,24 +8,25 @@ require 'pvn/revision/argument'
 module PVN
   module MockBaseRevisionOption
     def run_log_command limit, path
-      if path == Resources::PT_PATH
-        case limit
-        when 1
-          Resources::PT_LOG_R19.readlines
-        when 5
-          Resources::PT_LOG_R19_15.readlines
-        when 7
-          Resources::PT_LOG_R19_13.readlines
-        when 19
-          Resources::PT_LOG_R19_1.readlines
-        when 20
-          Resources::PT_LOG_R19_1.readlines
-        else
-          fail "limit not handled: #{limit}; #{path}"
-        end
-      else
-        fail "path not handled: #{path}"
-      end
+      xmllines = if path == Resources::PT_PATH
+                   case limit
+                   when 1
+                     Resources::PT_LOG_R19.readlines
+                   when 5
+                     Resources::PT_LOG_R19_15.readlines
+                   when 7
+                     Resources::PT_LOG_R19_13.readlines
+                   when 19
+                     Resources::PT_LOG_R19_1.readlines
+                   when 20
+                     Resources::PT_LOG_R19_1.readlines
+                   else
+                     fail "limit not handled: #{limit}; #{path}"
+                   end
+                 else
+                   fail "path not handled: #{path}"
+                 end
+      SVNx::Log::Entries.new(:xmllines => xmllines).entries
     end
   end
   

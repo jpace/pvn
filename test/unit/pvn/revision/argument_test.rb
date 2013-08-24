@@ -12,11 +12,12 @@ module PVN::Revision
       # This is the equivalent of "log" at revision 22, when this file was added
       # at revision 13. Using this instead of just "log" when regenerating the
       # resource files keeps the revisions from bouncing around.
-      @xmllines = Resources::PT_LOG_R22_13_SECONDFILE_TXT.readlines
+      xmllines = Resources::PT_LOG_R22_13_SECONDFILE_TXT.readlines
+      @entries = SVNx::Log::Entries.new :xmllines => xmllines
     end
 
     def create_argument value
-      Argument.new value, xmllines: @xmllines
+      Argument.new value, entries: @entries
     end
 
     def assert_argument_value exp_value, value
