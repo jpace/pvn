@@ -19,8 +19,8 @@ module PVN::Pct
 
       modified.each do |entry|
         info "entry.path: #{entry.path}"
-        lines = SVNx::Exec.new.cat entry.path, nil, false
-        svn_count = lines.size
+        catexec = SVNx::CatExec.new path: entry.path, revision: nil, use_cache: false
+        svn_count = catexec.output.size
         local_count = Pathname.new(entry.path).readlines.size
         
         dc = PVN::DiffCount.new svn_count, local_count, entry.path

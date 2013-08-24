@@ -18,8 +18,8 @@ module PVN::Seek
     end
 
     def cat revision
-      ex = SVNx::Exec.new
-      ex.cat @path, revision, true
+      ex = SVNx::CatExec.new path: @path, revision: revision, use_cache: true
+      ex.output
     end
 
     def matches? previous_entry, current_entry

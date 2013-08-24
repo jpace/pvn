@@ -4,7 +4,6 @@
 require 'tc'
 require 'svnx/log/entries'
 require 'pvn/revision/argument'
-
 require 'resources'
 
 module PVN::Revision
