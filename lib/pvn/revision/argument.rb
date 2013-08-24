@@ -33,7 +33,9 @@ module PVN::Revision
     class << self
       alias_method :orig_new, :new
 
-      def new value, xmllines = nil
+      def new value, args = Hash.new
+        xmllines = args[:xmllines]
+
         # these are lines from "svn log -v <file>"
         if xmllines.kind_of? Array
           xmllines = xmllines.join ''

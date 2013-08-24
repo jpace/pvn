@@ -28,7 +28,7 @@ module PVN::Revision
     end
 
     def to_revision val, xmllines
-      val.kind_of?(Argument) || Argument.new(val, xmllines)
+      val.kind_of?(Argument) || Argument.new(val, xmllines: xmllines)
     end
     
     def to_s

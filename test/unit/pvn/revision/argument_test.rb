@@ -16,7 +16,7 @@ module PVN::Revision
     end
 
     def create_argument value
-      Argument.new value, @xmllines
+      Argument.new value, xmllines: @xmllines
     end
 
     def assert_argument_value exp_value, value

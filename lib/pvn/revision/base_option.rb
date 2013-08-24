@@ -29,7 +29,7 @@ module PVN
       xmllines = run_log_command limit, path
 
       # This is Argument, not Range, because we're getting the value
-      reventry = PVN::Revision::Argument.new rel, xmllines
+      reventry = PVN::Revision::Argument.new rel, xmllines: xmllines
       reventry.value.to_s
     end
     
