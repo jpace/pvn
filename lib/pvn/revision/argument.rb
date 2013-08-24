@@ -34,17 +34,13 @@ module PVN::Revision
       alias_method :orig_new, :new
 
       def new value, args = Hash.new
-        xmllines = args[:xmllines]
-
         # these are lines from "svn log -v <file>"
-        if xmllines.kind_of? Array
-          xmllines = xmllines.join ''
-        end
+        xmllines = args[:xmllines]
         
         case value
         when Fixnum
           if value < 0
-            RelativeArgument.orig_new value, xmllines
+            RelativeArgument.orig_new value, xmllines: xmllines
           else
             FixnumArgument.orig_new value
           end
@@ -52,7 +48,7 @@ module PVN::Revision
           if SVN_ARGUMENT_WORDS.include? value
             StringArgument.orig_new value
           elsif md = RELATIVE_REVISION_RE.match(value)
-            RelativeArgument.orig_new md[0].to_i, xmllines
+            RelativeArgument.orig_new md[0].to_i, xmllines: xmllines
           elsif DATE_REGEXP.match value
             StringArgument.orig_new value
           else
@@ -98,9 +94,15 @@ module PVN::Revision
   # this is of the form -3, which is revision[-3] (second one from the most
   # recent; -1 is the most recent).
   class RelativeArgument < FixnumArgument
-    def initialize value, xmllines
+    def initialize value, args
+      xmllines = args[:xmllines]
+      
       unless xmllines
         raise RevisionError.new "cannot determine relative revision without xmllines"
+      end
+
+      if xmllines.kind_of? Array
+        xmllines = xmllines.join ''
       end
       
       logentries = SVNx::Log::Entries.new :xmllines => xmllines
