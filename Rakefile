@@ -53,7 +53,7 @@ spec = Gem::Specification.new do |s|
   s.license            = 'MIT'
 
   s.add_dependency("synoption", ">= 0.0.2")
-  s.add_dependency("svnx", ">= 0.0.2")
+  s.add_dependency("svnx", ">= 0.1.0")
   s.add_dependency("riel", ">= 1.1.16")
   s.add_dependency("rainbow", ">= 1.1.4")
 end

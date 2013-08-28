@@ -3,6 +3,7 @@
 
 require 'synoption/option'
 require 'svnx/exec'
+require 'svnx/revision/argument'
 
 module PVN
   class BaseRevisionOption < Synoption::Option
@@ -19,7 +20,7 @@ module PVN
 
     def resolve_value optset, unprocessed
       val = value
-      if PVN::Revision::RELATIVE_REVISION_RE.match val
+      if SVNx::Revision::RELATIVE_REVISION_RE.match val
         @value = relative_to_absolute val, unprocessed[0]
       end
     end
@@ -29,7 +30,7 @@ module PVN
       entries = run_log_command limit, path
       
       # This is Argument, not Range, because we're getting the value
-      reventry = PVN::Revision::Argument.new rel, entries: entries
+      reventry = SVNx::Revision::Argument.new rel, entries: entries
       reventry.value.to_s
     end
     

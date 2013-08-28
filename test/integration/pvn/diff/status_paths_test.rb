@@ -2,7 +2,7 @@
 # -*- ruby -*-
 
 require 'pvn/diff/status_paths'
-require 'pvn/revision/range'
+require 'svnx/revision/range'
 require 'pp'
 require 'integration/tc'
 
@@ -17,7 +17,7 @@ module PVN::Diff
       
     def test_to_working_copy
       # revision doesn't matter:
-      revision = PVN::Revision::Range.new '20'
+      revision = SVNx::Revision::Range.new '20'
       paths = %w{ . }
       statuspaths = StatusPaths.new revision, paths
       expnames = [

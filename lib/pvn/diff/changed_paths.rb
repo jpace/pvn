@@ -4,7 +4,7 @@
 require 'pvn/diff/log_paths'
 require 'pvn/diff/status_paths'
 require 'pvn/diff/local_path'
-require 'pvn/revision/range'
+require 'svnx/revision/range'
 require 'logue/loggable'
 
 module PVN::Diff
@@ -20,7 +20,7 @@ module PVN::Diff
       # fromrev = revision.from.value
 
       info "revision: #{revision}".color(:cyan)
-      rev = PVN::Revision::Range.new revision.to_s, 'HEAD'
+      rev = SVNx::Revision::Range.new revision.to_s, 'HEAD'
       info "rev: #{rev}".color(:cyan)
 
       logpaths = LogPaths.new rev, @paths

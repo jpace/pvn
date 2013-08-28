@@ -99,7 +99,7 @@ module PVN::Diff
       
       # -r20 means -r20:working_copy
 
-      revision = PVN::Revision::Range.new 20, nil
+      revision = SVNx::Revision::Range.new 20, nil
       whitespace = false
       paths = %w{ . }
 

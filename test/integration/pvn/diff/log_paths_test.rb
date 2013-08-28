@@ -3,7 +3,7 @@
 
 require 'integration/tc'
 require 'pvn/diff/log_paths'
-require 'pvn/revision/range'
+require 'svnx/revision/range'
 
 module PVN::Diff
   class LogPathsTestCase < PVN::IntegrationTestCase
@@ -15,7 +15,7 @@ module PVN::Diff
     end
       
     def test_revision_to_revision
-      revision = PVN::Revision::Range.new '15', '16'
+      revision = SVNx::Revision::Range.new '15', '16'
       paths = %w{ . }
       logpaths = LogPaths.new revision, paths
       exppaths = [

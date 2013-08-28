@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'tc'
-require 'pvn/revision/error'
-require 'pvn/revision/argument'
+require 'svnx/revision/error'
+require 'svnx/revision/argument'
 
 module PVN
   module MockBaseRevisionOption
@@ -51,7 +51,7 @@ module PVN
     end
 
     def assert_revision_option_raises val, path = Resources::PT_PATH
-      assert_raises(PVN::Revision::RevisionError) do 
+      assert_raises(SVNx::Revision::RevisionError) do 
         opt = create_option
         # opt.process [ val ]
         opt.set_value val

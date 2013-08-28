@@ -34,7 +34,7 @@ module PVN::Diff
       rev = change ? [ change.to_i - 1, change.to_i ] : options.revision
       from, to = rev[0], rev[1]
 
-      @revision = PVN::Revision::Range.new from, to
+      @revision = SVNx::Revision::Range.new from, to
       info "@revision: #{@revision}"
 
       # this indicates that this should be split into two classes:

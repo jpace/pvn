@@ -3,7 +3,7 @@
 
 require 'pvn/io/element'
 require 'pvn/pct/differ'
-require 'pvn/revision/range'
+require 'svnx/revision/range'
 require 'rainbow'
 
 module PVN::Pct
