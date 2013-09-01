@@ -36,7 +36,7 @@ end
 
 spec = Gem::Specification.new do |s| 
   s.name               = "pvn"
-  s.version            = "0.1.1"
+  s.version            = "0.1.2"
   s.author             = "Jeff Pace"
   s.email              = "jeugenepace@gmail.com"
   s.homepage           = "http://www.incava.org/projects/pvn"
@@ -53,7 +53,7 @@ spec = Gem::Specification.new do |s|
   s.license            = 'MIT'
 
   s.add_dependency("synoption", ">= 0.0.2")
-  s.add_dependency("svnx", ">= 0.1.0")
+  s.add_dependency("svnx", ">= 0.3.0")
   s.add_dependency("riel", ">= 1.1.16")
   s.add_dependency("rainbow", ">= 1.1.4")
 end
