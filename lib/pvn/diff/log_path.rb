@@ -51,7 +51,7 @@ module PVN::Diff
       displaypath = get_display_path
 
       rev_change = changes.detect do |chg| 
-        revarg = SVNx::Revision::Argument.new chg.revision
+        revarg = SVNx::Revision::Argument.create chg.revision
         revarg > revision.from
       end
 
@@ -127,8 +127,8 @@ module PVN::Diff
 
     def revisions_later_than revision
       changes.select do |chg|
-        x = SVNx::Revision::Argument.new chg.revision
-        y = SVNx::Revision::Argument.new revision
+        x = SVNx::Revision::Argument.create chg.revision
+        y = SVNx::Revision::Argument.create revision
         x > y
       end
     end

@@ -30,7 +30,7 @@ module PVN
       entries = run_log_command limit, path
       
       # This is Argument, not Range, because we're getting the value
-      reventry = SVNx::Revision::Argument.new rel, entries: entries
+      reventry = SVNx::Revision::Argument.create rel, entries: entries
       reventry.value.to_s
     end
     
