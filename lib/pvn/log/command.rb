@@ -41,11 +41,19 @@ module PVN::Log
       info "paths: #{paths}"
 
       allentries = Array.new
-      
-      entcls = options.user ? UserEntries : Entries
 
-      paths.each do |path|
-        allentries.concat entcls.new(path, options).entries
+      info "options.user: #{options.user}".color('#4a4a33')
+
+      if options.user
+        entcls = UserEntries
+        paths.each do |path|
+          allentries.concat entcls.new(path, options).entries
+        end
+      else
+        entcls = Entries
+        paths.each do |path|
+          allentries.concat entcls.new(path, options).entries
+        end
       end
 
       # we can show relative revisions for a single path, without filtering by
@@ -58,7 +66,7 @@ module PVN::Log
       from_tail = show_relative && !options.limit
 
       ef = PVN::Log::EntriesFormatter.new options.color, allentries, from_head, from_tail
-      puts ef.format
+      $io.puts ef.format
     end
   end
 end

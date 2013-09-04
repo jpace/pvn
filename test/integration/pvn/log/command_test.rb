@@ -18,12 +18,6 @@ module PVN::Log
       end
     end
 
-    def test_user
-      # filter_for_user
-      # fetch_log_in_pieces (-n LIMIT, LIMIT * 2, LIMIT * 4, LIMIT * 8 ... )
-      # PVN::Log::Command.new [ PT_DIRNAME ]
-    end
-
     def test_doc
       strio = StringIO.new
       $io = strio
@@ -81,6 +75,25 @@ module PVN::Log
                  ]
       
       assert_command_output Command, expected, %w{ -h }
+    end
+
+    def test_user
+      expected = Array.new
+      expected << "\e[1m13\e[0m                  \e[1m\e[36mJim\e[0m                      \e[1m\e[35m12-09-16 13:51:55\e[0m"
+      expected << ""
+      expected << "\e[37mWe're not sure. Are we...black?\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+      expected << "\e[1m3\e[0m                   \e[1m\e[36mJim\e[0m                      \e[1m\e[35m12-09-15 17:29:15\e[0m"
+      expected << ""
+      expected << "\e[37mBoy, is he strict!\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+
+      assert_command_output Command, expected, %w{ -u Jim  }
+      # filter_for_user
+      # fetch_log_in_pieces (-n LIMIT, LIMIT * 2, LIMIT * 4, LIMIT * 8 ... )
+      # PVN::Log::Command.new [ PT_DIRNAME ]
     end
   end
 end
