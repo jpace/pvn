@@ -6,19 +6,6 @@ require 'pvn/log/entries'
 require 'pvn/seek/seeker'
 
 module PVN::Seek
-  class PathLogOptions
-    def initialize revision
-      @revision = revision
-    end
-
-    def limit; nil; end
-    def verbose; nil; end
-    def revision; @revision; end
-    def user; nil; end
-    def use_cache; nil; end
-    def files; end
-  end
-
   class Path
     include Logue::Loggable
 
@@ -36,7 +23,7 @@ module PVN::Seek
     end
 
     def get_entries revision
-      logentries = PVN::Log::Entries.new @path, PathLogOptions.new(revision)
+      logentries = PVN::Log::Entries.new @path, nil, { revision: revision, files: nil, use_cache: nil, limit: nil }
       logentries.to_a
     end
 
