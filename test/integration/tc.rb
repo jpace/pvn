@@ -50,7 +50,7 @@ module PVN
       # end
     end
 
-    def assert_command_output cmdcls, explines, args
+    def assert_command_block(explines, &blk)
       orig_dir = Dir.pwd
       
       Dir.chdir '/Programs/pvn/pvntestbed.pending'
@@ -58,7 +58,9 @@ module PVN
       strio = StringIO.new
 
       $io = strio
-      cmdcls.new args
+
+      blk.call
+
       strio.close
 
       if Logue::Log.verbose
@@ -75,37 +77,24 @@ module PVN
       Dir.chdir orig_dir
     end
 
-    def assert_command_option_output cmdcls, optcls, args, explines
-      orig_dir = Dir.pwd
-      
-      Dir.chdir '/Programs/pvn/pvntestbed.pending'
-
-      strio = StringIO.new
-
-      $io = strio
-
-      info "args: #{args}"
-
-      opts = optcls.new
-      info "opts: #{opts}"
-
-      opts.process args
-
-      cmd = cmdcls.new opts
-      info "cmd: #{cmd}"
-      
-      if Logue::Log.verbose
-        puts "......................................................."
-        puts strio.string
-        puts "......................................................."
+    def assert_command_output cmdcls, explines, args
+      assert_command_block(explines) do
+        cmdcls.new args
       end
-      
-      actlines = strio.string.split "\n"
+    end
 
-      assert_arrays_equal explines, actlines
-
-      $io = $stdout
-      Dir.chdir orig_dir
+    def assert_command_option_output cmdcls, optcls, args, explines
+      assert_command_block(explines) do
+        info "args: #{args}"
+        
+        opts = optcls.new
+        info "opts: #{opts}"
+        
+        opts.process args
+        
+        cmd = cmdcls.new opts
+        info "cmd: #{cmd}"
+      end
     end
   end
 end
