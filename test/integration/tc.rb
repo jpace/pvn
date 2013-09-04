@@ -44,10 +44,10 @@ module PVN
     end
 
     def assert_arrays_equal expected, actual
-      assert_equal expected, actual
-      # (0 ... [ expected.size, actual.size ].max).each do |idx|
-      #   assert_equal expected[idx], actual[idx]
-      # end
+      # assert_equal expected, actual
+      (0 ... [ expected.size, actual.size ].max).each do |idx|
+        assert_equal expected[idx], actual[idx], "line[#{idx}]"
+      end
     end
 
     def assert_command_block(explines, &blk)

@@ -18,6 +18,10 @@ module PVN::Log
       end
     end
 
+    def assert_command_output expected, args = Array.new
+      super PVN::Log::Command, expected, args
+    end
+
     def test_doc
       strio = StringIO.new
       $io = strio
@@ -74,10 +78,41 @@ module PVN::Log
                   "    Prints log entries only for user 'barney', with the default limit.",
                  ]
       
-      assert_command_output Command, expected, %w{ -h }
+      assert_command_output expected, %w{ -h }
     end
 
-    def test_user
+    def test_command_default
+      expected = Array.new
+      expected << "\e[1m22\e[0m        \e[1m-1\e[0m        \e[1m\e[36mLyle\e[0m                     \e[1m\e[35m12-09-18 11:32:19\e[0m"
+      expected << ""
+      expected << "\e[37mDon't pay no attention to that alky. He can't hold a gun, much less shoot it.\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+      expected << "\e[1m21\e[0m        \e[1m-2\e[0m        \e[1m\e[36mGovernor William J. Le Petomane\e[0m \e[1m\e[35m12-09-18 11:30:10\e[0m"
+      expected << ""
+      expected << "\e[37mWe've gotta protect our phoney baloney jobs, gentlemen!\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+      expected << "\e[1m20\e[0m        \e[1m-3\e[0m        \e[1m\e[36mHoward Johnson\e[0m           \e[1m\e[35m12-09-18 11:28:08\e[0m"
+      expected << ""
+      expected << "\e[37mY'know, Nietzsche says: \"Out of chaos comes order.\"\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+      expected << "\e[1m19\e[0m        \e[1m-4\e[0m        \e[1m\e[36mLili von Shtupp\e[0m          \e[1m\e[35m12-09-16 14:24:07\e[0m"
+      expected << ""
+      expected << "\e[37m\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+      expected << "\e[1m18\e[0m        \e[1m-5\e[0m        \e[1m\e[36mLili von Shtupp\e[0m          \e[1m\e[35m12-09-16 14:09:45\e[0m"
+      expected << ""
+      expected << "\e[37mWillkommen, Bienvenue, Welcome, C'mon in.\e[0m"
+      expected << ""
+      expected << "-------------------------------------------------------"
+
+      assert_command_output expected
+    end
+
+    def test_command_user
       expected = Array.new
       expected << "\e[1m13\e[0m                  \e[1m\e[36mJim\e[0m                      \e[1m\e[35m12-09-16 13:51:55\e[0m"
       expected << ""
@@ -90,10 +125,7 @@ module PVN::Log
       expected << ""
       expected << "-------------------------------------------------------"
 
-      assert_command_output Command, expected, %w{ -u Jim  }
-      # filter_for_user
-      # fetch_log_in_pieces (-n LIMIT, LIMIT * 2, LIMIT * 4, LIMIT * 8 ... )
-      # PVN::Log::Command.new [ PT_DIRNAME ]
+      assert_command_output expected, %w{ -u Jim  }
     end
   end
 end
