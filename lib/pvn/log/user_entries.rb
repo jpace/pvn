@@ -8,17 +8,17 @@ module PVN::Log
   class UserEntries < PVN::Log::Entries
     include Logue::Loggable
 
-    def initialize path, options
-      @user = options.user
-      @limit = options.limit
+    def initialize path, options, args
+      @user = args[:user]
+      @limit = args[:limit]
 
-      super
+      super path, options, args
       
       filter_entries_for_user
     end
 
-    def limit options
-      nil
+    def has_limit?
+      false
     end
 
     def filter_entries_for_user

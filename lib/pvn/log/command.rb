@@ -47,12 +47,12 @@ module PVN::Log
       if options.user
         entcls = UserEntries
         paths.each do |path|
-          allentries.concat entcls.new(path, options).entries
+          allentries.concat entcls.new(path, options, user: options.user, limit: options.limit).entries
         end
       else
         entcls = Entries
         paths.each do |path|
-          allentries.concat entcls.new(path, options).entries
+          allentries.concat entcls.new(path, options, Hash.new).entries
         end
       end
 

@@ -9,9 +9,9 @@ module PVN::Log
   class Entries < SVNx::Log::Entries
     include Logue::Loggable
 
-    def initialize path, options
+    def initialize path, options, args = Hash.new
       revision = options.revision
-      limit = limit options
+      limit = has_limit? ? options.limit : nil
       verbose = options.files
 
       # we can't cache this, because we don't know if there has been an svn
@@ -21,8 +21,8 @@ module PVN::Log
       super :xmllines => xmllines
     end
 
-    def limit options
-      options.limit
+    def has_limit?
+      true
     end
   end
 end
