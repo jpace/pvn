@@ -9,7 +9,7 @@ module PVN::Log
   class Entries < SVNx::Log::Entries
     include Logue::Loggable
 
-    def initialize path, options, args = Hash.new
+    def initialize path, args = Hash.new
       limit = has_limit? ? args[:limit] : nil
       
       # we can't cache this, because we don't know if there has been an svn

@@ -23,7 +23,7 @@ module PVN::Seek
     end
 
     def get_entries revision
-      logentries = PVN::Log::Entries.new @path, nil, { revision: revision, files: nil, use_cache: nil, limit: nil }
+      logentries = PVN::Log::Entries.new @path, revision: revision, files: nil, use_cache: nil, limit: nil
       logentries.to_a
     end
 

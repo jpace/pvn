@@ -54,7 +54,7 @@ module PVN::Log
                end
       
       paths.each do |path|
-        allentries.concat entcls.new(path, options, args).entries
+        allentries.concat entcls.new(path, args).entries
       end
 
       # we can show relative revisions for a single path, without filtering by
