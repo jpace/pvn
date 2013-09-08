@@ -1,24 +1,25 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/entries'
+require 'svnx/log/entries'
 require 'logue/loggable'
+require 'svnx/exec'
 
 module PVN::Log
-  class UserEntries < PVN::Log::Entries
+  class UserEntries < SVNx::Log::Entries
     include Logue::Loggable
 
-    def initialize path, args
+    def initialize path, args = Hash.new
       @user = args[:user]
       @limit = args[:limit]
-
-      super path, args
+      
+      # we can't cache this, because we don't know if there has been an svn
+      # update since the previous run:
+      use_cache = false
+      xmllines = SVNx::Exec.new.log path, args[:revision], nil, args[:files], use_cache
+      super :xmllines => xmllines
       
       filter_entries_for_user
-    end
-
-    def has_limit?
-      false
     end
 
     def filter_entries_for_user

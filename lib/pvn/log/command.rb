@@ -46,15 +46,15 @@ module PVN::Log
 
       args = { revision: options.revision, limit: options.limit, files: options.files }
 
-      entcls = if options.user
-                 args.merge!({ user: options.user })
-                 UserEntries
-               else
-                 Entries
-               end
-      
-      paths.each do |path|
-        allentries.concat entcls.new(path, args).entries
+      if options.user
+        args.merge!({ user: options.user })
+        paths.each do |path|
+          allentries.concat UserEntries.new(path, args).entries
+        end
+      else
+        paths.each do |path|
+          allentries.concat Entries.new(path, args).entries
+        end
       end
 
       # we can show relative revisions for a single path, without filtering by
