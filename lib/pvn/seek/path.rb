@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'logue/loggable'
-require 'pvn/log/entries'
 require 'pvn/seek/seeker'
+require 'svnx/log/command'
 
 module PVN::Seek
   class Path
@@ -23,8 +23,9 @@ module PVN::Seek
     end
 
     def get_entries revision
-      logentries = PVN::Log::Entries.new @path, revision: revision, files: nil, use_cache: nil, limit: nil
-      logentries.to_a
+      args = { revision: revision, limit: nil, files: nil, use_cache: nil, path: @path }
+      exec = SVNx::LogExec.new args
+      exec.entries.to_a
     end
 
     def show_no_match type, entries

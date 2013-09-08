@@ -1,7 +1,6 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'pvn/log/entries'
 require 'logue/loggable'
 require 'svnx/exec'
 require 'pvn/seek/match'
