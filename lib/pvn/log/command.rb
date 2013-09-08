@@ -5,8 +5,7 @@ require 'pvn/io/element'
 require 'pvn/log/formatter/entries_formatter'
 require 'pvn/log/options'
 require 'pvn/command/command'
-require 'pvn/log/entries'
-require 'pvn/log/user_entries'
+require 'svnx/log/command'
 
 module PVN::Log
   class Command < PVN::Command::Command
@@ -42,18 +41,37 @@ module PVN::Log
 
       allentries = Array.new
 
-      info "options.user: #{options.user}".color('#4a4a33')
-
-      args = { revision: options.revision, limit: options.limit, files: options.files }
+      args = { revision: options.revision, limit: options.limit, files: options.files, use_cache: false }
 
       if options.user
-        args.merge!({ user: options.user })
+        limit = args[:limit]
+        args[:limit] = nil
+        args[:user] = options.user
+
         paths.each do |path|
-          allentries.concat UserEntries.new(path, args).entries
+          args[:path] = path
+
+          exec = SVNx::LogExec.new args
+          # SVNx::Entries => Array entries:
+
+          userentries = Hash.new
+          exec.entries.entries.each do |entry|
+            break if userentries.size >= limit
+            if entry.author == args[:user]
+              userentries[userentries.size] = entry
+            end
+          end
+          
+          raise "ERROR: no matching log entries for '#{args[:user]}'" if userentries.empty?
+
+          allentries.concat userentries.values
         end
       else
         paths.each do |path|
-          allentries.concat Entries.new(path, args).entries
+          args[:path] = path
+          exec = SVNx::LogExec.new args
+          # SVNx::Entries => Array entries:
+          allentries.concat exec.entries.entries
         end
       end
 
