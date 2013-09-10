@@ -5,9 +5,10 @@ require 'rubygems'
 require 'logue/loggable'
 require 'svnx/log/entries'
 require 'svnx/status/entries'
+require 'svnx/status/command'
 require 'svnx/info/entries'
+require 'svnx/info/command'
 require 'pvn/io/fselement'
-require 'svnx/exec'
 
 module PVN; module IO; end; end
 

@@ -2,7 +2,6 @@
 # -*- ruby -*-
 
 require 'synoption/option'
-require 'svnx/exec'
 require 'svnx/revision/argument'
 
 module PVN

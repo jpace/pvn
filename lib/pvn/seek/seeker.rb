@@ -2,8 +2,8 @@
 # -*- ruby -*-
 
 require 'logue/loggable'
-require 'svnx/exec'
 require 'pvn/seek/match'
+require 'svnx/cat/command'
 
 module PVN::Seek
   class Seeker

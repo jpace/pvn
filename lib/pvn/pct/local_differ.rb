@@ -3,7 +3,6 @@
 
 require 'pvn/io/element'
 require 'pvn/pct/differ'
-require 'svnx/exec'
 
 module PVN::Pct
   class LocalDiffer < Differ
