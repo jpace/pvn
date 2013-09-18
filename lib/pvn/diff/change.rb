@@ -1,7 +1,7 @@
 #!/usr/bin/ruby -w
 # -*- ruby -*-
 
-require 'svnx/action'
+require 'svnx/base/action'
 require 'logue/loggable'
 
 module PVN; module Diff; end; end
