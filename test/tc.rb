@@ -5,7 +5,10 @@ require 'test/unit'
 require 'resources'
 require 'rainbow'
 
-Logue::Log.level = Logue::Log::DEBUG
+# no verbose if running all tests:
+level = ARGV.detect { |x| x.index '**' } ? Logue::Log::WARN : Logue::Log::DEBUG
+
+Logue::Log.level = level
 Logue::Log.set_widths(-35, 4, -35)
 
 # produce colorized output, even when redirecting to a file:
@@ -16,10 +19,6 @@ module PVN
     include Logue::Loggable
     
     def setup
-    end
-    
-    def test_truth
-      assert true
     end
   end
 end

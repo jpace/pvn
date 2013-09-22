@@ -7,11 +7,6 @@ require 'stringio'
 
 module PVN::Log
   class CommandTest < PVN::IntegrationTestCase
-    
-    def test_path
-      Command.new [ PT_DIRNAME ]
-    end
-    
     def test_invalid_path
       assert_raises(RuntimeError) do
         Command.new %w{ /this/doesnt/exist }

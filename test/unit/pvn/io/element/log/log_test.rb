@@ -7,7 +7,7 @@ require 'pvn/io/element'
 require 'resources'
 
 module PVN::IO::IOElement
-  class LogTestCase ###$$$ < PVN::Log::TestCase
+  class LogTestCase ### < PVN::Log::TestCase
     def assert_log_entries_size expsize, dirlog
       assert_equal expsize, dirlog.entries.size
     end
