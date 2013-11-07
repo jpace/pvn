@@ -11,7 +11,11 @@ module PVN::Log
       'M' => :modified,
       'A' => :added,
       'D' => :deleted,
-      'R' => :renamed
+      'R' => :renamed,
+      SVNx::Action::MODIFIED => :modified,
+      SVNx::Action::ADDED => :added,
+      SVNx::Action::DELETED => :deleted,
+      # SVNx::Action::RENAMED => :renamed
     }
 
     def initialize use_colors, paths
@@ -26,7 +30,7 @@ module PVN::Log
         if field = PATH_ACTIONS[path.action]
           pstr << colorize(path.name, field)
         else
-          raise "wtf?: #{path.action}"
+          raise "wtf?: #{path.action.inspect}; #{path.action.class}"
         end
 
         if path.kind == 'dir'

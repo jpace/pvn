@@ -115,3 +115,7 @@ Fri Aug  9 19:25:19 2013
 Mon Aug 12 07:45:05 2013
 
   Improved date displayed with log, with a more concise and clearer format.
+
+Thu Nov  7 10:15:30 2013
+
+  Fixed status command for changes in SVNx::Action.
