@@ -20,9 +20,13 @@ module PVN::Diff
 
     def add elmt, url
       status = elmt.find_files_by_status
+      info "status: #{status}".color('#33facc')
       status.entries.each do |entry|
+        info "entry: #{entry}".color('#33facc')
         # we don't care about unversioned entries for diffing.
-        next if entry.status == 'unversioned'
+        info "entry.status: #{entry.status}".color('#33facc')
+        info "entry.status.class: #{entry.status.class}".color('#33facc')
+        next if entry.status.unversioned?
         
         # svn log prepends /; svn status does not
         # name = '/' + entry.path
@@ -49,9 +53,10 @@ module PVN::Diff
       #     else
       #         it is compared to BASE
 
-      info "status_entry.status: #{status_entry.status}"
+      info "status_entry.status: #{status_entry.status}".color('#2c2cdd')
 
       action = SVNx::Action.new status_entry.status
+      info "action: #{action}".color('#2c2cdd')
       case
       when action.added?
         info "added"

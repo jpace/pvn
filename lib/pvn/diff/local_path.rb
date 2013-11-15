@@ -24,12 +24,14 @@ module PVN::Diff
     end
 
     def show_diff whitespace = nil
-      case @entry.status
-      when 'modified'
+      info "@entry.status: #{@entry.status}".color('#22c3c3')
+      # crappy programming here. this should be pushed into PVN::Element.
+      st = @entry.status
+      if st.modified?
         show_as_modified whitespace
-      when 'deleted'
+      elsif st.deleted?
         show_as_deleted
-      when 'added'
+      elsif st.added?
         show_as_added
       end
     end

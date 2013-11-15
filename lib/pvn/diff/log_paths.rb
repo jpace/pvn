@@ -26,12 +26,15 @@ module PVN::Diff
     end
 
     def add_path logentry, logentrypath, pathinfo
+      info "logentry: #{logentry}".color('#fa3d3d')
+
       name = logentrypath.name
       revision = logentry.revision
       action = logentrypath.action
+      info "action: #{action}"
       url = pathinfo.url
 
-      info "action: #{action}"
+      info "action: #{action}".color('#fa3d3d')
       info "url: #{url}"
       
       path = @elements.detect { |element| element.name == name }
