@@ -74,6 +74,8 @@ module PVN::Diff
     def get_diff_revision change, revision
       # find the first revision where logpath was in svn, no earlier than the
       # revision.from value
+      info "change: #{change.class}"
+      info "change.action: #{change.action}"
       if change.action.added?
         change.revision.to_i
       elsif change.revision.to_i >= revision.from.value

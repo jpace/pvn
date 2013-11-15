@@ -45,12 +45,14 @@ module PVN::Pct
     
     def get_diff_counts path, options
       revision = options.revision
+      info "revision: #{revision}".color('#fafa33')
 
       # revision -r20 is like diff -c20:
       fromrev, torev = get_from_to_revisions revision
       
       elmt = PVN::IO::Element.new :local => path
       modnames = get_modified elmt, fromrev, torev
+      info "modnames: #{modnames}"
 
       reporoot = elmt.repo_root
 
@@ -64,6 +66,7 @@ module PVN::Pct
       modnames.each do |mod|
         fullpath = reporoot + mod
         elmt = PVN::IO::Element.new :path => fullpath
+        info "elmt: #{elmt}"
         
         next unless has_revisions? elmt, fromrev, torev
         next if directory? elmt

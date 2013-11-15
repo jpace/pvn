@@ -12,7 +12,14 @@ module PVN::Diff
       @elmt = PVN::IO::Element.new :local => @entry.path
       name = entry.path
       action = SVNx::Action.new @entry.status
-      revision = action.added? ? 0 : @elmt.get_info.revision
+      info "action: #{action}".color('#4addaf')
+      revision = if action.added?
+                   0
+                 elsif action.unversioned?
+                   nil
+                 else
+                   @elmt.get_info.revision
+                 end
       super name, revision, action, nil
     end
 

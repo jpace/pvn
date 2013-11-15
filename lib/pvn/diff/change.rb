@@ -16,7 +16,7 @@ module PVN::Diff
     
     def initialize revision, action
       @revision = to_revision(revision)
-      @action = action.kind_of?(SVNx::Action) || SVNx::Action.new(action)
+      @action = action.kind_of?(SVNx::Action) ? action : SVNx::Action.new(action)
     end
 
     def to_revision rev
