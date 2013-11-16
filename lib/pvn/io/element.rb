@@ -10,6 +10,7 @@ require 'svnx/info/entries'
 require 'svnx/info/command'
 require 'svnx/cat/command'
 require 'pvn/io/fselement'
+require 'svnx/io/element'
 
 module PVN; module IO; end; end
 
@@ -35,6 +36,9 @@ module PVN::IO
       @path  = args[:path]
       
       info "local: #{@local.inspect}"
+
+      @svnelement = SVNx::IO::Element.new args
+      info "@svnelement: #{@svnelement}"
     end
 
     def exist?
@@ -85,28 +89,10 @@ module PVN::IO
       # add a ? if not there already
       (status.to_s.sub(%r{\??$}, '?')).to_sym
     end
-    
+
     # returns a set of entries matching status for the given revision
     def find_entries revision, status
-      svninfo = get_info
-
-      filter = svninfo.url.dup
-      filter.slice! svninfo.root
-
-      # we can't cache this, because we don't know if there has been an svn
-      # update since the previous run:
-      logexec = SVNx::LogExec.new :path => @local, :revision => revision, :verbose => true, :use_cache => false
-      entries = logexec.entries
-      
-      stat = status_to_symbol status
-
-      matching = entries.collect do |entry|
-        entry.paths.select do |epath|
-          epath.action.send(stat) && epath.name.start_with?(filter)
-        end
-      end
-
-      matching.flatten.uniq
+      @svnelement.find_in_log revision, status
     end
 
     def cat revision, use_cache = false
@@ -126,22 +112,12 @@ module PVN::IO
 
     # returns a set of local files that have the given status/action
     def find_files_by_status status = nil
-      statexec = SVNx::StatusExec.new path: @local, use_cache: false
-      entries = statexec.entries
-
-      stat = status_to_symbol status
-      info "stat: #{stat}".color('#fa33dd')
-
-      entries.select do |entry|
-        status.nil? || entry.status.send(stat)
-      end
+      @svnelement.find_by_status status
     end
 
     # returns log entries
     def logentries revision
-      # use_cache should be conditional on revision:
-      logexec = SVNx::LogExec.new :path => @local, :revision => revision.to_s, :verbose => true, :use_cache => false
-      logexec.entries
+      @svnelement.log_entries :revision => revision
     end
     
     def <=> other
