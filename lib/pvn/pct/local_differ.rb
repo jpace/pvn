@@ -8,7 +8,7 @@ module PVN::Pct
   class LocalDiffer < Differ
     def get_diff_counts path, options
       elmt = PVN::IO::Element.new :local => path
-      modified = elmt.find_modified_files
+      modified = elmt.find_files_by_status :modified
       info "modified: #{modified}".color('#fa4434')
       
       # total = PVN::DiffCount.new
