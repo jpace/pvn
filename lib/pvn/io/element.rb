@@ -81,8 +81,13 @@ module PVN::IO
       end
     end
 
-    # returns a set of entries modified over the given revision
-    def find_modified_entries revision
+    def status_to_symbol status
+      # add a ? if not there already
+      (status.to_s.sub(%r{\??$}, '?')).to_sym
+    end
+    
+    # returns a set of entries matching status for the given revision
+    def find_entries revision, status
       svninfo = get_info
 
       filter = svninfo.url.dup
@@ -91,25 +96,21 @@ module PVN::IO
       # we can't cache this, because we don't know if there has been an svn
       # update since the previous run:
       logexec = SVNx::LogExec.new :path => @local, :revision => revision, :verbose => true, :use_cache => false
-      info "logexec: #{logexec}".color('#4a4aff')
       entries = logexec.entries
-      info "entries: #{entries.inspect}"
       
-      modified = Set.new
+      matching = Set.new
+
+      stat = status_to_symbol status
 
       entries.each do |entry|
-        info "entry: #{entry}"
         entry.paths.each do |epath|
-          info "epath: #{epath}"
-          info "epath.action: #{epath.action}"
-          info "epath.action: #{epath.action.class}"
-          if epath.action.modified? && epath.name.start_with?(filter)
-            modified << epath
+          if epath.action.send(stat) && epath.name.start_with?(filter)
+            matching << epath
           end
         end
       end
 
-      modified
+      matching
     end
 
     def cat revision, use_cache = false
@@ -127,21 +128,17 @@ module PVN::IO
       catexec.output
     end
 
-    # returns a set of local files that are in the given status
+    # returns a set of local files that have the given status/action
     def find_files_by_status status = nil
       statexec = SVNx::StatusExec.new path: @local, use_cache: false
       entries = statexec.entries
 
-      stat = status.to_s.sub(%r{\?$}, '') + '?'
+      stat = status_to_symbol status
+      info "stat: #{stat}".color('#fa33dd')
 
       entries.select do |entry|
-        status.nil? || entry.status.send(stat.to_sym)
+        status.nil? || entry.status.send(stat)
       end
-    end
-
-    # returns a set of local files that are in modified status
-    def find_modified_files
-      find_files_by_status :modified
     end
 
     # returns log entries

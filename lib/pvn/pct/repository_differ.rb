@@ -21,7 +21,7 @@ module PVN::Pct
     end
 
     def get_modified elmt, fromrev, torev
-      modified = elmt.find_modified_entries [ fromrev + ':' + torev ]
+      modified = elmt.find_entries [ fromrev + ':' + torev ], :modified
       modified.collect { |m| m.name }.sort.uniq
     end
 
