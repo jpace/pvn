@@ -46,27 +46,17 @@ module PVN::IO
     end
 
     def directory?
-      if exist?
-        @local.directory?
-      else
-        # look it up with svn info
-        false
-      end
+      @svnelement.directory?
     end
 
     def file?
-      if exist?
-        @local.file?
-      else
-        raise "need this"
-      end
+      @svnelement.file?
     end
 
     def get_info revision = nil
       usepath = @local || @path
-      info "usepath: #{usepath}".color('#4aff4a')
-      info = SVNx::InfoExec.new path: usepath, revision: revision
-      info.entry
+      inf = SVNx::InfoExec.new path: usepath, revision: revision
+      inf.entry
     end
 
     def repo_root
