@@ -132,14 +132,16 @@ module PVN::IO
       statexec = SVNx::StatusExec.new path: @local, use_cache: false
       entries = statexec.entries
 
+      stat = status.to_s.sub(%r{\?$}, '') + '?'
+
       entries.select do |entry|
-        status.nil? || entry.status == status
+        status.nil? || entry.status.send(stat.to_sym)
       end
     end
 
     # returns a set of local files that are in modified status
     def find_modified_files
-      find_files_by_status 'modified'
+      find_files_by_status :modified
     end
 
     # returns log entries

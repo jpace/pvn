@@ -9,7 +9,8 @@ module PVN::Pct
     def get_diff_counts path, options
       elmt = PVN::IO::Element.new :local => path
       modified = elmt.find_modified_files
-
+      info "modified: #{modified}".color('#fa4434')
+      
       # total = PVN::DiffCount.new
 
       modified = modified.sort_by { |n| n.path }
@@ -17,7 +18,7 @@ module PVN::Pct
       diff_counts = Array.new
 
       modified.each do |entry|
-        info "entry.path: #{entry.path}"
+        info "entry.path: #{entry.path}".color('#fa4434')
         catexec = SVNx::CatExec.new path: entry.path, revision: nil, use_cache: false
         svn_count = catexec.output.size
         local_count = Pathname.new(entry.path).readlines.size
