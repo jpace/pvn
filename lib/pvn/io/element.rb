@@ -98,19 +98,15 @@ module PVN::IO
       logexec = SVNx::LogExec.new :path => @local, :revision => revision, :verbose => true, :use_cache => false
       entries = logexec.entries
       
-      matching = Set.new
-
       stat = status_to_symbol status
 
-      entries.each do |entry|
-        entry.paths.each do |epath|
-          if epath.action.send(stat) && epath.name.start_with?(filter)
-            matching << epath
-          end
+      matching = entries.collect do |entry|
+        entry.paths.select do |epath|
+          epath.action.send(stat) && epath.name.start_with?(filter)
         end
       end
 
-      matching
+      matching.flatten.uniq
     end
 
     def cat revision, use_cache = false
